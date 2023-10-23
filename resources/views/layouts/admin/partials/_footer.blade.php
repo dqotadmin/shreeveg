@@ -5,7 +5,7 @@
                 <span class="d-none d-sm-inline-block">{{ Str::limit(Helpers::get_business_settings('footer_text'), 100) }}</span>
             </p>
         </div>
-        <div class="col-auto">
+        {{-- <div class="col-auto">
             <div class="d-flex justify-content-end">
                 <!-- List Dot -->
                 <ul class="list-inline list-separator">
@@ -29,15 +29,11 @@
                         <!-- End Keyboard Shortcuts Toggle -->
                     </li>
 
-                    <li class="list-inline-item">
-                        <label class="badge badge-success text-capitalize">
-                            {{translate('Software Version')}} {{ env('SOFTWARE_VERSION') }}
-                        </label>
-                    </li>
+                    
 
                 </ul>
                 <!-- End List Dot -->
             </div>
-        </div>
+        </div> --}}
     </div>
 </div>

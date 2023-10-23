@@ -69,14 +69,14 @@ class Helpers
                 $item['choice_options'] = json_decode($item['choice_options']);
 
                 $categories = gettype($item['category_ids']) == 'array' ? $item['category_ids'] : json_decode($item['category_ids']);
-                if(!is_null($categories) && count($categories) > 0) {
+                if (!is_null($categories) && count($categories) > 0) {
                     $ids = [];
                     foreach ($categories as $value) {
                         if ($value->position == 1) {
                             $ids[] = $value->id;
                         }
                     }
-                    $item['category_discount']= CategoryDiscount::active()->where('category_id', $ids)->first();
+                    $item['category_discount'] = CategoryDiscount::active()->where('category_id', $ids)->first();
                 } else {
                     $item['category_discount'] = [];
                 }
@@ -85,7 +85,7 @@ class Helpers
                     $variations[] = [
                         'type' => $var['type'],
                         'price' => (float)$var['price'],
-                        'stock' => isset($var['stock']) ? (integer)$var['stock'] : (integer)0,
+                        'stock' => isset($var['stock']) ? (int)$var['stock'] : (int)0,
                     ];
                 }
                 $item['variations'] = $variations;
@@ -112,14 +112,14 @@ class Helpers
             $data['choice_options'] = json_decode($data['choice_options']);
 
             $categories = gettype($data['category_ids']) == 'array' ? $data['category_ids'] : json_decode($data['category_ids']);
-            if(!is_null($categories) && count($categories) > 0) {
+            if (!is_null($categories) && count($categories) > 0) {
                 $ids = [];
                 foreach ($categories as $value) {
                     if ($value->position == 1) {
                         $ids[] = $value->id;
                     }
                 }
-                $data['category_discount']= CategoryDiscount::active()->where('category_id', $ids)->first();
+                $data['category_discount'] = CategoryDiscount::active()->where('category_id', $ids)->first();
             } else {
                 $data['category_discount'] = [];
             }
@@ -128,7 +128,7 @@ class Helpers
                 $variations[] = [
                     'type' => $var['type'],
                     'price' => (float)$var['price'],
-                    'stock' => isset($var['stock']) ? (integer)$var['stock'] : (integer)0,
+                    'stock' => isset($var['stock']) ? (int)$var['stock'] : (int)0,
                 ];
             }
             $data['variations'] = $variations;
@@ -199,7 +199,8 @@ class Helpers
         /*$project_id = BusinessSetting::where(['key' => 'fcm_project_id'])->first()->value;*/
 
         $url = "https://fcm.googleapis.com/fcm/send";
-        $header = array("authorization: key=" . $key . "",
+        $header = array(
+            "authorization: key=" . $key . "",
             "content-type: application/json"
         );
 
@@ -252,7 +253,8 @@ class Helpers
         /*$project_id = BusinessSetting::where(['key' => 'fcm_project_id'])->first()->value;*/
 
         $url = "https://fcm.googleapis.com/fcm/send";
-        $header = array("authorization: key=" . $key . "",
+        $header = array(
+            "authorization: key=" . $key . "",
             "content-type: application/json"
         );
 
@@ -331,7 +333,7 @@ class Helpers
     public static function category_discount_calculate($category_id, $price)
     {
         $category_discount = CategoryDiscount::active()->where(['category_id' => $category_id])->first();
-        if ($category_discount){
+        if ($category_discount) {
             if ($category_discount['discount_type'] == 'percent') {
                 $price_discount = ($price / 100) * $category_discount['discount_amount'];
                 if ($category_discount['maximum_amount'] < $price_discount) {
@@ -340,7 +342,7 @@ class Helpers
             } else {
                 $price_discount = $category_discount['discount_amount'];
             }
-        }else{
+        } else {
             $price_discount = 0;
         }
         return self::set_price($price_discount);
@@ -408,9 +410,9 @@ class Helpers
             $data = self::get_business_settings('delivery_boy_start_message');
         } elseif ($status == 'returned') {
             $data = self::get_business_settings('returned_message');
-        }  elseif ($status == 'failed') {
+        } elseif ($status == 'failed') {
             $data = self::get_business_settings('failed_message');
-        }  elseif ($status == 'canceled') {
+        } elseif ($status == 'canceled') {
             $data = self::get_business_settings('canceled_message');
         } elseif ($status == 'customer_notify_message') {
             $data = self::get_business_settings('customer_notify_message');
@@ -456,7 +458,6 @@ class Helpers
                     } else {
                         unlink($dir . "/" . $object);
                     }
-
                 }
             }
             reset($objects);
@@ -465,6 +466,15 @@ class Helpers
     }
 
     public static function get_language_name($key)
+    {
+        $languages = array(
+            "en-IN" => "English (India)",
+            "hi" => "Hindi - हिन्दी",
+        );
+        return array_key_exists($key, $languages) ? $languages[$key] : $key;
+    }
+
+    public static function get_language_name_old($key)
     {
         $languages = array(
             "af" => "Afrikaans",
@@ -617,9 +627,9 @@ class Helpers
     {
         $data = self::get_business_settings('language');
         $default_lang = 'en';
-        if($data && array_key_exists('code', $data)) {
+        if ($data && array_key_exists('code', $data)) {
             foreach ($data as $lang) {
-                if($lang['default'] == true) {
+                if ($lang['default'] == true) {
                     $default_lang = $lang['code'];
                 }
             }
@@ -686,7 +696,6 @@ class Helpers
 
         if (strpos($str, $envKey) !== false) {
             $str = str_replace("{$envKey}={$oldValue}", "{$envKey}={$envValue}", $str);
-
         } else {
             $str .= "{$envKey}={$envValue}\n";
         }
@@ -696,15 +705,15 @@ class Helpers
         return $envValue;
     }
 
-    public static function requestSender($request):array
+    public static function requestSender($request): array
     {
         $remove = array("http://", "https://", "www.");
         $url = str_replace($remove, "", url('/'));
 
         $post = [
-            base64_decode('dXNlcm5hbWU=') => $request['username'],//un
-            base64_decode('cHVyY2hhc2Vfa2V5') => $request['purchase_key'],//pk
-            base64_decode('c29mdHdhcmVfaWQ=') => base64_decode(env(base64_decode('U09GVFdBUkVfSUQ='))),//sid
+            base64_decode('dXNlcm5hbWU=') => $request['username'], //un
+            base64_decode('cHVyY2hhc2Vfa2V5') => $request['purchase_key'], //pk
+            base64_decode('c29mdHdhcmVfaWQ=') => base64_decode(env(base64_decode('U09GVFdBUkVfSUQ='))), //sid
             base64_decode('ZG9tYWlu') => $url,
         ];
 
@@ -789,7 +798,8 @@ class Helpers
         return true;
     }
 
-    public static function generate_referer_code() {
+    public static function generate_referer_code()
+    {
         $ref_code = Str::random('20');
         if (User::where('referral_code', '=', $ref_code)->exists()) {
             return generate_referer_code();
@@ -807,7 +817,6 @@ class Helpers
         $mpdf->WriteHTML($mpdf_view);
         $mpdf->Output($file_prefix . $file_postfix . '.pdf', 'D');
     }
-
 }
 
 function translate($key)
@@ -815,7 +824,7 @@ function translate($key)
     $local = session()->has('local') ? session('local') : 'en';
     App::setLocale($local);
 
-    try{
+    try {
         $lang_array = include(base_path('resources/lang/' . $local . '/messages.php'));
         $processed_key = ucfirst(str_replace('_', ' ', Helpers::remove_invalid_charcaters($key)));
 
@@ -827,11 +836,9 @@ function translate($key)
         } else {
             $result = __('messages.' . $key);
         }
-    }catch(Exception $exception){
+    } catch (Exception $exception) {
         $result = __('messages.' . $key);
     }
 
     return $result;
 }
-
-

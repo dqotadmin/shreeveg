@@ -18,7 +18,7 @@
             <div class="navbar-nav-wrap-content-right">
                 <!-- Navbar -->
                 <ul class="navbar-nav align-items-center flex-row">
-                    <li class="nav-item mr-0">
+                    {{-- <li class="nav-item mr-0">
                         <div class="hs-unfold">
                             <div class="p-2">
                                 @php( $local = session()->has('local')?session('local'):'en')
@@ -38,7 +38,6 @@
                                                     <li>
                                                         <a class="dropdown-item pb-1 lang-country-flag"
                                                            href="{{route('admin.lang',[$data['code']])}}">
-{{--                                                           <img src="{{asset('public/assets/admin/img/flags')}}/{{$data['code']}}.png" alt="">--}}
                                                             <span>{{\App\CentralLogics\Helpers::get_language_name($data['code'])}}</span>
                                                         </a>
                                                     </li>
@@ -49,9 +48,9 @@
                                 </div>
                             </div>
                         </div>
-                    </li>
+                    </li> --}}
 
-                    <li class="nav-item d-none d-sm-inline-block">
+                    {{-- <li class="nav-item d-none d-sm-inline-block">
                         <!-- Notification -->
                         <div class="hs-unfold">
                             <a class="js-hs-unfold-invoker btn btn-icon notify--icon"
@@ -65,9 +64,9 @@
                             </a>
                         </div>
                         <!-- End Notification -->
-                    </li>
+                    </li> --}}
 
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <!-- Notification -->
                         <div class="hs-unfold">
                             <a class="js-hs-unfold-invoker btn btn-icon notify--icon"
@@ -79,7 +78,7 @@
                             </a>
                         </div>
                         <!-- End Notification -->
-                    </li>
+                    </li> --}}
 
 
                     <li class="nav-item ml-4">

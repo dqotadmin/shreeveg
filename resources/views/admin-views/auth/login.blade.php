@@ -44,11 +44,7 @@
                             </div>
                             <h2 class="title">{{translate('sign in')}}</h2>
                             <div>{{translate('welcome_back')}}</div>
-                            <p class="mb-0">{{translate('Want to login your branches')}}?
-                                <a href="{{route('branch.auth.login')}}">
-                                    {{translate('branch')}} {{translate('login')}}
-                                </a>
-                            </p>
+                            
                             <span class="badge badge-soft-info mt-2">( {{translate('admin_or_employee_signin')}} )</span>
                         </div>
                     </div>

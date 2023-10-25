@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', translate('Add new category'))
+@section('title', translate('Add new Unit'))
 
 @push('css_or_js')
 
@@ -16,7 +16,7 @@
                     <img src="{{asset('public/assets/admin/img/category.png')}}" class="w--24" alt="">
                 </span>
                 <span>
-                    {{translate('category_setup')}}
+                    {{translate('unit_setup')}}
                 </span>
             </h1>
         </div>
@@ -24,22 +24,70 @@
 
         <div class="row g-2">
             <div class="col-sm-12 col-lg-12">
-                        <div class="btn--container justify-content-end m-2">
-                            <a type="button"  href="{{route('admin.category.create')}}" class="btn btn--primary">{{translate('Add Catgory')}}</a>
-                        </div>
+                <div class="card">
+                    <div class="card-body pt-sm-0 pb-sm-4">
+                        <form action="{{route('admin.unit.store')}}" method="post" enctype="multipart/form-data">
+                            @csrf
                             @php($data = Helpers::get_business_settings('language'))
                             @php($default_lang = Helpers::get_default_language())
                             {{-- @php($default_lang = 'en') --}}
-                           
+                            @if ($data && array_key_exists('code', $data[0]))
+                                {{-- @php($default_lang = json_decode($language)[0]) --}}
+                                <ul class="nav nav-tabs d-inline-flex mb--n-30">
+                                    <!-- @foreach ($data as $lang)
+                                    <li class="nav-item">
+                                        <a class="nav-link lang_link {{ $lang['default'] == true ? 'active' : '' }}" href="#"
+                                        id="{{ $lang['code'] }}-link">{{ \App\CentralLogics\Helpers::get_language_name($lang['code']) . '(' . strtoupper($lang['code']) . ')' }}</a>
+                                    </li>
+                                    @endforeach -->
+                                </ul>
+                                <div class="row align-items-end g-4">
+                                    @foreach ($data as $lang)
+                                        <div class="col-sm-6 {{ $lang['default'] == false ? 'd-none' : '' }} lang_form"
+                                                id="{{ $lang['code'] }}-form">
+                                            <label class="form-label"
+                                                    for="exampleFormControlInput1">{{ translate('Unit') }} {{ translate('Title') }}
+                                                <!-- ({{ strtoupper($lang['code']) }}) -->
+                                            </label>
+                                            <input type="text" name="title[]" class="form-control" placeholder="{{ translate('Ex: Vegitabal') }}" maxlength="255"
+                                                    {{$lang['status'] == true ? 'required':''}}
+                                                    @if($lang['status'] == true) oninvalid="document.getElementById('{{$lang['code']}}-link').click()" @endif>
+                                        </div>
+                                        <input type="hidden" name="lang[]" value="{{ $lang['code'] }}">
+                                    @endforeach
+                                    @foreach ($data as $lang)
+                                        <div class="col-sm-6 {{ $lang['default'] == false ? 'd-none' : '' }} lang_form"
+                                                id="{{ $lang['code'] }}-form">
+                                            <label class="form-label"
+                                                    for="exampleFormControlInput1">{{ translate('Unit') }} {{ translate('Description') }}
+                                                <!-- ({{ strtoupper($lang['code']) }}) -->
+                                            </label>
+                                            <input type="text" name="description[]" class="form-control" placeholder="{{ translate('Ex: veg') }}" maxlength="255"
+                                                    {{$lang['status'] == true ? 'required':''}}
+                                                    @if($lang['status'] == true) oninvalid="document.getElementById('{{$lang['code']}}-link').click()" @endif>
+                                        </div>
+                                        <input type="hidden" name="lang[]" value="{{ $lang['code'] }}">
+                                    @endforeach
+                                    <input name="position" value="0" hidden>
+                              
+                                    <div class="col-12">
+                                        <div class="btn--container justify-content-end">
+                                            <button type="reset" class="btn btn--reset">{{translate('reset')}}</button>
+                                            <button type="submit" class="btn btn--primary">{{translate('submit')}}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
 
             <div class="col-sm-12 col-lg-12">
                 <div class="card">
                     <div class="card-header border-0">
                         <div class="card--header">
-                            <h5 class="card-title">{{translate('Category Table')}} <span class="badge badge-soft-secondary">{{ $categories->total() }}</span> </h5>
+                            <h5 class="card-title">{{translate('Unit Table')}} <span class="badge badge-soft-secondary">{{ $units->total() }}</span> </h5>
                             <form action="{{url()->current()}}" method="GET">
                                 <div class="input-group">
                                     <input id="datatableSearch_" type="search" name="search" maxlength="255"
@@ -62,52 +110,35 @@
                             <thead class="thead-light">
                             <tr>
                                 <th class="text-center">{{translate('#')}}</th>
-                                <th>{{translate('category_image')}}</th>
-                                <th>{{translate('name')}}</th>
-                                <th>{{translate('Title Silver')}}</th>
-                                <th>{{translate('Title Gold')}}</th>
-                                <th>{{translate('Title Platinum')}}</th>
+                                <th>{{translate('Unit Title')}}</th>
+                                <th>{{translate('Unit Description')}}</th>
                                 <th>{{translate('status')}}</th>
                                 <th class="text-center">{{translate('action')}}</th>
                             </tr>
                             </thead>
 
                             <tbody>
-                            @foreach($categories as $key=>$category)
+                            @foreach($units as $key=>$unit)
                                 <tr>
-                                    <td class="text-center">{{$categories->firstItem()+$key}}</td>
-                                    <td>
-                                        <img src="{{asset('storage/app/public/category')}}/{{$category['image']}}"
-                                            onerror="this.src='{{asset('public/assets/admin/img/400x400/img2.jpg')}}'" class="img--50 ml-3" alt="">
-                                    </td>
+                                    <td class="text-center">{{$units->firstItem()+$key}}</td>
+                                   
                                     <td>
                                     <span class="d-block font-size-sm text-body text-trim-50">
-                                        {{$category['name']}}
+                                        {{$unit['title']}}
                                     </span>
                                     </td>
                                     <td>
                                     <span class="d-block font-size-sm text-body text-trim-50">
-                                        {{$category['title_silver']}}
-                                    </span>
-                                    </td>
-                                 
-                                    <td>
-                                    <span class="d-block font-size-sm text-body text-trim-50">
-                                        {{$category['title_gold']}}
-                                    </span>
-                                    </td>
-                                    <td>
-                                    <span class="d-block font-size-sm text-body text-trim-50">
-                                        {{$category['title_platinum']}}
+                                        {{$unit['description']}}
                                     </span>
                                     </td>
                                     <td>
 
                                         <label class="toggle-switch">
                                             <input type="checkbox"
-                                                onclick="status_change_alert('{{ route('admin.category.status', [$category->id, $category->status ? 0 : 1]) }}', '{{ $category->status? translate('you_want_to_disable_this_category'): translate('you_want_to_active_this_category') }}', event)"
-                                                class="toggle-switch-input" id="stocksCheckbox{{ $category->id }}"
-                                                {{ $category->status ? 'checked' : '' }}>
+                                                onclick="status_change_alert('{{ route('admin.unit.status', [$unit->id, $unit->status ? 0 : 1]) }}', '{{ $unit->status? translate('you_want_to_disable_this_unit'): translate('you_want_to_active_this_unit') }}', event)"
+                                                class="toggle-switch-input" id="stocksCheckbox{{ $unit->id }}"
+                                                {{ $unit->status ? 'checked' : '' }}>
                                             <span class="toggle-switch-label text">
                                                 <span class="toggle-switch-indicator"></span>
                                             </span>
@@ -118,15 +149,15 @@
                                         <!-- Dropdown -->
                                         <div class="btn--container justify-content-center">
                                             <a class="action-btn"
-                                                href="{{route('admin.category.edit',[$category['id']])}}">
+                                                href="{{route('admin.unit.edit',[$unit['id']])}}">
                                             <i class="tio-edit"></i></a>
                                             <a class="action-btn btn--danger btn-outline-danger" href="javascript:"
-                                                onclick="form_alert('category-{{$category['id']}}','{{ translate("Want to delete this") }}')">
+                                                onclick="form_alert('unit-{{$unit['id']}}','{{ translate("Want to delete this") }}')">
                                                 <i class="tio-delete-outlined"></i>
                                             </a>
                                         </div>
-                                        <form action="{{route('admin.category.delete',[$category['id']])}}"
-                                                method="post" id="category-{{$category['id']}}">
+                                        <form action="{{route('admin.unit.delete',[$unit['id']])}}"
+                                                method="post" id="unit-{{$unit['id']}}">
                                             @csrf @method('delete')
                                         </form>
                                         <!-- End Dropdown -->
@@ -137,7 +168,7 @@
                         </table>
 
                                 
-                        @if(count($categories) == 0)
+                        @if(count($units) == 0)
                         <div class="text-center p-4">
                             <img class="w-120px mb-3" src="{{asset('/public/assets/admin/svg/illustrations/sorry.svg')}}" alt="Image Description">
                             <p class="mb-0">{{translate('No_data_to_show')}}</p>
@@ -146,7 +177,7 @@
 
                         <table>
                             <tfoot>
-                            {!! $categories->links() !!}
+                            {!! $units->links() !!}
                             </tfoot>
                         </table>
 

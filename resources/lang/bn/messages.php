@@ -1572,6 +1572,7 @@
   'Invalid Token' => 'Invalid Token',
   'success' => 'Success',
   'support_management' => 'Support management',
+  'unit_management' => 'Unit management',
   'user_management' => 'User management',
   'Click to import the file here' => 'Click to import the file here',
   'Click here to import the .xlsx file here' => 'Click here to import the .xlsx file here',

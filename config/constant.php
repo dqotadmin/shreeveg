@@ -16,6 +16,8 @@ const MANAGEMENT_SECTION = [
     'support_management' => 'support_management',
     'report_management' => 'report_management',
     'user_management' => 'user_management',
+  'unit_management' => 'Unit management',
+
     'system_management' => 'system_management',
 ];
 

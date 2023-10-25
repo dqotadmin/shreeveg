@@ -34,7 +34,7 @@
                     @php($data = Helpers::get_business_settings('language'))
                     @php($default_lang = Helpers::get_default_language())
 
-                    @if($data && array_key_exists('code', $data[0]))
+                    <!-- @if($data && array_key_exists('code', $data[0]))
 
                             <ul class="nav nav-tabs d-inline-flex {{$category->parent_id == 0 ? 'mb--n-30' : 'mb-4'}}">
                                 @foreach($data as $lang)
@@ -45,7 +45,7 @@
                                 @endforeach
                             </ul>
 
-                    @endif
+                    @endif -->
 
                     @if($data && array_key_exists('code', $data[0]))
                     <div class="row align-items-end g-4">
@@ -62,11 +62,73 @@
                             ?>
                             <div class="col-sm-6 {{$lang['default'] == false ? 'd-none':''}} lang_form" id="{{$lang['code']}}-form">
                                 <label class="input-label" for="exampleFormControlInput1">{{translate('name')}}
-                                    ({{strtoupper($lang['code'])}})</label>
-                                <input type="text" name="name[]" maxlength="255" value="{{$lang['code'] == 'en' ? $category['name'] : ($translate[$lang['code']]['name']??'')}}" class="form-control" @if($lang['status'] == true) oninvalid="document.getElementById('{{$lang['code']}}-link').click()" @endif placeholder="{{ translate('New Category') }}" {{$lang['status'] == true ? 'required':''}}>
+                                    <!-- ({{strtoupper($lang['code'])}}) -->
+                                </label>
+                                <input type="text" name="name[]" maxlength="255"
+                                 value="{{$lang['code'] == 'en' ? $category['name'] : ($translate[$lang['code']]['name']??'')}}" 
+                                 class="form-control" @if($lang['status'] == true) oninvalid="document.getElementById('{{$lang['code']}}-link').click()" @endif 
+                                 placeholder="{{ translate('New Category') }}" {{$lang['status'] == true ? 'required':''}}>
                             </div>
                             <input type="hidden" name="lang[]" value="{{$lang['code']}}">
                         @endforeach
+                        @foreach ($data as $lang)
+                                        <div class="col-sm-6 {{ $lang['default'] == false ? 'd-none' : '' }} lang_form"
+                                                id="{{ $lang['code'] }}-form">
+                                            <label class="form-label"
+                                                    for="exampleFormControlInput1">{{ translate('Title') }} {{ translate('silver') }}
+                                                <!-- ({{ strtoupper($lang['code']) }}) -->
+                                            </label>
+                                            <input type="text" name="title_silver[]" class="form-control"  value="{{$lang['code'] == 'en' ? $category['title_silver'] : ($translate[$lang['code']]['title_silver']??'')}}"  placeholder="{{ translate('Ex: veg') }}" maxlength="255"
+                                                    {{$lang['status'] == true ? 'required':''}}
+                                                    @if($lang['status'] == true) oninvalid="document.getElementById('{{$lang['code']}}-link').click()" @endif>
+                                        </div>
+                                        <input type="hidden" name="lang[]" value="{{ $lang['code'] }}">
+                                    @endforeach
+                                    @foreach ($data as $lang)
+                                        <div class="col-sm-6 {{ $lang['default'] == false ? 'd-none' : '' }} lang_form"
+                                                id="{{ $lang['code'] }}-form">
+                                            <label class="form-label"
+                                                    for="exampleFormControlInput1">{{ translate('Item') }} {{ translate('Code') }}
+                                                <!-- ({{ strtoupper($lang['code']) }}) -->
+                                            </label>
+                                            <input type="text" name="item_code[]" class="form-control"
+                                            value="{{$lang['code'] == 'en' ? $category['item_code'] : ($translate[$lang['code']]['item_code']??'')}}" 
+                                             placeholder="{{ translate('Ex: abc123') }}" maxlength="255"
+                                                    {{$lang['status'] == true ? 'required':''}}
+                                                    @if($lang['status'] == true) oninvalid="document.getElementById('{{$lang['code']}}-link').click()" @endif>
+                                        </div>
+                                        <input type="hidden" name="lang[]" value="{{ $lang['code'] }}">
+                                    @endforeach
+                                    @foreach ($data as $lang)
+                                        <div class="col-sm-6 {{ $lang['default'] == false ? 'd-none' : '' }} lang_form"
+                                                id="{{ $lang['code'] }}-form">
+                                            <label class="form-label"
+                                                    for="exampleFormControlInput1">{{ translate('Title') }} {{ translate('Gold') }}
+                                                <!-- ({{ strtoupper($lang['code']) }}) -->
+                                            </label>
+                                            <input type="text" name="title_gold[]" class="form-control" placeholder="{{ translate('Ex: 100% Organick') }}" maxlength="255"
+                                            value="{{$lang['code'] == 'en' ? $category['title_gold'] : ($translate[$lang['code']]['title_gold']??'')}}" 
+                                                    {{$lang['status'] == true ? 'required':''}}
+                                                    @if($lang['status'] == true) oninvalid="document.getElementById('{{$lang['code']}}-link').click()" @endif>
+                                        </div>
+                                        <input type="hidden" name="lang[]" value="{{ $lang['code'] }}">
+                                    @endforeach
+                                    @foreach ($data as $lang)
+
+                                        <div class="col-sm-6 {{ $lang['default'] == false ? 'd-none' : '' }} lang_form"
+                                                id="{{ $lang['code'] }}-form">
+                                            <label class="form-label"
+                                                    for="exampleFormControlInput1">{{translate('Title')}} {{ translate('Platinum') }}
+                                                <!-- ({{ strtoupper($default_lang) }}) -->
+                                            </label>
+                                            <input type="text" name="title_platinum[]" class="form-control" placeholder="{{ translate('Ex: 100% Organick') }}" maxlength="255"
+                                        value="{{$lang['code'] == 'en' ? $category['title_platinum'] : ($translate[$lang['code']]['title_platinum']??'')}}" 
+                                                    {{$lang['status'] == true ? 'required':''}}
+                                                    @if($lang['status'] == true) oninvalid="document.getElementById('{{$lang['code']}}-link').click()" @endif>
+                                        </div>
+                                        <input type="hidden" name="lang[]" value="{{ $lang['code'] }}">
+                                         
+                                    @endforeach
                         @else
                             <div class="col-sm-6 lang_form" id="{{$default_lang}}-form">
                                 <label class="input-label"
@@ -80,7 +142,7 @@
                         @endif
                         <input name="position" value="0" hidden>
                         @if($category->parent_id == 0)
-                        <div class="col-sm-6">
+                        <div class="col-sm-6"> 
                             <center>
                                 <img class="img--105" id="viewer" onerror="this.src='{{asset('public/assets/admin/img/900x400/img1.jpg')}}'"
                                     src="{{asset('storage/app/public/category')}}/{{$category['image']}}" alt="image"/>
@@ -95,7 +157,8 @@
                         @endif
                         <div class="col-12">
                             <div class="btn--container justify-content-end">
-                                <button type="reset" class="btn btn--reset">{{translate('reset')}}</button>
+                                <a href="{{route('admin.category.list')}}"  type="reset" class="btn btn--reset">
+                             {{translate('Back')}}</a>
                                 <button type="submit" class="btn btn--primary">{{translate('update')}}</button>
                             </div>
                         </div>

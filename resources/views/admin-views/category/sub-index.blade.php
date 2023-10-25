@@ -20,64 +20,18 @@
             </h1>
         </div>
         <!-- End Page Header -->
-        <div class="row gx-2 gx-lg-3">
-            <div class="col-sm-12 col-lg-12 mb-3 mb-lg-2">
-                <div class="card">
-                    <div class="card-body">
-                        <form action="{{route('admin.category.store')}}" method="post">
-                            @csrf
-                            @php($data = Helpers::get_business_settings('language'))
-                            @php($default_lang = Helpers::get_default_language())
-
-                            @if($data && array_key_exists('code', $data[0]))
-
-                                <ul class="nav nav-tabs mb-4 d-inline-flex">
-                                    @foreach($data as $lang)
-                                        <li class="nav-item">
-                                            <a class="nav-link lang_link {{$lang['default'] == true? 'active':''}}" href="#" id="{{$lang['code']}}-link">{{\App\CentralLogics\Helpers::get_language_name($lang['code']).'('.strtoupper($lang['code']).')'}}</a>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                                <div class="row">
-                                @foreach($data as $lang)
-                                    <div class="col-sm-6 {{$lang['default'] == false ? 'd-none':''}} lang_form" id="{{$lang['code']}}-form">
-                                        <label class="form-label" for="exampleFormControlInput1">{{translate('sub_category')}} {{translate('name')}} ({{strtoupper($lang['code'])}})</label>
-                                        <input type="text" name="name[]" class="form-control" maxlength="255" placeholder="{{ translate('New Sub Category') }}" {{$lang['status'] == true ? 'required':''}}
-                                        @if($lang['status'] == true) oninvalid="document.getElementById('{{$lang['code']}}-link').click()" @endif>
-                                    </div>
-                                    <input type="hidden" name="lang[]" value="{{$lang['code']}}">
-                                @endforeach
-                                @else
-                                <div class="col-sm-6 lang_form" id="{{$default_lang}}-form">
-                                    <label class="form-label" for="exampleFormControlInput1">{{translate('sub_category')}} {{translate('name')}}({{strtoupper($default_lang)}})</label>
-                                    <input type="text" name="name[]" class="form-control" placeholder="{{ translate('New Sub Category') }}" required>
-                                </div>
-                                <input type="hidden" name="lang[]" value="{{$default_lang}}">
-                                @endif
-                                <input name="position" value="1" hidden>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label class="form-label"
-                                            for="exampleFormControlSelect1">{{translate('main')}} {{translate('category')}}
-                                            <span class="input-label-secondary">*</span></label>
-                                        <select id="exampleFormControlSelect1" name="parent_id" class="form-control" required>
-                                            @foreach(\App\Model\Category::where(['position'=>0])->get() as $category)
-                                                <option value="{{$category['id']}}">{{$category['name']}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="btn--container justify-content-end">
-                                        <a href="" class="btn btn--reset min-w-120px">{{translate('reset')}}</a>
-                                        <button type="submit" class="btn btn--primary">{{translate('submit')}}</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+        <div class="row g-2">
+            <div class="col-sm-12 col-lg-12">
+                <div class="btn--container justify-content-end m-2">
+                    <a type="button"  href="{{route('admin.category.sub-create')}}" class="btn btn--primary">{{translate('Add Sub Catgory')}}</a>
                 </div>
+                    @csrf
+                    @php($data = Helpers::get_business_settings('language'))
+                    @php($default_lang = Helpers::get_default_language())
+
             </div>
+        </div>
+        
 
             <div class="col-sm-12 col-lg-12 mb-3 mb-lg-2">
                 <div class="card">
@@ -98,19 +52,24 @@
                                     </div>
                                 </div>
                             </form>
-                        </div>
+                        </div> 
                     </div>
                     <!-- Table -->
                     <div class="table-responsive datatable-custom">
                         <table class="table table-borderless table-thead-bordered table-nowrap table-align-middle card-table">
                             <thead class="thead-light">
-                            <tr>
-                                <th class="text-center">{{translate('#')}}</th>
-                                <th>{{translate('main')}} {{translate('category')}}</th>
-                                <th>{{translate('sub_category')}}</th>
-                                <th>{{translate('status')}}</th>
-                                <th class="text-center">{{translate('action')}}</th>
-                            </tr>
+                                <tr>
+                                    <th class="text-center">{{translate('#')}}</th>
+                                    <th>{{translate('Image')}}</th>
+                                    <th>{{translate('main')}} {{translate('category')}}</th>
+                                    <th>{{translate('sub_category')}}</th>
+                                    <th>{{translate('Title Silver')}}</th>
+                                    <th>{{translate('Title Gold')}}</th>
+                                    <th>{{translate('Title Platinum')}}</th>
+                                    <th>{{translate('unit')}}</th>
+                                    <th>{{translate('status')}}</th>
+                                    <th class="text-center">{{translate('action')}}</th>
+                                </tr>
 
                             </thead>
 
@@ -118,6 +77,10 @@
                             @foreach($categories as $key=>$category)
                                 <tr>
                                     <td class="text-center">{{$categories->firstItem()+$key}}</td>
+                                    <td>
+                                        <img src="{{asset('storage/app/public/category')}}/{{$category['image']}}"
+                                            onerror="this.src='{{asset('public/assets/admin/img/400x400/img2.jpg')}}'" class="img--50 ml-3" alt="">
+                                    </td>
                                     <td>
                                         <span class="d-block font-size-sm text-body">
                                             {{$category->parent['name']}}
@@ -128,6 +91,34 @@
                                         <span class="d-block font-size-sm text-body">
                                             {{$category['name']}}
                                         </span>
+                                    </td>
+
+                                    <td>
+                                    <span class="d-block font-size-sm text-body text-trim-50">
+                                        {{$category['title_silver']}}
+                                    </span>
+                                    </td>
+                                 
+                                    <td>
+                                    <span class="d-block font-size-sm text-body text-trim-50">
+                                        {{$category['title_gold']}}
+                                    </span>
+                                    </td>
+                                    <td>
+                                    <span class="d-block font-size-sm text-body text-trim-50">
+                                        {{$category['title_platinum']}}
+                                    </span>
+                                    </td>
+                                    <td>
+                                    <select  name="unit[]" id="select_unit" data-val="{{$category->id}}" class="select_unit form-control" required>
+                                            @foreach(\App\Model\Unit::get() as $unit)
+                                            <option
+                                                    value="{{$unit['id']}}"   {{$category['sub_unit_title']==$unit['id']?'selected':''}}>
+                                                    {{$unit['title']}}
+                                                </option> 
+                                            @endforeach
+                                      </option>
+                                    </select>
                                     </td>
 
                                     <td>
@@ -147,7 +138,7 @@
                                         <!-- Dropdown -->
                                         <div class="btn--container justify-content-center">
                                             <a class="action-btn"
-                                                href="{{route('admin.category.edit',[$category['id']])}}">
+                                                href="{{route('admin.category.sub-edit',[$category['id']])}}">
                                             <i class="tio-edit"></i></a>
                                             <a class="action-btn btn--danger btn-outline-danger" href="javascript:"
                                                 onclick="form_alert('category-{{$category['id']}}','{{ translate("Want to delete this") }}')">
@@ -209,53 +200,101 @@
             })
         }
 </script>
-    <script>
-        $(".lang_link").click(function(e){
-            e.preventDefault();
-            $(".lang_link").removeClass('active');
-            $(".lang_form").addClass('d-none');
-            $(this).addClass('active');
+<script>
+    $(".lang_link").click(function(e){
+        e.preventDefault();
+        $(".lang_link").removeClass('active');
+        $(".lang_form").addClass('d-none');
+        $(this).addClass('active');
 
-            let form_id = this.id;
-            let lang = form_id.split("-")[0];
-            console.log(lang);
-            $("#"+lang+"-form").removeClass('d-none');
-            if(lang == '{{$default_lang}}')
-            {
-                $(".from_part_2").removeClass('d-none');
-            }
-            else
-            {
-                $(".from_part_2").addClass('d-none');
+        let form_id = this.id;
+        let lang = form_id.split("-")[0];
+        console.log(lang);
+        $("#"+lang+"-form").removeClass('d-none');
+        if(lang == '{{$default_lang}}')
+        {
+            $(".from_part_2").removeClass('d-none');
+        }
+        else
+        {
+            $(".from_part_2").addClass('d-none');
+        }
+    });
+</script>
+
+<script>
+    $('#search-form').on('submit', function () {
+        var formData = new FormData(this);
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-    </script>
+        $.post({
+            url: '{{route('admin.category.search')}}',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                $('#loading').show();
+            },
+            success: function (data) {
+                $('#set-rows').html(data.view);
+                $('.page-area').hide();
+            },
+            complete: function () {
+                $('#loading').hide();
+            },
+        });
+    });
+</script>
+<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
 
+            reader.onload = function (e) {
+                $('#viewer').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $("#customFileEg1").change(function () {
+        readURL(this);
+    });
+</script>
+        <!-- change unit  -->
     <script>
-        $('#search-form').on('submit', function () {
-            var formData = new FormData(this);
+   	$(".select_unit").on('change',function(e) {
+			e.preventDefault();
+            var sub_unit_title =  $(this).val();
+			var id = $(this).attr('data-val'); 
+            console.log(id);
             $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            $.post({
-                url: '{{route('admin.category.search')}}',
-                data: formData,
-                cache: false,
-                contentType: false,
-                processData: false,
-                beforeSend: function () {
-                    $('#loading').show();
-                },
-                success: function (data) {
-                    $('#set-rows').html(data.view);
-                    $('.page-area').hide();
-                },
-                complete: function () {
-                    $('#loading').hide();
-                },
-            });
+            if (select_unit) {
+						$.ajax({
+                            url: '{{route('admin.category.update-unit')}}',
+                            data: {
+                                id: id,
+                                sub_unit_title: sub_unit_title,
+                            }, 
+							type: "POST",
+							success: function(response) {
+                                toastr.success(response.message);
+							},
+							error: function(response) {
+                                toastr.error(response.error);
+							}
+						});
+					}
+         
         });
     </script>
 @endpush

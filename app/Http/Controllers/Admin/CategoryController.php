@@ -46,10 +46,39 @@ class CategoryController extends Controller
         return view('admin-views.category.index', compact('categories', 'search'));
     }
 
+    function create(Request $request): View|Factory|Application
+    {
+        $query_param = [];
+        $search = $request['search'];
+        if ($request->has('search')) {
+            $key = explode(' ', $request['search']);
+            $categories = $this->category->where(['position' => 0])->where(function ($q) use ($key) {
+                foreach ($key as $value) {
+                    $q->orWhere('name', 'like', "%{$value}%");
+                }
+            });
+            $query_param = ['search' => $request['search']];
+        } else {
+            $categories = $this->category->where(['position' => 0]);
+        }
+        $categories = $categories->latest()->paginate(Helpers::getPagination())->appends($query_param);
+         return view('admin-views.category.add', compact('categories', 'search'));
+
+    }
+    function sub_create(Request $request): View|Factory|Application
+    {
+        return view('admin-views.category.sub-add');
+
+    }
+
     /**
      * @param Request $request
      * @return Application|Factory|View
      */
+
+
+   
+
     function sub_index(Request $request): View|Factory|Application
     {
         $query_param = [];
@@ -119,6 +148,11 @@ class CategoryController extends Controller
     {
         $request->validate([
             'name' => 'required',
+            'title_silver' => 'required',
+            'item_code' => 'required',
+            'title_gold' => 'required',
+            'title_platinum' => 'required',
+            'image' => 'required',
         ]);
 
         foreach ($request->name as $name) {
@@ -147,24 +181,32 @@ class CategoryController extends Controller
         //into db
         $category = $this->category;
         $category->name = $request->name[array_search('en', $request->lang)];
+        $category->title_silver = $request->title_silver[array_search('en', $request->lang)];
+        $category->item_code = $request->item_code[array_search('en', $request->lang)];
+        $category->title_gold = $request->title_gold[array_search('en', $request->lang)];
+        $category->title_platinum = $request->title_platinum[array_search('en', $request->lang)];
         $category->image = $image_name;
         $category->parent_id = $request->parent_id == null ? 0 : $request->parent_id;
         $category->position = $request->position;
+        //sub category data 
+        $category->unit =  $request->unit == null ? null :  json_encode($request['unit']);
+        $category->unit_title = $request->unit_title == null ? null : $request->unit_title[array_search('en', $request->lang)];
+        $category->sub_unit_title = $request->sub_unit_title == null ? null :  $request->sub_unit_title[array_search('en', $request->lang)];
         $category->save();
 
         //translation
         $data = [];
-        foreach ($request->lang as $index => $key) {
-            if ($request->name[$index] && $key != 'en') {
-                $data[] = array(
-                    'translationable_type' => 'App\Model\Category',
-                    'translationable_id' => $category->id,
-                    'locale' => $key,
-                    'key' => 'name',
-                    'value' => $request->name[$index],
-                );
-            }
-        }
+        // foreach ($request->lang as $index => $key) {
+        //     if ($request->name[$index] && $key != 'en') {
+        //         $data[] = array(
+        //             'translationable_type' => 'App\Model\Category',
+        //             'translationable_id' => $category->id,
+        //             'locale' => $key,
+        //             'key' => 'name',
+        //             'value' => $request->name[$index],
+        //         );
+        //     }
+        // }
         if (count($data)) {
             Translation::insert($data);
         }
@@ -183,6 +225,26 @@ class CategoryController extends Controller
         return view('admin-views.category.edit', compact('category'));
     }
 
+    public function sub_edit($id): View|Factory|Application
+    {
+        $category = $this->category->withoutGlobalScopes()->with('translations')->find($id);
+        return view('admin-views.category.sub-edit', compact('category'));
+    }
+
+    public function update_unit(Request $request):  \Illuminate\Http\JsonResponse
+    {    
+        $id = $request->id;
+        $sub_unit_title = $request->sub_unit_title;
+        $category = $this->category->find($id);
+        $category->sub_unit_title = $sub_unit_title;
+        $category->save();
+        if($category->save()){
+        return response()->json(['message' => translate('Unit updated Successfully')]);
+        }else{
+        return response()->json(['message' => translate('Unit Not updated!')]);
+
+        }
+    }
     /**
      * @param Request $request
      * @return RedirectResponse
@@ -204,8 +266,12 @@ class CategoryController extends Controller
     public function update(Request $request, $id): RedirectResponse
     {
         $request->validate([
-            'name' =>'required|unique:categories,name,'.$request->id
-        ]);
+            'name' =>'required|unique:categories,name,'.$request->id,
+            'title_silver' => 'required',
+            'item_code' => 'required',
+            'title_gold' => 'required',
+            'title_platinum' => 'required',
+     ]);
 
         foreach ($request->name as $name) {
             if (strlen($name) > 255) {
@@ -215,22 +281,37 @@ class CategoryController extends Controller
         }
 
         $category = $this->category->find($id);
+   
         $category->name = $request->name[array_search('en', $request->lang)];
+        $category->title_silver = $request->title_silver[array_search('en', $request->lang)];
+        $category->item_code = $request->item_code[array_search('en', $request->lang)];
+        $category->title_gold = $request->title_gold[array_search('en', $request->lang)];
+        $category->title_platinum = $request->title_platinum[array_search('en', $request->lang)];
         $category->image = $request->has('image') ? Helpers::update('category/', $category->image, 'png', $request->file('image')) : $category->image;
+
+        $category->parent_id = $request->parent_id == null ? 0 : $request->parent_id;
+        $category->position = $request->position;
+        //sub category data 
+        $category->unit =  $request->unit == null ? null :  json_encode($request['unit']);
+        $category->unit_title = $request->unit_title == null ? null : $request->unit_title[array_search('en', $request->lang)];
+        $category->sub_unit_title = $request->sub_unit_title == null ? null :  $request->sub_unit_title[array_search('en', $request->lang)];
+
+   
         $category->save();
-        foreach ($request->lang as $index => $key) {
-            if ($request->name[$index] && $key != 'en') {
-                Translation::updateOrInsert(
-                    ['translationable_type' => 'App\Model\Category',
-                        'translationable_id' => $category->id,
-                        'locale' => $key,
-                        'key' => 'name'],
-                    ['value' => $request->name[$index]]
-                );
-            }
-        }
+        // foreach ($request->lang as $index => $key) {
+        //     if ($request->name[$index] && $key != 'en') {
+        //         Translation::updateOrInsert(
+        //             ['translationable_type' => 'App\Model\Category',
+        //                 'translationable_id' => $category->id,
+        //                 'locale' => $key,
+        //                 'key' => 'name'],
+        //             ['value' => $request->name[$index]]
+        //         );
+        //     }
+        // }
         Toastr::success($category->parent_id == 0 ? translate('Category updated successfully!') : translate('Sub Category updated successfully!'));
-        return back();
+        return redirect()->back();
+
     }
 
     /**

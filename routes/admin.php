@@ -193,16 +193,35 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
         });
 
         Route::group(['prefix' => 'category', 'as' => 'category.','middleware'=>['module:product_management']], function () {
-            Route::get('add', 'CategoryController@index')->name('add');
+            Route::get('list', 'CategoryController@index')->name('list');
+            Route::get('create', 'CategoryController@create')->name('create');
+            Route::get('sub-create', 'CategoryController@sub_create')->name('sub-create');
+            Route::post('update-unit', 'CategoryController@update_unit')->name('update-unit');
+            
+            
             Route::get('add-sub-category', 'CategoryController@sub_index')->name('add-sub-category');
             Route::get('add-sub-sub-category', 'CategoryController@sub_sub_index')->name('add-sub-sub-category');
             Route::post('store', 'CategoryController@store')->name('store');
             Route::get('edit/{id}', 'CategoryController@edit')->name('edit');
+            Route::get('sub-edit/{id}', 'CategoryController@sub_edit')->name('sub-edit');
             Route::post('update/{id}', 'CategoryController@update')->name('update');
             Route::post('store', 'CategoryController@store')->name('store');
             Route::get('status/{id}/{status}', 'CategoryController@status')->name('status');
             Route::delete('delete/{id}', 'CategoryController@delete')->name('delete');
             Route::post('search', 'CategoryController@search')->name('search');
+        });
+
+        Route::group(['prefix' => 'Unit', 'as' => 'unit.','middleware'=>['module:unit_management']], function () {
+            Route::get('add', 'UnitController@index')->name('add');
+            Route::get('add-sub-category', 'UnitController@sub_index')->name('add-sub-category');
+            Route::get('add-sub-sub-category', 'UnitController@sub_sub_index')->name('add-sub-sub-category');
+            Route::post('store', 'UnitController@store')->name('store');
+            Route::get('edit/{id}', 'UnitController@edit')->name('edit');
+            Route::post('update/{id}', 'UnitController@update')->name('update');
+            Route::post('store', 'UnitController@store')->name('store');
+            Route::get('status/{id}/{status}', 'UnitController@status')->name('status');
+            Route::delete('delete/{id}', 'UnitController@delete')->name('delete');
+            Route::post('search', 'UnitController@search')->name('search');
         });
 
         Route::group(['prefix' => 'message', 'as' => 'message.','middleware'=>['module:support_management']], function () {

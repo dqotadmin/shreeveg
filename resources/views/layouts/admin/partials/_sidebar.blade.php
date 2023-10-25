@@ -67,7 +67,7 @@
                             </li>
 
 
-                            <!-- Pages -->
+                            <!-- Pages Category -->
                             <li class="navbar-vertical-aside-has-menu {{Request::is('admin/category*')?'active':''}}">
                                 <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle"
                                    href="javascript:" title="{{translate('category setup')}}"
@@ -78,8 +78,8 @@
                                 </a>
                                 <ul class="js-navbar-vertical-aside-submenu nav nav-sub"
                                     style="display: {{Request::is('admin/category*')?'block':'none'}}">
-                                    <li class="nav-item {{Request::is('admin/category/add')?'active':''}}">
-                                        <a class="nav-link " href="{{route('admin.category.add')}}"
+                                    <li class="nav-item {{Request::is('admin/category/list')?'active':''}}">
+                                        <a class="nav-link " href="{{route('admin.category.list')}}"
                                            title="{{translate('categories')}}">
                                             <span class="tio-circle nav-indicator-icon"></span>
                                             <span class="text-truncate">{{translate('categories')}}</span>
@@ -95,6 +95,15 @@
                                     </li>
                                 </ul>
                             </li>
+                            <!-- End Pages -->
+                            <!-- Unit Pages -->
+                            <li class="navbar-vertical-aside-has-menu {{Request::is('admin/unit*')?'active':''}}">
+                                <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{route('admin.unit.add')}}" title="{{translate('unit')}}">
+                                    <i class="tio-category nav-icon"></i>
+                                    <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('unit')}}</span>
+                                </a>
+                            </li>
+                          
                             <!-- End Pages -->
 
                             <!-- Pages -->

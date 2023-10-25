@@ -24,6 +24,9 @@
         src="{{asset('public/assets/admin')}}/vendor/hs-navbar-vertical-aside/hs-navbar-vertical-aside-mini-cache.js"></script>
     <link rel="stylesheet" href="{{asset('public/assets/admin')}}/css/toastr.css">
     <link rel="stylesheet" href="{{asset('public/assets/admin')}}/css/custom-helper.css">
+<!-- style for select choose -->
+    <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
+
 </head>
 
 <body class="footer-offset">
@@ -94,6 +97,8 @@
 <script src="{{asset('public/assets/admin')}}/js/theme.min.js"></script>
 <script src="{{asset('public/assets/admin')}}/js/sweet_alert.js"></script>
 <script src="{{asset('public/assets/admin')}}/js/toastr.js"></script>
+<!--script for select choose -->
+<script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
 {!! Toastr::message() !!}
 
 @if ($errors->any())
@@ -281,6 +286,13 @@
             })
         });
     });
+</script>
+<script>
+
+$(".chosen-select").chosen({
+  no_results_text: "Oops, nothing found!"
+
+})
 </script>
 
 <!-- IE Support -->

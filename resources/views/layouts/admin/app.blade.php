@@ -28,7 +28,34 @@
     <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
 
 </head>
-
+    <style>
+        .chosen-choices{
+            display: block;
+    width: 100% !important;
+    height: calc(1.6em + 1.21875rem) !IMPORTANT;
+    padding: 0.54688rem 0.875rem;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.6;
+    color: #1e2022;
+    background-color: #fff !important;
+    background-clip: padding-box;
+    border: 0.0625rem solid #e7eaf3 !IMPORTANT;
+    border-radius: 0.3125rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    background-image: unset !IMPORTANT;
+    display: flex;
+    align-items: center;
+}
+.search-field {
+    padding-left: 10px !important;
+}
+.chosen-container-active .chosen-choices {
+    border: 1px solid #5897fb !IMPORTANT;
+    -webkit-box-shadow: 0 0 5px rgba(0,0,0,.3);
+    box-shadow: none !important;
+}
+    </style>
 <body class="footer-offset">
 
 {{--loader--}}

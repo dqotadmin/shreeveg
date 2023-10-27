@@ -21,67 +21,19 @@
             </h1>
         </div>
         <!-- End Page Header -->
-
         <div class="row g-2">
             <div class="col-sm-12 col-lg-12">
-                <div class="card">
-                    <div class="card-body pt-sm-0 pb-sm-4">
-                        <form action="{{route('admin.unit.store')}}" method="post" enctype="multipart/form-data">
-                            @csrf
+                        <div class="btn--container justify-content-end m-2">
+                            <a type="button"  href="{{route('admin.unit.create')}}" class="btn btn--primary">{{translate('Add Unit')}}</a>
+                        </div>
                             @php($data = Helpers::get_business_settings('language'))
                             @php($default_lang = Helpers::get_default_language())
                             {{-- @php($default_lang = 'en') --}}
-                            @if ($data && array_key_exists('code', $data[0]))
-                                {{-- @php($default_lang = json_decode($language)[0]) --}}
-                                <ul class="nav nav-tabs d-inline-flex mb--n-30">
-                                    <!-- @foreach ($data as $lang)
-                                    <li class="nav-item">
-                                        <a class="nav-link lang_link {{ $lang['default'] == true ? 'active' : '' }}" href="#"
-                                        id="{{ $lang['code'] }}-link">{{ \App\CentralLogics\Helpers::get_language_name($lang['code']) . '(' . strtoupper($lang['code']) . ')' }}</a>
-                                    </li>
-                                    @endforeach -->
-                                </ul>
-                                <div class="row align-items-end g-4">
-                                    @foreach ($data as $lang)
-                                        <div class="col-sm-6 {{ $lang['default'] == false ? 'd-none' : '' }} lang_form"
-                                                id="{{ $lang['code'] }}-form">
-                                            <label class="form-label"
-                                                    for="exampleFormControlInput1">{{ translate('Unit') }} {{ translate('Title') }}
-                                                <!-- ({{ strtoupper($lang['code']) }}) -->
-                                            </label>
-                                            <input type="text" name="title[]" class="form-control" placeholder="{{ translate('Ex: Vegitabal') }}" maxlength="255"
-                                                    {{$lang['status'] == true ? 'required':''}}
-                                                    @if($lang['status'] == true) oninvalid="document.getElementById('{{$lang['code']}}-link').click()" @endif>
-                                        </div>
-                                        <input type="hidden" name="lang[]" value="{{ $lang['code'] }}">
-                                    @endforeach
-                                    @foreach ($data as $lang)
-                                        <div class="col-sm-6 {{ $lang['default'] == false ? 'd-none' : '' }} lang_form"
-                                                id="{{ $lang['code'] }}-form">
-                                            <label class="form-label"
-                                                    for="exampleFormControlInput1">{{ translate('Unit') }} {{ translate('Description') }}
-                                                <!-- ({{ strtoupper($lang['code']) }}) -->
-                                            </label>
-                                            <input type="text" name="description[]" class="form-control" placeholder="{{ translate('Ex: veg') }}" maxlength="255"
-                                                    {{$lang['status'] == true ? 'required':''}}
-                                                    @if($lang['status'] == true) oninvalid="document.getElementById('{{$lang['code']}}-link').click()" @endif>
-                                        </div>
-                                        <input type="hidden" name="lang[]" value="{{ $lang['code'] }}">
-                                    @endforeach
-                                    <input name="position" value="0" hidden>
-                              
-                                    <div class="col-12">
-                                        <div class="btn--container justify-content-end">
-                                            <button type="reset" class="btn btn--reset">{{translate('reset')}}</button>
-                                            <button type="submit" class="btn btn--primary">{{translate('submit')}}</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
-                        </form>
-                    </div>
+                           
                 </div>
             </div>
+        </div>
+       
 
             <div class="col-sm-12 col-lg-12">
                 <div class="card">

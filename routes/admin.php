@@ -2,6 +2,10 @@
 
 use App\Http\Controllers\Admin\AnalyticController;
 use Illuminate\Support\Facades\Route;
+// Route::get('/', function(){
+//     return redirect()->route('admin.auth.login');
+
+// });
 
 Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
     /*authentication*/
@@ -211,17 +215,48 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::post('search', 'CategoryController@search')->name('search');
         });
 
-        Route::group(['prefix' => 'Unit', 'as' => 'unit.','middleware'=>['module:unit_management']], function () {
+        Route::group(['prefix' => 'unit', 'as' => 'unit.','middleware'=>['module:unit_management']], function () {
             Route::get('add', 'UnitController@index')->name('add');
-            Route::get('add-sub-category', 'UnitController@sub_index')->name('add-sub-category');
-            Route::get('add-sub-sub-category', 'UnitController@sub_sub_index')->name('add-sub-sub-category');
+            Route::get('create', 'UnitController@create')->name('create');
             Route::post('store', 'UnitController@store')->name('store');
             Route::get('edit/{id}', 'UnitController@edit')->name('edit');
             Route::post('update/{id}', 'UnitController@update')->name('update');
-            Route::post('store', 'UnitController@store')->name('store');
             Route::get('status/{id}/{status}', 'UnitController@status')->name('status');
             Route::delete('delete/{id}', 'UnitController@delete')->name('delete');
             Route::post('search', 'UnitController@search')->name('search');
+        });
+
+        Route::group(['prefix' => 'city', 'as' => 'city.','middleware'=>['module:city_management']], function () {
+            Route::get('add', 'CityController@index')->name('add');
+            Route::get('create', 'CityController@create')->name('create');
+            Route::post('store', 'CityController@store')->name('store');
+            Route::get('edit/{id}', 'CityController@edit')->name('edit');
+            Route::post('update/{id}', 'CityController@update')->name('update');
+            Route::get('status/{id}/{status}', 'CityController@status')->name('status');
+            Route::delete('delete/{id}', 'CityController@delete')->name('delete');
+            Route::post('search', 'CityController@search')->name('search');
+        });
+        
+        Route::group(['prefix' => 'area', 'as' => 'area.','middleware'=>['module:area_management']], function () {
+            Route::get('add', 'CityAreaController@index')->name('add');
+            Route::get('create', 'CityAreaController@create')->name('create');
+            Route::post('store', 'CityAreaController@store')->name('store');
+            Route::get('edit/{id}', 'CityAreaController@edit')->name('edit');
+            Route::post('update/{id}', 'CityAreaController@update')->name('update');
+            Route::get('status/{id}/{status}', 'CityAreaController@status')->name('status');
+            Route::delete('delete/{id}', 'CityAreaController@delete')->name('delete');
+            Route::post('search', 'CityAreaController@search')->name('search');
+        });
+
+        Route::group(['prefix' => 'warehouse', 'as' => 'warehouse.','middleware'=>['module:warehouse_management']], function () {
+            Route::get('add', 'WarehouseController@index')->name('add');
+            Route::get('create', 'WarehouseController@create')->name('create');
+            Route::post('store', 'WarehouseController@store')->name('store');
+            Route::get('edit/{id}', 'WarehouseController@edit')->name('edit');
+            Route::post('update/{id}', 'WarehouseController@update')->name('update');
+            Route::get('status/{id}/{status}', 'WarehouseController@status')->name('status');
+            Route::delete('delete/{id}', 'WarehouseController@delete')->name('delete');
+            Route::post('search', 'WarehouseController@search')->name('search');
         });
 
         Route::group(['prefix' => 'message', 'as' => 'message.','middleware'=>['module:support_management']], function () {

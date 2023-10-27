@@ -110,7 +110,7 @@
                             </div>
                         </div>
                         <div class="col-sm-12">
-                            <div class="card">
+                            <div class="card"> 
                                 <div class="card-header">
                                     <h5 class="card-title">
                                         <i class="tio-poi"></i>
@@ -128,7 +128,7 @@
                                                                data-toggle="tooltip"
                                                                data-placement="top"
                                                                title="{{ translate('click_on_the_map_select_your_default_location') }}">
-                                                            </i>
+                                                            </i> 
                                                         </label>
                                                         <input type="text" id="latitude" name="latitude" class="form-control"
                                                                placeholder="{{ translate('Ex:') }} 23.8118428"
@@ -190,7 +190,7 @@
 
 @push('script_2')
 
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ \App\Model\BusinessSetting::where('key', 'map_api_client_key')->first()?->value }}&libraries=places&v=3.45.8"></script>
+     <script src="https://maps.googleapis.com/maps/api/js?key={{ \App\Model\BusinessSetting::where('key', 'map_api_client_key')->first()?->value }}&libraries=places&v=3.45.8"></script>
 
     <script>
         function readURL(input) {

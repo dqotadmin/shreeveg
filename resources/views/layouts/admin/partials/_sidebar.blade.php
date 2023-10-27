@@ -103,6 +103,24 @@
                                     <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('unit')}}</span>
                                 </a>
                             </li>
+                            <li class="navbar-vertical-aside-has-menu {{Request::is('admin/city*')?'active':''}}">
+                                <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{route('admin.city.add')}}" title="{{translate('city')}}">
+                                    <i class="tio-city nav-icon"></i>
+                                    <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('City')}}</span>
+                                </a>
+                            </li>
+                            <li class="navbar-vertical-aside-has-menu {{Request::is('admin/area*')?'active':''}}">
+                                <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{route('admin.area.add')}}" title="{{translate('area')}}">
+                                    <i class="tio-map nav-icon"></i>
+                                    <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Area')}}</span>
+                                </a>
+                            </li>
+                            <li class="navbar-vertical-aside-has-menu {{Request::is('admin/warehouse*')?'active':''}}">
+                                <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{route('admin.warehouse.add')}}" title="{{translate('Warehouse')}}">
+                                    <i class="tio-map nav-icon"></i>
+                                    <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Warehouse')}}</span>
+                                </a>
+                            </li>
                           
                             <!-- End Pages -->
 

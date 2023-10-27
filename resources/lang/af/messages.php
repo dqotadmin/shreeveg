@@ -397,6 +397,7 @@
   'DB_PASSWORD' => 'DB PASSWORD',
   'BUYER_USERNAME' => 'BUYER USERNAME',
   'PURCHASE_CODE' => 'PURCHASE CODE',
+ 
   'Are you sure?' => 'Are you sure ',
   'Sensitive_data! Make_sure_before_changing.' => 'Sensitive data! Make sure before changing.',
   'Cancelled' => 'Cancelled',
@@ -767,6 +768,8 @@
   'deliveryman_management' => 'Deliveryman management',
   'customer_management' => 'Customer management',
   'report_management' => 'Report management',
+  'warehouse_management' => 'Warehouse management',
+  
   'roles_table' => 'Roles table',
   'SL' => 'SL',
   'modules' => 'Modules',

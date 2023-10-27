@@ -46,6 +46,14 @@ class UnitController extends Controller
         return view('admin-views.unit.index', compact('units', 'search'));
     }
 
+
+    function create(Request $request): View|Factory|Application
+    {
+       return view('admin-views.unit.add');
+
+    }
+
+
     /**
      * @param Request $request
      * @return Application|Factory|View
@@ -100,6 +108,8 @@ class UnitController extends Controller
         $unit = $this->unit;
         $unit->title = $request->title[array_search('en', $request->lang)];
         $unit->description = $request->description[array_search('en', $request->lang)];
+        $unit->under_unit = $request->under_unit[array_search('en', $request->lang)];
+        
         $unit->position = $request->position;
         $unit->save();
 
@@ -170,6 +180,7 @@ class UnitController extends Controller
         $unit = $this->unit->find($id);
         $unit->title = $request->title[array_search('en', $request->lang)];
         $unit->description = $request->description[array_search('en', $request->lang)];
+        $unit->under_unit = $request->under_unit[array_search('en', $request->lang)];
         $unit->save();
         // foreach ($request->lang as $index => $key) {
         //     if ($request->name[$index] && $key != 'en') {

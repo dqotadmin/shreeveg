@@ -59,19 +59,6 @@
                                         <div class="col-sm-6 {{ $lang['default'] == false ? 'd-none' : '' }} lang_form"
                                                 id="{{ $lang['code'] }}-form">
                                             <label class="form-label"
-                                                    for="exampleFormControlInput1">{{ translate('Title') }} {{ translate('silver') }}
-                                                <!-- ({{ strtoupper($lang['code']) }}) -->
-                                            </label>
-                                            <input type="text" name="title_silver[]" class="form-control" placeholder="{{ translate('Ex: veg') }}" maxlength="255"
-                                                    {{$lang['status'] == true ? 'required':''}}
-                                                    @if($lang['status'] == true) oninvalid="document.getElementById('{{$lang['code']}}-link').click()" @endif>
-                                        </div>
-                                        <input type="hidden" name="lang[]" value="{{ $lang['code'] }}">
-                                    @endforeach
-                                    @foreach ($data as $lang)
-                                        <div class="col-sm-6 {{ $lang['default'] == false ? 'd-none' : '' }} lang_form"
-                                                id="{{ $lang['code'] }}-form">
-                                            <label class="form-label"
                                                     for="exampleFormControlInput1">{{ translate('Item') }} {{ translate('Code') }}
                                                 <!-- ({{ strtoupper($lang['code']) }}) -->
                                             </label>
@@ -81,6 +68,20 @@
                                         </div>
                                         <input type="hidden" name="lang[]" value="{{ $lang['code'] }}">
                                     @endforeach
+                                    @foreach ($data as $lang)
+                                        <div class="col-sm-6 {{ $lang['default'] == false ? 'd-none' : '' }} lang_form"
+                                                id="{{ $lang['code'] }}-form">
+                                            <label class="form-label"
+                                                    for="exampleFormControlInput1">{{ translate('Title') }} {{ translate('silver') }}
+                                                <!-- ({{ strtoupper($lang['code']) }}) -->
+                                            </label>
+                                            <input type="text" name="title_silver[]" class="form-control" placeholder="{{ translate('Ex: veg') }}" maxlength="255"
+                                                    {{$lang['status'] == true ? 'required':''}}
+                                                    @if($lang['status'] == true) oninvalid="document.getElementById('{{$lang['code']}}-link').click()" @endif>
+                                        </div>
+                                        <input type="hidden" name="lang[]" value="{{ $lang['code'] }}">
+                                    @endforeach
+                                    
                                     @foreach ($data as $lang)
                                         <div class="col-sm-6 {{ $lang['default'] == false ? 'd-none' : '' }} lang_form"
                                                 id="{{ $lang['code'] }}-form">
@@ -96,7 +97,7 @@
                                     @endforeach
                                     @foreach ($data as $lang)
 
-                                    <div class="col-sm-6 {{ $lang['default'] == false ? 'd-none' : '' }} lang_form"
+                                        <div class="col-sm-6 {{ $lang['default'] == false ? 'd-none' : '' }} lang_form"
                                                 id="{{ $lang['code'] }}-form">
                                             <label class="form-label"
                                                     for="exampleFormControlInput1">{{translate('Title')}} {{ translate('Platinum') }}
@@ -109,6 +110,7 @@
                                         <input type="hidden" name="lang[]" value="{{ $lang['code'] }}">
                                          
                                     @endforeach
+                                    
 
                                     <input name="position" value="0" hidden>
                                     <div class="col-sm-6">
@@ -125,6 +127,7 @@
                                             <label class="custom-file-label" for="customFileEg1">{{ translate('choose') }}
                                                 {{ translate('file') }}</label>
                                         </div>
+                                        
                                     </div>
                                     <div class="col-12">
                                         <div class="btn--container justify-content-end">
@@ -138,9 +141,6 @@
                     </div>
                 </div>
             </div>
-
-            
-            <!-- End Table -->
         </div>
     </div>
 

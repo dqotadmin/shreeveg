@@ -36,7 +36,7 @@
                                             <option value="free_delivery">{{translate('free delivery')}}</option>
                                             <option value="customer_wise">{{translate('customer wise')}}</option>
                                         </select>
-                                    </div>
+                                    </div> 
                                 </div>
                                 <div class="col-md-4 col-sm-6">
                                     <div class="form-group">

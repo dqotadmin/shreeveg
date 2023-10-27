@@ -25,8 +25,8 @@ use Illuminate\Support\Facades\Route;
 // Route::post('system_settings', 'InstallController@system_settings')->name('system_settings');
 // Route::post('purchase_code', 'InstallController@purchase_code')->name('purchase.code');
 
-Route::fallback(function () {
-    return redirect('/');
-});
+// Route::fallback(function () {
+//     return redirect('/');
+// });
 
 

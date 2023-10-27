@@ -139,7 +139,7 @@ class CategoryController extends Controller
     {
         return view('admin-views.category.index');
     }
-
+ 
     /**
      * @param Request $request
      * @return RedirectResponse
@@ -147,9 +147,9 @@ class CategoryController extends Controller
     function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => 'required',
+            'name' => 'required|unique:categories',
             'title_silver' => 'required',
-            'item_code' => 'required',
+            'item_code' => 'required|unique:categories',
             'title_gold' => 'required',
             'title_platinum' => 'required',
             'image' => 'required',
@@ -268,7 +268,7 @@ class CategoryController extends Controller
         $request->validate([
             'name' =>'required|unique:categories,name,'.$request->id,
             'title_silver' => 'required',
-            'item_code' => 'required',
+            'item_code' => 'required|unique:categories,item_code',
             'title_gold' => 'required',
             'title_platinum' => 'required',
      ]);

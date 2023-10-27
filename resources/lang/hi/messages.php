@@ -768,6 +768,7 @@
   'customer_management' => 'Customer management',
   'report_management' => 'Report management',
   'roles_table' => 'Roles table',
+  'warehouse_management' => 'Warehouse management',
   'SL' => 'SL',
   'modules' => 'Modules',
   'created_at' => 'Created at',

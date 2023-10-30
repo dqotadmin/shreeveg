@@ -309,7 +309,8 @@
                             <!-- End Pages -->
                         @endif
 
-                     @if(Helpers::module_permission_check(MANAGEMENT_SECTION['system_management']))
+
+                         @if(Helpers::module_permission_check(MANAGEMENT_SECTION['system_management']))
                             <li class="nav-item">
                                 <small class="nav-subtitle"
                                        title="Layouts">{{translate('system setting')}}</small>
@@ -330,7 +331,7 @@
                             <!-- End Pages -->
 
                             <!-- Pages -->
-                            <li class="navbar-vertical-aside-has-menu {{Request::is('admin/branch*')?'active':''}}">
+                            {{-- <li class="navbar-vertical-aside-has-menu {{Request::is('admin/branch*')?'active':''}}">
                                 <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle"
                                    href="javascript:"
                                    title="{{translate('Branch Setup')}}"
@@ -360,9 +361,9 @@
                                         </a>
                                     </li>
                                 </ul>
-                            </li>
+                            </li> --}}
 
-                            <li class="navbar-vertical-aside-has-menu {{Request::is('admin/business-settings/web-app/payment-method*')
+                            {{-- <li class="navbar-vertical-aside-has-menu {{Request::is('admin/business-settings/web-app/payment-method*')
                                         || Request::is('admin/business-settings/web-app/third-party*')
                                         || Request::is('admin/business-settings/web-app/mail-config*')
                                         || Request::is('admin/business-settings/web-app/sms-module*') ?'active':''}}">
@@ -372,7 +373,7 @@
                                     <span
                                         class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('3rd Party')}}</span>
                                 </a>
-                            </li>
+                            </li> --}}
 
 
                             <li class="navbar-vertical-aside-has-menu {{Request::is('admin/business-settings/page-setup/*')?'active':''}}">
@@ -421,7 +422,7 @@
                                 </a>
                             </li>
 
-                        @endif  
+                        @endif 
 
                         <li class="nav-item">
                             <div class="nav-divider"></div>

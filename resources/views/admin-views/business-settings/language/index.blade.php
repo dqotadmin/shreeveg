@@ -27,7 +27,7 @@
                     {{ translate('App Settings') }}
                 </a>
             </li>
-            <li class="nav-item">
+             {{--<li class="nav-item">
                 <a class="nav-link" href="{{route('admin.business-settings.web-app.system-setup.firebase_message_config_index')}}">
                     {{ translate('Firebase Configuration') }}
                 </a>
@@ -36,7 +36,7 @@
                 <a class="nav-link" href="{{route('admin.business-settings.web-app.system-setup.db-index')}}">
                     {{ translate('Clean Database') }}
                 </a>
-            </li>
+            </li> --}}
         </ul>
     </div>
     <!-- End Page Header -->

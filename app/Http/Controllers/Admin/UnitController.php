@@ -108,7 +108,6 @@ class UnitController extends Controller
         $unit = $this->unit;
         $unit->title = $request->title[array_search('en', $request->lang)];
         $unit->description = $request->description[array_search('en', $request->lang)];
-        $unit->under_unit = $request->under_unit[array_search('en', $request->lang)];
         
         $unit->position = $request->position;
         $unit->save();
@@ -180,7 +179,6 @@ class UnitController extends Controller
         $unit = $this->unit->find($id);
         $unit->title = $request->title[array_search('en', $request->lang)];
         $unit->description = $request->description[array_search('en', $request->lang)];
-        $unit->under_unit = $request->under_unit[array_search('en', $request->lang)];
         $unit->save();
         // foreach ($request->lang as $index => $key) {
         //     if ($request->name[$index] && $key != 'en') {
@@ -198,7 +196,7 @@ class UnitController extends Controller
 
     }
 
-    /**
+    /** 
      * @param Request $request
      * @return RedirectResponse
      */
@@ -206,7 +204,7 @@ class UnitController extends Controller
     {
         $unit = $this->unit->find($request->id);
        
-        if ($unit->childes->count() == 0) {
+        if ($unit) {
             $unit->delete();
             Toastr::success( translate('unit removed!')  );
         } else {

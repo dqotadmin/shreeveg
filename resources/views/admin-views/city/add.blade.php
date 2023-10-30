@@ -63,6 +63,7 @@
                                                 <!-- ({{ strtoupper($lang['code']) }}) -->
                                             </label>
                                             <select id="exampleFormControlSelect1" name="state_id[]" class="form-control "  required>
+                                            <option value="" disabled selected>Select State </option>
                                             @foreach(\App\Model\State::orderBy('id', 'DESC')->where(['position'=>0])->get() as $state)
                                                 <option value="{{$state['id']}}">{{$state['name']}}</option>
                                             @endforeach

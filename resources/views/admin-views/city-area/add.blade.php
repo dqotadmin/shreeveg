@@ -50,7 +50,8 @@
                                                 <!-- ({{ strtoupper($lang['code']) }}) -->
                                             </label>
                                             <select id="exampleFormControlSelect1" name="city_id[]" class="form-control "  required>
-                                            @foreach(\App\Model\City::orderBy('id', 'DESC')->where(['position'=>0])->get() as $city)
+                                        <option value="" disabled selected>Select City</option>
+                                            @foreach(\App\Model\City::orderBy('id', 'DESC')->where(['position'=>0])->where(['state_id'=>19])->get() as $city)
                                                 <option value="{{$city['id']}}">{{$city['city']}}</option>
                                             @endforeach
                                         </select>

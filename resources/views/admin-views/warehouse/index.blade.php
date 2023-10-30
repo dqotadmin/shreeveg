@@ -38,8 +38,8 @@
         <div class="card">
             <div class="card-header border-0">
                 <div class="card--header">
-                    <h5 class="card-title">{{translate('Warehouse Table')}} <span class="badge badge-soft-secondary">
-                        </span> </h5>
+                    <h5 class="card-title">{{translate('Warehouses')}}  <span class="badge badge-soft-secondary">{{ $warehouses->total() }}</span>
+                         </h5>
                     <form action="{{url()->current()}}" method="GET">
                         <div class="input-group">
                             <input id="datatableSearch_" type="search" name="search" maxlength="255"
@@ -64,10 +64,10 @@
                             <th>{{translate('Warehouse Name')}}</th>
                             <th>{{translate('Warehouse Code')}}</th>
                             <th>{{translate('Address')}}</th>
-                            <th>{{translate('Pincode')}}</th>
-                            <th>{{translate('Name')}}</th>
+                            <!-- <th>{{translate('Pincode')}}</th> -->
+                            <!-- <th>{{translate('Name')}}</th>
                             <th>{{translate('Number')}}</th>
-                            <th>{{translate('Title')}}</th>
+                            <th>{{translate('Title')}}</th> -->
                             <th>{{translate('status')}}</th>
                             <th class="text-center">{{translate('action')}}</th>
                         </tr>
@@ -93,8 +93,8 @@
                                         {{$warehouse['address']}}
                                     </span>
                                     </td>
-                                    <td>
-                                    <span class="d-block font-size-sm text-body text-trim-50">
+                                    <!-- <td> -->
+                                    <!-- <span class="d-block font-size-sm text-body text-trim-50">
                                         {{$warehouse['pin_code']}}
                                     </span>
                                     </td>
@@ -112,7 +112,7 @@
                                     <span class="d-block font-size-sm text-body text-trim-50">
                                         {{$warehouse['title']}}
                                     </span>
-                                    </td>
+                                    </td> -->
                                     <td>
 
                                         <label class="toggle-switch">

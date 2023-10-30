@@ -37,7 +37,7 @@
                 <div class="card">
                     <div class="card-header border-0">
                         <div class="card--header">
-                            <h5 class="card-title">{{translate('City Table')}} <span class="badge badge-soft-secondary">{{ $cities->total() }}</span> </h5>
+                            <h5 class="card-title">{{translate('Cities')}} <span class="badge badge-soft-secondary">{{ $cities->total() }}</span> </h5>
                             <form action="{{url()->current()}}" method="GET">
                                 <div class="input-group">
                                     <input id="datatableSearch_" type="search" name="search" maxlength="255"

@@ -83,7 +83,9 @@
                                     </td>
                                     <td>
                                         <span class="d-block font-size-sm text-body">
+                                            @if(!empty($category->parent['name']))
                                             {{$category->parent['name']}}
+                                            @endif
                                         </span>
                                     </td>
 

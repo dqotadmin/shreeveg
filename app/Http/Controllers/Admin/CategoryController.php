@@ -31,16 +31,22 @@ class CategoryController extends Controller
     {
         $query_param = [];
         $search = $request['search'];
+        $categories = $this->category;
+        if(!empty($request->parent_id)){
+            $categories = $categories->where(['parent_id'=>$request->parent_id]);
+        }else{
+            $categories = $categories->where(['parent_id'=>0]);
+        }
         if ($request->has('search')) {
             $key = explode(' ', $request['search']);
-            $categories = $this->category->where(['position' => 0])->where(function ($q) use ($key) {
+            $categories = $categories->where(function ($q) use ($key) {
                 foreach ($key as $value) {
                     $q->orWhere('name', 'like', "%{$value}%");
                 }
             });
             $query_param = ['search' => $request['search']];
         } else {
-            $categories = $this->category->where(['position' => 0]);
+            $categories = $categories;
         }
         $categories = $categories->latest()->paginate(Helpers::getPagination())->appends($query_param);
         return view('admin-views.category.index', compact('categories', 'search'));
@@ -79,8 +85,11 @@ class CategoryController extends Controller
 
    
 
-    function sub_index(Request $request): View|Factory|Application
+    function sub_index($id): View|Factory|Application
     {
+        dd($id);
+        // $category = $this->category->withoutGlobalScopes()->with('translations')->find($id);
+        // return view('admin-views.category.edit', compact('category'));
         $query_param = [];
         $search = $request['search'];
         if ($request->has('search')) {
@@ -153,6 +162,7 @@ class CategoryController extends Controller
             'title_gold' => 'required',
             'title_platinum' => 'required',
             'image' => 'required',
+            'parent_id' => 'required',
         ]);
 
         foreach ($request->name as $name) {
@@ -189,9 +199,9 @@ class CategoryController extends Controller
         $category->parent_id = $request->parent_id == null ? 0 : $request->parent_id;
         $category->position = $request->position;
         //sub category data 
-        $category->unit =  $request->unit == null ? null :  json_encode($request['unit']);
-        $category->unit_title = $request->unit_title == null ? null : $request->unit_title[array_search('en', $request->lang)];
-        $category->sub_unit_title = $request->sub_unit_title == null ? null :  $request->sub_unit_title[array_search('en', $request->lang)];
+        // $category->unit =  $request->unit == null ? null :  json_encode($request['unit']);
+        // $category->unit_title = $request->unit_title == null ? null : $request->unit_title[array_search('en', $request->lang)];
+        // $category->sub_unit_title = $request->sub_unit_title == null ? null :  $request->sub_unit_title[array_search('en', $request->lang)];
         $category->save();
 
         //translation
@@ -292,9 +302,9 @@ class CategoryController extends Controller
         $category->parent_id = $request->parent_id == null ? 0 : $request->parent_id;
         $category->position = $request->position;
         //sub category data 
-        $category->unit =  $request->unit == null ? null :  json_encode($request['unit']);
-        $category->unit_title = $request->unit_title == null ? null : $request->unit_title[array_search('en', $request->lang)];
-        $category->sub_unit_title = $request->sub_unit_title == null ? null :  $request->sub_unit_title[array_search('en', $request->lang)];
+        // $category->unit =  $request->unit == null ? null :  json_encode($request['unit']);
+        // $category->unit_title = $request->unit_title == null ? null : $request->unit_title[array_search('en', $request->lang)];
+        // $category->sub_unit_title = $request->sub_unit_title == null ? null :  $request->sub_unit_title[array_search('en', $request->lang)];
 
    
         $category->save();

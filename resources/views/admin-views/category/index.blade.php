@@ -39,7 +39,7 @@
                 <div class="card">
                     <div class="card-header border-0">
                         <div class="card--header">
-                            <h5 class="card-title">{{translate('Category Table')}} <span class="badge badge-soft-secondary">{{ $categories->total() }}</span> </h5>
+                            <h5 class="card-title">{{translate('Categories')}} <span class="badge badge-soft-secondary">{{ $categories->total() }}</span> </h5>
                             <form action="{{url()->current()}}" method="GET">
                                 <div class="input-group">
                                     <input id="datatableSearch_" type="search" name="search" maxlength="255"
@@ -81,9 +81,21 @@
                                             onerror="this.src='{{asset('public/assets/admin/img/400x400/img2.jpg')}}'" class="img--50 ml-3" alt="">
                                     </td>
                                     <td>
-                                    <span class="d-block font-size-sm text-body text-trim-50">
-                                        {{$category['name']}}
-                                    </span>
+                                        @if(count($category->childes))
+                                            <a class=" " style="text-decoration: underline;"
+                                            href="{{route('admin.category.list',['parent_id'=>$category['id']])}}">
+                                                {{$category['name']}} 
+                                            <i class="tio-list"></i></a>
+                                        @else
+                                        <span class="d-block font-size-sm text-body text-trim-50">
+                                               {{$category['name']}}
+                                             
+                                               
+                                               </span>
+                                                 @endif
+                                           
+                                          
+
                                     </td>
                                     <td>
                                     <span class="d-block font-size-sm text-body text-trim-50">

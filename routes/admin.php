@@ -23,6 +23,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::get('/fcm/{id}', 'DashboardController@fcm')->name('dashboard');     //test route
             Route::get('/', 'DashboardController@dashboard')->name('dashboard');
             Route::post('order-stats', 'DashboardController@order_stats')->name('order-stats');
+            Route::get('warehouse-admin', 'SystemController@create')->name('warehouse-admin');
             Route::get('settings', 'SystemController@settings')->name('settings');
             Route::post('settings', 'SystemController@settings_update');
             Route::post('settings-password', 'SystemController@settings_password_update')->name('settings-password');

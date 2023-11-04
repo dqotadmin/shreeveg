@@ -168,10 +168,12 @@
                                              
                                             @endforeach -->
                                         @foreach($categories as $category)
-                                        @php($editRow = Helpers::getWhCategoriesData($category->id,$warehouses->id))
+                                       
 
                                        
-                                        <?php $checked = $margin = $catOrder= $status =''; 
+                                        <?php
+                                        $editRow = Helpers::getWhCategoriesData($category->id,$warehouses->id);
+                                        $checked = $margin = $catOrder=''; $status ='1'; 
                                             if(!empty($editRow) && $editRow->category_id == $category->id){
                                                 $checked ='checked';
                                                 $margin = $editRow->margin;
@@ -202,15 +204,15 @@
 
                                                     <input type="text" name="margin[]" value="{{$margin}}" placeholder="Ex. Margin 5%"
                                                         class="form-control" id="">
-                                                    @if($status)
+                                                    
                                                     <label class="toggle-switch my-0">
                                                         <input type="checkbox"
-                                                        {{ $status ? 'checked' : '' }}
+                                                        {{ $checked }}
                                                             class="toggle-switch-input" name="status[]" id="stocksCheckbox{{ $warehouses->id }}"
                                                            ><span class="toggle-switch-label mx-auto text"><span class="toggle-switch-indicator"></span>
                                                         </span>
                                                     </label>
-                                                    @endif
+                                                    
                                                 </div>
                                             </div>
                                         </div>

@@ -328,6 +328,9 @@ class WarehouseController extends Controller
         ]);
    
             $data = $request->all();
+
+            //echo '<pre>';
+            //print_r($data);die;
        
         // Iterate through the arrays and remove key-value pairs where the value is null     [0 => "3" , 3 => "3"]
         foreach ($data as &$array) {
@@ -361,7 +364,7 @@ class WarehouseController extends Controller
             $row->category_id = $cat;
             $row->category_order = $data["category_order"][$key];
             $row->margin = $data["margin"][$key];
-            $row->status = (@$data["status"][$key])?'1':'0';
+            $row->status = isset($data["status"][$key]) ? $data["status"][$key] : 0;
             $row->save();
     }
         

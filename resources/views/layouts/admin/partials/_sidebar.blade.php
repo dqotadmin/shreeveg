@@ -264,7 +264,7 @@
 
                             <!-- Pages Category -->
                             <li class="navbar-vertical-aside-has-menu {{Request::is('admin/user*')?'active':''}}">
-                                <a class="js-navbar-vertical-aside-menu-link nav-link"   title="{{translate('Warehouse Admin')}}">
+                                <a class="js-navbar-vertical-aside-menu-link nav-link"  href="{{route('admin.warehouse-admin')}}"  title="{{translate('Warehouse Admin')}}">
                                     <i class="tio-category nav-icon"></i>
                                     <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Warehouse Admin')}}</span>
                                 </a>
@@ -287,7 +287,7 @@
                                     <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('sales Person')}}</span>
                                 </a>
                             </li>
-                            <li class="navbar-vertical-aside-has-menu {{Request::is('admin/warehouse*')?'active':''}}">
+                            <li class="navbar-vertical-aside-has-menu {{Request::is('admin/delivery*')?'active':''}}">
                                 <a class="js-navbar-vertical-aside-menu-link nav-link" href="#" title="{{translate('Delivery Boy Admin')}}">
                                     <i class="tio-map nav-icon"></i>
                                     <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Delivery Boy')}}</span>

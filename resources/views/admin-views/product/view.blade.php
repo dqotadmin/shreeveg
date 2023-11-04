@@ -201,11 +201,6 @@
                                    </div>
                                 </td>
                                 <td>
-                                    @foreach(json_decode($product['variations'],true) as $variation)
-                                        <div class="text-capitalize">
-                                            {{$variation['type']}} : {{ Helpers::set_symbol($variation['price']) }}
-                                        </div>
-                                    @endforeach
                                 </td>
                                 <td>
                                     @foreach($product->tags as $tag)

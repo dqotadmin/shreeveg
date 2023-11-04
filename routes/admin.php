@@ -158,6 +158,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
 
             Route::get('view/{id}', 'ProductController@view')->name('view');
             Route::get('remove-image/{id}/{name}', 'ProductController@remove_image')->name('remove-image');
+            Route::get('remove-single-image/{id}/{name}', 'ProductController@remove_single_image')->name('remove-single-image');
             //ajax request
             Route::get('get-categories', 'ProductController@get_categories')->name('get-categories');
             Route::post('daily-needs', 'ProductController@daily_needs')->name('daily-needs');
@@ -257,6 +258,9 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::get('status/{id}/{status}', 'WarehouseController@status')->name('status');
             Route::delete('delete/{id}', 'WarehouseController@delete')->name('delete');
             Route::post('search', 'WarehouseController@search')->name('search');
+            Route::get('wh-assign-category/{id}', 'WarehouseController@wh_assign_category_page')->name('wh-assign-category-page');
+            Route::get('wh-assign-category/{id}/{status}', 'WarehouseController@wh_assign_category_status')->name('wh-assign-category-status');
+            Route::post('wh-assign-category', 'WarehouseController@wh_assign_category_store')->name('wh-assign-category');
         });
 
         Route::group(['prefix' => 'message', 'as' => 'message.','middleware'=>['module:support_management']], function () {

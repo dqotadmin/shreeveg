@@ -207,6 +207,52 @@
                                 </ul>
                             </li> --}}
                             <!-- End Pages -->
+
+               <!-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------  -->
+
+
+                        <!-- Pages -->
+                        <li class="navbar-vertical-aside-has-menu {{Request::is('admin/product*') || Request::is('admin/attribute*')?'active':''}}">
+                            <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle" href="javascript:" title="{{translate('product setup')}}">
+                                <i class="tio-premium-outlined nav-icon"></i>
+                                <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('product setup')}}</span>
+                            </a>
+                            <ul class="js-navbar-vertical-aside-submenu nav nav-sub" style="display: {{Request::is('admin/product*') || Request::is('admin/attribute*') ? 'block' : 'none'}}">
+
+                                <li class="nav-item {{Request::is('admin/attribute*')?'active':''}}">
+                                    <a class="nav-link" href="{{route('admin.attribute.add-new')}}" title="{{translate('product attribute')}}">
+                                        <span class="tio-circle nav-indicator-icon"></span>
+                                        <span class="text-truncate">{{translate('product attribute')}}</span>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item {{Request::is('admin/product/list*')?'active':''}} {{Request::is('admin/product/add-new')?'active':''}}">
+                                    <a class="nav-link " href="{{route('admin.product.list')}}" title="{{translate('list')}}">
+                                        <span class="tio-circle nav-indicator-icon"></span>
+                                        <span class="text-truncate">{{translate('product list')}}</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {{Request::is('admin/product/bulk-import')?'active':''}}">
+                                    <a class="nav-link " href="{{route('admin.product.bulk-import')}}" title="{{translate('bulk_import')}}">
+                                        <span class="tio-circle nav-indicator-icon"></span>
+                                        <span class="text-truncate">{{translate('bulk_import')}}</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {{Request::is('admin/product/bulk-export-index')?'active':''}}">
+                                    <a class="nav-link " href="{{route('admin.product.bulk-export-index')}}" title="{{translate('bulk_export')}}">
+                                        <span class="tio-circle nav-indicator-icon"></span>
+                                        <span class="text-truncate">{{translate('bulk_export')}}</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {{Request::is('admin/product/limited-stock')?'active':''}}">
+                                    <a class="nav-link" href="{{route('admin.product.limited-stock')}}" title="{{translate('Limited Stocks')}}">
+                                        <span class="tio-circle nav-indicator-icon"></span>
+                                        <span class="text-truncate">{{translate('Limited Stocks')}}</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- End Pages -->
                         @endif
                         @if(Helpers::module_permission_check(MANAGEMENT_SECTION['user_management']))
                             <li class="nav-item">
@@ -399,8 +445,7 @@
                                     <li class="nav-item {{Request::is('admin/business-settings/web-app/third-party/social-media')?'active':''}}">
                                         <a class="nav-link "
                                            href="{{route('admin.business-settings.web-app.third-party.social-media')}}"
-                                           title="{{translate('Social Media')}}"
-                                        >
+                                           title="{{translate('Social Media')}}">
                                             <span class="tio-circle nav-indicator-icon"></span>
                                             <span
                                                 class="text-truncate">{{translate('Social Media')}}</span>

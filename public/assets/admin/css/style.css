@@ -33,6 +33,23 @@
   padding: 13px 10px 14px;
 }
 
+.check_category_main{
+  display: flex;
+  align-items: center;
+}
+.check_category_main .check-item {
+  width: 20%;
+}
+.m_inputs{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.m_inputs .form-control {
+    height: 45px;
+    margin-right: 20px;
+
+}
 .sidebar--search-form .form--control {
   padding-left: 40px;
 }

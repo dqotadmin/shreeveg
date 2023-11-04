@@ -18,7 +18,7 @@
             <div class="navbar-nav-wrap-content-right">
                 <!-- Navbar -->
                 <ul class="navbar-nav align-items-center flex-row">
-                    {{-- <li class="nav-item mr-0">
+                    <li class="nav-item mr-0">
                         <div class="hs-unfold">
                             <div class="p-2">
                                 @php( $local = session()->has('local')?session('local'):'en')
@@ -48,7 +48,7 @@
                                 </div>
                             </div>
                         </div>
-                    </li> --}}
+                    </li> 
 
                     {{-- <li class="nav-item d-none d-sm-inline-block">
                         <!-- Notification -->

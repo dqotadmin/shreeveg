@@ -26,7 +26,7 @@
 
     <div class="row g-2">
         <div class="col-sm-12 col-lg-12">
-            <form action="{{route('admin.warehouse.store')}}" method="post" enctype="multipart/form-data">
+            <form action="{{route('admin.warehouse.store')}}" method="post" id="timeForm" enctype="multipart/form-data">
                 @csrf
                 <div class="row g-2">
                     <div class="col-sm-12">
@@ -60,7 +60,7 @@
                                             for="exampleFormControlInput1">{{ translate('Select Warehouse Admin') }}
                                             <!-- ({{ strtoupper($lang['code']) }}) -->
                                         </label>
-                                        <select name="city_id[]" class=" form-control">
+                                        <select name="owner_name[]" class=" form-control">
                                             <option value="" disabled selected>Select Name</option>
                                             @foreach(\App\Model\Admin::orderBy('id',
                                             'DESC')->where('admin_role_id',3)->get() as $admin)
@@ -104,7 +104,6 @@
                                     </div>
                                     <input type="hidden" name="lang[]" value="{{ $lang['code'] }}">
                                     @endforeach
-                                    <!-- <p>Data Attribute Value: <span id="dataAttributeValue"></span></p> -->
                                     @foreach ($data as $lang)
                                     <div class="col-sm-4 {{ $lang['default'] == false ? 'd-none' : '' }} lang_form"
                                         id="{{ $lang['code'] }}-form">
@@ -113,9 +112,8 @@
                                         </label>
                                         <!-- <a href="javascript:void(0)" class="float-right c1 fz-12"
                                             onclick="generateCode()">{{translate('generate_code')}}</a> -->
-                                        <input type="text" name="code[]" class="form-control" readonly value=""
-                                            id="dataAttributeValue"
-                                            placeholder="{{\Illuminate\Support\Str::random(8)}}">
+                                        <input type="text" name="code[]" class="form-control"   
+                                            id="dataAttributeValue" >
                                     </div>
                                     <input type="hidden" name="lang[]" value="{{ $lang['code'] }}">
                                     @endforeach
@@ -155,7 +153,7 @@
                                     <div class="col-sm-6 {{ $lang['default'] == false ? 'd-none' : '' }} lang_form"
                                         id="{{ $lang['code'] }}-form">
                                         <label class="form-label"
-                                            for="exampleFormControlInput1">{{ translate('Warehouse Open Time') }}
+                                            for="exampleFormControlInput1">{{ translate('Warehouse Start Time') }}
                                         </label>
                                         <input type="time" name="open_time[]" class="form-control" maxlength="255"
                                             {{$lang['status'] == true ? '':''}} @if($lang['status']==true)
@@ -168,7 +166,7 @@
                                     <div class="col-sm-6 {{ $lang['default'] == false ? 'd-none' : '' }} lang_form"
                                         id="{{ $lang['code'] }}-form">
                                         <label class="form-label"
-                                            for="exampleFormControlInput1">{{ translate('Warehouse Close Time') }}
+                                            for="exampleFormControlInput1">{{ translate('Warehouse End Time') }}
                                         </label>
                                         <input type="time" name="close_time[]" class="form-control" maxlength="255"
                                             {{$lang['status'] == true ? '':''}} @if($lang['status']==true)
@@ -247,7 +245,7 @@
                                                             title="{{ translate('click_on_the_map_select_your_default_location') }}">
                                                         </i>
                                                     </label>
-                                                    <input type="text" id="latitude" name="latitude"
+                                                    <input type="text" id="latitude" name="latitude[]"
                                                         class="form-control"
                                                         placeholder="{{ translate('Ex:') }} 23.8118428"
                                                         value="{{ old('latitude') }}" readonly>
@@ -262,7 +260,8 @@
                                                             title="{{ translate('click_on_the_map_select_your_default_location') }}">
                                                         </i>
                                                     </label>
-                                                    <input type="text" step="0.1" name="longitude" class="form-control"
+                                                    <input type="text" step="0.1" name="longitude[]"
+                                                        class="form-control"
                                                         placeholder="{{ translate('Ex:') }} 90.356331" id="longitude"
                                                         value="{{ old('longitude') }}" readonly>
                                                 </div>
@@ -431,6 +430,7 @@
                             </div>
                         </div>
                     </div> -->
+
                     <div class="col-sm-6">
                         <div class="card">
                             <div class="card-header">
@@ -441,27 +441,38 @@
                             </div>
                             <div class="card-body pt-sm-0 pb-sm-4">
                                 <div class="row align-items-end g-4  mt-3">
-                                    <table class="table table-bordered" id="order_revise">
+
+                                    <table class="table table-bordered" id="box-revise-pair">
                                         <tr>
-                                            <th>Open Time</th>
-                                            <th> Close Time</th>
-                                            <th> </th>
+                                            <th>Start Time</th>
+                                            <th> End Time</th>
+                                            <th>
+                                                <button type="button" id="add-revise-pair"
+                                                    class="remove-revise-pair btn btn-outline-success">Add More</button>
+                                            </th>
                                         </tr>
-                                        <tr>
-                                            <td><input type="time" name="revise_time[revise_open_time][]" class="form-control" />
+                                        <tr class="row-revise-pair">
+                                            <td>
+                                                <input type="time" class="input-revise-pair form-control"
+                                                    name="revise_time_open[]" required>
                                             </td>
-                                            <td><input type="time" name="revise_time[revise_close_time][]" class="form-control" />
+                                            <td>
+                                                <input type="time" class="input-revise-pair  form-control"
+                                                    name="revise_time_close[]" required>
                                             </td>
-                                            <td><button type="button" name="add" id="order_revise-ar"
-                                                    class="btn btn-outline-primary">Add More</button></td>
+                                            <td>
+                                                <button type="button"
+                                                    class="remove-revise-pair btn btn-outline-danger">Remove</button>
+                                            </td>
                                         </tr>
                                     </table>
-
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="col-sm-6">
+
+
+                    <div class="col-sm-6">
                         <div class="card">
                             <div class="card-header">
                                 <h5 class="card-title">
@@ -471,27 +482,34 @@
                             </div>
                             <div class="card-body pt-sm-0 pb-sm-4">
                                 <div class="row align-items-end g-4  mt-3">
-                                    <table class="table table-bordered" id="delivery_order">
+                                    <table class="table table-bordered" id="box-delivery-pair">
                                         <tr>
-                                            <th>Open Time</th>
-                                            <th> Close Time</th>
-                                            <th> </th>
+                                            <th>Start Time</th>
+                                            <th> End Time</th>
+                                            <th> <button type="button" id="add-delivery-pair"
+                                                    class="remove-delivery-pair btn btn-outline-success">Add
+                                                    More</button> </th>
+
                                         </tr>
-                                        <tr>
-                                            <td><input type="time" name="delivery_open_time[]" class="form-control" />
+                                        <tr class="row-delivery-pair">
+                                            <td><input type="time" name="delivery_open_time[]"
+                                                    class="form-control input-delivery-pair" required />
                                             </td>
-                                            <td><input type="time" name="delivery_close_time[]" class="form-control" />
+                                            <td><input type="time" name="delivery_close_time[]"
+                                                    class="form-control input-delivery-pair" required />
                                             </td>
-                                            <td><button type="button" name="add" id="delivery_order-ar"
-                                                    class="btn btn-outline-primary">Add More</button></td>
+                                            <td><button type="button"
+                                                    class="remove-delivery-pair btn btn-outline-danger">Remove</button>
+                                            </td>
+
                                         </tr>
                                     </table>
 
                                 </div>
                             </div>
                         </div>
-                    </div> -->
-                    <!-- <div class="col-sm-6">
+                    </div>
+                    <div class="col-sm-6">
                         <div class="card">
                             <div class="card-header">
                                 <h5 class="card-title">
@@ -501,19 +519,25 @@
                             </div>
                             <div class="card-body pt-sm-0 pb-sm-4">
                                 <div class="row align-items-end g-4  mt-3">
-                                    <table class="table table-bordered" id="order_cancel">
+                                    <table class="table table-bordered" id="box-order-cancel-pair">
                                         <tr>
-                                            <th>Open Time</th>
-                                            <th> Close Time</th>
-                                            <th> </th>
+                                            <th>Start Time</th>
+                                            <th> End Time</th>
+                                            <th> <button type="button" id="add-order-cancel-pair"
+                                                    class="remove-order-cancel-pair btn btn-outline-success">Add
+                                                    More</button> </th>
+
                                         </tr>
-                                        <tr>
+                                        <tr class="row-order-cancel-pair">
+
                                             <td><input type="time" name="order_cancel_open_time[]"
-                                                    class="form-control" /></td>
+                                                    class="form-control input-order-cancel-pair" required /></td>
                                             <td><input type="time" name="order_cancel_close_time[]"
-                                                    class="form-control" /></td>
-                                            <td><button type="button" name="add" id="order_cancel-ar"
-                                                    class="btn btn-outline-primary">Add More</button></td>
+                                                    class="form-control input-order-cancel-pair" required /></td>
+                                            <td><button type="button"
+                                                    class="remove-order-cancel-pair btn btn-outline-danger">Remove</button>
+                                            </td>
+
                                         </tr>
                                     </table>
 
@@ -532,29 +556,35 @@
                             </div>
                             <div class="card-body pt-sm-0 pb-sm-4">
                                 <div class="row align-items-end g-4  mt-3">
-                                    <table class="table table-bordered" id="pre_order">
+                                    <table class="table table-bordered" id="box-pre-order-pair">
                                         <tr>
-                                            <th>Open Time</th>
-                                            <th> Close Time</th>
-                                            <th> </th>
+                                            <th>Start Time</th>
+                                            <th> End Time</th>
+                                            <th> <button type="button" id="add-pre-order-pair"
+                                                    class="remove-pre-order-pair btn btn-outline-success">Add
+                                                    More</button> </th>
+
                                         </tr>
-                                        <tr>
-                                            <td><input type="time" name="pre_order_open_time[]" class="form-control" />
+                                        <tr class="row-pre-order-pair">
+
+
+                                            <td><input type="time" name="pre_order_open_time[]"
+                                                    class="form-control input-pre-order-pair" required />
                                             </td>
-                                            <td><input type="time" name="pre_order_close_time[]" class="form-control" />
+                                            <td><input type="time" name="pre_order_close_time[]"
+                                                    class="form-control input-pre-order-pair" required />
                                             </td>
-                                            <td><button type="button" name="add" id="pre_order-ar"
-                                                    class="btn btn-outline-primary">Add More</button></td>
+                                            <td><button type="button"
+                                                    class="remove-pre-order-pair btn btn-outline-danger">Remove</button>
+                                            </td>
+
                                         </tr>
                                     </table>
-
                                     <input name="position" value="0" hidden>
-
-
                                 </div>
                             </div>
                         </div>
-                    </div> -->
+                    </div>
                     <div class="col-sm-12">
                         <div class="card">
                             <div class="col-12">
@@ -568,17 +598,35 @@
                 </div>
                 @endif
             </form>
+
         </div>
     </div>
 </div>
-
 @endsection
 
 @push('script_2')
 <script
     src="https://maps.googleapis.com/maps/api/js?key={{ \App\Model\BusinessSetting::where('key', 'map_api_client_key')->first()?->value }}&libraries=places&v=3.45.8">
 </script>
+<script>
+    $("#dataAttributeValue").val(54);
 
+$('.city_code').on('change', function() {
+    var city_code = $(this).val();
+    var selectedOption = $(this).find("option:selected");
+
+    // Get the data attribute value
+    var dataAttributeValue = selectedOption.attr("data-val");
+    var prev_id = $('#prev_id').val();
+    //console.log('RJ' + dataAttributeValue + prev_id);
+
+    // Display the data attribute value in the span
+    var warehouse_code = 'RJ' + dataAttributeValue + prev_id;
+    console.log('dfdf');
+    $("#dataAttributeValue").val(warehouse_code);
+    console.log(warehouse_code)
+});
+</script>
 <script>
 function status_change_alert(url, message, e) {
     e.preventDefault();
@@ -760,64 +808,469 @@ $('.__right-eye').on('click', function() {
     }
 })
 </script>
-<script type="text/javascript">
-$("#order_revise-ar").click(function() {
-    $("#order_revise").append(
-        '<tr><td><input type="time" name="revise_time[revise_open_time][]" class="form-control" /></td><td><input type="time" name="revise_time[revise_close_time][]"class="form-control" /></td><td><button type="button" class="btn btn-outline-danger remove-input-field">Delete</button></td></tr>'
-    );
-});
-$(document).on('click', '.remove-input-field', function() {
-    $(this).parents('tr').remove();
-});
-</script>
 
-<script type="text/javascript">
-$("#order_cancel-ar").click(function() {
-    $("#order_cancel").append(
-        '<tr><td><input type="time" name="order_cancel_open_time[]" class="form-control" /></td><td><input type="time" name="order_cancel_close_time[]"class="form-control" /></td><td><button type="button" class="btn btn-outline-danger remove-input-field">Delete</button></td></tr>'
-    );
-});
-$(document).on('click', '.remove-input-field', function() {
-    $(this).parents('tr').remove();
-});
-</script>
 
-<script type="text/javascript">
-$("#pre_order-ar").click(function() {
-    $("#pre_order").append(
-        '<tr><td><input type="time" name="pre_order_open_time[]" class="form-control" /></td><td><input type="time" name="pre_order_close_time[]"class="form-control" /></td><td><button type="button" class="btn btn-outline-danger remove-input-field">Delete</button></td></tr>'
-    );
-});
-$(document).on('click', '.remove-input-field', function() {
-    $(this).parents('tr').remove();
-});
-</script>
 
-<script type="text/javascript">
-$("#delivery_order-ar").click(function() {
-    $("#delivery_order").append(
-        '<tr><td><input type="time" name="delivery_open_time[]" class="form-control" /></td><td><input type="time" name="delivery_close_time[]"class="form-control" /></td><td><button type="button" class="btn btn-outline-danger remove-input-field">Delete</button></td></tr>'
-    );
-});
-$(document).on('click', '.remove-input-field', function() {
-    $(this).parents('tr').remove();
-});
-</script>
+<!-- add multirows for revise time slot -->
 <script>
-$('.city_code').on('change', function() {
+// Add more functionality
+$('#add-revise-pair').on('click', function() {
+    if (checkReviseTime()) {
+        var newPair = $('.row-revise-pair:first').clone();
+        newPair.find('input').val('');
+        newPair.appendTo('#box-revise-pair');
+    }
+});
 
-    var city_code = $(this).val();
-    var selectedOption = $(this).find("option:selected");
+// Remove functionality
+$(document).on('click', '.remove-revise-pair', function() {
+    $(this).closest('.row-revise-pair').remove();
+});
 
-    // Get the data attribute value
-    var dataAttributeValue = selectedOption.attr("data-val");
-    var prev_id = $('#prev_id').val();
+//  validation
+function checkReviseTime() {
+    var valid = true;
 
-    // Display the data attribute value in the span
-    $("#dataAttributeValue").css('text-transform', 'uppercase');
-    $("#dataAttributeValue").val('RJ' + dataAttributeValue + prev_id);
-})
+    $('input[name^="revise_time_open"]').each(function(index) {
+
+        var startTime = $(this).val(); //get start time
+        var endTimeArray = document.getElementsByName('revise_time_close[]');
+        var endTime = endTimeArray[index].value; // get end time
+
+        //split hours and minutes
+        var startTimeSplit = startTime.split(':'); //10:30 -> 10,30
+        var endTimeSplit = endTime.split(':'); //11:30 -> 11,30
+
+        // Convert hours and minutes to integers
+        var startTimeHours = parseInt(startTimeSplit[0]); // get hourse ( 10,30)-> (10)
+        var startTimeMinutes = parseInt(startTimeSplit[1]); // get minutes ( 10,30)-> (30)
+        var endTimeHours = parseInt(endTimeSplit[0]);
+        var endTimeMinutes = parseInt(endTimeSplit[1]);
+
+        // Calculate the time difference in minutes
+        var timeDifferenceMinutes = (endTimeHours * 60 + endTimeMinutes) - (startTimeHours * 60 +
+            startTimeMinutes); // 60
+
+        if (startTime == '' || endTime == '') {
+            Swal.fire({
+                title: 'Alert',
+                html: 'Please fill start and end time of current row.',
+                icon: 'info',
+                confirmButtonText: 'OK'
+            });
+            valid = false;
+        } else if (startTime && endTime) {
+            var startMoment = moment(startTime, 'HH:mm');
+            var endMoment = moment(endTime, 'HH:mm');
+            if (!endMoment.isAfter(startMoment)) {
+                Swal.fire({
+                    title: 'Alert',
+                    html: 'End time must be after start time.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+                valid = false;
+            }
+            if (timeDifferenceMinutes < 30) {
+                Swal.fire({
+                    title: 'Alert',
+                    html: 'Start time and end time difference is <strong>' + timeDifferenceMinutes +
+                        ' minutes</strong>. It should be 30 and greater than 30.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+                valid = false;
+            }
+
+            if (index > 0 && valid) {
+                //get diff prev end time and new start time
+                var preEndTime = moment(endTimeArray[index - 1].value, 'HH:mm'); // get pre end time
+
+                //get diffrence
+                var preEndTimeSlot = (endTimeArray[index - 1].value).split(':'); //11:30 -> 11,30
+                var NewStartTime = startTime.split(':'); //12:30 -> 12,30
+
+                // Convert hours and minutes to integers
+                var preEndTimeHours = parseInt(preEndTimeSlot[0]); //11
+                var preEndTimeMinutes = parseInt(preEndTimeSlot[1]); //30
+                var startTimeHours = parseInt(NewStartTime[0]); //12
+                var endTimeMinutes = parseInt(NewStartTime[1]); //30
+
+                // Calculate the time difference in minutes
+                var newRowTimeDifferenceMinutes = (startTimeHours * 60 + endTimeMinutes) - (preEndTimeHours *
+                    60 + preEndTimeMinutes); //60
+
+                if (newRowTimeDifferenceMinutes < 30) {
+                    Swal.fire({
+                        title: 'Alert',
+                        html: 'Previous End Time And New start time difference is <strong>' +
+                            newRowTimeDifferenceMinutes +
+                            ' minutes</strong>. It should be 30 and greater than 30.',
+                        icon: 'info',
+                        confirmButtonText: 'OK'
+                    });
+                    valid = false;
+                }
+                if (!startMoment.isAfter(preEndTime)) {
+                    Swal.fire({
+                        title: 'Alert',
+                        html: ' Next time slot must be greater than previous.',
+                        icon: 'info',
+                        confirmButtonText: 'OK'
+                    });
+                    valid = false;
+                }
+            }
+        }
+    });
+    return valid;
+};
+</script>
+<!-- add multirows for delivery time slot -->
+<script>
+// Add more functionality
+$('#add-delivery-pair').on('click', function() {
+    if (checkDeliveryTime()) {
+        var newPair = $('.row-delivery-pair:first').clone();
+        newPair.find('input').val('');
+        newPair.appendTo('#box-delivery-pair');
+    }
+});
+
+// Remove functionality
+$(document).on('click', '.remove-delivery-pair', function() {
+    $(this).closest('.row-delivery-pair').remove();
+});
+
+//  validation
+
+function checkDeliveryTime() {
+    var valid = true;
+
+    $('input[name^="delivery_open_time"]').each(function(index) {
+
+        var startTime = $(this).val(); //get start time
+        var endTimeArray = document.getElementsByName('delivery_close_time[]');
+        var endTime = endTimeArray[index].value; // get end time
+
+        //split hours and minutes
+        var startTimeSplit = startTime.split(':'); //10:30 -> 10,30
+        var endTimeSplit = endTime.split(':'); //11:30 -> 11,30
+
+        // Convert hours and minutes to integers
+        var startTimeHours = parseInt(startTimeSplit[0]); // get hourse ( 10,30)-> (10)
+        var startTimeMinutes = parseInt(startTimeSplit[1]); // get minutes ( 10,30)-> (30)
+        var endTimeHours = parseInt(endTimeSplit[0]);
+        var endTimeMinutes = parseInt(endTimeSplit[1]);
+
+        // Calculate the time difference in minutes
+        var timeDifferenceMinutes = (endTimeHours * 60 + endTimeMinutes) - (startTimeHours * 60 +
+            startTimeMinutes); // 60
+
+        if (startTime == '' || endTime == '') {
+            Swal.fire({
+                title: 'Alert',
+                html: 'Please fill start and end time of current row.',
+                icon: 'info',
+                confirmButtonText: 'OK'
+            });
+            valid = false;
+        } else if (startTime && endTime) {
+            var startMoment = moment(startTime, 'HH:mm');
+            var endMoment = moment(endTime, 'HH:mm');
+            if (!endMoment.isAfter(startMoment)) {
+                Swal.fire({
+                    title: 'Alert',
+                    html: 'End time must be after start time.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+                valid = false;
+            }
+            if (timeDifferenceMinutes < 30) {
+                Swal.fire({
+                    title: 'Alert',
+                    html: 'Start time and end time difference is <strong>' + timeDifferenceMinutes +
+                        ' minutes</strong>. It should be 30 and greater than 30.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+                valid = false;
+            }
+            if (index > 0 && valid) {
+                //get diff prev end time and new start time
+                var preEndTime = moment(endTimeArray[index - 1].value, 'HH:mm'); // get pre end time
+
+                //get diffrence
+                var preEndTimeSlot = (endTimeArray[index - 1].value).split(':'); //11:30 -> 11,30
+                var NewStartTime = startTime.split(':'); //12:30 -> 12,30
+
+                // Convert hours and minutes to integers
+                var preEndTimeHours = parseInt(preEndTimeSlot[0]); //11
+                var preEndTimeMinutes = parseInt(preEndTimeSlot[1]); //30
+                var startTimeHours = parseInt(NewStartTime[0]); //12
+                var endTimeMinutes = parseInt(NewStartTime[1]); //30
+
+                // Calculate the time difference in minutes
+                var newRowTimeDifferenceMinutes = (startTimeHours * 60 + endTimeMinutes) - (preEndTimeHours *
+                    60 + preEndTimeMinutes); //60
+                if (newRowTimeDifferenceMinutes < 30) {
+                    Swal.fire({
+                        title: 'Alert',
+                        html: 'Previous end time And New start time difference is <strong>' +
+                            newRowTimeDifferenceMinutes +
+                            ' minutes</strong>. It should be 30 and greater than 30.',
+                        icon: 'info',
+                        confirmButtonText: 'OK'
+                    });
+                    valid = false;
+                }
+                if (!startMoment.isAfter(preEndTime)) {
+                    Swal.fire({
+                        title: 'Alert',
+                        html: ' Next time slot must be greater than previous.',
+                        icon: 'info',
+                        confirmButtonText: 'OK'
+                    });
+                    valid = false;
+                }
+            }
+        }
+    });
+    return valid;
+};
+</script>
+<!-- add multirows for order cancel time slot -->
+<script>
+// Add more functionality
+$('#add-order-cancel-pair').on('click', function() {
+    if (checkOrderCancelTime()) {
+        var newPair = $('.row-order-cancel-pair:first').clone();
+        newPair.find('input').val('');
+        newPair.appendTo('#box-order-cancel-pair');
+    }
+});
+
+// Remove functionality
+$(document).on('click', '.remove-order-cancel-pair', function() {
+    $(this).closest('.row-order-cancel-pair').remove();
+});
+
+//  validation
+function checkOrderCancelTime() {
+    var valid = true;
+
+    $('input[name^="order_cancel_open_time"]').each(function(index) {
+
+        var startTime = $(this).val(); //get start time
+        var endTimeArray = document.getElementsByName('order_cancel_close_time[]');
+        var endTime = endTimeArray[index].value; // get end time
+
+        //split hours and minutes
+        var startTimeSplit = startTime.split(':'); //10:30 -> 10,30
+        var endTimeSplit = endTime.split(':'); //11:30 -> 11,30
+
+        // Convert hours and minutes to integers
+        var startTimeHours = parseInt(startTimeSplit[0]); // get hourse ( 10,30)-> (10)
+        var startTimeMinutes = parseInt(startTimeSplit[1]); // get minutes ( 10,30)-> (30)
+        var endTimeHours = parseInt(endTimeSplit[0]);
+        var endTimeMinutes = parseInt(endTimeSplit[1]);
+
+        // Calculate the time difference in minutes
+        var timeDifferenceMinutes = (endTimeHours * 60 + endTimeMinutes) - (startTimeHours * 60 +
+            startTimeMinutes); // 60
+
+        if (startTime == '' || endTime == '') {
+            Swal.fire({
+                title: 'Alert',
+                html: 'Please fill start and end time of current row.',
+                icon: 'info',
+                confirmButtonText: 'OK'
+            });
+            valid = false;
+        } else if (startTime && endTime) {
+            var startMoment = moment(startTime, 'HH:mm');
+            var endMoment = moment(endTime, 'HH:mm');
+            if (!endMoment.isAfter(startMoment)) {
+                Swal.fire({
+                    title: 'Alert',
+                    html: 'End time must be after start time.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+                valid = false;
+            }
+            if (timeDifferenceMinutes < 30) {
+                Swal.fire({
+                    title: 'Alert',
+                    html: 'Start time and end time difference is <strong>' + timeDifferenceMinutes +
+                        ' minutes</strong>. It should be 30 and greater than 30.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+                valid = false;
+            }
+            if (index > 0 && valid) {
+                //get diff prev end time and new start time
+                var preEndTime = moment(endTimeArray[index - 1].value, 'HH:mm'); // get pre end time
+
+                //get diffrence
+                var preEndTimeSlot = (endTimeArray[index - 1].value).split(':'); //11:30 -> 11,30
+                var NewStartTime = startTime.split(':'); //12:30 -> 12,30
+
+                // Convert hours and minutes to integers
+                var preEndTimeHours = parseInt(preEndTimeSlot[0]); //11
+                var preEndTimeMinutes = parseInt(preEndTimeSlot[1]); //30
+                var startTimeHours = parseInt(NewStartTime[0]); //12
+                var endTimeMinutes = parseInt(NewStartTime[1]); //30
+
+                // Calculate the time difference in minutes
+                var newRowTimeDifferenceMinutes = (startTimeHours * 60 + endTimeMinutes) - (preEndTimeHours *
+                    60 + preEndTimeMinutes); //60
+                if (newRowTimeDifferenceMinutes < 30) {
+                    Swal.fire({
+                        title: 'Alert',
+                        html: 'Previous End Time And New start time difference is <strong>' +
+                            newRowTimeDifferenceMinutes +
+                            ' minutes</strong>. It should be 30 and greater than 30.',
+                        icon: 'info',
+                        confirmButtonText: 'OK'
+                    });
+                    valid = false;
+                }
+                if (!startMoment.isAfter(preEndTime)) {
+                    Swal.fire({
+                        title: 'Alert',
+                        html: ' Next time slot must be greater than previous.',
+                        icon: 'info',
+                        confirmButtonText: 'OK'
+                    });
+                    valid = false;
+                }
+            }
+        }
+    });
+    return valid;
+};
+</script>
+<!-- add multirows for pre order time slot -->
+<script>
+// Add more functionality
+$('#add-pre-order-pair').on('click', function() {
+    if (checkPreOrderTime()) {
+        var newPair = $('.row-pre-order-pair:first').clone();
+        newPair.find('input').val('');
+        newPair.appendTo('#box-pre-order-pair');
+    }
+});
+
+// Remove functionality
+$(document).on('click', '.remove-pre-order-pair', function() {
+    $(this).closest('.row-pre-order-pair').remove();
+});
+
+//  validation
+function checkPreOrderTime() {
+    var valid = true;
+
+    $('input[name^="pre_order_open_time"]').each(function(index) {
+
+        var startTime = $(this).val(); //get start time
+        var endTimeArray = document.getElementsByName('pre_order_close_time[]');
+        var endTime = endTimeArray[index].value; // get end time
+
+        //split hours and minutes
+        var startTimeSplit = startTime.split(':'); //10:30 -> 10,30
+        var endTimeSplit = endTime.split(':'); //11:30 -> 11,30
+
+        // Convert hours and minutes to integers
+        var startTimeHours = parseInt(startTimeSplit[0]); // get hourse ( 10,30)-> (10)
+        var startTimeMinutes = parseInt(startTimeSplit[1]); // get minutes ( 10,30)-> (30)
+        var endTimeHours = parseInt(endTimeSplit[0]);
+        var endTimeMinutes = parseInt(endTimeSplit[1]);
+
+        // Calculate the time difference in minutes
+        var timeDifferenceMinutes = (endTimeHours * 60 + endTimeMinutes) - (startTimeHours * 60 +
+            startTimeMinutes); // 60
+
+        if (startTime == '' || endTime == '') {
+            Swal.fire({
+                title: 'Alert',
+                html: 'Please fill start and end time of current row.',
+                icon: 'info',
+                confirmButtonText: 'OK'
+            });
+
+
+            valid = false;
+        } else if (startTime && endTime) {
+            var startMoment = moment(startTime, 'HH:mm');
+            var endMoment = moment(endTime, 'HH:mm');
+            if (!endMoment.isAfter(startMoment)) {
+                Swal.fire({
+                    title: 'Alert',
+                    html: 'End time must be after start time.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+
+                valid = false;
+            }
+            if (timeDifferenceMinutes < 30) {
+                Swal.fire({
+                    title: 'Alert',
+                    html: 'Start time and end time difference is <strong>' + timeDifferenceMinutes +
+                        ' minutes</strong>. It should be 30 and greater than 30.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+
+                valid = false;
+            }
+            if (index > 0 && valid) {
+                //get diff prev end time and new start time
+                var preEndTime = moment(endTimeArray[index - 1].value, 'HH:mm'); // get pre end time
+
+                //get diffrence
+                var preEndTimeSlot = (endTimeArray[index - 1].value).split(':'); //11:30 -> 11,30
+                var NewStartTime = startTime.split(':'); //12:30 -> 12,30
+
+                // Convert hours and minutes to integers
+                var preEndTimeHours = parseInt(preEndTimeSlot[0]); //11
+                var preEndTimeMinutes = parseInt(preEndTimeSlot[1]); //30
+                var startTimeHours = parseInt(NewStartTime[0]); //12
+                var endTimeMinutes = parseInt(NewStartTime[1]); //30
+
+                // Calculate the time difference in minutes
+                var newRowTimeDifferenceMinutes = (startTimeHours * 60 + endTimeMinutes) - (preEndTimeHours *
+                    60 + preEndTimeMinutes); //60
+                if (newRowTimeDifferenceMinutes < 30) {
+                    Swal.fire({
+                        title: 'Alert',
+                        html: 'Previous End Time And New start time difference is <strong>' +
+                            newRowTimeDifferenceMinutes +
+                            ' minutes</strong>. It should be 30 and greater than 30.',
+                        icon: 'info',
+                        confirmButtonText: 'OK'
+                    });
+                    valid = false;
+                }
+                if (!startMoment.isAfter(preEndTime)) {
+                    Swal.fire({
+                        title: 'Alert',
+                        html: ' Next time slot must be greater than previous.',
+                        icon: 'info',
+                        confirmButtonText: 'OK'
+                    });
+                    valid = false;
+                }
+            }
+        }
+    });
+    return valid;
+};
+
 </script>
 
-
+</body>
 @endpush

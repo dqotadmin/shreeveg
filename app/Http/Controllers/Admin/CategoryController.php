@@ -91,7 +91,6 @@ class CategoryController extends Controller
 
     function sub_index($id): View|Factory|Application
     {
-        dd($id);
         // $category = $this->category->withoutGlobalScopes()->with('translations')->find($id);
         // return view('admin-views.category.edit', compact('category'));
         $query_param = [];

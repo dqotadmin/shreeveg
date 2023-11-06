@@ -34,7 +34,7 @@
                     </div>
                 </div>
 
-<!--                <div class="d-flex">
+                <!-- <div class="d-flex">
                     <h5 class="input-label m-0 text-capitalize">{{translate('module_permission')}} : </h5>
                     <div class="check-item pb-0 w-auto">
                         <div class="form-group form-check form&#45;&#45;check m-0 ml-2">

@@ -93,26 +93,7 @@
                                         {{$warehouse['address']}}
                                     </span>
                                     </td>
-                                    <!-- <td> -->
-                                    <!-- <span class="d-block font-size-sm text-body text-trim-50">
-                                        {{$warehouse['pin_code']}}
-                                    </span>
-                                    </td>
-                                    <td>
-                                    <span class="d-block font-size-sm text-body text-trim-50">
-                                        {{$warehouse['owner_name']}}
-                                    </span>
-                                    </td>
-                                    <td>
-                                    <span class="d-block font-size-sm text-body text-trim-50">
-                                        {{$warehouse['owner_number']}}
-                                    </span>
-                                    </td>
-                                    <td>
-                                    <span class="d-block font-size-sm text-body text-trim-50">
-                                        {{$warehouse['title']}}
-                                    </span>
-                                    </td> -->
+                                 
                                     <td>
 
                                         <label class="toggle-switch">
@@ -128,7 +109,11 @@
                                     </td>
                                     <td>
                                         <!-- Dropdown -->
+                                        
                                         <div class="btn--container justify-content-center">
+                                             <a class="action-btn btn--warning btn-outline-warning"
+                                                href="{{route('admin.warehouse.wh-assign-category-page',[$warehouse['id']])}}">
+                                            <i class="tio-category"></i></a>
                                             <a class="action-btn"
                                                 href="{{route('admin.warehouse.edit',[$warehouse['id']])}}">
                                             <i class="tio-edit"></i></a>

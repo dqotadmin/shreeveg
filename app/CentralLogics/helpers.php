@@ -146,7 +146,7 @@ class Helpers
 
         return $data;
     }
-
+    
     public static function get_business_settings($name)
     {
         $config = null;
@@ -158,6 +158,18 @@ class Helpers
             }
         }
         return $config;
+    }
+
+    public static function getWhCategoriesData($catid,$whId)
+    {
+       $row = [];
+        $data = \App\Model\WarehouseCategory::where(['warehouse_id' => $whId,'category_id' =>$catid])->first();
+        if (isset($data)) {
+            $row = $data;
+        }
+        //dd($row);
+        return $row;
+
     }
 
     public static function currency_code()

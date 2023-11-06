@@ -64,7 +64,7 @@
                                     <input type="hidden" name="lang[]" value="{{$lang['code']}}">
                                     <div class="form-group mb-0">
                                         <label class="input-label" for="{{$lang['code']}}_description">{{translate('short')}} {{translate('description')}}  ({{strtoupper($lang['code'])}})</label>
-                                        <textarea name="description[]" class="form-control h--172px" id="{{$lang['code']}}_hiddenArea">{{$translate[$lang['code']]['description']??$product['description']}}</textarea>
+                                        <textarea name="description[]" class="form-control " id="{{$lang['code']}}_hiddenArea">{{$translate[$lang['code']]['description']??$product['description']}}</textarea>
                                     </div>
                                 </div>
                             @endforeach
@@ -72,13 +72,13 @@
                             <div id="english-form">
                                 <div class="form-group">
                                     <label class="input-label" for="exampleFormControlInput1">{{translate('name')}} (EN)</label>
-                                    <input type="text" name="name[]" value="{{$product['name']}}" class="form-control" placeholder="{{translate('New Product')}}" required>
+                                    <input type="text" name="name[]" value="{{$product['name']}}" class="form-control" placeholder="{{translate('New Product')}}" required >
                                 </div>
                                 <input type="hidden" name="lang[]" value="en">
                                 <div class="form-group mb-0">
                                     <label class="input-label"
                                         for="exampleFormControlInput1">{{translate('short')}} {{translate('description')}} (EN)</label>
-                                    <textarea name="description[]" class="form-control h--172px" id="hiddenArea">{{ $product['description'] }}</textarea>
+                                    <textarea name="description[]" class="form-control " id="hiddenArea">{{ $product['description'] }}</textarea>
                                 </div>
                             </div>
                         @endif
@@ -106,14 +106,33 @@
                                             class="input-label-secondary">*</span></label>
                                     <select name="category_id" id="category-id" class="form-control js-select2-custom"
                                             onchange="getRequest('{{url('/')}}/admin/product/get-categories?parent_id='+this.value,'sub-categories')">
-                                        @foreach($categories as $category)
-                                            <option
-                                                value="{{$category['id']}}" {{ $category->id==$product_category[0]->id ? 'selected' : ''}} >{{$category['name']}}</option>
-                                        @endforeach
+                                            @if($product_category)
+                                            @foreach($categories as $category)
+                                                <option
+                                                    value="{{$category['id']}}" {{ $category->id==$product_category[0]->id ? 'selected' : ''}} >{{$category['name']}}</option>
+                                            @endforeach
+                                            @endif
                                     </select>
                                 </div>
                             </div>
+                            
                             <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="input-label"
+                                           for="exampleFormControlInput1">{{translate('Product_Code')}}</label>
+                                    <input type="text" min="1" step="1"  value="{{$product['product_code']}}"   name="product_code" style="text-transform: uppercase;"
+                                           class="form-control"
+                                           placeholder="{{ translate('Ex : 4228') }}" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="input-label"
+                                        for="exampleFormControlInput1">{{translate('Stock')}}</label>
+                                    <input type="number" min="0" step="0.01"   value="{{$product['stock']}}" name="stock" class="form-control" placeholder="{{ translate('Ex : 54') }}"required >
+                                </div>
+                            </div>
+                            <!-- <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="input-label"
                                             for="exampleFormControlSelect1">{{translate('sub_category')}}<span
@@ -143,7 +162,7 @@
                                             for="exampleFormControlInput1">{{translate('capacity')}}</label>
                                     <input type="number" min="0" step="0.01" value="{{$product['capacity']}}"  name="capacity"
                                             class="form-control"
-                                            placeholder="{{ translate('Ex : 5') }}" required>
+                                            placeholder="{{ translate('Ex : 5') }}" >
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -152,13 +171,13 @@
                                            for="exampleFormControlInput1">{{translate('maximum_order_quantity')}}</label>
                                     <input type="number" min="1" step="1" value="{{$product['maximum_order_quantity']}}" name="maximum_order_quantity"
                                            class="form-control"
-                                           placeholder="{{ translate('Ex : 3') }}" required>
+                                           placeholder="{{ translate('Ex : 3') }}" >
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
-                <div class="mt-2">
+                <!-- <div class="mt-2">
                     <div class="card min-h-116px">
                         <div class="card-body d-flex flex-column justify-content-center">
                             <div class="d-flex flex-wrap-reverse justify-content-between">
@@ -177,10 +196,32 @@
                             </div>
                         </div>
                     </div>
+                </div> -->
+            </div>
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-body">
+                    <h5 class="mb-3">{{translate('Single product')}} {{translate('image')}} <small
+                        class="text-danger">* ( {{translate('ratio')}} 1:1 )</small></h5>
+                        <div class="product--single">
+                            @if (!empty(json_decode($product['single_image'],true)))
+                                    @foreach(json_decode($product['single_image'],true) as $img)
+                                        <div class="row g-2" >
+                                            <div class="spartan_item_wrapper position-relative">
+                                                <img class="img-150 border rounded p-3" src="{{asset('storage/app/public/product/single')}}/{{$img}}">
+                                                <a href="{{route('admin.product.remove-single-image',[$product['id'],$img])}}" class="spartan__close"><i class="tio-add-to-trash"></i></a>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                            @else
+                                <div class="row g-2" id="single"></div>
+                            @endif
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-6">
-                <div class="card">
+            <div class="col-lg-9">
+                <div class="card h-100">
                     <div class="card-body">
                     <h5 class="mb-3">{{translate('product')}} {{translate('image')}} <small
                         class="text-danger">* ( {{translate('ratio')}} 1:1 )</small></h5>
@@ -199,7 +240,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6">
+            <!-- <div class="col-lg-6">
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title">
@@ -223,8 +264,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-6">
+            </div> -->
+            <div class="col-lg-12">
                 <div class="card h-100">
                     <div class="card-header">
                         <h5 class="card-title">
@@ -238,114 +279,66 @@
                     </div>
                     <div class="card-body">
                         <div class="p-2">
-                            <div class="row g-3">
-                                <div class="col-sm-6">
-                                    <div class="form-group mb-0">
-                                        <label class="input-label" for="exampleFormControlInput1">{{translate('default_unit_price')}}</label>
-                                        <input type="number" value="{{$product['price']}}" min="0" max="100000000" name="price" class="form-control" step="any" placeholder="{{ translate('Ex : 100') }}" required>
+                     
+                            @if(!empty(json_decode($product['product_details'], true)))
+                                @foreach(json_decode($product['product_details'], true) as $product_data)
+                                    <div class="row g-3">
+                                        <div class="col-sm-1">
+                                            <div class="form-group mb-0">
+                                                <label class="input-label"
+                                                    for="exampleFormControlInput1">{{translate('Quantity')}}</label>
+                                                <input type="number" min="0" max="10000000000" step="any" value="{{$product_data['quantity']}}" name="quantity[]"
+                                                    class="form-control"
+                                                    placeholder="{{ translate('Ex : 1') }}" required >
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label class="input-label"
+                                                for="exampleFormControlInput1">{{translate('Unit')}}</label>
+                                                <select name="unit_id[]" id="" class="form-control js-select2-custom">
+                                                    <option value="" disabled selected>Please Select Unit</option>
+                                                    @if(isset($product_data['unit_id']))
+                                                    @foreach($units as $unit)
+                                                        <option value="{{$unit->id}}" {{$product_data['unit_id'] == $unit->id ? 'selected': ''}} style="text-transform: capitalize;" >{{$unit->title}}</option>
+                                                    @endforeach
+                                                    @endif
+                                                </select>
+                                        </div>
+                                        <div class="col-sm-2">
+                                                <label class="input-label"
+                                                    for="exampleFormControlInput1">{{translate('default_price')}}/{{translate('offer_price')}}</label>
+                                                <input name="offer_price[]" min="0" max="100000000" step="any" value="{{$product_data['offer_price']}}"
+                                                    class="form-control"
+                                                    placeholder="{{ translate('Ex : 10') }}" required>
+                                        </div>
+                                        <div class="col-sm-2">
+                                                <label class="input-label"
+                                                    for="exampleFormControlInput1">{{translate('Actual Price')}}</label>
+                                                <input name="actual_price[]" min="0" max="100000000" step="any" value="{{$product_data['actual_price']}}"
+                                                    class="form-control"
+                                                    placeholder="{{ translate('Ex : 15') }}" required>
+                                        </div>
+                                        <div class="col-sm-2">
+                                                <label class="input-label" for="exampleFormControlInput1">{{translate('Approx Piece/Weight')}}</label>
+                                                <input name="approx_piece[]" min="0" max="100000000" step="any"   class="form-control" value="{{$product_data['approx_piece']}}"
+                                                    placeholder="{{ translate('Ex : 1 pieces') }}" required>
+                                        </div>
+                                        <div class="col-sm-3">
+                                                <label class="input-label" for="exampleFormControlInput1">{{translate('Short Title')}}</label>
+                                                <input type="text" min="0" max="100000000" step="any"  name="title[]" class="form-control" value="{{$product_data['title']}}"
+                                                    placeholder="{{ translate('Ex : This product is pure organic') }}" required>
+                                        </div>
+                                    
                                     </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group mb-0">
-                                        <label class="input-label"
-                                                for="exampleFormControlInput1">{{translate('stock')}}</label>
-                                        <input type="number" min="0" max="100000000" value="{{$product['total_stock']}}" name="total_stock" class="form-control"
-                                                placeholder="{{ translate('Ex : 100') }}">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group mb-0">
-                                        <label class="input-label"
-                                                for="exampleFormControlInput1">{{translate('discount')}} {{translate('type')}}</label>
-                                        <select name="discount_type" id="discount_type" class="form-control js-select2-custom">
-                                            <option value="percent" {{$product['discount_type']=='percent'?'selected':''}}>
-                                                {{translate('percent')}}
-                                            </option>
-                                            <option value="amount" {{$product['discount_type']=='amount'?'selected':''}}>
-                                                {{translate('amount')}}
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group mb-0">
-                                        <label class="input-label"
-                                                for="exampleFormControlInput1">{{translate('discount')}} <span id="discount_symbol">{{$product['discount_type']=='amount'?'':'(%)'}}</span></label>
-                                        <input type="number" min="0" value="{{$product['discount']}}" max="100000"
-                                                name="discount" class="form-control" step="any"
-                                                placeholder="{{ translate('Ex : 100') }}" required>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group mb-0">
-                                        <label class="input-label"
-                                                for="exampleFormControlInput1">{{translate('tax_type')}}</label>
-                                        <select name="tax_type" id="tax_type" class="form-control js-select2-custom">
-                                            <option
-                                                value="percent" {{$product['tax_type']=='percent'?'selected':''}}>{{translate('percent')}}
-                                            </option>
-                                            <option
-                                                value="amount" {{$product['tax_type']=='amount'?'selected':''}}>{{translate('amount')}}
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group mb-0">
-                                        <label class="input-label" for="exampleFormControlInput1">{{translate('tax_rate')}} <span id="tax_symbol">{{$product['tax_type']=='amount'?'':'(%)'}}</span></label>
-                                        <input type="number" value="{{$product['tax']}}" min="0" max="100000" name="tax" class="form-control" step="any" placeholder="{{ translate('Ex : 7') }}" required>
-                                    </div>
-                                </div>
-                            </div>
+                                @endforeach
+                            @endif
+                           
+
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6">
-                <div class="card h-100">
-                    <div class="card-header">
-                        <h5 class="card-title">
-                            <span class="card-header-icon">
-                                <i class="tio-puzzle"></i>
-                            </span>
-                            <span>
-                                {{translate('attribute')}}
-                            </span>
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="p-2">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="form-group __select-attr">
-                                        <label class="input-label"
-                                                for="exampleFormControlSelect1">{{translate('select attribute')}}<span
-                                                class="input-label-secondary"></span></label>
-                                        <select name="attribute_id[]" id="choice_attributes"
-                                                class="form-control js-select2-custom"
-                                                multiple="multiple">
-                                            @foreach(\App\Model\Attribute::orderBy('name')->get() as $attribute)
-                                                <option
-                                                    value="{{$attribute['id']}}" {{in_array($attribute->id,json_decode($product['attributes'],true))?'selected':''}}>{{$attribute['name']}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-12 mt-2 mb-2">
-                                    <div class="customer_choice_options" id="customer_choice_options">
-                                        @include('admin-views.product.partials._choices',['choice_no'=>json_decode($product['attributes']),'choice_options'=>json_decode($product['choice_options'],true)])
-                                    </div>
-                                </div>
-                                <div class="col-md-12 mt-2 mb-2">
-                                    <div class="variant_combination" id="variant_combination">
-                                        @include('admin-views.product.partials._edit-combinations',['combinations'=>json_decode($product['variations'],true)])
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+       
             <div class="col-12">
                 <div class="btn--container justify-content-end">
                     <button type="reset" class="btn btn--reset">{{translate('clear')}}</button>
@@ -416,6 +409,41 @@
                 },
                 onSizeErr: function (index, file) {
                     toastr.error('File size too big', {
+                        CloseButton: true,
+                        ProgressBar: true
+                    });
+                }
+            });
+        });
+        $(function () {
+            $("#single").spartanMultiImagePicker({
+                fieldName: 'single_image[]',
+                maxCount: 1,
+                rowHeight: '150px',
+                groupClassName: '',
+                maxFileSize: '',
+                placeholderImage: {
+                    image: '{{asset('public/assets/admin/img/upload-en.png')}}',
+                    width: '100%'
+                },
+                dropFileLabel: "Drop Here",
+                onAddRow: function (index, file) {
+
+                },
+                onRenderedPreview: function (index) {
+
+                },
+                onRemoveRow: function (index) {
+
+                },
+                onExtensionErr: function (index, file) {
+                    toastr.error('{{ translate("Please only input png or jpg type file") }}', {
+                        CloseButton: true,
+                        ProgressBar: true
+                    });
+                },
+                onSizeErr: function (index, file) {
+                    toastr.error('{{ translate("File size too big") }}', {
                         CloseButton: true,
                         ProgressBar: true
                     });

@@ -40,6 +40,10 @@ class SystemController extends Controller
     {
         return view('admin-views.settings');
     }
+    public function create(): View|Factory|Application
+    {
+             return view('admin-views.warehouse-admin.add');
+    }
 
     /**
      * @param Request $request

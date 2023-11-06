@@ -23,13 +23,26 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::get('/fcm/{id}', 'DashboardController@fcm')->name('dashboard');     //test route
             Route::get('/', 'DashboardController@dashboard')->name('dashboard');
             Route::post('order-stats', 'DashboardController@order_stats')->name('order-stats');
+        //  admin roles start
+            Route::get('warehouse-admin', 'AdminUserController@index')->name('warehouse-admin');
+            Route::get('user-management-create', 'AdminUserController@user_management_create')->name('user-management-create');
+            Route::post('warehouse-admin', 'AdminUserController@store')->name('warehouse-admin');
+            Route::get('warehouse-admin-status/{id}/{status}', 'AdminUserController@status')->name('warehouse-admin-status');
+            Route::get('warehouse-admin-edit/{id}', 'AdminUserController@edit')->name('warehouse-admin-edit');
+            Route::delete('warehouse-admin-delete/{id}', 'AdminUserController@delete')->name('warehouse-admin-delete');
+            Route::post('warehouse-admin-update/{id}', 'AdminUserController@update')->name('warehouse-admin-update');
+
+            //end
             Route::get('settings', 'SystemController@settings')->name('settings');
             Route::post('settings', 'SystemController@settings_update');
             Route::post('settings-password', 'SystemController@settings_password_update')->name('settings-password');
             Route::get('/get-restaurant-data', 'SystemController@restaurant_data')->name('get-restaurant-data');
             Route::get('dashboard/order-statistics', 'DashboardController@get_order_statitics')->name('dashboard.order-statistics');
             Route::get('dashboard/earning-statistics', 'DashboardController@get_earning_statitics')->name('dashboard.earning-statistics');
-        //});
+
+            Route::get('warehouse-admin', 'AdminUserController@index')->name('user-management');
+
+        // });
 
         Route::group(['prefix' => 'custom-role', 'as' => 'custom-role.', 'middleware'=>['module:user_management']], function () {
             Route::get('create', 'CustomRoleController@create')->name('create');
@@ -158,6 +171,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
 
             Route::get('view/{id}', 'ProductController@view')->name('view');
             Route::get('remove-image/{id}/{name}', 'ProductController@remove_image')->name('remove-image');
+            Route::get('remove-single-image/{id}/{name}', 'ProductController@remove_single_image')->name('remove-single-image');
             //ajax request
             Route::get('get-categories', 'ProductController@get_categories')->name('get-categories');
             Route::post('daily-needs', 'ProductController@daily_needs')->name('daily-needs');
@@ -257,6 +271,9 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::get('status/{id}/{status}', 'WarehouseController@status')->name('status');
             Route::delete('delete/{id}', 'WarehouseController@delete')->name('delete');
             Route::post('search', 'WarehouseController@search')->name('search');
+            Route::get('wh-assign-category/{id}', 'WarehouseController@wh_assign_category_page')->name('wh-assign-category-page');
+            Route::get('wh-assign-category/{id}/{catid}/{status}', 'WarehouseController@wh_assign_category_status')->name('wh-assign-category-status');
+            Route::post('wh-assign-category', 'WarehouseController@wh_assign_category_store')->name('wh-assign-category');
         });
 
         Route::group(['prefix' => 'message', 'as' => 'message.','middleware'=>['module:support_management']], function () {

@@ -1,0 +1,107 @@
+<script>
+// function addRow(button) {
+//     var startTime= 0;
+//     var endTime= 0;
+//     var gape_time= 0;
+//     var total_time= 0;
+//     var timeDifference= 0;
+//     var hours= 0;
+//     var minutes= 0;
+//     var seconds= 0;
+//     var startDate= 0;
+//     var endDate= 0;
+    
+//     $('.timeslot-row').each(function(index) {
+//             let startTimeInput = $(this).find('#open_time');
+//             let endTimeInput = $(this).find('#close_time');
+
+//             startTime = startTimeInput.val();
+//             endTime = endTimeInput.val();
+//             startDate = new Date(`2000-01-01T${startTime}`);
+//             endDate = new Date(`2000-01-01T${endTime}`);
+
+//             // Calculate the time difference in milliseconds
+//             timeDifference = endDate - startDate;
+//             hours = Math.floor(timeDifference / 3600000 )*60; // 1 hour = 3600000 milliseconds
+//             minutes = Math.floor((timeDifference % 3600000) / 60000); // 1 minute = 60000 milliseconds
+//             seconds = Math.floor((timeDifference % 60000) / 1000); // 1 second = 1000 milliseconds
+//             total_time= hours+minutes+seconds;
+//             gape_time = total_time;
+//             console.log("gape_time in loop",gape_time);
+//             console.log(startTime);
+//             console.log(endTime);
+          
+//         });
+//             console.log(endTime);
+//             console.log("gape_time out loop ",gape_time);
+      
+
+  
+//    const currentRow = button.parentNode.parentNode;
+//     const newRow = currentRow.cloneNode(true);
+   
+//     // Reset input values in the new row
+//     const inputFields = newRow.querySelectorAll('input[type="time"]');
+//     inputFields.forEach(input => input.value = "");
+
+//     // Change the text on the button to "Remove" and set the remove action
+//     const addButton = newRow.querySelector('button');
+//     addButton.textContent = "Remove";
+//     addButton.onclick = function() {
+//         removeRow(this);
+//     };
+//     // Add the new row
+//     currentRow.parentNode.insertBefore(newRow, currentRow);
+//     function removeRow(button) {
+//         const row = button.parentNode.parentNode;
+//         row.parentNode.removeChild(row);
+//     }
+//     alert('start time is greater then end time');
+// }
+    
+
+    
+<script type="text/javascript">
+    $("#pre_order-ar").click(function() {
+        $("#pre_order").append(
+            '<tr><td><input type="time" name="pre_order_open_time[]" class="form-control" /></td><td><input type="time" name="pre_order_close_time[]"class="form-control" /></td><td><button type="button" class="btn btn-outline-danger remove-input-field">Delete</button></td></tr>'
+        );
+    });
+    $(document).on('click', '.remove-input-field', function() {
+        $(this).parents('tr').remove();
+    });
+</script>
+
+<script type="text/javascript">
+    $("#delivery_order-ar").click(function() {
+        $("#delivery_order").append(
+            '<tr><td><input type="time" name="delivery_open_time[]" class="form-control" /></td><td><input type="time" name="delivery_close_time[]"class="form-control" /></td><td><button type="button" class="btn btn-outline-danger remove-input-field">Delete</button></td></tr>'
+        );
+    });
+    $(document).on('click', '.remove-input-field', function() {
+        $(this).parents('tr').remove();
+    });
+</script>
+
+
+<script type="text/javascript">
+    $("#order_revise-ar").click(function() {
+        $("#order_revise").append(
+            '<tr><td><input type="time" name="revise_time[revise_open_time][]" class="form-control" /></td><td><input type="time" name="revise_time[revise_close_time][]"class="form-control" /></td><td><button type="button" class="btn btn-outline-danger remove-input-field">Delete</button></td></tr>'
+        );
+    });
+    $(document).on('click', '.remove-input-field', function() {
+        $(this).parents('tr').remove();
+    });
+</script>
+
+<script type="text/javascript">
+    $("#order_cancel-ar").click(function() {
+        $("#order_cancel").append(
+            '<tr><td><input type="time" name="order_cancel_open_time[]" class="form-control" /></td><td><input type="time" name="order_cancel_close_time[]"class="form-control" /></td><td><button type="button" class="btn btn-outline-danger remove-input-field">Delete</button></td></tr>'
+        );
+    });
+    $(document).on('click', '.remove-input-field', function() {
+        $(this).parents('tr').remove();
+    });
+</script>

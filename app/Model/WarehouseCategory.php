@@ -15,5 +15,6 @@ class WarehouseCategory extends Model
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
+    protected $fillable = ['margin', 'category_order']; // Add other fields as needed
 }
     ?>

@@ -111,9 +111,10 @@
                                 {{translate('Category Assign')}}
                             </h5>
                         </div>
-                     
+
                         <div class="card-body">
-                            <form id="submit-create-role" method="post" action="{{route('admin.warehouse.wh-assign-category')}}"
+                            <form id="submit-create-role" method="post"
+                                action="{{route('admin.warehouse.wh-assign-category')}}"
                                 style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
                                 @csrf
                                 <input type="hidden" name="warehouse_id" value="{{$warehouses->id}}">
@@ -130,61 +131,25 @@
                                 <div class="check--item-wrapper" style="display: inherit;">
                                     <div class="row">
                                         <?php $i=1; ?>
-                                            <!-- @foreach($wh_assign_categories as $wh_assign_category)
-                                           
-                                            <div class="col-md-6">
-                                                    <div class="check_category_main">
-                                                        <div class="check-item pb-0">
-                                                            <div class="form-group form-check form--check">
-                                                                <input type="checkbox" name="category_id[]"
-                                                                    value="{{$wh_assign_category->id}}"
-                                                                    class="form-check-input module-permission"
-                                                                    id="{{$wh_assign_category->category_id}}" checked>
-                                                                <label class="form-check-label" 
-                                                                    style="{{Session::get('direction') === "rtl" ? 'margin-right: 1.25rem;' : ''}};"
-                                                                 
-                                                                    for="{{$wh_assign_category->category_id}}">{{translate($wh_assign_category->category_id)}}</label>
-                                                            </div>
-                                                        </div>
 
-                                                        <div class="m_inputs">
-                                                            <input type="number" name="category_order[]"  value="{{$wh_assign_category->category_order}}"
-                                                      
-                                                                placeholder="Ex. Order <?php  ?>"  class="form-control " id="">
-
-                                                            <input type="text" name="margin[]" value="{{$wh_assign_category->margin}}" placeholder="Ex. Margin 5%"
-                                                                class="form-control" id="">
-
-                                                            <label class="toggle-switch my-0">
-                                                                <input type="checkbox"
-                                                                    onclick="status_change_alert('{{ route('admin.warehouse.wh-assign-category-status', [$warehouses->id, $warehouses->status ? 0 : 1]) }}', '{{ $warehouses->status? translate('you_want_to_disable_this_role'): translate('you_want_to_active_this_role') }}', event)"
-                                                                    class="toggle-switch-input" id="stocksCheckbox{{ $warehouses->id }}"
-                                                                    {{ $warehouses->status ? 'checked' : '' }}><span class="toggle-switch-label mx-auto text"><span class="toggle-switch-indicator"></span>
-                                                                </span>
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                             
-                                            @endforeach -->
                                         @foreach($categories as $category)
-                                       
 
-                                       
+
+
                                         <?php
                                         $editRow = Helpers::getWhCategoriesData($category->id,$warehouses->id);
-                                        $checked = $margin = $catOrder=''; $status ='1'; 
+                                        $checked = $status = $margin = $catOrder=''; 
                                             if(!empty($editRow) && $editRow->category_id == $category->id){
                                                 $checked ='checked';
                                                 $margin = $editRow->margin;
                                                 $catOrder = $editRow->category_order;
-                                                $status = true;
+                                                $status =  $editRow->status;
                                             }
                                         
                                         ?>
-    
-                                       
-                                        <div class="col-md-6">
+
+
+                                        <div class="col-md-12">
                                             <div class="check_category_main">
                                                 <div class="check-item pb-0">
                                                     <div class="form-group form-check form--check">
@@ -202,21 +167,26 @@
                                                     <input type="number" name="category_order[]" value="{{$catOrder}}"
                                                         placeholder="Ex. Order <?php  ?>" class="form-control " id="">
 
-                                                    <input type="text" name="margin[]" value="{{$margin}}" placeholder="Ex. Margin 5%"
-                                                        class="form-control" id="">
-                                                    
-                                                    <label class="toggle-switch my-0">
-                                                        <input type="checkbox"
-                                                        {{ $checked }}
-                                                            class="toggle-switch-input" name="status[]" id="stocksCheckbox{{ $warehouses->id }}"
-                                                           ><span class="toggle-switch-label mx-auto text"><span class="toggle-switch-indicator"></span>
+                                                    <input type="text" name="margin[]" value="{{$margin}}"
+                                                        placeholder="Ex. Margin 5%" class="form-control" id="">
+
+
+                                                    <label class="toggle-switch">
+                                                        <input type="checkbox" name="status[]"
+                                                            {{$status =='1' ? 'checked' : ''}}
+                                                            onclick="status_change_alert('{{ route('admin.warehouse.wh-assign-category-status', [$warehouses->id,$category->id, @$editRow->status ? 0 : 1]) }}', '{{ $warehouses->status? translate('you_want_to_disable_this_category'): translate('you_want_to_active_this_category') }}', event)"
+                                                            class="toggle-switch-input"
+                                                            id="stocksCheckbox{{ @$editRow->status }}">
+                                                        <span class="toggle-switch-label text">
+                                                            <span class="toggle-switch-indicator"></span>
                                                         </span>
                                                     </label>
-                                                    
+
+
                                                 </div>
                                             </div>
                                         </div>
-                                       
+
                                         @endforeach
                                     </div>
                                 </div>

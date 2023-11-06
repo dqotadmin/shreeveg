@@ -2106,4 +2106,7 @@
   'third_product_rate' => 'Third product rate',
   'Ex : 150' => 'Ex : 150',
   'Ex : 10 pieces' => 'Ex : 10 pieces',
+  'Add new Warehouse Admin' => 'Add new Warehouse Admin',
+  'Warehouse Admin Setup' => 'Warehouse Admin Setup',
+  'Add Warehouse Admin' => 'Add Warehouse Admin',
 );

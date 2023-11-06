@@ -37,6 +37,7 @@ class CategoryController extends Controller
         }else{
             $categories = $categories->where(['parent_id'=>0]);
         }
+
         if ($request->has('search')) {
             $key = explode(' ', $request['search']);
             $categories = $categories->where(function ($q) use ($key) {
@@ -48,6 +49,7 @@ class CategoryController extends Controller
         } else {
             $categories = $categories;
         }
+
         $categories = $categories->latest()->paginate(Helpers::getPagination())->appends($query_param);
         return view('admin-views.category.index', compact('categories', 'search'));
     }
@@ -67,10 +69,12 @@ class CategoryController extends Controller
         } else {
             $categories = $this->category->where(['position' => 0]);
         }
+
         $categories = $categories->latest()->paginate(Helpers::getPagination())->appends($query_param);
-         return view('admin-views.category.add', compact('categories', 'search'));
+        return view('admin-views.category.add', compact('categories', 'search'));
 
     }
+
     function sub_create(Request $request): View|Factory|Application
     {
         return view('admin-views.category.sub-add');
@@ -281,7 +285,7 @@ class CategoryController extends Controller
             'item_code' => 'required|unique:categories,item_code',
             'title_gold' => 'required',
             'title_platinum' => 'required',
-     ]);
+        ]);
 
         foreach ($request->name as $name) {
             if (strlen($name) > 255) {

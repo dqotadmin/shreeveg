@@ -34,123 +34,22 @@
                         @if ($data && array_key_exists('code', $data[0]))
                         {{-- @php($default_lang = json_decode($language)[0]) --}}
                         <ul class="nav nav-tabs d-inline-flex mb--n-30">
-                            <!-- @foreach ($data as $lang)
-                                    <li class="nav-item">
-                                        <a class="nav-link lang_link {{ $lang['default'] == true ? 'active' : '' }}" href="#"
-                                        id="{{ $lang['code'] }}-link">{{ \App\CentralLogics\Helpers::get_language_name($lang['code']) . '(' . strtoupper($lang['code']) . ')' }}</a>
-                                    </li>
-                                    @endforeach -->
+                            @foreach ($data as $lang)
+                            <li class="nav-item">
+                                <a class="nav-link lang_link {{ $lang['default'] == true ? 'active' : '' }}" href="#"
+                                id="{{ $lang['code'] }}-link">{{ \App\CentralLogics\Helpers::get_language_name($lang['code']) . '(' . strtoupper($lang['code']) . ')' }}</a>
+                            </li>
+                            @endforeach
                         </ul>
-                        <div class="row align-items-end g-4">
-                            <h4>Category Type</h4>
-                        </div>
+
+                        
                         <div class="d-flex flex-wrap mb-4 align-items-center">
-                            <div>
-                                <label class="form-check mr-2 mr-md-4">
-                                    <input class="form-check-input" type="radio" name="parent_id[]" value="0">
-                                    <span class="form-check-label text--title pl-2">{{translate('Parent')}}</span>
-                                </label>
-                            </div>
-                            <div>
-                                <label class="form-check" id="show_dropdown">
-                                    <input class="form-check-input" type="radio" name="parent_id[]">
-                                    <span class="form-check-label text--title pl-2">{{translate('Child')}}</span>
-                                </label>
-                            </div>
-                            <!-- <div>
-                                        <button type="button" class="btn btn-outline--primary text-nowrap btn-block"
-                                                data-toggle="dropdown">
-                                                {{translate('Child')}}
-                                            <i class="tio-chevron-down"></i>
-                                        </button>
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                        <li><a class="dropdown-item" href="">{{translate('Mango')}}</a> </li>
-                                            <li><a class="dropdown-item" href="">Sub Menu dropdown <i class="tio-chevron-down"></i> </li>
-                                                    <ul class="dropdown-menu dropdown-menu-right">
-                                                        <li><a class="dropdown-item" href="">{{translate('Totapuri')}}</a> </li>
-                                                        <li><a class="dropdown-item" href="">{{translate('Hapus')}}</a> </li>
-                                                        <li><a class="dropdown-item" href="">{{translate('Sindhura')}}</a> </li> 
-                                                        <li><a class="dropdown-item" href="">{{translate('Banginapalli')}}</a> </li>
-                                                    </ul>
-                                        </ul>
-                                    </div> -->
-                            <!-- <div class="navbar menu_lsit navbar-expand-lg  ">
-                                <ul class="navbar-nav drop_nav">
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle drop_btn form-control" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Dropdown
-                                        </a>
-                                        <ul class="dropdown-menu slideInUp" aria-labelledby="navbarDropdown">
-                                            <li class="nav-item"><a class="dropdown-item" href="#">Action</a></li>
-                                            <li class="nav-item"><a class="dropdown-item" href="#">Action</a></li>
-                                            <div class="dropdown-divider"></div>
-                                            <li class="nav-item"><a class="dropdown-item" href="#">Action</a></li>
-                                            <li class="nav-item dropdown-submenu"><a class="dropdown-item" href="#">More options</a>
-                                                <ul class="dropdown-menu">
-                                                    <li class="nav-item"><a class="dropdown-item" href="#">More options</a>
-                                                    </li>
-                                                    <li class="nav-item dropdown-submenu"> <a class="dropdown-item" href="#">More options</a>
-                                                        <ul class="dropdown-menu">
-                                                            <li class="nav-item">
-                                                                <a class="dropdown-item" href="#">More options</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="dropdown-item" href="#">More options</a>
-                                                            </li>
-                                                            <li class="nav-item dropdown-submenu">
-                                                                <a class="dropdown-item" href="#">More options</a>
-                                                                <ul class="dropdown-menu">
-                                                                    <li class="nav-item">
-                                                                        <a class="dropdown-item" href="#">More options</a>
-                                                                    </li>
-                                                                    <li class="nav-item">
-                                                                        <a class="dropdown-item" href="#">More options</a>
-                                                                    </li>
-                                                                    <li class="nav-item dropdown-submenu">
-                                                                        <a class="dropdown-item" href="#">More options</a>
-                                                                        <ul class="dropdown-menu">
-                                                                            <li class="nav-item">
-                                                                                <a class="dropdown-item" href="#">More options</a>
-                                                                            </li>
-                                                                            <li class="nav-item">
-                                                                                <a class="dropdown-item" href="#">More options</a>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </li>
 
-                                                                </ul>
-                                                            </li>
+                            
 
-                                                        </ul>
-                                                    </li>
-                                                    <li class="nav-item"><a class="dropdown-item" href="#">More options</a>
-                                                    </li>
-                                                    <li class="nav-item"><a class="dropdown-item" href="#">More options</a>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div> -->
-                            <div class="" id="sub_dropdown" style="display: none;">
-                                <select class="form-control">
-                                    <option value="">{{translate('Sub Category')}}</option>
-                                    <optgroup label="Layer 1">
-                                        <option value="action1">Apple</option>
-                                        <option value="action2">Banane </option>
-                                    </optgroup>
-                                    <optgroup label="Layer 2">
-                                        <option value="Sub">Mango</option>
-                                    <optgroup label="Layer 3">
-                                        <option value="submore1">Banginapalli</option>
-                                        <option value="submore2">Ratnagiri</option>
-                                    </optgroup>
-                                    <option value="more2">Graps</option>
-                                    </optgroup>
-                                </select>
-                            </div>
+
                             <div class="row align-items-end g-4">
+
                                 @foreach ($data as $lang)
                                 <div class="col-sm-6 {{ $lang['default'] == false ? 'd-none' : '' }} lang_form"
                                     id="{{ $lang['code'] }}-form">
@@ -165,6 +64,7 @@
                                 </div>
                                 <input type="hidden" name="lang[]" value="{{ $lang['code'] }}">
                                 @endforeach
+
                                 @foreach ($data as $lang)
                                 <div class="col-sm-6 {{ $lang['default'] == false ? 'd-none' : '' }} lang_form"
                                     id="{{ $lang['code'] }}-form">
@@ -179,6 +79,7 @@
                                 </div>
                                 <input type="hidden" name="lang[]" value="{{ $lang['code'] }}">
                                 @endforeach
+
                                 @foreach ($data as $lang)
                                 <div class="col-sm-4 {{ $lang['default'] == false ? 'd-none' : '' }} lang_form"
                                     id="{{ $lang['code'] }}-form">

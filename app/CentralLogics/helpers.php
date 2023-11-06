@@ -468,8 +468,8 @@ class Helpers
     public static function get_language_name($key)
     {
         $languages = array(
-            "en-IN" => "English (India)",
-            "hi" => "Hindi - हिन्दी",
+            "en" => "English",
+            "hi" => "हिन्दी",
         );
         return array_key_exists($key, $languages) ? $languages[$key] : $key;
     }

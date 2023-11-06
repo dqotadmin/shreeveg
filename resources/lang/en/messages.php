@@ -2138,4 +2138,13 @@
   'Delivery Boy Admin' => 'Delivery Boy Admin',
   'Delivery Boy' => 'Delivery Boy',
   'Warehouses' => 'Warehouses',
+  'Parent' => 'Parent',
+  'Child' => 'Child',
+  'Mango' => 'Mango',
+  'Totapuri' => 'Totapuri',
+  'Hapus' => 'Hapus',
+  'Sindhura' => 'Sindhura',
+  'Banginapalli' => 'Banginapalli',
+  'Sub Category' => 'Sub Category',
+  'warehouse Update setup ' => 'Warehouse Update setup ',
 );

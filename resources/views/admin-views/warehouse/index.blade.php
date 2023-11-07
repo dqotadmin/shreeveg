@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', translate('Add new warehouse'))
+@section('title', translate('Add New Warehouse'))
 
 @push('css_or_js')
 
@@ -16,7 +16,7 @@
                 <img src="{{asset('public/assets/admin/img/category.png')}}" class="w--24" alt="">
             </span>
             <span>
-                {{translate('Warehouse_setup')}}
+                {{translate('Warehouse')}}
             </span>
         </h1>
     </div>
@@ -38,8 +38,9 @@
         <div class="card">
             <div class="card-header border-0">
                 <div class="card--header">
-                    <h5 class="card-title">{{translate('Warehouses')}}  <span class="badge badge-soft-secondary">{{ $warehouses->total() }}</span>
-                         </h5>
+                    <h5 class="card-title">{{translate('Warehouses')}} <span
+                            class="badge badge-soft-secondary">{{ $warehouses->total() }}</span>
+                    </h5>
                     <form action="{{url()->current()}}" method="GET">
                         <div class="input-group">
                             <input id="datatableSearch_" type="search" name="search" maxlength="255"
@@ -72,80 +73,80 @@
                             <th class="text-center">{{translate('action')}}</th>
                         </tr>
                     </thead>
- 
+
                     <tbody>
-                            @foreach($warehouses as $key=>$warehouse)
-                                <tr>
-                                    <td class="text-center">{{$warehouses->firstItem()+$key}}</td>
-                                   
-                                    <td>
-                                    <span class="d-block font-size-sm text-body text-trim-50">
-                                        {{$warehouse['name']}}
-                                    </span>
-                                    </td>
-                                    <td>
-                                    <span class="d-block font-size-sm text-body text-trim-50">
-                                        {{$warehouse['code']}}
-                                    </span>
-                                    </td>
-                                    <td>
-                                    <span class="d-block font-size-sm text-body text-trim-50">
-                                        {{$warehouse['address']}}
-                                    </span>
-                                    </td>
-                                 
-                                    <td>
+                        @foreach($warehouses as $key=>$warehouse)
+                        <tr>
+                            <td class="text-center">{{$warehouses->firstItem()+$key}}</td>
 
-                                        <label class="toggle-switch">
-                                            <input type="checkbox"
-                                                onclick="status_change_alert('{{ route('admin.warehouse.status', [$warehouse->id, $warehouse->status ? 0 : 1]) }}', '{{ $warehouse->status? translate('you_want_to_disable_this_warehouse'): translate('you_want_to_active_this_warehouse') }}', event)"
-                                                class="toggle-switch-input" id="stocksCheckbox{{ $warehouse->id }}"
-                                                {{ $warehouse->status ? 'checked' : '' }}>
-                                            <span class="toggle-switch-label text">
-                                                <span class="toggle-switch-indicator"></span>
-                                            </span>
-                                        </label>
+                            <td>
+                                <span class="d-block font-size-sm text-body text-trim-50">
+                                    {{$warehouse['name']}}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="d-block font-size-sm text-body text-trim-50">
+                                    {{$warehouse['code']}}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="d-block font-size-sm text-body text-trim-50">
+                                    {{$warehouse['address']}}
+                                </span>
+                            </td>
 
-                                    </td>
-                                    <td>
-                                        <!-- Dropdown -->
-                                        
-                                        <div class="btn--container justify-content-center">
-                                             <a class="action-btn btn--warning btn-outline-warning"
-                                                href="{{route('admin.warehouse.wh-assign-category-page',[$warehouse['id']])}}">
-                                            <i class="tio-category"></i></a>
-                                            <a class="action-btn"
-                                                href="{{route('admin.warehouse.edit',[$warehouse['id']])}}">
-                                            <i class="tio-edit"></i></a>
-                                            <a class="action-btn btn--danger btn-outline-danger" href="javascript:"
-                                                onclick="form_alert('warehouse-{{$warehouse['id']}}','{{ translate("Want to delete this") }}')">
-                                                <i class="tio-delete-outlined"></i>
-                                            </a>
-                                        </div>
-                                        <form action="{{route('admin.warehouse.delete',[$warehouse['id']])}}"
-                                                method="post" id="warehouse-{{$warehouse['id']}}">
-                                            @csrf @method('delete')
-                                        </form>
-                                        <!-- End Dropdown -->
-                                    </td>
-                                </tr>
-                            @endforeach
-                            </tbody>
+                            <td>
+
+                                <label class="toggle-switch">
+                                    <input type="checkbox"
+                                        onclick="status_change_alert('{{ route('admin.warehouse.status', [$warehouse->id, $warehouse->status ? 0 : 1]) }}', '{{ $warehouse->status? translate('you_want_to_disable_this_warehouse'): translate('you_want_to_active_this_warehouse') }}', event)"
+                                        class="toggle-switch-input" id="stocksCheckbox{{ $warehouse->id }}"
+                                        {{ $warehouse->status ? 'checked' : '' }}>
+                                    <span class="toggle-switch-label text">
+                                        <span class="toggle-switch-indicator"></span>
+                                    </span>
+                                </label>
+
+                            </td>
+                            <td>
+                                <!-- Dropdown -->
+
+                                <div class="btn--container justify-content-center">
+                                    <a class="action-btn btn--warning btn-outline-warning"
+                                        href="{{route('admin.warehouse.wh-assign-category-page',[$warehouse['id']])}}">
+                                        <i class="tio-category"></i></a>
+                                    <a class="action-btn" href="{{route('admin.warehouse.edit',[$warehouse['id']])}}">
+                                        <i class="tio-edit"></i></a>
+                                    <a class="action-btn btn--danger btn-outline-danger" href="javascript:"
+                                        onclick="form_alert('warehouse-{{$warehouse['id']}}','{{ translate("Want to delete this") }}')">
+                                        <i class="tio-delete-outlined"></i>
+                                    </a>
+                                </div>
+                                <form action="{{route('admin.warehouse.delete',[$warehouse['id']])}}" method="post"
+                                    id="warehouse-{{$warehouse['id']}}">
+                                    @csrf @method('delete')
+                                </form>
+                                <!-- End Dropdown -->
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
                 </table>
 
 
                 @if(count($warehouses) == 0)
-                        <div class="text-center p-4">
-                            <img class="w-120px mb-3" src="{{asset('/public/assets/admin/svg/illustrations/sorry.svg')}}" alt="Image Description">
-                            <p class="mb-0">{{translate('No_data_to_show')}}</p>
-                        </div>
-                        @endif
+                <div class="text-center p-4">
+                    <img class="w-120px mb-3" src="{{asset('/public/assets/admin/svg/illustrations/sorry.svg')}}"
+                        alt="Image Description">
+                    <p class="mb-0">{{translate('No_data_to_show')}}</p>
+                </div>
+                @endif
 
-                        <table>
-                            <tfoot>
-                            {!! $warehouses->links() !!}
-                            </tfoot>
-                        </table>
+                <table>
+                    <tfoot>
+                        {!! $warehouses->links() !!}
+                    </tfoot>
+                </table>
 
                 <table>
                     <tfoot>

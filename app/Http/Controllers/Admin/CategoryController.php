@@ -68,7 +68,9 @@ class CategoryController extends Controller
             $categories = $this->category->where(['position' => 0]);
         }
         $categories = $categories->latest()->paginate(Helpers::getPagination())->appends($query_param);
-         return view('admin-views.category.add', compact('categories', 'search'));
+        $all_categories = $this->category->get();
+        $categories = Category::with('childes')->where('parent_id',0)->get();
+         return view('admin-views.category.add', compact('categories', 'search','all_categories'));
 
     }
     function sub_create(Request $request): View|Factory|Application
@@ -157,7 +159,7 @@ class CategoryController extends Controller
         $request->validate([
             'name' => 'required|unique:categories',
             'title_silver' => 'required',
-            'item_code' => 'required|unique:categories',
+            'category_code' => 'required|unique:categories',
             'title_gold' => 'required',
             'title_platinum' => 'required',
             'image' => 'required',
@@ -186,14 +188,13 @@ class CategoryController extends Controller
         } else {
             $image_name = 'def.png';
         }
-
         //into db
         $category = $this->category;
         $category->name = $request->name[array_search('en', $request->lang)];
-        $category->title_silver = $request->title_silver[array_search('en', $request->lang)];
-        $category->item_code = $request->item_code[array_search('en', $request->lang)];
-        $category->title_gold = $request->title_gold[array_search('en', $request->lang)];
-        $category->title_platinum = $request->title_platinum[array_search('en', $request->lang)];
+        $category->title_silver = $request->title_silver;
+        $category->category_code = $request->category_code;
+        $category->title_gold = $request->title_gold;
+        $category->title_platinum = $request->title_platinum;
         $category->image = $image_name;
         $category->parent_id = $request->parent_id == null ? 0 : $request->parent_id;
         $category->position = $request->position;
@@ -205,23 +206,23 @@ class CategoryController extends Controller
 
         //translation
         $data = [];
-        // foreach ($request->lang as $index => $key) {
-        //     if ($request->name[$index] && $key != 'en') {
-        //         $data[] = array(
-        //             'translationable_type' => 'App\Model\Category',
-        //             'translationable_id' => $category->id,
-        //             'locale' => $key,
-        //             'key' => 'name',
-        //             'value' => $request->name[$index],
-        //         );
-        //     }
-        // }
+        foreach ($request->lang as $index => $key) {
+            if ($request->name[$index] && $key != 'en') {
+            $data[] = array(
+                    'translationable_type' => 'App\Model\Category',
+                    'translationable_id' => $category->id,
+                    'locale' => $key,
+                    'key' => 'name',
+                    'value' => $request->name[$index],
+                );
+            }
+        }
         if (count($data)) {
             Translation::insert($data);
         }
 
         Toastr::success($request->parent_id == 0 ? translate('Category Added Successfully!') : translate('Sub Category Added Successfully!'));
-        return back();
+        return redirect()->route('admin.category.list');
     }
 
     /**
@@ -230,8 +231,9 @@ class CategoryController extends Controller
      */
     public function edit($id): View|Factory|Application
     {
+        $categories = Category::with('childes')->where('parent_id',0)->get();
         $category = $this->category->withoutGlobalScopes()->with('translations')->find($id);
-        return view('admin-views.category.edit', compact('category'));
+        return view('admin-views.category.edit', compact('category','categories'));
     }
 
     public function sub_edit($id): View|Factory|Application
@@ -277,7 +279,9 @@ class CategoryController extends Controller
         $request->validate([
             'name' =>'required|unique:categories,name,'.$request->id,
             'title_silver' => 'required',
-            'item_code' => 'required|unique:categories,item_code',
+            'category_code' =>  ['required',
+                                Rule::unique('categories')->ignore($id)
+        ],
             'title_gold' => 'required',
             'title_platinum' => 'required',
      ]);
@@ -292,10 +296,10 @@ class CategoryController extends Controller
         $category = $this->category->find($id);
    
         $category->name = $request->name[array_search('en', $request->lang)];
-        $category->title_silver = $request->title_silver[array_search('en', $request->lang)];
-        $category->item_code = $request->item_code[array_search('en', $request->lang)];
-        $category->title_gold = $request->title_gold[array_search('en', $request->lang)];
-        $category->title_platinum = $request->title_platinum[array_search('en', $request->lang)];
+        $category->title_silver = $request->title_silver;
+        $category->category_code = $request->category_code;
+        $category->title_gold = $request->title_gold;
+        $category->title_platinum = $request->title_platinum;
         $category->image = $request->has('image') ? Helpers::update('category/', $category->image, 'png', $request->file('image')) : $category->image;
 
         $category->parent_id = $request->parent_id == null ? 0 : $request->parent_id;
@@ -307,19 +311,20 @@ class CategoryController extends Controller
 
    
         $category->save();
-        // foreach ($request->lang as $index => $key) {
-        //     if ($request->name[$index] && $key != 'en') {
-        //         Translation::updateOrInsert(
-        //             ['translationable_type' => 'App\Model\Category',
-        //                 'translationable_id' => $category->id,
-        //                 'locale' => $key,
-        //                 'key' => 'name'],
-        //             ['value' => $request->name[$index]]
-        //         );
-        //     }
-        // }
+        foreach ($request->lang as $index => $key) {
+            if ($request->name[$index] && $key != 'en') {
+                Translation::updateOrInsert(
+                    ['translationable_type' => 'App\Model\Category',
+                        'translationable_id' => $category->id,
+                        'locale' => $key,
+                        'key' => 'name'],
+                    ['value' => $request->name[$index]]
+                );
+            }
+        }
         Toastr::success($category->parent_id == 0 ? translate('Category updated successfully!') : translate('Sub Category updated successfully!'));
-        return redirect()->back();
+        return redirect()->route('admin.category.list');
+
 
     }
 

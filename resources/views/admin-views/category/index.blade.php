@@ -16,7 +16,7 @@
                     <img src="{{asset('public/assets/admin/img/category.png')}}" class="w--24" alt="">
                 </span>
                 <span>
-                    {{translate('category_setup')}}
+                    {{translate('category')}}
                 </span>
             </h1>
         </div>
@@ -25,7 +25,7 @@
         <div class="row g-2">
             <div class="col-sm-12 col-lg-12">
                         <div class="btn--container justify-content-end m-2">
-                            <a type="button"  href="{{route('admin.category.create')}}" class="btn btn--primary">{{translate('Add Catgory')}}</a>
+                            <a type="button"  href="{{route('admin.category.create')}}" class="btn btn--primary">{{translate('Add Category')}}</a>
                         </div>
                             @php($data = Helpers::get_business_settings('language'))
                             @php($default_lang = Helpers::get_default_language())
@@ -62,12 +62,12 @@
                             <thead class="thead-light">
                             <tr>
                                 <th class="text-center">{{translate('#')}}</th>
-                                <th>{{translate('category_image')}}</th>
-                                <th>{{translate('name')}}</th>
-                                <th>{{translate('Title Silver')}}</th>
-                                <th>{{translate('Title Gold')}}</th>
-                                <th>{{translate('Title Platinum')}}</th>
-                                <th>{{translate('status')}}</th>
+                                <th >{{translate('category_image')}}</th>
+                                <th >{{translate('name')}}</th>
+                                <th >{{translate('Title Silver')}}</th>
+                                <th >{{translate('Title Gold')}}</th>
+                                <th >{{translate('Title Platinum')}}</th>
+                                <th >{{translate('status')}}</th>
                                 <th class="text-center">{{translate('action')}}</th>
                             </tr>
                             </thead>
@@ -99,18 +99,18 @@
                                     </td>
                                     <td>
                                     <span class="d-block font-size-sm text-body text-trim-50">
-                                        {{$category['title_silver']}}
+                                 {{Str::words($category['title_silver'],10)}}
                                     </span>
                                     </td>
                                  
                                     <td>
                                     <span class="d-block font-size-sm text-body text-trim-50">
-                                        {{$category['title_gold']}}
+                                    {{Str::words($category['title_gold'],6)}}
                                     </span>
                                     </td>
                                     <td>
                                     <span class="d-block font-size-sm text-body text-trim-50">
-                                        {{$category['title_platinum']}}
+                                    {{Str::words($category['title_platinum'],10)}}
                                     </span>
                                     </td>
                                     <td>

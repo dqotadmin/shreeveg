@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', translate('Add new Unit'))
+@section('title', translate('Add New Unit'))
 
 @push('css_or_js')
 
@@ -16,7 +16,7 @@
                     <img src="{{asset('public/assets/admin/img/category.png')}}" class="w--24" alt="">
                 </span>
                 <span>
-                    {{translate('unit_setup')}}
+                    {{translate('Unit')}}
                 </span>
             </h1>
         </div>

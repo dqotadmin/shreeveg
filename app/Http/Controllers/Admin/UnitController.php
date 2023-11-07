@@ -100,37 +100,37 @@ class UnitController extends Controller
                 return back();
             }
         }
-
+       
        
 
 
         //into db
         $unit = $this->unit;
         $unit->title = $request->title[array_search('en', $request->lang)];
-        $unit->description = $request->description[array_search('en', $request->lang)];
-        
+        $unit->description = $request->description;
         $unit->position = $request->position;
         $unit->save();
-
         //translation
         $data = [];
-        // foreach ($request->lang as $index => $key) {
-        //     if ($request->name[$index] && $key != 'en') {
-        //         $data[] = array(
-        //             'translationable_type' => 'App\Model\unit',
-        //             'translationable_id' => $unit->id,
-        //             'locale' => $key,
-        //             'key' => 'name',
-        //             'value' => $request->name[$index],
-        //         );
-        //     }
-        // }
+        foreach ($request->lang as $index => $key) {
+            if ($request->title[$index] && $key != 'en') {
+            $data[] = array(
+                    'translationable_type' => 'App\Model\Unit',
+                    'translationable_id' => $unit->id,
+                    'locale' => $key,
+                    'key' => 'title',
+                    'value' => $request->title[$index],
+                );
+
+            }
+        }
         if (count($data)) {
             Translation::insert($data);
         }
 
         Toastr::success(translate('unit Added Successfully!') );
-        return back();
+        return redirect()->route('admin.unit.add');
+
     }
 
     /**
@@ -178,19 +178,20 @@ class UnitController extends Controller
 
         $unit = $this->unit->find($id);
         $unit->title = $request->title[array_search('en', $request->lang)];
-        $unit->description = $request->description[array_search('en', $request->lang)];
+        $unit->description = $request->description;
         $unit->save();
-        // foreach ($request->lang as $index => $key) {
-        //     if ($request->name[$index] && $key != 'en') {
-        //         Translation::updateOrInsert(
-        //             ['translationable_type' => 'App\Model\unit',
-        //                 'translationable_id' => $unit->id,
-        //                 'locale' => $key,
-        //                 'key' => 'name'],
-        //             ['value' => $request->name[$index]]
-        //         );
-        //     }
-        // }
+        foreach ($request->lang as $index => $key) {
+            if ($request->title[$index] && $key != 'en') {
+            $data[] = array(
+                    'translationable_type' => 'App\Model\Unit',
+                    'translationable_id' => $unit->id,
+                    'locale' => $key,
+                    'key' => 'title',
+                    'value' => $request->title[$index],
+                );
+
+            }
+        }
         Toastr::success( translate('unit updated successfully!') );
         return redirect()->route('admin.unit.add');
 

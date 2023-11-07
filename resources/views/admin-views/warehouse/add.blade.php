@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', translate('Add new Unit'))
+@section('title', translate('Add New Warehouse'))
 
 @push('css_or_js')
 <style>
@@ -18,7 +18,7 @@
                 <img src="{{asset('public/assets/admin/img/category.png')}}" class="w--24" alt="">
             </span>
             <span>
-                {{translate('warehouse_setup')}}
+                {{translate('warehouse')}}
             </span>
         </h1>
     </div>
@@ -112,8 +112,8 @@
                                         </label>
                                         <!-- <a href="javascript:void(0)" class="float-right c1 fz-12"
                                             onclick="generateCode()">{{translate('generate_code')}}</a> -->
-                                        <input type="text" name="code[]" class="form-control"   
-                                            id="dataAttributeValue" >
+                                        <input type="text" name="code[]" class="form-control city_by_code"
+                                            id="city_by_code">
                                     </div>
                                     <input type="hidden" name="lang[]" value="{{ $lang['code'] }}">
                                     @endforeach
@@ -586,13 +586,9 @@
                         </div>
                     </div>
                     <div class="col-sm-12">
-                        <div class="card">
-                            <div class="col-12">
-                                <div class="btn--container justify-content-end">
-                                    <button type="reset" class="btn btn--reset">{{translate('reset')}}</button>
-                                    <button type="submit" class="btn btn--primary">{{translate('submit')}}</button>
-                                </div>
-                            </div>
+                        <div class="btn--container justify-content-end">
+                            <button type="reset" class="btn btn--reset">{{translate('reset')}}</button>
+                            <button type="submit" class="btn btn--primary">{{translate('submit')}}</button>
                         </div>
                     </div>
                 </div>
@@ -609,8 +605,6 @@
     src="https://maps.googleapis.com/maps/api/js?key={{ \App\Model\BusinessSetting::where('key', 'map_api_client_key')->first()?->value }}&libraries=places&v=3.45.8">
 </script>
 <script>
-    $("#dataAttributeValue").val(54);
-
 $('.city_code').on('change', function() {
     var city_code = $(this).val();
     var selectedOption = $(this).find("option:selected");
@@ -618,13 +612,13 @@ $('.city_code').on('change', function() {
     // Get the data attribute value
     var dataAttributeValue = selectedOption.attr("data-val");
     var prev_id = $('#prev_id').val();
-    //console.log('RJ' + dataAttributeValue + prev_id);
+    console.log('previous id' + 'RJ' + dataAttributeValue + prev_id);
 
     // Display the data attribute value in the span
     var warehouse_code = 'RJ' + dataAttributeValue + prev_id;
-    console.log('dfdf');
-    $("#dataAttributeValue").val(warehouse_code);
-    console.log(warehouse_code)
+    console.log(warehouse_code);
+    $(".city_by_code").val(warehouse_code);
+    $(".city_by_code").css('color', 'green');
 });
 </script>
 <script>
@@ -1269,7 +1263,6 @@ function checkPreOrderTime() {
     });
     return valid;
 };
-
 </script>
 
 </body>

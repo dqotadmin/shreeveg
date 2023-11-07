@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', translate('Add new  Admin'))
+@section('title', translate('Add New Admin'))
 
 
 @push('css_or_js')
@@ -17,7 +17,7 @@
                 <img src="{{asset('public/assets/admin/img/category.png')}}" class="w--24" alt="">
             </span>
             <span>
-                {{translate('Warehouse Admin Setup')}}
+                {{translate('Warehouse Admin')}}
 
             </span>
         </h1>

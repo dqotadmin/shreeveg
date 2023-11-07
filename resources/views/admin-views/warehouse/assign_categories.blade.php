@@ -16,7 +16,7 @@
                 <img src="{{asset('public/assets/admin/img/category.png')}}" class="w--24" alt="">
             </span>
             <span>
-                {{ translate('warehouse Update setup ') }}
+                {{ translate('Update Warehouse') }}
             </span>
         </h1>
     </div>
@@ -54,7 +54,7 @@
                                 <div class="col-sm-4 {{ $lang['default'] == false ? 'd-none' : '' }} lang_form"
                                     id="{{ $lang['code'] }}-form">
                                     <label class="form-label"
-                                        for="exampleFormControlInput1">{{ translate('Select Warehouse Admin') }}
+                                        for="exampleFormControlInput1">{{ translate('Warehouse Admin Name') }}
                                         <!-- ({{ strtoupper($lang['code']) }}) -->
                                     </label>
                                     @foreach(\App\Model\Admin::orderBy('id',

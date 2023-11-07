@@ -16,7 +16,7 @@
                     <img src="{{asset('public/assets/admin/img/category.png')}}" class="w--24" alt="">
                 </span>
                 <span>
-                        {{ translate('warehouse Update setup ') }}
+                        {{ translate('Update Warehouse') }}
                 </span>
             </h1>
         </div>

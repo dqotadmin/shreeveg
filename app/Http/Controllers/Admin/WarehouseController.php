@@ -319,66 +319,62 @@ class WarehouseController extends Controller
         $warehouses = $this->warehouse->withoutGlobalScopes()->with('translations')->find($id);
         return view('admin-views.warehouse.assign_categories', compact('warehouses','categories','wh_assign_categories','wh_assign_id'));
     }
+
     function wh_assign_category_store(Request $request): RedirectResponse
-    {  
-        $request->validate([
-        'margin'  => 'required',
-        'category_id'  => 'required',
-        'category_order'  => 'required',
-        ]);
-        if (!empty($request->margin) && !empty($request->category_id) && !empty($request->category_order)) {
-            $data = $request->all();
+{
+    $request->validate([
+        'margin' => 'required',
+        'category_id' => 'required',
+        'category_order' => 'required',
+    ]);
 
-            //echo '<pre>';
-            // print_r($data);die;
-       
-            // Iterate through the arrays and remove key-value pairs where the value is null     [0 => "3" , 3 => "3"]
-            foreach ($data as &$array) {
-                if (is_array($array)) {
-                    $array = array_filter($array, function ($value) {
-                        return $value !== null;
-                    });
-                }
-            }
-            // Remove top-level key-value pairs where the value is an empty array  [0 => "3" , 3 => "3"]
-            $data = array_filter($data, function ($value) {
-                return !empty($value);
-            });
+    if (!empty($request->margin) && !empty($request->category_id) && !empty($request->category_order)) {
+        $data = $request->all();
 
-            if (isset($data["category_order"]) && is_array($data["category_order"])) {
-                $data["category_order"] = array_values($data["category_order"]);
-            }
-
-            if (isset($data["margin"]) && is_array($data["margin"])) {
-                $data["margin"] = array_values($data["margin"]);
-            }
-            $data["status"] = $request->status;
-        
-            $this->warehouse_categories->where(['warehouse_id' => $data['warehouse_id']])->delete();
-            
-            foreach($data['category_id'] as $key => $cat){ 
-            
-                $row = new $this->warehouse_categories;
-            
-                $row->warehouse_id = $data['warehouse_id'];
-                $row->category_id = $cat;
-                $row->category_order = $data["category_order"][$key]? $data["category_order"][$key] : 0;
-                $row->margin = $data["margin"][$key];
-                $row->status = isset($data["status"][$key]) ? $data["status"][$key] : 0;
-                $row->save();
+        foreach ($data as &$array) {
+            if (is_array($array)) {
+                $array = array_filter($array, function ($value) {
+                    return $value !== null;
+                });
             }
         }
-        
-        // The $data array now contains non-null values with their keys removed
-        Toastr::success(translate('Warehouse Categories Added Successfully!') );
-        return back();
-        
+
+        $data = array_filter($data, function ($value) {
+            return !empty($value);
+        });
+
+        if (isset($data["category_order"]) && is_array($data["category_order"])) {
+            $data["category_order"] = array_values($data["category_order"]);
+        }
+
+        if (isset($data["margin"]) && is_array($data["margin"])) {
+            $data["margin"] = array_values($data["margin"]);
+        }
+        $data["status"] = $request->status;
+
+        foreach ($data['category_id'] as $key => $cat) {
+            $row = $this->warehouse_categories->firstOrNew(['warehouse_id' => $data['warehouse_id'], 'category_id' => $cat]);
+            $row->warehouse_id =  isset($data["warehouse_id"]) ? $data['warehouse_id'] : '';
+            $row->category_id = isset($cat) ? $cat : '';
+            $row->category_order = $data["category_order"][$key] ?? 0;
+            $row->margin = $data["margin"][$key];
+            
+            $row->status = isset($data["status"][$key]) ? $data["status"][$key] : 0;
+
+$row->save();
+        }
     }
+
+    Toastr::success(translate('Warehouse Categories Added Successfully!'));
+    return back();
+}
+  
 
     public function wh_assign_category_status(Request $request): RedirectResponse
     {
         //dd($request->id,$request->catid,);
         $status = $this->warehouse_categories->where('warehouse_id',$request->id)->where('category_id',$request->catid)->first();
+
         $status->status = $request->status;
         $status->save();
         Toastr::success(translate('Warehouse status updated!'));

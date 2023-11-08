@@ -14,7 +14,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
-
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 class Helpers
 {
     public static function error_processor($validator)
@@ -828,6 +829,22 @@ class Helpers
         $mpdf_view = $mpdf_view->render();
         $mpdf->WriteHTML($mpdf_view);
         $mpdf->Output($file_prefix . $file_postfix . '.pdf', 'D');
+    }
+
+    // function for unique data 
+    public static function  uniqueRule($table, $column, $ignoreId = null)
+    {
+        return function ($attribute, $value) use ($table, $column, $ignoreId) {
+            $query = DB::table($table)->where($column, $value);
+
+            if ($ignoreId !== null) {
+                $query->where('id', '!=', $ignoreId);
+            }
+
+            return $query->count() === 0;
+
+        };
+
     }
 }
 

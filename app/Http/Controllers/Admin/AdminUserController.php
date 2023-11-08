@@ -46,6 +46,7 @@ class AdminUserController extends Controller
     }
     function index(Request $request)
     {
+        //dd($request->all());
         $query_param = [];
         $search = $request['search'];
         if($request->has('search'))

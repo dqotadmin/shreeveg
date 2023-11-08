@@ -40,8 +40,9 @@
     <div class="card">
         <div class="card-header border-0">
             <div class="card--header">
-                <h5 class="card-title">{{$role->name}} <span class="badge badge-soft-secondary"> </span>
+            <h5 class="card-title">{{$role->name}}<span class="badge badge-soft-secondary">{{ $admins->total() }}</span> </h5>
                 </h5>
+                
                 <form action="{{url()->current()}}" method="GET">
                     <div class="input-group">
                         <input id="datatableSearch_" type="search" name="search" maxlength="255"

@@ -32,14 +32,14 @@ class CityAreaController extends Controller
         $search = $request['search'];
         if ($request->has('search')) {
             $key = explode(' ', $request['search']);
-            $cityareas = $this->cityarea->where(['position' => 0])->where(function ($q) use ($key) {
+            $cityareas = $this->cityarea->where(function ($q) use ($key) {
                 foreach ($key as $value) {
                     $q->orWhere('area', 'like', "%{$value}%");
                 }
             });
             $query_param = ['search' => $request['search']];
         } else {
-            $cityareas = $this->cityarea->where(['position' => 0]);
+            $cityareas = $this->cityarea;
         }
         $cityareas = $cityareas->latest()->paginate(Helpers::getPagination())->appends($query_param);
         return view('admin-views.city-area.index', compact('cityareas', 'search'));
@@ -91,41 +91,22 @@ class CityAreaController extends Controller
             'radius' => 'required',
         ]);
 
-        foreach ($request->area as $name) {
-            if (strlen($name) > 30) {
+            if (strlen($request->area) > 30) {
                 toastr::error(translate('Area is too long!'));
                 return back();
             }
-        }
         //into db
         $cityarea = $this->cityarea;
-        $cityarea->city_id = $request->city_id[array_search('en', $request->lang)];
-        $cityarea->area = $request->area[array_search('en', $request->lang)];
-        $cityarea->latitude_code = $request->latitude_code[array_search('en', $request->lang)];
-        $cityarea->longitude_code = $request->longitude_code[array_search('en', $request->lang)];
-        $cityarea->radius = $request->radius[array_search('en', $request->lang)];
-        $cityarea->position = $request->position;
+        $cityarea->city_id = $request->city_id;
+        $cityarea->area = $request->area;
+        $cityarea->latitude_code = $request->latitude_code;
+        $cityarea->longitude_code = $request->longitude_code;
+        $cityarea->radius = $request->radius;
         $cityarea->save();
 
-        //translation
-        $data = [];
-        // foreach ($request->lang as $index => $key) {
-        //     if ($request->name[$index] && $key != 'en') {
-        //         $data[] = array(
-        //             'translationable_type' => 'App\Model\cityarea',
-        //             'translationable_id' => $cityarea->id,
-        //             'locale' => $key,
-        //             'key' => 'name',
-        //             'value' => $request->name[$index],
-        //         );
-        //     }
-        // }
-        if (count($data)) {
-            Translation::insert($data);
-        }
-
         Toastr::success(translate('cityarea Added Successfully!') );
-        return back();
+        return redirect()->route('admin.area.add');
+
     }
 
     /**
@@ -166,32 +147,19 @@ class CityAreaController extends Controller
      ]);
 
      
-     foreach ($request->area as $name) {
-        if (strlen($name) > 10) {
+        if (strlen($request->area) > 20) {
             toastr::error(translate('area is too long!'));
             return back();
         }
-    }
 
         $cityarea = $this->cityarea->find($id);
-        $cityarea->city_id = $request->city_id[array_search('en', $request->lang)];
-        $cityarea->area = $request->area[array_search('en', $request->lang)];
-        $cityarea->latitude_code = $request->latitude_code[array_search('en', $request->lang)];
-        $cityarea->longitude_code = $request->longitude_code[array_search('en', $request->lang)];
-        $cityarea->radius = $request->radius[array_search('en', $request->lang)];
-        $cityarea->position = $request->position;
+        $cityarea->city_id = $request->city_id;
+        $cityarea->area = $request->area;
+        $cityarea->latitude_code = $request->latitude_code;
+        $cityarea->longitude_code = $request->longitude_code;
+        $cityarea->radius = $request->radius;
         $cityarea->save();
-        // foreach ($request->lang as $index => $key) {
-        //     if ($request->name[$index] && $key != 'en') {
-        //         Translation::updateOrInsert(
-        //             ['translationable_type' => 'App\Model\cityarea',
-        //                 'translationable_id' => $cityarea->id,
-        //                 'locale' => $key,
-        //                 'key' => 'name'],
-        //             ['value' => $request->name[$index]]
-        //         );
-        //     }
-        // }
+     
         Toastr::success( translate('cityarea updated successfully!') );
         return redirect()->route('admin.area.add');
 
@@ -205,7 +173,7 @@ class CityAreaController extends Controller
     {
         $cityarea = $this->cityarea->find($request->id);
        
-        if ($cityarea->childes->count() == 0) {
+        if ($cityarea) {
             $cityarea->delete();
             Toastr::success( translate('cityarea removed!')  );
         } else {

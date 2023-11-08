@@ -40,7 +40,8 @@ class WarehouseController extends Controller
             $key = explode(' ', $request['search']);
             $warehouses = $this->warehouse->where(function ($q) use ($key) {
                 foreach ($key as $value) {
-                    $q->orWhere('warehouse_name', 'like', "%{$value}%");
+                    $q->orWhere('name', 'like', "%{$value}%");
+                    $q->orWhere('code', 'like', "%{$value}%");
                 }
             });
             $query_param = ['search' => $request['search']];
@@ -82,7 +83,7 @@ class WarehouseController extends Controller
         $key = explode(' ', $request['search']);
         $warehouses = $this->warehouse->where(function ($q) use ($key) {
             foreach ($key as $value) {
-                $q->orWhere('warehouse_name', 'like', "%{$value}%");
+                $q->orWhere('code', 'like', "%{$value}%");
             }
         })->get();
         return response()->json([
@@ -359,9 +360,9 @@ class WarehouseController extends Controller
             $row->category_order = $data["category_order"][$key] ?? 0;
             $row->margin = $data["margin"][$key];
             
-            $row->status = isset($data["status"][$key]) ? $data["status"][$key] : 0;
+            $row->status = isset($data["status"][$key]) ? $data["status"][$key] : 1;
 
-$row->save();
+        $row->save();
         }
     }
 
@@ -372,13 +373,17 @@ $row->save();
 
     public function wh_assign_category_status(Request $request): RedirectResponse
     {
-        //dd($request->id,$request->catid,);
         $status = $this->warehouse_categories->where('warehouse_id',$request->id)->where('category_id',$request->catid)->first();
-
-        $status->status = $request->status;
-        $status->save();
-        Toastr::success(translate('Warehouse status updated!'));
-        return back();
+        if($status){
+            $status->status = $request->status;
+            $status->save();
+            Toastr::success(translate('Warehouse category status updated!'));
+            return back();
+        }else{
+            Toastr::error(translate('Warehouse category status not updated!'));
+            return back();
+        }
+   
     }
 
     /**

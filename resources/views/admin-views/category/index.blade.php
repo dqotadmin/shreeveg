@@ -45,7 +45,7 @@
                                     <input id="datatableSearch_" type="search" name="search" maxlength="255"
                                            class="form-control pl-5"
                                            placeholder="{{translate('Search_by_Name')}}" aria-label="Search"
-                                           value="{{$search}}" required autocomplete="off">
+                                           value="{{$search}}"   autocomplete="on">
                                            <i class="tio-search tio-input-search"></i>
                                     <div class="input-group-append">
                                         <button type="submit" class="input-group-text">
@@ -64,6 +64,7 @@
                                 <th class="text-center">{{translate('#')}}</th>
                                 <th >{{translate('category_image')}}</th>
                                 <th >{{translate('name')}}</th>
+                                <th >{{translate('Category Code')}}</th>
                                 <th >{{translate('Title Silver')}}</th>
                                 <th >{{translate('Title Gold')}}</th>
                                 <th >{{translate('Title Platinum')}}</th>
@@ -96,6 +97,11 @@
                                            
                                           
 
+                                    </td>
+                                    <td>
+                                    <span class="d-block font-size-sm text-body text-trim-50">
+                                 {{$category['category_code']}}
+                                    </span>
                                     </td>
                                     <td>
                                     <span class="d-block font-size-sm text-body text-trim-50">

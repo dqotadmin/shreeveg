@@ -64,12 +64,12 @@
                             </div>
                             <div>
                                 <label class="form-check">
-                                    <input class="form-check-input" type="radio" id="show_dropdown" >
+                                    <input class="form-check-input" type="radio" id="show_dropdown">
                                     <span class="form-check-label text--title pl-2">{{translate('Child')}}</span>
                                 </label>
                             </div>
                             <div class="" id="sub_dropdown" style="display:none; margin-left: 20px;">
-                                <select  name="parent_id" class="form-control">
+                                <select name="parent_id" class="form-control">
                                     <option value="" selected disabled>{{translate('Categories')}}</option>
 
                                     @foreach ($categories as $category)
@@ -77,35 +77,40 @@
                                         {{ $category->id === old('id') ? 'selected' : '' }}>
                                         {{ $category->name }}
                                     </option>
-                                        @if ($category->childes)
-                                        @foreach ($category->childes as $sub_child)
-                                        <option value="{{ $sub_child->id }}" class="bold-text-remove"
-                                            {{ $sub_child->id === old('id') ? 'selected' : '' }}>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&bull;{{ $sub_child->name }}</option>
-                                            @if ($sub_child)
-                                            @foreach ($sub_child->childes as $sub_sub_child)
-                                            <option value="{{ $sub_sub_child->id }}" class="bold-text-remove"
-                                                {{ $sub_sub_child->id === old('id') ? 'selected' : '' }}>
-                                                &nbsp;&nbsp;&nbsp;&nbsp;
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&bull;{{ $sub_sub_child->name }}</option>
-                                                @if ($sub_sub_child)
-                                                @foreach ($sub_sub_child->childes as $fourth_sub_child)
-                                                <option value="{{ $fourth_sub_child->id }}" class="bold-text-remove"
-                                                    {{ $fourth_sub_child->id === old('id') ? 'selected' : '' }}>
-                                                    &nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&bull;{{ $fourth_sub_child->name }}</option>
-                                                    @if ($fourth_sub_child)
-                                                        @foreach ($fourth_sub_child->childes as $five_sub_child)
-                                                        <option value="{{ $five_sub_child->id }}" class="bold-text-remove"
-                                                            {{ $five_sub_child->id === old('id') ? 'selected' : '' }}>
-                                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&bull;{{ $five_sub_child->name }}</option>
-                                                        @endforeach
-                                                    @endif
-                                                @endforeach
-                                                @endif
-                                            @endforeach
-                                            @endif
-                                        @endforeach
-                                        @endif
+                                    @if ($category->childes)
+                                    @foreach ($category->childes as $sub_child)
+                                    <option value="{{ $sub_child->id }}" class="bold-text-remove"
+                                        {{ $sub_child->id === old('id') ? 'selected' : '' }}>
+                                        &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&bull;{{ $sub_child->name }}</option>
+                                    @if ($sub_child)
+                                    @foreach ($sub_child->childes as $sub_sub_child)
+                                    <option value="{{ $sub_sub_child->id }}" class="bold-text-remove"
+                                        {{ $sub_sub_child->id === old('id') ? 'selected' : '' }}>
+                                        &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&bull;{{ $sub_sub_child->name }}</option>
+                                    @if ($sub_sub_child)
+                                    @foreach ($sub_sub_child->childes as $fourth_sub_child)
+                                    <option value="{{ $fourth_sub_child->id }}" class="bold-text-remove"
+                                        {{ $fourth_sub_child->id === old('id') ? 'selected' : '' }}>
+                                        &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&bull;{{ $fourth_sub_child->name }}</option>
+                                    @if ($fourth_sub_child)
+                                    @foreach ($fourth_sub_child->childes as $five_sub_child)
+                                    <option value="{{ $five_sub_child->id }}" class="bold-text-remove"
+                                        {{ $five_sub_child->id === old('id') ? 'selected' : '' }}>
+                                        &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&bull;{{ $five_sub_child->name }}</option>
+                                    @endforeach
+                                    @endif
+                                    @endforeach
+                                    @endif
+                                    @endforeach
+                                    @endif
+                                    @endforeach
+                                    @endif
                                     @endforeach
 
                                 </select>
@@ -268,10 +273,10 @@ $('#show_dropdown').on('click', function() {
 });
 </script>
 <script>
-    var radios = $('[type="radio"]');
+var radios = $('[type="radio"]');
 
 radios.change(function() {
-  radios.not(this).prop('checked', false);
+    radios.not(this).prop('checked', false);
 });
 </script>
 @endpush

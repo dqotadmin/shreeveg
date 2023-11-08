@@ -30,30 +30,16 @@
                             @php($data = Helpers::get_business_settings('language'))
                             @php($default_lang = Helpers::get_default_language())
                             {{-- @php($default_lang = 'en') --}}
-                            @if ($data && array_key_exists('code', $data[0]))
-                                {{-- @php($default_lang = json_decode($language)[0]) --}}
-                                <ul class="nav nav-tabs d-inline-flex mb--n-30">
-                                @foreach ($data as $lang)
-                            <li class="nav-item">
-                                <a class="nav-link lang_link {{ $lang['default'] == true ? 'active' : '' }}" href="#"
-                                    id="{{ $lang['code'] }}-link">{{ \App\CentralLogics\Helpers::get_language_name($lang['code']) . '(' . strtoupper($lang['code']) . ')' }}</a>
-                            </li>
-                            @endforeach
+                           
                                 </ul>
                                 <div class="row align-items-end g-4" style="margin-top: 40px;">
-                                    @foreach ($data as $lang)
-                                        <div class="col-sm-6 {{ $lang['default'] == false ? 'd-none' : '' }} lang_form"
-                                                id="{{ $lang['code'] }}-form">
+                                        <div class="col-sm-6 ">
                                             <label class="form-label"
                                                     for="exampleFormControlInput1">{{ translate('Unit') }} {{ translate('Title') }}
-                                                ({{ strtoupper($lang['code']) }})
+                                                
                                             </label>
-                                            <input type="text" name="title[]" class="form-control" placeholder="{{ translate('Ex: gm') }}" maxlength="255"
-                                                    {{$lang['status'] == true ? 'required':''}}
-                                                    @if($lang['status'] == true) oninvalid="document.getElementById('{{$lang['code']}}-link').click()" @endif>
+                                            <input type="text" name="title" class="form-control" placeholder="{{ translate('Ex: gm') }}" maxlength="255">
                                         </div>
-                                        <input type="hidden" name="lang[]" value="{{ $lang['code'] }}">
-                                    @endforeach
                                   
                                         <div class="col-sm-6" >
                                             <label class="form-label"
@@ -61,18 +47,7 @@
                                             </label>
                                             <input type="text" name="description" class="form-control" placeholder="{{ translate('Ex: gram') }}" maxlength="255">
                                         </div>
-                                    @else
-                                        <div class="lang_form col-sm-6" id="{{ $default_lang }}-form">
-                                            <label class="form-label"
-                                                    for="exampleFormControlInput1">{{translate('Unit')}} {{ translate('Title') }}
-                                                ({{ strtoupper($default_lang) }})</label>
-                                            <input type="text" name="title[]" class="form-control" maxlength="255"
-                                                    placeholder="{{ translate('Ex: gm') }}" required>
-                                        </div>
-                                        <input type="hidden" name="lang[]" value="{{ $default_lang }}">
-
-                                        
-                                    @endif
+                                    
                                     <input name="position" value="0" hidden>
                               
                                     <div class="col-12">

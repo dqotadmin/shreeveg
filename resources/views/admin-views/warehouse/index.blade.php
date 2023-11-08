@@ -45,7 +45,7 @@
                         <div class="input-group">
                             <input id="datatableSearch_" type="search" name="search" maxlength="255"
                                 class="form-control pl-5" placeholder="{{translate('Search_by_Name')}}"
-                                aria-label="Search" value="" required autocomplete="off">
+                                aria-label="Search"  value="{{$search}}" autocomplete="on">
                             <i class="tio-search tio-input-search"></i>
                             <div class="input-group-append">
                                 <button type="submit" class="input-group-text">

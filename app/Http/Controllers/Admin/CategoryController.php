@@ -42,6 +42,8 @@ class CategoryController extends Controller
             $categories = $categories->where(function ($q) use ($key) {
                 foreach ($key as $value) {
                     $q->orWhere('name', 'like', "%{$value}%");
+                    $q->orWhere('category_code', 'like', "%{$value}%");
+              
                 }
             });
             $query_param = ['search' => $request['search']];

@@ -170,7 +170,7 @@
                                                     <input type="text" name="margin[]" value="{{$margin}}"
                                                         placeholder="Ex. Margin 5%" class="form-control" id="">
 
-
+                                                    @if(!empty($editRow->status))
                                                     <label class="toggle-switch">
                                                         <input type="checkbox" name="status[]"
                                                             {{$status =='1' ? 'checked' : ''}}
@@ -181,7 +181,7 @@
                                                             <span class="toggle-switch-indicator"></span>
                                                         </span>
                                                     </label>
-
+                                                    @endif
 
                                                 </div>
                                             </div>

@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', translate('Add New'){{$role->name}} )
+@section('title', translate('Update Admin')) 
 
 
 @push('css_or_js')

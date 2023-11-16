@@ -135,7 +135,7 @@ class UnitController extends Controller
         $unit = $this->unit->find($request->id);
         $unit->status = $request->status;
         $unit->save();
-        Toastr::success(translate('unit status updated!'));
+        Toastr::success(translate('Unit status updated!'));
         return back();
     }
 
@@ -156,7 +156,7 @@ class UnitController extends Controller
 
      
         if (strlen($request->title) > 10) {
-            toastr::error(translate('Title is too long!'));
+            toastr::error(translate('Unit title is too long!'));
             return back();
         }
 
@@ -165,7 +165,7 @@ class UnitController extends Controller
         $unit->description = $request->description;
         $unit->save();
         
-        Toastr::success( translate('unit updated successfully!') );
+        Toastr::success( translate('Unit updated successfully!') );
         return redirect()->route('admin.unit.add');
 
     }
@@ -182,7 +182,7 @@ class UnitController extends Controller
             $unit->delete();
             Toastr::success( translate('unit removed!')  );
         } else {
-            Toastr::warning( translate('Remove subunits first!') );
+            Toastr::warning( translate('unit not removed!') );
         }
         return back();
     }

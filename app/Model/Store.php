@@ -5,7 +5,7 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class Warehouse extends Model
+class Store extends Model
 {
     
 
@@ -14,7 +14,10 @@ class Warehouse extends Model
         return $this->morphMany('App\Model\Translation', 'translationable');
     }
 
-  
+  public function city(){
+    return $this->belongsTo(City::class,'city_id');
+
+  }
    
  
 }

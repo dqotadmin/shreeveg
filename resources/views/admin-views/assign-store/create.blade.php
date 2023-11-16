@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', translate('Admin role'))
+@section('title', translate('employee role'))
 
 @push('css_or_js')
 
@@ -15,7 +15,7 @@
                 <img src="{{asset('public/assets/admin/img/employee.png')}}" class="w--24" alt="mail">
             </span>
             <span>
-                {{translate('Admin Role')}}
+                {{translate('Admin Role Setup')}}
             </span>
         </h1>
     </div>
@@ -27,7 +27,7 @@
     <div class="card">
         <div class="card-header border-0">
             <div class="card--header">
-                <h5 class="card-title">{{translate('admin_roles')}} <span class="badge badge-soft-primary">{{count($rl)}}</span></h5>
+                <h5 class="card-title">{{translate('employee_roles_table')}} <span class="badge badge-soft-primary">{{count($rl)}}</span></h5>
                 <form action="{{url()->current()}}" method="GET">
                     <div class="input-group">
                         <input id="datatableSearch_" type="search" name="search"

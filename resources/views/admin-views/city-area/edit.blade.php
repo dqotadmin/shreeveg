@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', translate('Update area'))
+@section('title', translate('Update Area'))
 
 @push('css_or_js')
 

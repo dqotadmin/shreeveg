@@ -17,7 +17,7 @@
                 <img src="{{asset('public/assets/admin/img/category.png')}}" class="w--24" alt="">
             </span>
             <span>
-            {{$role->name}} 
+           Update {{$role->name}} 
 
             </span>
         </h1>
@@ -46,7 +46,8 @@
                                 
                                 src="{{asset('storage/app/public/admin/warehouse')}}/{{$admins['image']}}"
                                 alt="Image">
-                            <input type="hidden" name="admin_role_id" value="3">
+                            <input type="hidden" name="admin_role_id" value="  {{$admins->admin_role_id}}">
+                            <input type="hidden" name="admin_role_id" value="  {{$admins->admin_role_id}}">
                             <input type="file" name="image" class="js-file-attach avatar-uploader-input"
                                 id="customFileEg1" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*">
                             <label class="avatar-uploader-trigger" for="customFileEg1">
@@ -68,6 +69,17 @@
                             <!-- Form -->
                             <!-- Form Group -->
                             <div class="row form-group">
+                                <label for="phoneLabel"
+                                    class="col-sm-3 col-form-label input-label">{{ translate('Role') }} <span
+                                        class="input-label-secondary"></span></label>
+
+                                <div class="col-sm-9">
+                                    <input name="name" id="" class="form-control" value="{{$role->name}}" readonly>
+                                    <input name="admin_role_id" type="hidden" class="form-control" value="{{$role->id}}">
+
+                                </div>
+                            </div>
+                              <div class="row form-group">
                                 <label for="firstNameLabel"
                                     class="col-sm-3 col-form-label input-label">{{ translate('Full name') }} <i
                                         class="tio-help-outlined text-body ml-1" data-toggle="tooltip"
@@ -114,8 +126,8 @@
                             </div>
 
                             <div class="d-flex justify-content-end">
-                            <a href="{{route('admin.warehouse-admin')}}"  type="reset" class="btn btn--reset mr-2">
-                                {{translate('Back')}}</a>
+                          
+                            <a href="{{route('admin.warehouse-admin',['role_id'=>$role->id])}}" type="button" class="btn btn--reset mr-2">  {{translate('Back')}}</a>
                                 <button type="submit" class="btn btn-primary">{{ translate('Update') }}</button>
                             </div>
 
@@ -125,66 +137,6 @@
                     </div>
                     <!-- End Card -->
 
-                    <!-- Card -->
-                    <!-- <div id="passwordDiv" class="card mb-3 mb-lg-5">
-                        <div class="card-header">
-                            <h4 class="card-title"><i class="tio-lock"></i> {{ translate('Change your password') }}</h4>
-                        </div> -->
-
-                        <!-- Body -->
-                        <!-- <div class="card-body"> -->
-                            <!-- Form -->
-
-
-                            <!-- Form Group -->
-                            <!-- <div class="row form-group">
-                                <label for="newPassword"
-                                    class="col-sm-3 col-form-label input-label">{{ translate('New password') }}</label>
-
-                                <div class="col-sm-9">
-                                    <input type="password" class="js-pwstrength form-control" name="password"
-                                        id="newPassword" placeholder="{{ translate('Enter new password') }}"
-                                        aria-label="Enter new password" data-hs-pwstrength-options='{
-                                           "ui": {
-                                             "container": "#changePasswordForm",
-                                             "viewports": {
-                                               "progress": "#passwordStrengthProgress",
-                                               "verdict": "#passwordStrengthVerdict"
-                                             }
-                                           }
-                                         }' required>
-
-                                    <p id="passwordStrengthVerdict" class="form-text mb-2"></p>
-
-                                    <div id="passwordStrengthProgress"></div>
-                                </div>
-                            </div> -->
-                            <!-- End Form Group -->
-
-                            <!-- Form Group -->
-                            <!-- <div class="row form-group">
-                                <label for="confirmNewPasswordLabel"
-                                    class="col-sm-3 col-form-label input-label">{{ translate('Confirm password') }}</label>
-
-                                <div class="col-sm-9">
-                                    <div class="mb-3">
-                                        <input type="password" class="form-control" name="confirm_password"
-                                            id="confirmNewPasswordLabel"
-                                            placeholder="{{ translate('Confirm your new password') }}"
-                                            aria-label="Confirm your new password" required>
-                                    </div>
-                                </div>
-                            </div> -->
-                            <!-- End Form Group -->
-
-                            <!-- <div class="d-flex justify-content-end">
-                                <button type="submit" class="btn btn-primary">{{ translate('Save Changes') }}</button>
-                            </div> -->
-                            <!-- End Form -->
-                        <!-- </div> -->
-                        <!-- End Body -->
-                    <!-- </div> -->
-                    <!-- End Card -->
                 </form>
 
                     <!-- Sticky Block End Point -->

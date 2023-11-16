@@ -92,7 +92,7 @@ class CityAreaController extends Controller
         ]);
 
             if (strlen($request->area) > 30) {
-                toastr::error(translate('Area is too long!'));
+                toastr::error(translate('Area Name is too long!'));
                 return back();
             }
         //into db
@@ -104,7 +104,7 @@ class CityAreaController extends Controller
         $cityarea->radius = $request->radius;
         $cityarea->save();
 
-        Toastr::success(translate('cityarea Added Successfully!') );
+        Toastr::success(translate('Area Added Successfully!') );
         return redirect()->route('admin.area.add');
 
     }
@@ -128,7 +128,7 @@ class CityAreaController extends Controller
         $cityarea = $this->cityarea->find($request->id);
         $cityarea->status = $request->status;
         $cityarea->save();
-        Toastr::success(translate('cityarea status updated!'));
+        Toastr::success(translate('Area status updated!'));
         return back();
     }
 
@@ -140,15 +140,16 @@ class CityAreaController extends Controller
     public function update(Request $request, $id): RedirectResponse
     {
         $request->validate([
-            'area' => 'required|unique:city_areas',
-            'latitude_code' => 'required',
+            'area' =>    ['required',
+            Rule::unique('city_areas')->ignore($id)
+             ],'latitude_code' => 'required',
             'longitude_code' => 'required',
             'radius' => 'required',
      ]);
 
      
         if (strlen($request->area) > 20) {
-            toastr::error(translate('area is too long!'));
+            toastr::error(translate('Area is too long!'));
             return back();
         }
 
@@ -160,7 +161,7 @@ class CityAreaController extends Controller
         $cityarea->radius = $request->radius;
         $cityarea->save();
      
-        Toastr::success( translate('cityarea updated successfully!') );
+        Toastr::success( translate('Area updated successfully!') );
         return redirect()->route('admin.area.add');
 
     }
@@ -175,10 +176,8 @@ class CityAreaController extends Controller
        
         if ($cityarea) {
             $cityarea->delete();
-            Toastr::success( translate('cityarea removed!')  );
-        } else {
-            Toastr::warning( translate('Remove subcityareas first!') );
-        }
+            Toastr::success( translate('Area removed!')  );
+        } 
         return back();
     }
 }

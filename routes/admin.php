@@ -31,6 +31,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::get('warehouse-admin-edit/{id}', 'AdminUserController@edit')->name('warehouse-admin-edit');
             Route::delete('warehouse-admin-delete/{id}', 'AdminUserController@delete')->name('warehouse-admin-delete');
             Route::post('warehouse-admin-update/{id}', 'AdminUserController@update')->name('warehouse-admin-update');
+            Route::get('get-cities/{state}', 'AdminUserController@getCities')->name('get-cities');
 
             //end
             Route::get('settings', 'SystemController@settings')->name('settings');
@@ -53,6 +54,17 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::get('status/{id}/{status}', 'CustomRoleController@status')->name('status');
             Route::get('export', 'CustomRoleController@export')->name('export');
         });
+
+        Route::group(['prefix' => 'assign-store', 'as' => 'banner.','middleware'=>['module:promotion_management']], function () {
+            Route::get('add-new', 'BannerController@index')->name('add-new');
+            Route::post('store', 'BannerController@store')->name('store');
+            Route::get('edit/{id}', 'BannerController@edit')->name('edit');
+            Route::put('update/{id}', 'BannerController@update')->name('update');
+            Route::get('list', 'BannerController@list')->name('list');
+            Route::get('status/{id}/{status}', 'BannerController@status')->name('status');
+            Route::delete('delete/{id}', 'BannerController@delete')->name('delete');
+        });
+
 
         Route::group(['prefix' => 'employee', 'as' => 'employee.','middleware'=>['module:user_management']], function () {
             Route::get('add-new', 'EmployeeController@add_new')->name('add-new');
@@ -272,8 +284,20 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::delete('delete/{id}', 'WarehouseController@delete')->name('delete');
             Route::post('search', 'WarehouseController@search')->name('search');
             Route::get('wh-assign-category/{id}', 'WarehouseController@wh_assign_category_page')->name('wh-assign-category-page');
-            Route::get('wh-assign-category/{id}/{catid}/{status}', 'WarehouseController@wh_assign_category_status')->name('wh-assign-category-status');
+            Route::get('wh-assign-category-create/{id}', 'WarehouseController@wh_assign_category_page_create')->name('wh-assign-category-page-create');
+
+            Route::get('wh-assign-category/{id}/{status}', 'WarehouseController@wh_assign_category_status')->name('wh-assign-category-status');
             Route::post('wh-assign-category', 'WarehouseController@wh_assign_category_store')->name('wh-assign-category');
+        });
+        Route::group(['prefix' => 'store', 'as' => 'store.','middleware'=>['module:store_management']], function () {
+            Route::get('index', 'StoreController@index')->name('index');
+            Route::get('create', 'StoreController@create')->name('create');
+            Route::post('store', 'StoreController@store')->name('store');
+            Route::get('status/{id}/{status}', 'StoreController@status')->name('status');
+            Route::get('edit/{id}', 'StoreController@edit')->name('edit');
+            Route::delete('delete/{id}', 'StoreController@delete')->name('delete');
+            Route::post('update/{id}', 'StoreController@update')->name('update');
+
         });
 
         Route::group(['prefix' => 'message', 'as' => 'message.','middleware'=>['module:support_management']], function () {

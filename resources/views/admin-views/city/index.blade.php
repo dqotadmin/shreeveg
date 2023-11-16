@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', translate('Add new city'))
+@section('title', translate('City List'))
 
 @push('css_or_js')
 

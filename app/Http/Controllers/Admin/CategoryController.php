@@ -170,7 +170,7 @@ class CategoryController extends Controller
 
         foreach ($request->name as $name) {
             if (strlen($name) > 255) {
-                toastr::error(translate('Name is too long!'));
+                toastr::error(translate('Category name is too long!'));
                 return back();
             }
         }
@@ -290,7 +290,7 @@ class CategoryController extends Controller
 
         foreach ($request->name as $name) {
             if (strlen($name) > 255) {
-                toastr::error(translate('Name is too long!'));
+                toastr::error(translate('Category name is too long!'));
                 return back();
             }
         }

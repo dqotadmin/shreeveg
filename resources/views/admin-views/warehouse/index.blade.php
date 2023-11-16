@@ -26,7 +26,7 @@
         <div class="col-sm-12 col-lg-12">
             <div class="btn--container justify-content-end m-2">
                 <a type="button" href="{{route('admin.warehouse.create')}}"
-                    class="btn btn--primary">{{translate('Create Warehouse')}}</a>
+                    class="btn btn--primary">{{translate('Add Warehouse')}}</a>
             </div>
             @php($data = Helpers::get_business_settings('language'))
             @php($default_lang = Helpers::get_default_language())

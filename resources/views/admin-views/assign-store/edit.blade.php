@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', translate('update Admin role'))
+@section('title', translate('update employee role'))
 
 @push('css_or_js')
 
@@ -15,7 +15,7 @@
                 <img src="{{asset('public/assets/admin/img/employee.png')}}" class="w--24" alt="mail">
             </span>
             <span>
-                {{translate('Admin Role')}}
+                {{translate('Employee Role Setup')}}
             </span>
         </h1>
     </div>

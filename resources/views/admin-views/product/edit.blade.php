@@ -129,7 +129,7 @@
                                 <div class="form-group">
                                     <label class="input-label"
                                         for="exampleFormControlInput1">{{translate('Stock')}}</label>
-                                    <input type="number" min="0" step="0.01"   value="{{$product['stock']}}" name="stock" class="form-control" placeholder="{{ translate('Ex : 54') }}"required >
+                                    <input type="number" min="0" step="0.01"   value="{{$product['total_stock']}}" name="total_stock" class="form-control" placeholder="{{ translate('Ex : 54') }}"required >
                                 </div>
                             </div>
                             <!-- <div class="col-sm-6">

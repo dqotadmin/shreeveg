@@ -6,6 +6,8 @@ use App\CentralLogics\Helpers;
 use App\Http\Controllers\Controller;
 use App\Model\Store;
 use App\Model\Translation;
+use App\Model\City;
+use App\Model\Warehouse;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -91,21 +93,23 @@ class StoreController extends Controller
     function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'warehouse_admin_id' => 'required',
+            'warehouse_id' => 'required',
             'owner_id' => 'required',
+            'city_id' => 'required',
             'code' => 'required|unique:stores',
         ],[
-            'warehouse_admin_id.required'=>translate('Warehouse admin name is required'),
+            'warehouse_id.required'=>translate('Warehouse is required'),
             'owner_id.required'=>translate('Owner name is required'),
+            'city_id.required'=>translate('City Name is required'),
         ]);
 
-
+      
         //into db
         $store = $this->store;
         $store->name = $request->name == null ? null : $request->name;
         $store->code = $request->code == null ? null : $request->code;
         $store->address = $request->address == null ? null : $request->address;
-        $store->warehouse_admin_id = $request->warehouse_admin_id == null ? null : $request->warehouse_admin_id;
+        $store->warehouse_id = $request->warehouse_id == null ? null : $request->warehouse_id;
         $store->owner_id = $request->owner_id == null ? null : $request->owner_id;
         $store->city_id = $request->city_id == null ? null : $request->city_id;
         $store->pin_code = $request->pin_code == null ? null : $request->pin_code;
@@ -157,15 +161,18 @@ class StoreController extends Controller
     public function update(Request $request, $id): RedirectResponse
     {
         $request->validate([
-            'warehouse_admin_id' => 'required',
+            'warehouse_id' => 'required',
             'owner_id' => 'required',
+            'city_id' => 'required',
+            'name' => 'required',
             'code' => [
                 'required',
                     Rule::unique('stores')->ignore($id),
             ]
         ],[
-            'warehouse_admin_id.required'=>translate('Warehouse admin name is required'),
+            'warehouse_id.required'=>translate('Warehouse  is required'),
             'owner_id.required'=>translate('Owner name is required'),
+            'city_id.required'=>translate('City Name is required'),
         ]);
 
       
@@ -174,7 +181,7 @@ class StoreController extends Controller
         $store->name = $request->name == null ? null : $request->name;
         $store->code = $request->code == null ? null : $request->code;
         $store->address = $request->address == null ? null : $request->address;
-        $store->warehouse_admin_id = $request->warehouse_admin_id == null ? null : $request->warehouse_admin_id;
+        $store->warehouse_id = $request->warehouse_id == null ? null : $request->warehouse_id;
         $store->owner_id = $request->owner_id == null ? null : $request->owner_id;
         $store->city_id = $request->city_id == null ? null : $request->city_id;
         $store->pin_code = $request->pin_code == null ? null : $request->pin_code;
@@ -194,6 +201,28 @@ class StoreController extends Controller
         return redirect()->route('admin.store.index');
 
     }
+    public function get_city($stateId = null){
+        $city = City::query();
+        if($stateId){
+            $city = $city->where('state_id',$stateId)->get();
+        }
+        return response()->json(['city' => $city]);
+    }
+    public function get_warehouse($cityId=null){
+        $warehouse = Warehouse::query();
+    
+        if ($cityId) {
+            $warehouse = $warehouse->where('city_id', $cityId)->get();
+            
+            if ($warehouse->isEmpty()) {
+                return response()->json(['message' => 'Warehouses not found for the given city.']);
+            }
+        } else {
+            return response()->json(['message' => 'City ID is not provided.']);
+        }
+        return response()->json(['warehouse' => $warehouse]);
+    }
+   
 
     /** 
      * @param Request $request

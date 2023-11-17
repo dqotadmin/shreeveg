@@ -18,6 +18,11 @@ class Store extends Model
     return $this->belongsTo(City::class,'city_id');
 
   }
+  
+  public function warehouse(){
+    return $this->belongsTo(Warehouse::class,'warehouse_id');
+
+  }
    
  
 }

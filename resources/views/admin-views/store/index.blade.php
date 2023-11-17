@@ -64,7 +64,7 @@
                     <tr>
                         <th class="text-center">{{translate('#')}}</th>
                         <th>{{translate('Store Name')}}</th>
-                        <th>{{translate('Warehouse Code')}}</th>
+                        <th>{{translate('Store Code')}}</th>
                         <th>{{translate('Address')}}</th>
                         <th>{{translate('Pin Code')}}</th>
                         <th>{{translate('status')}}</th>
@@ -84,7 +84,7 @@
                         </td>
                         <td>
                             <span class="d-block font-size-sm text-body text-trim-50">
-                                {{$store['warehouse_admin_id']}}
+                                {{$store['code']}}
                             </span>
                         </td>
                         <td>

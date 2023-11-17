@@ -25,34 +25,44 @@
         <div class="col-sm-12 col-lg-12">
             <div class="card">
                 <div class="card-body pt-sm-0 pb-sm-4">
-                <form action="{{route('admin.store.update',[$stores['id']])}}" method="post"   enctype="multipart/form-data">
-                @csrf
-                
+                    <form action="{{route('admin.store.update',[$stores['id']])}}" method="post"
+                        enctype="multipart/form-data">
+                        @csrf
+
+
+
+
                         <div class="row align-items-end g-4" style="margin-top: 40px;">
                             <div class="col-sm-6">
-                                <label class="form-label"
-                                    for="exampleFormControlInput1">{{ translate('Warehouse Admin') }} </label>
-                                <select name="warehouse_admin_id" id="" class="form-control">
-                                    <option value="" style="text-transform: capitalize;" disabled selected>Select
-                                        Warehouse Admin Name</option>
-                                    @foreach(App\Model\Admin::where('admin_role_id',3)->get() as $warehouse)
-                                    <option value="{{$warehouse->id}}" style="text-transform: capitalize;" {{$stores->warehouse_admin_id == $warehouse->id ? 'selected':''}}>
-                                        {{$warehouse->f_name}} {{$warehouse->l_name}}</option>
+                                <label class="form-label" for="exampleFormControlInput1">{{ translate('Owner') }}
+                                    {{ translate('Name') }} </label>
+                                <select name="owner_id" id="get_city_name_by_owner" class="form-control">
+                                    <option value="" disabled selected>Select Owner Name</option>
+                                    @foreach(App\Model\Admin::where('admin_role_id',6)->get() as $store)
+                                    <option value="{{$store->id}}" city-val="{{$store->city->city}}"
+                                        state-id="{{$store->state_id}}" city-id="{{$store->city_id}}"
+                                        {{$stores->owner_id == $store->id ? 'selected' : '';}}>
+                                        {{$store->f_name}} {{$store->l_name}}</option>
                                     @endforeach
+                                </select>
+                            </div>
+ 
+                            <div class="col-sm-6">
+                                <label class="form-label" for=" "> {{ translate('City') }} </label>
+                                <select name="city_id" id="click_on_city" class="get_city  form-control">
+                                    <option value="{{$stores->city_id}}" >{{$stores->city->city}}</option>
                                 </select>
                             </div>
 
                             <div class="col-sm-6">
-                                <label class="form-label" for="exampleFormControlInput1">{{ translate('Owner') }}
-                                    {{ translate('Name') }} </label>
-                                <select name="owner_id" id="city_name" class="form-control">
-                                    <option value="" disabled selected>Select Owner Name</option>
-                                    @foreach(App\Model\Admin::where('admin_role_id',6)->get() as $store)
-                                    <option value="{{$store->id}}" city-val="{{$store->city->city}}"
-                                        city-id="{{$store->city_id}}"  {{$stores->owner_id == $store->id ? 'selected' : '';}}>{{$store->f_name}} {{$store->l_name}}</option>
-                                    @endforeach
+                                <label class="form-label" for="">{{ translate('Warehouse') }}
+                                </label>
+                                <select name="warehouse_id" id="" class="get_warehouse form-control">
+                                <option value="{{$stores->warehouse_id}}" >{{$stores->warehouse->name}}</option>
                                 </select>
                             </div>
+
+
                             <div class="col-sm-6 ">
                                 <label class="form-label" for="exampleFormControlInput1">{{ translate('Store') }}
                                     {{ translate('Name') }} </label>
@@ -70,35 +80,32 @@
                             <div class="col-sm-6">
                                 <label class="form-label" for="exampleFormControlInput1">{{ translate('Shop') }}
                                     {{ translate('Licence') }} </label>
-                                <input type="text" name="shop_licence" class="form-control" value="{{$stores->shop_licence}}"
-                                    placeholder="{{ translate('Ex: 1234676') }}" maxlength="255">
-                            </div>
-
-                            <div class="col-sm-6">
-                                <label class="form-label" for=" "> {{ translate('City') }} </label>
-                                <input type="text" class="form-control get_city_name"
-                                    placeholder="{{ translate('Ex: Jaipur') }}" readonly maxlength="255" value="{{$stores->city->city}}">
-                                <input type="hidden" name="city_id" class="form-control get_city_id" value="{{$stores->city->id}}"
-                                    placeholder="{{ translate('Ex: Jaipur') }}" readonly maxlength="255">
+                                <input type="text" name="shop_licence" class="form-control"
+                                    value="{{$stores->shop_licence}}" placeholder="{{ translate('Ex: 1234676') }}"
+                                    maxlength="255">
                             </div>
 
                             <div class="col-sm-6">
                                 <label class="form-label" for="exampleFormControlInput1">
                                     {{ translate('Area Pin Code') }} </label>
-                                <input type="text" name="pin_code" class="form-control" value="{{$stores->pin_code}}"  placeholder="{{ translate('Ex: 311001') }}" maxlength="255">
+                                <input type="text" name="pin_code" class="form-control" value="{{$stores->pin_code}}"
+                                    placeholder="{{ translate('Ex: 311001') }}" maxlength="255">
                             </div>
 
                             <div class="col-sm-6">
                                 <label class="form-label" for="exampleFormControlInput1"> {{ translate('BRN No.') }}
                                 </label>
-                                <input type="text" name="brn_number" class="form-control"  value="{{$stores->brn_number}}" placeholder="{{ translate('Ex: 5689643564') }}" maxlength="255">
+                                <input type="text" name="brn_number" class="form-control"
+                                    value="{{$stores->brn_number}}" placeholder="{{ translate('Ex: 5689643564') }}"
+                                    maxlength="255">
                             </div>
 
                             <div class="col-sm-6">
                                 <label class="form-label" for="exampleFormControlInput1"> {{ translate('MSME No.') }}
                                 </label>
-                                <input type="text" name="msme_number" class="form-control" value="{{$stores->msme_number}}"
-                                    placeholder="{{ translate('Ex: 5466766756') }}" maxlength="255">
+                                <input type="text" name="msme_number" class="form-control"
+                                    value="{{$stores->msme_number}}" placeholder="{{ translate('Ex: 5466766756') }}"
+                                    maxlength="255">
                             </div>
 
                             <div class="col-sm-6">
@@ -111,14 +118,14 @@
                             <div class="col-sm-6">
                                 <label class="form-label" for="exampleFormControlInput1">{{ translate('Store') }}
                                     {{ translate('Address') }} </label>
-                                <textarea type="text" name="address" class="form-control" 
+                                <textarea type="text" name="address" class="form-control"
                                     placeholder="{{ translate('Ex:  3 Station Road, Dhuri Arcade Near Vasai Bus Station, Bassein Road(vasai Road)') }}"
                                     maxlength="255">{{$stores->address}}</textarea>
                             </div>
 
                             <div class="col-md-6">
                                 <label class="form-label text-capitalize" for="latitude">{{ translate('latitude') }}
-                                    <i class="tio-info-outined" data-toggle="tooltip" data-placement="top" 
+                                    <i class="tio-info-outined" data-toggle="tooltip" data-placement="top"
                                         title="{{ translate('click_on_the_map_select_your_default_location') }}">
                                     </i>
                                 </label>
@@ -144,68 +151,124 @@
                                     </i>
                                 </label>
                                 <input type="number" name="coverage" min="1" max="1000" class="form-control"
-                                    placeholder="{{ translate('Ex : 3') }}"     value="{{$stores->coverage}}">
+                                    placeholder="{{ translate('Ex : 3') }}" value="{{$stores->coverage}}">
                             </div>
                             <div class="col-md-6" id="location_map_div">
-                                        <input id="pac-input" class="controls rounded" data-toggle="tooltip"
-                                            data-placement="right" name="map_location"
-                                            data-original-title="{{ translate('search_your_location_here') }}"
-                                            type="text" placeholder="{{ translate('search_here') }}" />
-                                        <div id="location_map_canvas" class="overflow-hidden rounded"
-                                            style="height: 100%"></div>
-                                    </div>
-                        <div class="col-sm-6">
-                            <div>
-                                <div class="text-center mb-3">
-                                    <img id="viewer" class="img--105"
-                                    onerror="this.src='{{asset('public/assets/admin/img/900x400/img1.jpg')}}'"
-                                        src="{{asset('storage/app/public/store')}}/{{$stores['document']}}"
-                                       alt="image" />
+                                <input id="pac-input" class="controls rounded" data-toggle="tooltip"
+                                    data-placement="right" name="map_location"
+                                    data-original-title="{{ translate('search_your_location_here') }}" type="text"
+                                    placeholder="{{ translate('search_here') }}" />
+                                <div id="location_map_canvas" class="overflow-hidden rounded" style="height: 100%">
                                 </div>
                             </div>
-                            <label class="form-label text-capitalize">{{ translate('Document  ') }}</label><small
-                                class="text-danger">*
-                                ( {{ translate('ratio') }}
-                                3:1 )</small>
-                            <div class="custom-file">
-                                <input type="file" name="document" id="customFileEg1" class="custom-file-input"
-                                    accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*"  
-                                    oninvalid="document.getElementById('en-link').click()">
-                                <label class="custom-file-label" for="customFileEg1">{{ translate('choose') }}
-                                    {{ translate('file') }}</label>
-                            </div>
+                            <div class="col-sm-6">
+                                <div>
+                                    <div class="text-center mb-3">
+                                        <img id="viewer" class="img--105"
+                                            onerror="this.src='{{asset('public/assets/admin/img/900x400/img1.jpg')}}'"
+                                            src="{{asset('storage/app/public/store')}}/{{$stores['document']}}"
+                                            alt="image" />
+                                    </div>
+                                </div>
+                                <label class="form-label text-capitalize">{{ translate('Document  ') }}</label><small
+                                    class="text-danger">*
+                                    ( {{ translate('ratio') }}
+                                    3:1 )</small>
+                                <div class="custom-file">
+                                    <input type="file" name="document" id="customFileEg1" class="custom-file-input"
+                                        accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*"
+                                        oninvalid="document.getElementById('en-link').click()">
+                                    <label class="custom-file-label" for="customFileEg1">{{ translate('choose') }}
+                                        {{ translate('file') }}</label>
+                                </div>
 
-                        </div>
-                        <div class="col-12">
-                            <div class="btn--container justify-content-end">
-                                <a type="button" href="{{route('admin.store.index')}}"
-                                    class="btn btn--reset">{{translate('Back')}}</a>
-                                <button type="submit" class="btn btn--primary">{{translate('submit')}}</button>
+                            </div>
+                            <div class="col-12">
+                                <div class="btn--container justify-content-end">
+                                    <a type="button" href="{{route('admin.store.index')}}"
+                                        class="btn btn--reset">{{translate('Back')}}</a>
+                                    <button type="submit" class="btn btn--primary">{{translate('submit')}}</button>
+                                </div>
                             </div>
                         </div>
+                    </form>
                 </div>
-                </form>
             </div>
         </div>
     </div>
-</div>
 </div>
 
 @endsection
 
 @push('script_2')
 <script>
-$('#city_name').on('change', function() {
-    var city_name = $(this).val();
-    var selectedOption = $(this).find("option:selected");
+$(document).ready(function() {
+    $('#get_city_name_by_owner').on('change', function() {
+        var owner_id = $(this).val();
+        var selectedOption = $(this).find('option:selected');
+        var city_id = selectedOption.attr('city-id');
+        var city_name = selectedOption.attr('city-val');
+        let stateId = selectedOption.attr('state-id');
+        //console.log(stateId);
+        getWarehouse(city_id);
+        $('.get_city').empty();
+        $('.get_city').append('<option value="' + city_id + '">' + city_name + '</option>');
+    });
+    // $('.get_city').html('<option value="">Select City</option>');
 
-    // Get the data attribute value
-    var cityVal = selectedOption.attr("city-val");
-    var cityId = selectedOption.attr("city-id");
-    $(".get_city_name").val(cityVal);
-    $(".get_city_id").val(cityId);
+    $('#click_on_city').on('click', function() {
+        let selectedOptionOwner = $('#get_city_name_by_owner').find('option:selected');
+        var stateId = selectedOptionOwner.attr('state-id');
+       
+        $.ajax({
+            url: '{{url('/')}}/admin/store/get-city-by-owner/'+stateId,
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                // console.log(data);
+                $.each(data.city, function(key, value) {
+                    // $('.get_city').empty();
+                    $('.get_city').append('<option value="' + value.id + '">' +
+                        value.city + '</option>');
 
+                });
+            }
+        });
+    });
 });
+$('.get_city').on('change', function() {
+    getWarehouse($(this).val());
+});
+
+function getWarehouse(cityId = null) {
+    $('.get_warehouse').empty();
+    $.ajax({
+        url: '{{url('/')}}/admin/store/get-warehouse-by-city/' + cityId,
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            if (data.message) {
+                var message = data.message;
+                Swal.fire({
+                title: 'Alert',
+                html: message,
+                icon: 'info',
+                confirmButtonText: 'OK'
+            });
+                // $('.get_warehouse').html('<option value="">'+ message +'</option>');
+            } else {
+                // Clear previous options
+                $('#get_warehouse').empty();
+                $.each(data.warehouse, function(key, value) {
+                    $('.get_warehouse').append('<option value="' + value.id + '">' +
+                        value.name + '</option>');
+
+                });
+            }
+
+        }
+    });
+};
 </script>
 <script>
 function status_change_alert(url, message, e) {
@@ -229,7 +292,7 @@ function status_change_alert(url, message, e) {
 </script>
 
 
- 
+
 
 <script>
 function readURL(input) {
@@ -252,7 +315,7 @@ $("#customFileEg1").change(function() {
     src="https://maps.googleapis.com/maps/api/js?key={{ \App\Model\BusinessSetting::where('key', 'map_api_client_key')->first()?->value }}&libraries=places&v=3.45.8">
 </script>
 
-  
+
 <script>
 $(document).ready(function() {
     function initAutocomplete() {
@@ -352,8 +415,6 @@ $(document).ready(function() {
     };
     initAutocomplete();
 });
-   
- 
 </script>
 
 </body>

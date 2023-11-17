@@ -55,16 +55,6 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::get('export', 'CustomRoleController@export')->name('export');
         });
 
-        Route::group(['prefix' => 'assign-store', 'as' => 'banner.','middleware'=>['module:promotion_management']], function () {
-            Route::get('add-new', 'BannerController@index')->name('add-new');
-            Route::post('store', 'BannerController@store')->name('store');
-            Route::get('edit/{id}', 'BannerController@edit')->name('edit');
-            Route::put('update/{id}', 'BannerController@update')->name('update');
-            Route::get('list', 'BannerController@list')->name('list');
-            Route::get('status/{id}/{status}', 'BannerController@status')->name('status');
-            Route::delete('delete/{id}', 'BannerController@delete')->name('delete');
-        });
-
 
         Route::group(['prefix' => 'employee', 'as' => 'employee.','middleware'=>['module:user_management']], function () {
             Route::get('add-new', 'EmployeeController@add_new')->name('add-new');
@@ -227,8 +217,6 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::get('create', 'CategoryController@create')->name('create');
             Route::get('sub-create', 'CategoryController@sub_create')->name('sub-create');
             Route::post('update-unit', 'CategoryController@update_unit')->name('update-unit');
-            
-            
             Route::get('add-sub-category', 'CategoryController@sub_index')->name('add-sub-category');
             Route::get('add-sub-sub-category', 'CategoryController@sub_sub_index')->name('add-sub-sub-category');
             Route::post('store', 'CategoryController@store')->name('store');
@@ -241,7 +229,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::post('search', 'CategoryController@search')->name('search');
         });
 
-        Route::group(['prefix' => 'unit', 'as' => 'unit.','middleware'=>['module:unit_management']], function () {
+        Route::group(['prefix' => 'unit', 'as' => 'unit.','middleware'=>['module:product_management']], function () {
             Route::get('add', 'UnitController@index')->name('add');
             Route::get('create', 'UnitController@create')->name('create');
             Route::post('store', 'UnitController@store')->name('store');
@@ -252,7 +240,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::post('search', 'UnitController@search')->name('search');
         });
 
-        Route::group(['prefix' => 'city', 'as' => 'city.','middleware'=>['module:city_management']], function () {
+        Route::group(['prefix' => 'city', 'as' => 'city.','middleware'=>['module:location_management']], function () {
             Route::get('add', 'CityController@index')->name('add');
             Route::get('create', 'CityController@create')->name('create');
             Route::post('store', 'CityController@store')->name('store');
@@ -263,7 +251,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::post('search', 'CityController@search')->name('search');
         });
         
-        Route::group(['prefix' => 'area', 'as' => 'area.','middleware'=>['module:area_management']], function () {
+        Route::group(['prefix' => 'area', 'as' => 'area.','middleware'=>['module:location_management']], function () {
             Route::get('add', 'CityAreaController@index')->name('add');
             Route::get('create', 'CityAreaController@create')->name('create');
             Route::post('store', 'CityAreaController@store')->name('store');
@@ -274,7 +262,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::post('search', 'CityAreaController@search')->name('search');
         });
 
-        Route::group(['prefix' => 'warehouse', 'as' => 'warehouse.','middleware'=>['module:warehouse_management']], function () {
+        Route::group(['prefix' => 'warehouse', 'as' => 'warehouse.','middleware'=>['module:user_management']], function () {
             Route::get('add', 'WarehouseController@index')->name('add');
             Route::get('create', 'WarehouseController@create')->name('create');
             Route::post('store', 'WarehouseController@store')->name('store');
@@ -297,7 +285,10 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::get('edit/{id}', 'StoreController@edit')->name('edit');
             Route::delete('delete/{id}', 'StoreController@delete')->name('delete');
             Route::post('update/{id}', 'StoreController@update')->name('update');
-
+            Route::get('get-city-by-owner/{stateId?}', 'StoreController@get_city')->name('get-city-by-owner');
+            Route::get('get-warehouse-by-city/{cityId?}', 'StoreController@get_warehouse')->name('get-warehouse-by-city');
+            
+            
         });
 
         Route::group(['prefix' => 'message', 'as' => 'message.','middleware'=>['module:support_management']], function () {

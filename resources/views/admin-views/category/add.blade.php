@@ -3,7 +3,18 @@
 @section('title', translate('Add new category'))
 
 @push('css_or_js')
+<style>
+.bold-text {
+    font-weight: bold;
+}
 
+.bold-text-remove {
+    padding-left: 30px;
+    /* Adjust the padding as needed */
+    font-weight: normal;
+    /* Adjust the position as needed */
+}
+</style>
 @endpush
 
 @section('content')
@@ -219,5 +230,11 @@
         }
     });
 </script>
+<script>
+var radios = $('[type="radio"]');
 
+radios.change(function() {
+    radios.not(this).prop('checked', false);
+});
+</script>
 @endpush

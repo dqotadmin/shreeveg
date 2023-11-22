@@ -16,7 +16,14 @@ const MANAGEMENT_SECTION = [
     'support_management' => 'support_management',
     'report_management' => 'report_management',
     'user_management' => 'user_management',
-  'unit_management' => 'Unit management',
+    'location_management' => 'location_management',
+    'unit_management' => 'Unit management',
+    'warehouse_management' => 'Warehouse Management',
+    'store_management' => 'Store Management',
+    'receiver_management' => 'Receiver Management',
+    'worker_management' => 'Worker Management',
+    'broker_management' => 'Broker Management',
+    'store_sales_management' => 'Store Sales Management',
 
     'system_management' => 'system_management',
 ];

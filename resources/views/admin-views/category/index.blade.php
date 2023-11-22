@@ -16,7 +16,7 @@
                     <img src="{{asset('public/assets/admin/img/category.png')}}" class="w--24" alt="">
                 </span>
                 <span>
-                    {{translate('category_setup')}}
+                    {{translate('category')}}
                 </span>
             </h1>
         </div>

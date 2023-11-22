@@ -15,6 +15,6 @@ class Warehouse extends Model
     }
 
   
-
+   
  
 }

@@ -35,7 +35,8 @@ class UnitController extends Controller
             $key = explode(' ', $request['search']);
             $units = $this->unit->where(['position' => 0])->where(function ($q) use ($key) {
                 foreach ($key as $value) {
-                    $q->orWhere('name', 'like', "%{$value}%");
+                    $q->orWhere('title', 'like', "%{$value}%");
+                    $q->orWhere('description', 'like', "%{$value}%");
                 }
             });
             $query_param = ['search' => $request['search']];
@@ -94,43 +95,25 @@ class UnitController extends Controller
             'description' => 'required',
         ]);
 
-        foreach ($request->title as $name) {
-            if (strlen($name) > 10) {
+            if (strlen($request->title) > 10) {
                 toastr::error(translate('Title is too long!'));
                 return back();
             }
-        }
-
+       
        
 
 
         //into db
         $unit = $this->unit;
-        $unit->title = $request->title[array_search('en', $request->lang)];
-        $unit->description = $request->description[array_search('en', $request->lang)];
-        
+        $unit->title = $request->title;
+        $unit->description = $request->description;
         $unit->position = $request->position;
         $unit->save();
-
-        //translation
-        $data = [];
-        // foreach ($request->lang as $index => $key) {
-        //     if ($request->name[$index] && $key != 'en') {
-        //         $data[] = array(
-        //             'translationable_type' => 'App\Model\unit',
-        //             'translationable_id' => $unit->id,
-        //             'locale' => $key,
-        //             'key' => 'name',
-        //             'value' => $request->name[$index],
-        //         );
-        //     }
-        // }
-        if (count($data)) {
-            Translation::insert($data);
-        }
+       
 
         Toastr::success(translate('unit Added Successfully!') );
-        return back();
+        return redirect()->route('admin.unit.add');
+
     }
 
     /**
@@ -152,7 +135,7 @@ class UnitController extends Controller
         $unit = $this->unit->find($request->id);
         $unit->status = $request->status;
         $unit->save();
-        Toastr::success(translate('unit status updated!'));
+        Toastr::success(translate('Unit status updated!'));
         return back();
     }
 
@@ -164,34 +147,25 @@ class UnitController extends Controller
     public function update(Request $request, $id): RedirectResponse
     {
         $request->validate([
-            'title' =>'required|unique:units,title,'.$request->id,
+            'title' =>  ['required',
+                            Rule::unique('units')->ignore($id)
+                        ],
+       
             'description' => 'required',
      ]);
 
      
-     foreach ($request->title as $name) {
-        if (strlen($name) > 10) {
-            toastr::error(translate('Title is too long!'));
+        if (strlen($request->title) > 10) {
+            toastr::error(translate('Unit title is too long!'));
             return back();
         }
-    }
 
         $unit = $this->unit->find($id);
-        $unit->title = $request->title[array_search('en', $request->lang)];
-        $unit->description = $request->description[array_search('en', $request->lang)];
+        $unit->title = $request->title;
+        $unit->description = $request->description;
         $unit->save();
-        // foreach ($request->lang as $index => $key) {
-        //     if ($request->name[$index] && $key != 'en') {
-        //         Translation::updateOrInsert(
-        //             ['translationable_type' => 'App\Model\unit',
-        //                 'translationable_id' => $unit->id,
-        //                 'locale' => $key,
-        //                 'key' => 'name'],
-        //             ['value' => $request->name[$index]]
-        //         );
-        //     }
-        // }
-        Toastr::success( translate('unit updated successfully!') );
+        
+        Toastr::success( translate('Unit updated successfully!') );
         return redirect()->route('admin.unit.add');
 
     }
@@ -208,7 +182,7 @@ class UnitController extends Controller
             $unit->delete();
             Toastr::success( translate('unit removed!')  );
         } else {
-            Toastr::warning( translate('Remove subunits first!') );
+            Toastr::warning( translate('unit not removed!') );
         }
         return back();
     }

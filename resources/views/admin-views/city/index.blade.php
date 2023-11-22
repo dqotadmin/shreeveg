@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', translate('Add new Unit'))
+@section('title', translate('City List'))
 
 @push('css_or_js')
 
@@ -16,7 +16,7 @@
                     <img src="{{asset('public/assets/admin/img/category.png')}}" class="w--24" alt="">
                 </span>
                 <span>
-                    {{translate('city_setup')}}
+                    {{translate('city')}}
                 </span>
             </h1>
         </div>
@@ -25,7 +25,7 @@
         <div class="row g-2">
             <div class="col-sm-12 col-lg-12">
                 <div class="btn--container justify-content-end m-2">
-                    <a type="button"  href="{{route('admin.city.create')}}" class="btn btn--primary">{{translate('city_setup')}}</a>
+                    <a type="button"  href="{{route('admin.city.create')}}" class="btn btn--primary">{{translate('Add city')}}</a>
                 </div>
                     @php($data = Helpers::get_business_settings('language'))
                     @php($default_lang = Helpers::get_default_language())
@@ -43,7 +43,7 @@
                                     <input id="datatableSearch_" type="search" name="search" maxlength="255"
                                            class="form-control pl-5"
                                            placeholder="{{translate('Search_by_Name')}}" aria-label="Search"
-                                           value="{{$search}}" required autocomplete="off">
+                                           value="{{$search}}"  autocomplete="on">
                                            <i class="tio-search tio-input-search"></i>
                                     <div class="input-group-append">
                                         <button type="submit" class="input-group-text">
@@ -61,6 +61,7 @@
                             <tr>
                                 <th class="text-center">{{translate('#')}}</th>
                                 <th>{{translate('City')}}</th>
+                                <th>{{translate('City Code')}}</th>
                                 <th>{{translate('State')}}</th>
                                 <th>{{translate('status')}}</th>
                                 <th class="text-center">{{translate('action')}}</th>
@@ -75,6 +76,11 @@
                                     <td>
                                     <span class="d-block font-size-sm text-body text-trim-50">
                                         {{$city['city']}}
+                                    </span>
+                                    </td>
+                                    <td>
+                                    <span class="d-block font-size-sm text-body text-trim-50">
+                                        {{$city['city_code']}}
                                     </span>
                                     </td>
                                     <td>

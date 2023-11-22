@@ -33,15 +33,19 @@ class CityController extends Controller
         $search = $request['search'];
         if ($request->has('search')) {
             $key = explode(' ', $request['search']);
-            $cities = $this->city->where(['position' => 0])->where(function ($q) use ($key) {
+            $cities = $this->city->where(function ($q) use ($key) {
                 foreach ($key as $value) {
-                    $q->orWhere('city', 'like', "%{$value}%");
-                }
+                    $q->orWhere('city', 'like', "%{$value}%")
+                    ->orWhere('city_code', 'like', "%{$value}%")
+                    ->orWhereHas('states',function($q2) use ($value){
+                        $q2->where('name', 'like', "%{$value}%");
+                    });
+                    }
             });
 
             $query_param = ['search' => $request['search']];
         } else {
-            $cities = $this->city->where(['position' => 0]);
+            $cities = $this->city;
         }
         $cities = $cities->latest()->paginate(Helpers::getPagination())->appends($query_param);
         return view('admin-views.city.index', compact('cities', 'search'));
@@ -93,42 +97,21 @@ class CityController extends Controller
             'state_id' => 'required',
         ]);
 
-        foreach ($request->city as $name) {
-            if (strlen($name) > 10) {
+            if (strlen($request->city) > 20) {
                 toastr::error(translate('City is too long!'));
                 return back();
             }
-        }
-
-       
-
 
         //into db
         $city = $this->city;
-        $city->city = $request->city[array_search('en', $request->lang)];
-        $city->state_id = $request->state_id[array_search('en', $request->lang)];
-        $city->position = $request->position;
+        $city->city = $request->city;
+        $city->city_code = $request->city_code;
+        $city->state_id = $request->state_id;
         $city->save();
 
-        //translation
-        $data = [];
-        // foreach ($request->lang as $index => $key) {
-        //     if ($request->name[$index] && $key != 'en') {
-        //         $data[] = array(
-        //             'translationable_type' => 'App\Model\City',
-        //             'translationable_id' => $city->id,
-        //             'locale' => $key,
-        //             'key' => 'name',
-        //             'value' => $request->name[$index],
-        //         );
-        //     }
-        // }
-        if (count($data)) {
-            Translation::insert($data);
-        }
 
         Toastr::success(translate('City Added Successfully!') );
-        return back();
+        return redirect()->route('admin.city.add');
     }
 
     /**
@@ -167,28 +150,17 @@ class CityController extends Controller
      ]);
 
      
-     foreach ($request->city as $name) {
-        if (strlen($name) > 10) {
+        if (strlen($request->city) > 20) {
             toastr::error(translate('city is too long!'));
             return back();
-        }
     }
 
         $city = $this->city->find($id);
-        $city->city = $request->city[array_search('en', $request->lang)];
-        $city->state_id = $request->state_id[array_search('en', $request->lang)];
+        $city->city = $request->city;
+        $city->city_code = $request->city_code;
+        $city->state_id = $request->state_id;
         $city->save();
-        // foreach ($request->lang as $index => $key) {
-        //     if ($request->name[$index] && $key != 'en') {
-        //         Translation::updateOrInsert(
-        //             ['translationable_type' => 'App\Model\city',
-        //                 'translationable_id' => $city->id,
-        //                 'locale' => $key,
-        //                 'key' => 'name'],
-        //             ['value' => $request->name[$index]]
-        //         );
-        //     }
-        // }
+       
         Toastr::success( translate('city updated successfully!') );
         return redirect()->route('admin.city.add');
 
@@ -202,7 +174,7 @@ class CityController extends Controller
     {
         $city = $this->city->find($request->id);
        
-        if ($city->childes->count() == 0) {
+        if ($city) {
             $city->delete();
             Toastr::success( translate('city removed!')  );
         } else {

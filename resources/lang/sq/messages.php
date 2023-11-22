@@ -1575,6 +1575,9 @@
   'success' => 'Success',
   'support_management' => 'Support management',
   'user_management' => 'User management',
+  'location_management' => 'Location Management',
+  'warehouse_management' => 'Warehouse Management',
+  'store_management' => 'Store Management',
   
   'Click to import the file here' => 'Click to import the file here',
   'Click here to import the .xlsx file here' => 'Click here to import the .xlsx file here',

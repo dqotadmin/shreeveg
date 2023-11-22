@@ -43,6 +43,8 @@ class CategoryController extends Controller
             $categories = $categories->where(function ($q) use ($key) {
                 foreach ($key as $value) {
                     $q->orWhere('name', 'like', "%{$value}%");
+                    $q->orWhere('category_code', 'like', "%{$value}%");
+              
                 }
             });
             $query_param = ['search' => $request['search']];
@@ -190,7 +192,7 @@ class CategoryController extends Controller
 
         foreach ($request->name as $name) {
             if (strlen($name) > 255) {
-                toastr::error(translate('Name is too long!'));
+                toastr::error(translate('Category name is too long!'));
                 return back();
             }
         }
@@ -210,7 +212,6 @@ class CategoryController extends Controller
         } else {
             $image_name = 'def.png';
         }
-
         //into db
         $category = $this->category;
         $category->name = $request->name[array_search('en', $request->lang)];
@@ -271,7 +272,7 @@ class CategoryController extends Controller
         }
 
         Toastr::success($request->parent_id == 0 ? translate('Category Added Successfully!') : translate('Sub Category Added Successfully!'));
-        return back();
+        return redirect()->route('admin.category.list');
     }
 
     /**
@@ -357,7 +358,7 @@ class CategoryController extends Controller
 
         foreach ($request->name as $name) {
             if (strlen($name) > 255) {
-                toastr::error(translate('Name is too long!'));
+                toastr::error(translate('Category name is too long!'));
                 return back();
             }
         }
@@ -386,7 +387,6 @@ class CategoryController extends Controller
         $category->status = 1;
         
         $category->save();
-
         foreach ($request->lang as $index => $key) {
             if ($request->name[$index] && $key != 'en') {
                 Translation::updateOrInsert(
@@ -431,7 +431,8 @@ class CategoryController extends Controller
         }
 
         Toastr::success($category->parent_id == 0 ? translate('Category updated successfully!') : translate('Sub Category updated successfully!'));
-        return redirect()->back();
+        return redirect()->route('admin.category.list');
+
 
     }
 

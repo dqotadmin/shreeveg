@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', translate('Add new Warehouse Admin'))
+@section('title', translate('Add New Admin'))
 
 @push('css_or_js')
 
@@ -16,7 +16,7 @@
                 <img src="{{asset('public/assets/admin/img/category.png')}}" class="w--24" alt="">
             </span>
             <span>
-            {{$role->name}}{{translate(' Setup')}}
+            {{$role->name}}
             </span>
         </h1>
     </div>
@@ -40,8 +40,9 @@
     <div class="card">
         <div class="card-header border-0">
             <div class="card--header">
-                <h5 class="card-title">{{$role->name}} <span class="badge badge-soft-secondary"> </span>
+            <h5 class="card-title">{{$role->name}}<span class="badge badge-soft-secondary">{{ $admins->total() }}</span> </h5>
                 </h5>
+                
                 <form action="{{url()->current()}}" method="GET">
                     <div class="input-group">
                         <input id="datatableSearch_" type="search" name="search" maxlength="255"

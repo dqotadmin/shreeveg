@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', translate('update employee role'))
+@section('title', translate('update Admin role'))
 
 @push('css_or_js')
 
@@ -15,7 +15,7 @@
                 <img src="{{asset('public/assets/admin/img/employee.png')}}" class="w--24" alt="mail">
             </span>
             <span>
-                {{translate('Employee Role Setup')}}
+                {{translate('Admin Role')}}
             </span>
         </h1>
     </div>
@@ -60,7 +60,7 @@
                 </div>
 
                 <div class="btn--container justify-content-end mt-4">
-                    <button type="reset" class="btn btn--reset">{{translate('reset')}}</button>
+                    <a type="button" href="{{route('admin.custom-role.create')}}" class="btn btn--reset">{{translate('Back')}}</a>
                     <button type="submit" class="btn btn--primary">{{translate('update')}}</button>
                 </div>
             </form>

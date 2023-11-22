@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', translate('Add new  Admin'))
+@section('title', translate('Add New Admin'))
 
 
 @push('css_or_js')
@@ -17,8 +17,7 @@
                 <img src="{{asset('public/assets/admin/img/category.png')}}" class="w--24" alt="">
             </span>
             <span>
-                {{translate('Warehouse Admin Setup')}}
-
+                {{translate($role->name)}} 
             </span>
         </h1>
     </div>
@@ -45,7 +44,7 @@
                                 class="avatar-img"
                                 src="{{asset('storage/app/public/admin')}}/{{auth('admin')->user()->image}}"
                                 alt="Image">
-                            
+
                             <input type="file" name="image" class="js-file-attach avatar-uploader-input"
                                 id="customFileEg1" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*">
                             <label class="avatar-uploader-trigger" for="customFileEg1">
@@ -66,20 +65,16 @@
                         <div class="card-body">
                             <!-- Form -->
                             <!-- Form Group -->
-                            
+
                             <div class="row form-group">
                                 <label for="phoneLabel"
                                     class="col-sm-3 col-form-label input-label">{{ translate('Role') }} <span
                                         class="input-label-secondary"></span></label>
 
                                 <div class="col-sm-9">
-                                    
-                                <select name="admin_role_id" id="" class="form-control">
-                                    
-                                    <option value="{{$role->id}}">{{$role->name}}</option>
+                                    <input name="name" id="" class="form-control" value="{{$role->name}}" readonly>
+                                    <input name="admin_role_id" type="hidden" class="form-control" value="{{$role->id}}">
 
-                                    
-                                </select>
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -91,11 +86,11 @@
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-sm-down-break">
                                         <input type="text" class="form-control" name="f_name" id="firstNameLabel"
-                                            placeholder="{{ translate('Your first name') }}" 
+                                            placeholder="{{ translate('Your first name') }}"
                                             aria-label="Your first name" value="{{old('f_name')}}">
                                         <input type="text" class="form-control" name="l_name" id="lastNameLabel"
-                                            placeholder="{{ translate('Your last name') }}" aria-label="Your last name" value="{{old('l_name')}}"
-                                           >
+                                            placeholder="{{ translate('Your last name') }}" aria-label="Your last name"
+                                            value="{{old('l_name')}}">
                                     </div>
                                 </div>
                             </div>
@@ -109,8 +104,8 @@
 
                                 <div class="col-sm-9">
                                     <input type="text" class="js-masked-input form-control" name="phone" id="phoneLabel"
-                                        placeholder="+x(xxx)xxx-xx-xx" aria-label="+(xxx)xx-xxx-xxxxx" value="{{old('phone')}}"
-                                        data-hs-mask-options='{
+                                        placeholder="+x(xxx)xxx-xx-xx" aria-label="+(xxx)xx-xxx-xxxxx"
+                                        value="{{old('phone')}}" data-hs-mask-options='{
                                            "template": "+(880)00-000-00000"
                                          }'>
                                 </div>
@@ -122,24 +117,141 @@
                                     class="col-sm-3 col-form-label input-label">{{ translate('Email') }}</label>
 
                                 <div class="col-sm-9">
-                                    <input type="email" class="form-control" name="email" id="newEmailLabel" value="{{old('email')}}"
+                                    <input type="email" class="form-control" name="email" id="newEmailLabel"
+                                        value="{{old('email')}}"
                                         placeholder="{{ translate('Enter new email address') }}"
                                         aria-label="Enter new email address">
                                 </div>
                             </div>
 
-                         
 
-                            <!-- End Form -->
+                           
+
+                            <div class="row form-group">
+                                <label class="col-sm-3 col-form-label input-label" for="">{{ translate('State') }}
+                                </label>
+                                <div class="col-sm-9">
+                                    <select id="state" name="state_id" class="form-control js-select2-custom" required>
+                                        <option value="" disabled selected>Select State </option>
+                                        @foreach(\App\Model\State::orderBy('id', 'DESC')->get() as $state)
+                                        <option value="{{$state['id']}}">{{$state['name']}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <!-- End Form -->
+                            </div>
+
+                            <div class="row form-group">
+                                <label class="col-sm-3 col-form-label input-label" for="">{{ translate('City') }}
+                                </label>
+                                <div class="col-sm-9">
+                                    <select id="city" name="city_id" class="form-control js-select2-custom" required>
+                                        <option value="" disabled selected>Select city </option>
+                                     
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Card -->
+                    <div id="bankDiv" class="card mb-3 mb-lg-5">
+                        <div class="card-header">
+                            <h4 class="card-title"><i class="tio-lock"></i> {{ translate('Bank Details') }}
+                            </h4>
+                        </div>
+                        			
+                        <!-- Body -->
+                        <div class="card-body">
+                            <!-- Form -->
+
+                            <div class="row form-group">
+                                <label for="phoneLabel"
+                                    class="col-sm-3 col-form-label input-label">{{ translate('Account Number') }} <span
+                                        class="input-label-secondary"></span></label>
+
+                                <div class="col-sm-9">
+                                    <input type="text" class="js-masked-input form-control" name="account_number" id="phoneLabel"
+                                        placeholder="5678886545" aria-label=" "
+                                        value="{{old('account_holder')}}" data-hs-mask-options='{
+                                           "template": "5678886545"
+                                         }'>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="phoneLabel"
+                                    class="col-sm-3 col-form-label input-label">{{ translate('Account Holder') }} <span
+                                        class="input-label-secondary"></span></label>
+
+                                <div class="col-sm-9">
+                                    <input type="text" class="js-masked-input form-control" name="account_holder" id="phoneLabel"
+                                        placeholder="Pooran Joshi" aria-label=" "
+                                        value="{{old('account_holder')}}" data-hs-mask-options='{
+                                           "template": "Pooran Joshi"
+                                         }'>
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <label for="phoneLabel"
+                                    class="col-sm-3 col-form-label input-label">{{ translate('Bank Name') }} <span
+                                        class="input-label-secondary"></span></label>
+
+                                <div class="col-sm-9">
+                                    <input type="text" class="js-masked-input form-control" name="bank_name" id="phoneLabel"
+                                        placeholder="Union Bank Of India" aria-label=" "
+                                        value="{{old('account_holder')}}" data-hs-mask-options='{
+                                           "template": "Union Bank Of India"
+                                         }'>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="phoneLabel"
+                                    class="col-sm-3 col-form-label input-label">{{ translate('IFSC Code') }} <span
+                                        class="input-label-secondary"></span></label>
+
+                                <div class="col-sm-9">
+                                    <input type="text" class="js-masked-input form-control" name="ifsc_code" id="phoneLabel"
+                                        placeholder="UBN564" aria-label=" "
+                                        value="{{old('account_holder')}}" data-hs-mask-options='{
+                                           "template": "UBN564"
+                                         }'>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="phoneLabel"
+                                    class="col-sm-3 col-form-label input-label">{{ translate('UPI Id') }} <span
+                                        class="input-label-secondary"></span></label>
+
+                                <div class="col-sm-9">
+                                    <input type="text" class="js-masked-input form-control" name="upi_id" id="phoneLabel"
+                                        placeholder="e57yut" aria-label=" "
+                                        value="{{old('account_holder')}}" data-hs-mask-options='{
+                                           "template": "e57yut"
+                                         }'>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="phoneLabel"
+                                    class="col-sm-3 col-form-label input-label">{{ translate('UPI Number') }} <span
+                                        class="input-label-secondary"></span></label>
+
+                                <div class="col-sm-9">
+                                    <input type="text" class="js-masked-input form-control" name="upi_number" id="upi_number"
+                                        placeholder="5464564" aria-label=" "
+                                        value="{{old('upi_number')}}" data-hs-mask-options='{
+                                           "template": "5464564"
+                                         }'>
+                                </div>
+                            </div>
+ 
                         </div>
                         <!-- End Body -->
                     </div>
-                    <!-- End Card -->
-
                     <!-- Card -->
                     <div id="passwordDiv" class="card mb-3 mb-lg-5">
                         <div class="card-header">
-                            <h4 class="card-title"><i class="tio-lock"></i> {{ translate('Change your password') }}</h4>
+                            <h4 class="card-title"><i class="tio-lock"></i> {{ translate('Change your password') }}
+                            </h4>
                         </div>
 
                         <!-- Body -->
@@ -189,9 +301,8 @@
                             <!-- End Form Group -->
 
                             <div class="d-flex justify-content-end">
-                                <a href="{{route('admin.warehouse-admin')}}"  type="reset" class="btn btn--reset mr-2">
-                                {{translate('Back')}}</a>
-                                 <button type="submit" class="btn btn-primary">{{ translate('Save Changes') }}</button>
+                                <a href="{{route('admin.warehouse-admin',['role_id'=>$role->id])}}" type="button" class="btn btn--reset mr-2">  {{translate('Back')}}</a>
+                                <button type="submit" class="btn btn-primary">{{ translate('Submit') }}</button>
                             </div>
                             <!-- End Form -->
                         </div>
@@ -200,8 +311,8 @@
                     <!-- End Card -->
                 </form>
 
-                    <!-- Sticky Block End Point -->
-                    <div id="stickyBlockEndPoint"></div>
+                <!-- Sticky Block End Point -->
+                <div id="stickyBlockEndPoint"></div>
             </div>
         </div>
     </div>
@@ -247,4 +358,30 @@ $("#passwordSection").click(function() {
     }, 2000);
 });
 </script>
+
+<script>
+        $(document).ready(function() {
+            $('#state').change(function() {
+                var stateId = $(this).val();
+                if (stateId) {
+                    $.ajax({
+                         url: '{{url('/')}}/admin/get-cities/' + stateId,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(data) {
+                            $('#city').empty();
+                            $('#city').append('<option value="">Select City</option>');
+                            $.each(data.cities, function(key, value) {
+                                $('#city').append('<option value="' + value.id + '">' + value.city + '</option>');
+                            });
+                        }
+                    });
+                } else {
+                    $('#city').empty();
+                    $('#city').append('<option value="">Select City</option>');
+                }
+            });
+        });
+    </script>
+
 @endpush

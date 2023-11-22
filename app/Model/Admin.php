@@ -13,5 +13,10 @@ class Admin extends Authenticatable
     {
         return $this->belongsTo(AdminRole::class,'admin_role_id');
     }
+    
+  public function city(){
+    return $this->belongsTo(City::class,'city_id');
+
+  }
 
 }

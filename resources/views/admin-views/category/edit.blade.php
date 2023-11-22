@@ -3,7 +3,11 @@
 @section('title', translate('Update category'))
 
 @push('css_or_js')
-
+<style>
+.bold-text {
+    font-weight: bold;
+}
+</style>
 @endpush
 
 @section('content')

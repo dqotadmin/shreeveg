@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', translate('Add new Unit'))
+@section('title', translate('Add New Unit'))
 
 @push('css_or_js')
 
@@ -16,7 +16,7 @@
                     <img src="{{asset('public/assets/admin/img/category.png')}}" class="w--24" alt="">
                 </span>
                 <span>
-                    {{translate('unit_setup')}}
+                    {{translate('Unit')}}
                 </span>
             </h1>
         </div>
@@ -45,7 +45,7 @@
                                     <input id="datatableSearch_" type="search" name="search" maxlength="255"
                                            class="form-control pl-5"
                                            placeholder="{{translate('Search_by_Name')}}" aria-label="Search"
-                                           value="{{$search}}" required autocomplete="off">
+                                           value="{{$search}}"   autocomplete="off">
                                            <i class="tio-search tio-input-search"></i>
                                     <div class="input-group-append">
                                         <button type="submit" class="input-group-text">

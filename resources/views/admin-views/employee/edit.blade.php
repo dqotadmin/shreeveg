@@ -100,6 +100,7 @@
                             </label>
                             <div class="product--coba">
                                     <div class="row g-2" id="coba">
+                                        @if(!empty($e['identity_image']))
                                         @foreach(json_decode($e['identity_image'],true) as $img)
                                             <div class="two__item w-50">
                                                 <div class="max-h-140px existing-item">
@@ -107,6 +108,7 @@
                                                 </div>
                                             </div>
                                         @endforeach
+                                        @endif
                                     </div>
                             </div>
                         </div>

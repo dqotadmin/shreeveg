@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', translate('employee role'))
+@section('title', translate('Admin role'))
 
 @push('css_or_js')
 
@@ -15,67 +15,19 @@
                 <img src="{{asset('public/assets/admin/img/employee.png')}}" class="w--24" alt="mail">
             </span>
             <span>
-                {{translate('Employee Role Setup')}}
+                {{translate('Admin Role')}}
             </span>
         </h1>
     </div>
     <!-- End Page Header -->
 
     <!-- Content Row -->
-    <div class="card mb-3">
-        <div class="card-body">
-            <form id="submit-create-role" method="post" action="{{route('admin.custom-role.store')}}"
-                    style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
-                @csrf
-                <div class="max-w-500px">
-                    <div class="form-group">
-                        <label class="form-label">{{translate('role_name')}}</label>
-                        <input type="text" name="name" class="form-control" id="name" aria-describedby="emailHelp" placeholder="{{translate('Ex')}} : {{translate('Store')}}" required>
-                    </div>
-                </div>
-
-                <!-- <div class="d-flex">
-                    <h5 class="input-label m-0 text-capitalize">{{translate('module_permission')}} : </h5>
-                    <div class="check-item pb-0 w-auto">
-                        <div class="form-group form-check form&#45;&#45;check m-0 ml-2">
-                            <input type="checkbox" name="modules[]" value="account" class="form-check-input"
-                                    id="select-all">
-                            <label class="form-check-label ml-2" for="select-all">{{ translate('Select All') }}</label>
-                        </div>
-                    </div>
-                </div>-->
-
-                <div class="d-flex">
-                    <h5 class="input-label m-0 text-capitalize">{{translate('module_permission')}} : </h5>
-                    <div class="check-item pb-0 w-auto">
-                        <input type="checkbox" id="select_all">
-                        <label class="title-color mb-0 pl-2" for="select_all">{{ translate('select_all')}}</label>
-                    </div>
-                </div>
-
-                <div class="check--item-wrapper">
-                    @foreach(MANAGEMENT_SECTION as $section)
-                        <div class="check-item">
-                            <div class="form-group form-check form--check">
-                                <input type="checkbox" name="modules[]" value="{{$section}}" class="form-check-input module-permission" id="{{$section}}">
-                                <label class="form-check-label" style="{{Session::get('direction') === "rtl" ? 'margin-right: 1.25rem;' : ''}};" for="{{$section}}">{{translate($section)}}</label>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-
-                <div class="btn--container justify-content-end mt-4">
-                    <button type="reset" class="btn btn--reset">{{translate('reset')}}</button>
-                    <button type="submit" class="btn btn--primary">{{translate('Submit')}}</button>
-                </div>
-            </form>
-        </div>
-    </div>
+     
 
     <div class="card">
         <div class="card-header border-0">
             <div class="card--header">
-                <h5 class="card-title">{{translate('employee_roles_table')}} <span class="badge badge-soft-primary">{{count($rl)}}</span></h5>
+                <h5 class="card-title">{{translate('admin_roles')}} <span class="badge badge-soft-primary">{{count($rl)}}</span></h5>
                 <form action="{{url()->current()}}" method="GET">
                     <div class="input-group">
                         <input id="datatableSearch_" type="search" name="search"
@@ -154,13 +106,13 @@
                                         title="{{translate('Edit') }}">
                                         <i class="tio-edit"></i>
                                     </a>
-                                    <a class="action-btn btn--danger btn-outline-danger" href="javascript:"
+                                    <!-- <a class="action-btn btn--danger btn-outline-danger" href="javascript:"
                                         onclick="form_alert('role-{{$r['id']}}','{{translate('Want to delete this role ?')}}')">
-                                        <i class="tio-delete-outlined"></i></a>
-                                    <form action="{{route('admin.custom-role.delete',[$r['id']])}}"
+                                        <i class="tio-delete-outlined"></i></a> -->
+                                    <!-- <form action="{{route('admin.custom-role.delete',[$r['id']])}}"
                                           method="post" id="role-{{$r['id']}}">
                                         @csrf @method('delete')
-                                    </form>
+                                    </form> -->
                                 </div>
                             </td>
                         </tr>

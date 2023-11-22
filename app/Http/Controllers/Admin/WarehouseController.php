@@ -40,7 +40,8 @@ class WarehouseController extends Controller
             $key = explode(' ', $request['search']);
             $warehouses = $this->warehouse->where(function ($q) use ($key) {
                 foreach ($key as $value) {
-                    $q->orWhere('warehouse_name', 'like', "%{$value}%");
+                    $q->orWhere('name', 'like', "%{$value}%");
+                    $q->orWhere('code', 'like', "%{$value}%");
                 }
             });
             $query_param = ['search' => $request['search']];
@@ -82,7 +83,7 @@ class WarehouseController extends Controller
         $key = explode(' ', $request['search']);
         $warehouses = $this->warehouse->where(function ($q) use ($key) {
             foreach ($key as $value) {
-                $q->orWhere('warehouse_name', 'like', "%{$value}%");
+                $q->orWhere('code', 'like', "%{$value}%");
             }
         })->get();
         return response()->json([
@@ -101,101 +102,78 @@ class WarehouseController extends Controller
     function store(Request $request): RedirectResponse
     {  
        
-        $revise = [];
-        // echo '<pre>';
-        foreach($request->revise_time_open as $revicekey => $opentime){
-            if(isset($request->revise_time_close[$revicekey])){
-                $revise[$revicekey]['open']  = $opentime;
-                $revise[$revicekey]['close'] = $request->revise_time_close[$revicekey];
-            }
-        }
-        $revise_time = json_encode($revise,true); //[{"open":"13:00","close":"13:30"},{"open":"14:00","close":"14:30"},{"open":"15:00","close":"10:00"}]
-
-
-        $deliver = [];
-        foreach($request->delivery_open_time as $deliveryKey => $delivery_open){
-            if(isset($request->delivery_close_time[$deliveryKey])){
-                $deliver[$deliveryKey]['open'] = $delivery_open;
-                $deliver[$deliveryKey]['close'] = $request->delivery_close_time[$deliveryKey];
-            }
-        }
-        $delivery_time = json_encode($deliver,true);
-
-        $order_cancel = [];
-        foreach($request->order_cancel_open_time as $orderCancelKey => $order_cancel_opentime){
-            if(isset($request->order_cancel_close_time[$orderCancelKey])){
-                $order_cancel[$orderCancelKey]['open'] = $order_cancel_opentime;
-                $order_cancel[$orderCancelKey]['close'] = $request->order_cancel_close_time[$orderCancelKey];
-            }
-        }
-        $order_cancel_time = json_encode($order_cancel,true);
-
-        $pre_order = [];
-        foreach($request->pre_order_close_time as $preOrderKey => $pre_order_opentime){
-            if(isset($request->pre_order_close_time[$preOrderKey])){
-                $pre_order[$preOrderKey]['open'] = $pre_order_opentime;
-                $pre_order[$preOrderKey]['close'] = $request->pre_order_close_time[$preOrderKey];
-            }
-        }
-        $pre_order_time = json_encode($pre_order,true);
-     
         $request->validate([
-        // 'name'  => 'required|unique:warehouses',
-        // 'code'  => 'required|unique:warehouses',
-        // 'address'  => 'required',
-        // 'owner_name'  => 'required',
-        // 'owner_number'  => 'required',
-        // 'owner_second_number'  => 'required',
-        // 'pin_code'  => 'required',
-        // 'brn_number'  => 'required',
-        // 'msme_number'  => 'required',
-        // 'email'  => 'required|unique:warehouses,email',
-        // 'title' => 'required',
-        // 'open_time'	  => 'required',
-        // 'close_time'  => 'required',	
-        // 'user_id'	  => 'required',
-        // 'password'  => 'required',
-        // 'map_location'  => 'required',
-        // 'latitude'	  => 'required',
-        // 'longitude'  => 'required',
- 
-     
-        ]);
- 
+            'name'  => 'required|unique:warehouses',
+            'code'  => 'required|unique:warehouses',
+            'address'  => 'required',
+            'brn_number'  => 'required',
+            'msme_number'  => 'required',
+        ]); 
+             $revise = $deliver =  $order_cancel =  $pre_order = [];
+        // echo '<pre>';
+        if($request->revise_time_open){
+            foreach($request->revise_time_open as $revicekey => $opentime){
+                if(isset($request->revise_time_close[$revicekey])){
+                    $revise[$revicekey]['open']  = $opentime;
+                    $revise[$revicekey]['close'] = $request->revise_time_close[$revicekey];
+                }
+            }
+            $revise_time = json_encode($revise,true); //[{"open":"13:00","close":"13:30"},{"open":"14:00","close":"14:30"},{"open":"15:00","close":"10:00"}]
+    
+        }
+        if($request->delivery_open_time){
+            foreach($request->delivery_open_time as $deliveryKey => $delivery_open){
+                if(isset($request->delivery_close_time[$deliveryKey])){
+                    $deliver[$deliveryKey]['open'] = $delivery_open;
+                    $deliver[$deliveryKey]['close'] = $request->delivery_close_time[$deliveryKey];
+                }
+            }
+            $delivery_time = json_encode($deliver,true);
+        }
+        if($request->delivery_open_time){
+         
+            foreach($request->order_cancel_open_time as $orderCancelKey => $order_cancel_opentime){
+                if(isset($request->order_cancel_close_time[$orderCancelKey])){
+                    $order_cancel[$orderCancelKey]['open'] = $order_cancel_opentime;
+                    $order_cancel[$orderCancelKey]['close'] = $request->order_cancel_close_time[$orderCancelKey];
+                }
+            }
+            $order_cancel_time = json_encode($order_cancel,true);
+        }
+        if($request->delivery_open_time){
+         
+            foreach($request->pre_order_close_time as $preOrderKey => $pre_order_opentime){
+                if(isset($request->pre_order_close_time[$preOrderKey])){
+                    $pre_order[$preOrderKey]['open'] = $pre_order_opentime;
+                    $pre_order[$preOrderKey]['close'] = $request->pre_order_close_time[$preOrderKey];
+                }
+            }
+            $pre_order_time = json_encode($pre_order,true);
+        }
         //into db
         $warehouse = $this->warehouse;
 
-        $warehouse->name = $request->name == null ? null : $request->name[array_search('en', $request->lang)];
-        $warehouse->code =  $request->code == null ? null : $request->code[array_search('en', $request->lang)];
-        $warehouse->address =  $request->address == null ? null : $request->address[array_search('en', $request->lang)];
-        $warehouse->owner_name =  $request->owner_name == null ? null : $request->owner_name[array_search('en', $request->lang)];
-        $warehouse->owner_number =  $request->owner_number == null ? null : $request->owner_number[array_search('en', $request->lang)];
-        $warehouse->owner_second_number =  $request->owner_second_number == null ? null : $request->owner_second_number[array_search('en', $request->lang)];
-        $warehouse->city_id =  $request->city_id == null ? null : $request->city_id[array_search('en', $request->lang)];
-        $warehouse->pin_code =  $request->pin_code == null ? null : $request->pin_code[array_search('en', $request->lang)];
-        $warehouse->brn_number =  $request->brn_number == null ? null : $request->brn_number[array_search('en', $request->lang)];
-        $warehouse->msme_number =  $request->msme_number == null ? null : $request->msme_number[array_search('en', $request->lang)];
-        $warehouse->coverage =  $request->coverage == null ? null : $request->coverage[array_search('en', $request->lang)];
-        $warehouse->title =  $request->title == null ? null : $request->title[array_search('en', $request->lang)];
-        $warehouse->open_time =  $request->open_time == null ? null : $request->open_time[array_search('en', $request->lang)];
-        $warehouse->close_time =  $request->close_time == null ? null : $request->close_time[array_search('en', $request->lang)];
+        $warehouse->warehouse_admin_id = $request->warehouse_admin_id == null ? null : $request->warehouse_admin_id;
+        $warehouse->name = $request->name == null ? null : $request->name;
+        $warehouse->code =  $request->code == null ? null : $request->code;
+        $warehouse->address =  $request->address == null ? null : $request->address;
+        $warehouse->city_id =  $request->city_id == null ? null : $request->city_id;
+        $warehouse->pin_code =  $request->pin_code == null ? null : $request->pin_code;
+        $warehouse->brn_number =  $request->brn_number == null ? null : $request->brn_number;
+        $warehouse->msme_number =  $request->msme_number == null ? null : $request->msme_number;
+        $warehouse->coverage =  $request->coverage == null ? null : $request->coverage;
+        $warehouse->title =  $request->title == null ? null : $request->title;
+        $warehouse->open_time =  $request->open_time == null ? null : $request->open_time;
+        $warehouse->close_time =  $request->close_time == null ? null : $request->close_time;
 
-        $warehouse->latitude = $request->latitude[array_search('en', $request->lang)];
-        $warehouse->longitude = $request->longitude[array_search('en', $request->lang)];
-  
-        $warehouse->revise_time =  $revise_time == null ? null :   $revise_time;
-        $warehouse->delivery_time =  $delivery_time == null ? null :   $delivery_time;
-        $warehouse->order_cancel_time =  $order_cancel_time == null ? null :  $order_cancel_time;
-        $warehouse->pre_order_time =  $pre_order_time == null ? null :  $pre_order_time;
+        $warehouse->latitude = $request->latitude;
+        $warehouse->longitude = $request->longitude;
+        $warehouse->revise_time =  isset($revise_time)  ? $revise_time:  null ;
+        $warehouse->delivery_time =  isset($delivery_time) ? $delivery_time :null ;
+        $warehouse->order_cancel_time =  isset($order_cancel_time) ? $order_cancel_time : null;
+        $warehouse->pre_order_time =  isset($pre_order_time) ?  $pre_order_time : null;
         $warehouse->save();
  
-        //translation
-        $data = [];
-    
-        if (count($data)) {
-            Translation::insert($data);
-        }
-
         Toastr::success(translate('Warehouse Added Successfully!') );
         return back();
     }
@@ -230,78 +208,77 @@ class WarehouseController extends Controller
      */
     public function update(Request $request, $id): RedirectResponse
     {
-        // $check_unique =  $this->warehouse->find($id);
+        $request->validate([
+            'address'  => 'required',
+            'brn_number'  => 'required',
+            'msme_number'  => 'required',
+            'open_time'	  => 'required',
+            'close_time'  => 'required',	
+        ]);
+            // $check_unique =  $this->warehouse->find($id);
         $revise = [];
-        foreach($request->revise_time_open as $revicekey => $opentime){
-            if(isset($request->revise_time_close[$revicekey])){
-                $revise[$revicekey]['open']  = $opentime;
-                $revise[$revicekey]['close'] = $request->revise_time_close[$revicekey];
+        $revise = $deliver =  $order_cancel =  $pre_order = [];
+        // echo '<pre>';
+        if($request->revise_time_open){
+            foreach($request->revise_time_open as $revicekey => $opentime){
+                if(isset($request->revise_time_close[$revicekey])){
+                    $revise[$revicekey]['open']  = $opentime;
+                    $revise[$revicekey]['close'] = $request->revise_time_close[$revicekey];
+                }
             }
-        }
-        $revise_time = json_encode($revise,true); //[{"open":"13:00","close":"13:30"},{"open":"14:00","close":"14:30"},{"open":"15:00","close":"10:00"}]
-
-
-        $deliver = [];
-        foreach($request->delivery_open_time as $deliveryKey => $delivery_open){
-            if(isset($request->delivery_close_time[$deliveryKey])){
-                $deliver[$deliveryKey]['open'] = $delivery_open;
-                $deliver[$deliveryKey]['close'] = $request->delivery_close_time[$deliveryKey];
-            }
-        }
-        $delivery_time = json_encode($deliver,true);
-
-        $order_cancel = [];
-        foreach($request->order_cancel_open_time as $orderCancelKey => $order_cancel_opentime){
-            if(isset($request->order_cancel_close_time[$orderCancelKey])){
-                $order_cancel[$orderCancelKey]['open'] = $order_cancel_opentime;
-                $order_cancel[$orderCancelKey]['close'] = $request->order_cancel_close_time[$orderCancelKey];
-            }
-        }
-        $order_cancel_time = json_encode($order_cancel,true);
-
-        $pre_order = [];
-        foreach($request->pre_order_close_time as $preOrderKey => $pre_order_opentime){
-            if(isset($request->pre_order_close_time[$preOrderKey])){
-                $pre_order[$preOrderKey]['open'] = $pre_order_opentime;
-                $pre_order[$preOrderKey]['close'] = $request->pre_order_close_time[$preOrderKey];
-            }
-        }
-        $pre_order_time = json_encode($pre_order,true);
-        // print_r($revise_time); echo'<br>';echo'<br>';
-        // print_r($delivery_time);echo'<br>';echo'<br>';
-        // print_r($order_cancel_time);echo'<br>';echo'<br>';
-        // print_r($pre_order_time);echo'<br>';echo'<br>';
-            $request->validate([
-                'address'  => 'required',
-                'owner_name'  => 'required',
-                'brn_number'  => 'required',
-                'msme_number'  => 'required',
-                'open_time'	  => 'required',
-                'close_time'  => 'required',	
-            ]);
-            $warehouse = $this->warehouse->find($id);
+            $revise_time = json_encode($revise,true); //[{"open":"13:00","close":"13:30"},{"open":"14:00","close":"14:30"},{"open":"15:00","close":"10:00"}]
     
- 
-        $warehouse->name = $request->name == null ? null : $request->name[array_search('en', $request->lang)];
-        $warehouse->code =  $request->code == null ? null : $request->code[array_search('en', $request->lang)];
-        $warehouse->address =  $request->address == null ? null : $request->address[array_search('en', $request->lang)];
-        $warehouse->owner_name =  $request->owner_name == null ? null : $request->owner_name[array_search('en', $request->lang)];
-        $warehouse->city_id =  $request->city_id == null ? null : $request->city_id[array_search('en', $request->lang)];
-        $warehouse->pin_code =  $request->pin_code == null ? null : $request->pin_code[array_search('en', $request->lang)];
-        $warehouse->brn_number =  $request->brn_number == null ? null : $request->brn_number[array_search('en', $request->lang)];
-        $warehouse->msme_number =  $request->msme_number == null ? null : $request->msme_number[array_search('en', $request->lang)];
-        $warehouse->coverage =  $request->coverage == null ? null : $request->coverage[array_search('en', $request->lang)];
-        $warehouse->title =  $request->title == null ? null : $request->title[array_search('en', $request->lang)];
-        $warehouse->open_time =  $request->open_time == null ? null : $request->open_time[array_search('en', $request->lang)];
-        $warehouse->close_time =  $request->close_time == null ? null : $request->close_time[array_search('en', $request->lang)];
-   
-        $warehouse->latitude =  $request->latitude == null ? null : $request->latitude[array_search('en', $request->lang)];
-        $warehouse->longitude =  $request->longitude == null ? null : $request->longitude[array_search('en', $request->lang)];
-  
-        $warehouse->revise_time =  $revise_time == null ? null :   $revise_time;
-        $warehouse->delivery_time =  $delivery_time == null ? null :   $delivery_time;
-        $warehouse->order_cancel_time =  $order_cancel_time == null ? null :  $order_cancel_time;
-        $warehouse->pre_order_time =  $pre_order_time == null ? null :  $pre_order_time;
+        }
+        if($request->delivery_open_time){
+            foreach($request->delivery_open_time as $deliveryKey => $delivery_open){
+                if(isset($request->delivery_close_time[$deliveryKey])){
+                    $deliver[$deliveryKey]['open'] = $delivery_open;
+                    $deliver[$deliveryKey]['close'] = $request->delivery_close_time[$deliveryKey];
+                }
+            }
+            $delivery_time = json_encode($deliver,true);
+        }
+        if($request->delivery_open_time){
+         
+            foreach($request->order_cancel_open_time as $orderCancelKey => $order_cancel_opentime){
+                if(isset($request->order_cancel_close_time[$orderCancelKey])){
+                    $order_cancel[$orderCancelKey]['open'] = $order_cancel_opentime;
+                    $order_cancel[$orderCancelKey]['close'] = $request->order_cancel_close_time[$orderCancelKey];
+                }
+            }
+            $order_cancel_time = json_encode($order_cancel,true);
+        }
+        if($request->delivery_open_time){
+         
+            foreach($request->pre_order_close_time as $preOrderKey => $pre_order_opentime){
+                if(isset($request->pre_order_close_time[$preOrderKey])){
+                    $pre_order[$preOrderKey]['open'] = $pre_order_opentime;
+                    $pre_order[$preOrderKey]['close'] = $request->pre_order_close_time[$preOrderKey];
+                }
+            }
+            $pre_order_time = json_encode($pre_order,true);
+        }
+          
+            $warehouse = $this->warehouse->find($id);
+            $warehouse->warehouse_admin_id = $request->warehouse_admin_id == null ? null : $request->warehouse_admin_id;
+            $warehouse->name = $request->name == null ? null : $request->name;
+            $warehouse->code =  $request->code == null ? null : $request->code;
+            $warehouse->address =  $request->address == null ? null : $request->address;
+            $warehouse->city_id =  $request->city_id == null ? null : $request->city_id;
+            $warehouse->pin_code =  $request->pin_code == null ? null : $request->pin_code;
+            $warehouse->brn_number =  $request->brn_number == null ? null : $request->brn_number;
+            $warehouse->msme_number =  $request->msme_number == null ? null : $request->msme_number;
+            $warehouse->coverage =  $request->coverage == null ? null : $request->coverage;
+            $warehouse->title =  $request->title == null ? null : $request->title;
+            $warehouse->open_time =  $request->open_time == null ? null : $request->open_time;
+            $warehouse->close_time =  $request->close_time == null ? null : $request->close_time;
+    
+            $warehouse->latitude = $request->latitude;
+            $warehouse->longitude = $request->longitude;
+            $warehouse->revise_time =  isset($revise_time)  ? $revise_time:  null ;
+            $warehouse->delivery_time =  isset($delivery_time) ? $delivery_time :null ;
+            $warehouse->order_cancel_time =  isset($order_cancel_time) ? $order_cancel_time : null;
+            $warehouse->pre_order_time =  isset($pre_order_time) ?  $pre_order_time : null;
        
         $warehouse->save();
         Toastr::success( translate('Warehouse updated successfully!') );
@@ -317,22 +294,29 @@ class WarehouseController extends Controller
         $wh_assign_categories = $this->warehouse_categories->where('warehouse_id',$id)->get();
         $wh_assign_id = $this->warehouse_categories->find($id);
         $warehouses = $this->warehouse->withoutGlobalScopes()->with('translations')->find($id);
-        return view('admin-views.warehouse.assign_categories', compact('warehouses','categories','wh_assign_categories','wh_assign_id'));
+        return view('admin-views.warehouse.assign_categories_list', compact('warehouses','categories','wh_assign_categories','wh_assign_id'));
     }
+    
+    public function wh_assign_category_page_create($id): View|Factory|Application
+    {
+        $categories = $this->category->where('parent_id',0)->get();
+        $wh_assign_categories = $this->warehouse_categories->where('warehouse_id',$id)->get();
+        $wh_assign_id = $this->warehouse_categories->find($id);
+        $warehouses = $this->warehouse->withoutGlobalScopes()->with('translations')->find($id);
+        return view('admin-views.warehouse.assign_categories_create', compact('warehouses','categories','wh_assign_categories','wh_assign_id'));
+    }
+
     function wh_assign_category_store(Request $request): RedirectResponse
-    {  
+    {
         $request->validate([
-        'margin'  => 'required',
-        'category_id'  => 'required',
-        'category_order'  => 'required',
+            'margin' => 'required',
+            'category_id' => 'required',
+            'category_order' => 'required',
         ]);
+        $this->warehouse_categories->where('warehouse_id',$request->warehouse_id)->delete();
         if (!empty($request->margin) && !empty($request->category_id) && !empty($request->category_order)) {
             $data = $request->all();
 
-            //echo '<pre>';
-            // print_r($data);die;
-       
-            // Iterate through the arrays and remove key-value pairs where the value is null     [0 => "3" , 3 => "3"]
             foreach ($data as &$array) {
                 if (is_array($array)) {
                     $array = array_filter($array, function ($value) {
@@ -340,49 +324,57 @@ class WarehouseController extends Controller
                     });
                 }
             }
-            // Remove top-level key-value pairs where the value is an empty array  [0 => "3" , 3 => "3"]
+
             $data = array_filter($data, function ($value) {
                 return !empty($value);
             });
 
             if (isset($data["category_order"]) && is_array($data["category_order"])) {
                 $data["category_order"] = array_values($data["category_order"]);
+            }else{
+        return back();
+
             }
 
             if (isset($data["margin"]) && is_array($data["margin"])) {
                 $data["margin"] = array_values($data["margin"]);
+            }else{
+        return back();
+
             }
             $data["status"] = $request->status;
-        
-            $this->warehouse_categories->where(['warehouse_id' => $data['warehouse_id']])->delete();
-            
-            foreach($data['category_id'] as $key => $cat){ 
-            
-                $row = new $this->warehouse_categories;
-            
-                $row->warehouse_id = $data['warehouse_id'];
-                $row->category_id = $cat;
-                $row->category_order = $data["category_order"][$key]? $data["category_order"][$key] : 0;
-                $row->margin = $data["margin"][$key];
-                $row->status = isset($data["status"][$key]) ? $data["status"][$key] : 0;
-                $row->save();
+
+            foreach ($data['category_id'] as $key => $cat) {
+                $row = $this->warehouse_categories->firstOrNew(['warehouse_id' => $data['warehouse_id'], 'category_id' => $cat]);
+                $row->warehouse_id =  isset($data["warehouse_id"]) ? $data['warehouse_id'] : '';
+                $row->category_id = isset($cat) ? $cat : '';
+                $row->category_order = $data["category_order"][$key] ?? '';
+                $row->margin = $data["margin"][$key] ?? '';
+                
+                $row->status = isset($data["status"][$key]) ? $data["status"][$key] : 1;
+
+            $row->save();
             }
         }
-        
-        // The $data array now contains non-null values with their keys removed
-        Toastr::success(translate('Warehouse Categories Added Successfully!') );
+
+        Toastr::success(translate('Warehouse Categories Added Successfully!'));
         return back();
-        
     }
+  
 
     public function wh_assign_category_status(Request $request): RedirectResponse
     {
-        //dd($request->id,$request->catid,);
-        $status = $this->warehouse_categories->where('warehouse_id',$request->id)->where('category_id',$request->catid)->first();
-        $status->status = $request->status;
-        $status->save();
-        Toastr::success(translate('Warehouse status updated!'));
-        return back();
+        $status = $this->warehouse_categories->where('id',$request->id)->first();
+        if($status){
+            $status->status = $request->status;
+            $status->save();
+            Toastr::success(translate('Warehouse category status updated!'));
+            return back();
+        }else{
+            Toastr::error(translate('Warehouse category status not updated!'));
+            return back();
+        }
+
     }
 
     /**
@@ -397,4 +389,5 @@ class WarehouseController extends Controller
             Toastr::success( translate('warehouse removed!')  );
             return back();
     }
+  
 }  

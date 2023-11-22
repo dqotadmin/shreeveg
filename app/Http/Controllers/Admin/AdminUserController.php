@@ -6,6 +6,9 @@ use App\CentralLogics\Helpers;
 use App\Http\Controllers\Controller;
 use App\Model\Admin;
 use App\Model\AdminRole;
+use App\Model\City;
+use App\Model\BankDetail;
+
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -46,6 +49,7 @@ class AdminUserController extends Controller
     }
     function index(Request $request)
     {
+        //dd($request->all());
         $query_param = [];
         $search = $request['search'];
         if($request->has('search'))
@@ -76,40 +80,55 @@ class AdminUserController extends Controller
     }
     
     public function store(Request $request): \Illuminate\Http\RedirectResponse
-        {
-            $request->validate([
-                'f_name' => 'required',
-                'l_name' => 'required',
-                'email' => 'required|max:255|unique:admins',
-                'password' => 'required|same:confirm_password|min:8',
-                'phone' => 'required',
-            ], [
-                'f_name.required' => 'First name is required!',
-                'l_name.required' => 'Last name is required!',
-                'email.required' => translate('Email is required!'),
-                'email.unique' => translate('Email must be unique')
-            ]);
-          
-            if (!empty($request->file('image'))) {
-                $image_name = Helpers::upload('admin/warehouse/', 'png', $request->file('image'));
-            } else {
-                $image_name = 'def.png';
-            }
-                //into db
-            $admin = $this->admin;
-            $admin->f_name = $request->f_name;
-            $admin->l_name = $request->l_name;
-            $admin->email = $request->email;
-            $admin->phone = $request->phone;
-            $admin->image = $image_name;
-            $admin->password = bcrypt($request['password']);
-
-            $admin->admin_role_id = $request->admin_role_id;
-            $admin->save();
-            Toastr::success(translate('Warehouse Admin Inserted Successfully!'));
-            return back();
+    {
+        $request->validate([
+            'f_name' => 'required',
+            'l_name' => 'required',
+            'email' => 'required|max:255|unique:admins',
+            'password' => 'required|same:confirm_password|min:8',
+            'phone' => 'required',
+        ], [
+            'f_name.required' => 'First name is required!',
+            'l_name.required' => 'Last name is required!',
+            'email.required' => translate('Email is required!'),
+            'email.unique' => translate('Email must be unique')
+        ]);
+        
+        if (!empty($request->file('image'))) {
+            $image_name = Helpers::upload('admin/warehouse/', 'png', $request->file('image'));
+        } else {
+            $image_name = 'def.png';
         }
-    
+            //into db
+        $admin = $this->admin;
+        $admin->f_name = $request->f_name;
+        $admin->l_name = $request->l_name;
+        $admin->email = $request->email;
+        $admin->phone = $request->phone;
+        $admin->city_id = $request->city_id;
+        $admin->state_id = $request->state_id;
+        $admin->image = $image_name;
+        $admin->password = bcrypt($request['password']);
+
+        $admin->admin_role_id = $request->admin_role_id;
+        $admin->save();
+       
+        $adminId = $admin->id;
+        $bankDetail = new BankDetail([
+            'user_id' => $adminId,
+            'account_number' => $request->account_number,
+            'account_holder' => $request->account_holder,
+            'bank_name' => $request->bank_name,
+            'ifsc_code' => $request->ifsc_code,
+            'upi_id' => $request->upi_id,
+            'upi_number' => $request->upi_number,
+            // Add other fields as needed
+        ]);
+        $bankDetail->save();
+        Toastr::success(translate($request->name.' Inserted Successfully!'));
+        return redirect()->route('admin.warehouse-admin',['role_id'=>$request->admin_role_id]);
+    }
+        
     public function edit(Request $request,$id){
         $admins = $this->admin->find($id);
         $role = $this->admin_role->where('id', $request->role_id)->first();
@@ -152,8 +171,8 @@ class AdminUserController extends Controller
         $admin->email = $request->email;
         $admin->image = $image_name;
         $admin->save();
-        Toastr::success( translate('warehouse admin updated successfully!') );
-        return redirect()->back();
+        Toastr::success( translate($request->name.' updated successfully!') );
+        return redirect()->route('admin.warehouse-admin',['role_id'=>$request->admin_role_id]);
     }
 
     function store_index(Request $request)
@@ -296,6 +315,11 @@ class AdminUserController extends Controller
         $admin->save();
         Toastr::success(translate('Admin password updated successfully!'));
         return back();
+    }
+    public function getCities($stateId)
+    {
+        $cities = City::where('state_id', $stateId)->get();
+        return response()->json(['cities' => $cities]);
     }
 
 

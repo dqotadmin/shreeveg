@@ -841,9 +841,12 @@ function translate($key)
         $processed_key = ucfirst(str_replace('_', ' ', Helpers::remove_invalid_charcaters($key)));
 
         if (!array_key_exists($key, $lang_array)) {
-            $lang_array[$key] = $processed_key;
-            $str = "<?php return " . var_export($lang_array, true) . ";";
-            file_put_contents(base_path('resources/lang/' . $local . '/messages.php'), $str);
+
+            // Stop Creating Label Auto
+            //$lang_array[$key] = $processed_key;
+            //$str = "<?php return " . var_export($lang_array, true) . ";";
+            //file_put_contents(base_path('resources/lang/' . $local . '/messages.php'), $str);
+
             $result = $processed_key;
         } else {
             $result = __('messages.' . $key);

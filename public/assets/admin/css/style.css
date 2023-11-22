@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Open+Sans:wght@400;500;600&display=swap");
+u@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Open+Sans:wght@400;500;600&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap");
 .form--control {
   background: transparent;
@@ -5715,4 +5715,8 @@ aside .navbar-vertical-content {
 }
 .mh-80px{
     max-height: 80px;
+}
+
+.input-text-uc {
+  text-transform: uppercase;
 }

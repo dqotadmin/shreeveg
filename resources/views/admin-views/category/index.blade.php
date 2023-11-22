@@ -25,7 +25,7 @@
         <div class="row g-2">
             <div class="col-sm-12 col-lg-12">
                         <div class="btn--container justify-content-end m-2">
-                            <a type="button"  href="{{route('admin.category.create')}}" class="btn btn--primary">{{translate('Add Catgory')}}</a>
+                            <a type="button"  href="{{route('admin.category.create')}}" class="btn btn--primary">{{translate('Add Category')}}</a>
                         </div>
                             @php($data = Helpers::get_business_settings('language'))
                             @php($default_lang = Helpers::get_default_language())
@@ -45,7 +45,7 @@
                                     <input id="datatableSearch_" type="search" name="search" maxlength="255"
                                            class="form-control pl-5"
                                            placeholder="{{translate('Search_by_Name')}}" aria-label="Search"
-                                           value="{{$search}}" required autocomplete="off">
+                                           value="{{$search}}"   autocomplete="on">
                                            <i class="tio-search tio-input-search"></i>
                                     <div class="input-group-append">
                                         <button type="submit" class="input-group-text">
@@ -62,12 +62,13 @@
                             <thead class="thead-light">
                             <tr>
                                 <th class="text-center">{{translate('#')}}</th>
-                                <th>{{translate('category_image')}}</th>
-                                <th>{{translate('name')}}</th>
-                                <th>{{translate('Title Silver')}}</th>
-                                <th>{{translate('Title Gold')}}</th>
-                                <th>{{translate('Title Platinum')}}</th>
-                                <th>{{translate('status')}}</th>
+                                <th >{{translate('category_image')}}</th>
+                                <th >{{translate('name')}}</th>
+                                <th >{{translate('Category Code')}}</th>
+                                <th >{{translate('Title Silver')}}</th>
+                                <th >{{translate('Title Gold')}}</th>
+                                <th >{{translate('Title Platinum')}}</th>
+                                <th >{{translate('status')}}</th>
                                 <th class="text-center">{{translate('action')}}</th>
                             </tr>
                             </thead>
@@ -99,18 +100,23 @@
                                     </td>
                                     <td>
                                     <span class="d-block font-size-sm text-body text-trim-50">
-                                        {{$category['title_silver']}}
+                                 {{$category['category_code']}}
+                                    </span>
+                                    </td>
+                                    <td>
+                                    <span class="d-block font-size-sm text-body text-trim-50">
+                                 {{Str::words($category['title_silver'],10)}}
                                     </span>
                                     </td>
                                  
                                     <td>
                                     <span class="d-block font-size-sm text-body text-trim-50">
-                                        {{$category['title_gold']}}
+                                    {{Str::words($category['title_gold'],6)}}
                                     </span>
                                     </td>
                                     <td>
                                     <span class="d-block font-size-sm text-body text-trim-50">
-                                        {{$category['title_platinum']}}
+                                    {{Str::words($category['title_platinum'],10)}}
                                     </span>
                                     </td>
                                     <td>

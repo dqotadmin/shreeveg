@@ -24,7 +24,6 @@ const MANAGEMENT_SECTION = [
     'worker_management' => 'Worker Management',
     'broker_management' => 'Broker Management',
     'store_sales_management' => 'Store Sales Management',
-
     'system_management' => 'system_management',
 ];
 

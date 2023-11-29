@@ -221,6 +221,28 @@
                             <small class="tio-more-horizontal nav-subtitle-replacer"></small>
                         </li>
 
+                        @if(auth('admin')->user()->admin_role_id == 8)
+                            
+                            <li class="navbar-vertical-aside-has-menu ">
+                                <a class="js-navbar-vertical-aside-menu-link nav-link"
+                                    href="{{route('admin.user-management',['role_id'=>'3'])}}"
+                                    title="{{translate('Warehouse Admin')}}">
+                                    <i class="tio-category nav-icon"></i>
+                                    <span
+                                        class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Warehouse Admin')}}</span>
+                                </a>
+                            </li>
+
+                            <li class="navbar-vertical-aside-has-menu ">
+                                <a class="js-navbar-vertical-aside-menu-link nav-link"
+                                    href="{{route('admin.user-management',['role_id'=>'8'])}}"
+                                    title="{{translate('warehouse_worker Admin')}}">
+                                    <i class="tio-map nav-icon"></i>
+                                    <span
+                                        class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Broker')}}</span>
+                                </a>
+                            </li>
+                        @endif
                         @if(auth('admin')->user()->admin_role_id == 1)
                             
                             <li class="navbar-vertical-aside-has-menu ">

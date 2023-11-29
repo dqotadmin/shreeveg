@@ -1,4 +1,4 @@
-<?php return array (
+<?php return array(
   'attribute' => 'Attribute',
   'update' => 'Update',
   'name' => 'Name',
@@ -2362,9 +2362,7 @@
   'Ex:Area Name' => 'Ex:Area Name',
   'Area Information' => 'Area Information',
   'Area location' => 'Area location',
-  '
-                    product updated successfully!' => '
-                    product updated successfully!',
+  'product updated successfully!' => 'product updated successfully!',
   'hide option before in minute' => 'Hide option before in minute',
   'Hide Option Before' => 'Hide Option Before',
   'add Customer' => 'Add Customer',
@@ -2374,6 +2372,10 @@
   'Ex : Account Number' => 'Ex : Account Number',
   'Ex : Account Holder' => 'Ex : Account Holder',
   'Customer Image' => 'Customer Image',
+  'time' => 'Time',
+  'rate list setup' => 'Rate list setup',
+  'Rate List' => 'Rate List',
+  'rate list remved' => 'Rate list remved',
   'Update Customer' => 'Update Customer',
   'Customer updated successfully!' => 'Customer updated successfully!',
   'Ex : Bank Name' => 'Ex : Bank Name',

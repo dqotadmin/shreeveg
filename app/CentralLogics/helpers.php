@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
+
 class Helpers
 {
     public static function error_processor($validator)
@@ -147,7 +148,7 @@ class Helpers
 
         return $data;
     }
-    
+
     public static function get_business_settings($name)
     {
         $config = null;
@@ -161,16 +162,15 @@ class Helpers
         return $config;
     }
 
-    public static function getWhCategoriesData($catid,$whId)
+    public static function getWhCategoriesData($catid, $whId)
     {
-       $row = [];
-        $data = \App\Model\WarehouseCategory::where(['warehouse_id' => $whId,'category_id' =>$catid])->first();
+        $row = [];
+        $data = \App\Model\WarehouseCategory::where(['warehouse_id' => $whId, 'category_id' => $catid])->first();
         if (isset($data)) {
             $row = $data;
         }
         //dd($row);
         return $row;
-
     }
 
     public static function currency_code()
@@ -842,9 +842,7 @@ class Helpers
             }
 
             return $query->count() === 0;
-
         };
-
     }
 }
 

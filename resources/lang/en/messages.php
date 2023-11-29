@@ -2386,4 +2386,5 @@
   ' Inserted Successfully!' => ' Inserted Successfully!',
   'order list' => 'Order list',
   'order_list' => 'Order list',
+  'brokers rate list' => 'Brokers rate list',
 );

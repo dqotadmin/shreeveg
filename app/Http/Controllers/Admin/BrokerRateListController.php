@@ -46,8 +46,6 @@ class BrokerRateListController extends Controller
 
     function index(Request $request)
     {
-        // dd($request->all());
-        //return view('admin-views.broker.index');
 
         $query_param = [];
         $search = $request['search'];
@@ -124,12 +122,17 @@ class BrokerRateListController extends Controller
         return view($this->view_folder . '.show', compact('row'));
     }
 
-    public function status(Request $request): RedirectResponse
+    function wh_receiver_rate_list(Request $request)
     {
-        $admin = $this->admin->find($request->id);
-        $admin->status = $request->status;
-        $admin->save();
-        Toastr::success(translate('Admin status updated!'));
-        return back();
+
+        $query_param = [];
+        $search = $request['search'];
+        $user_id = auth('admin')->user()->id;
+
+        $rows = $this->mTable::query()->get();
+
+        //$rows = $rows->orderBy('id', 'desc')->get();
+
+        return view($this->view_folder . '.rate_list', compact('rows'));
     }
 }

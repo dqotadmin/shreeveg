@@ -2374,4 +2374,8 @@
   'Ex : Account Number' => 'Ex : Account Number',
   'Ex : Account Holder' => 'Ex : Account Holder',
   'Customer Image' => 'Customer Image',
+  'time' => 'Time',
+  'rate list setup' => 'Rate list setup',
+  'Rate List' => 'Rate List',
+  'rate list remved' => 'Rate list remved',
 );

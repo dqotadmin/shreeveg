@@ -57,14 +57,17 @@
                                             required>
                                 </div>
                                 <div class="col-md-12">
-                                    <label class="input-label" for="exampleFormControlInput1">{{translate('branch')}}</label>
-                                    <select name="branch_id" class="form-control">
-                                        <option value="0" {{$delivery_man['branch_id']==0?'selected':''}}>{{translate('all')}}</option>
-                                        @foreach(\App\Model\Branch::all() as $branch)
-                                            <option value="{{$branch['id']}}" {{$delivery_man['branch_id']==$branch['id']?'selected':''}}>{{$branch['name']}}</option>
-                                        @endforeach
-                                    </select>
+                                    <div>
+                                        <label class="input-label" for="exampleFormControlInput1">{{translate('Warehouse Name')}}</label>
+                                        <select name="warehouse_id" class="form-control">
+                                            <option  disabled selected>{{translate('Select Warehouse')}}</option>
+                                            @foreach(\App\Model\Warehouse::where('status',1)->where('deleted_at',null)->get() as $warehouse)
+                                                <option value="{{$warehouse['id']}}" {{$warehouse['id']==$delivery_man['warehouse_id']?'selected':''}}>{{$warehouse['name']}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
+                                
                                 <div class="col-md-12">
                                     <label class="input-label" for="exampleFormControlInput1">{{translate('identity')}} {{translate('type')}}</label>
                                     <select name="identity_type" class="form-control">
@@ -157,9 +160,9 @@
                     </div>
                 </div>
             </div>
-
+ 
             <div class="btn--container justify-content-end mt-3">
-                <button type="reset" class="btn btn--reset">{{translate('reset')}}</button>
+                <a type="button" href="{{route('admin.delivery-man.list')}}" class="btn btn--reset">{{translate('back')}}</a>
                 <button type="submit" class="btn btn--primary">{{translate('update')}}</button>
             </div>
         </form>

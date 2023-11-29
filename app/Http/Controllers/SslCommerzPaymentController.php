@@ -143,7 +143,7 @@ class SslCommerzPaymentController extends Controller
         {
             $tran_id = $request->input('tran_id');
             #Check order status in order tabel against the transaction id or order id.
-            $order_details = DB::table('orders')
+            $order_details = DB::table('user_warehouse_orders')
                 ->where('transaction_reference', $tran_id)
                 ->select('transaction_reference', 'order_status', 'order_amount')->first();
 
@@ -156,7 +156,7 @@ class SslCommerzPaymentController extends Controller
                     in order table as confirmed or Complete.
                     Here you can also sent sms or email for successful transaction to customer
                     */
-                    $update_product = DB::table('orders')
+                    $update_product = DB::table('user_warehouse_orders')
                         ->where('transaction_reference', $tran_id)
                         ->update(['order_status' => 'confirmed', 'payment_status' => 'paid']);
 
@@ -166,7 +166,7 @@ class SslCommerzPaymentController extends Controller
                     That means IPN worked, but Transation validation failed.
                     Here you need to update order status as Failed in order table.
                     */
-                    $update_product = DB::table('orders')
+                    $update_product = DB::table('user_warehouse_orders')
                         ->where('transaction_reference', $tran_id)
                         ->update(['order_status' => 'confirmed', 'payment_status' => 'unpaid']);
 

@@ -2374,4 +2374,10 @@
   'Ex : Account Number' => 'Ex : Account Number',
   'Ex : Account Holder' => 'Ex : Account Holder',
   'Customer Image' => 'Customer Image',
+  'Update Customer' => 'Update Customer',
+  'Customer updated successfully!' => 'Customer updated successfully!',
+  'Ex : Bank Name' => 'Ex : Bank Name',
+  'Ex : IFSC Code' => 'Ex : IFSC Code',
+  'Ex : UPI Id' => 'Ex : UPI Id',
+  'Ex : UPI Number' => 'Ex : UPI Number',
 );

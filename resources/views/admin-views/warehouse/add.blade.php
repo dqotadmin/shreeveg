@@ -45,8 +45,8 @@
                                             for="exampleFormControlInput1">{{ translate('Select City') }} </label>
                                         <select id="city_code" name="city_id" class="city_code form-control">
                                             <option value="" disabled selected>Select City</option>
-                                            @foreach(\App\Model\City::orderBy('id',
-                                            'DESC')->where(['state_id'=>19])->get() as $city)
+                                            @foreach(\App\Model\City::orderBy('id','DESC')->where(['state_id'=>19])->where('status','1')->get() as $city)
+
                                             <option value="{{$city['id']}}" id="city_alpha_code_{{$city['id']}} "
                                                 data-val="<?php echo $city->city_code; ?>">{{$city['city']}}</option>
                                             @endforeach

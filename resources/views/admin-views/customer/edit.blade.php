@@ -1,9 +1,9 @@
 @extends('layouts.admin.app')
 
-@section('title', translate('Add new delivery-man'))
+@section('title', translate('Update Customer'))
 
 @push('css_or_js')
-
+ 
 @endpush
 
 @section('content')
@@ -15,13 +15,13 @@
                 <img src="{{asset('public/assets/admin/img/employee.png')}}" class="w--24" alt="mail">
             </span>
             <span>
-                {{translate('add new Customer')}}
+                {{translate('Update Customer')}}
             </span>
         </h1>
     </div>
     <!-- End Page Header -->
 
-    <form action="{{route('admin.pos.customer.store')}}" method="post" enctype="multipart/form-data">
+    <form action="{{route('admin.customer.update',[$customers['id']])}}" method="post" enctype="multipart/form-data">
         @csrf
         <div class="card">
             <div class="card-header">
@@ -38,47 +38,40 @@
                             <div class="col-md-12">
                                 <label class="input-label"
                                     for="exampleFormControlInput1">{{translate('First Name')}}</label>
-                                <input type="text" name="f_name" value="{{ old('f_name') }}" class="form-control"
+                                <input type="text" name="f_name" value="{{ $customers->f_name }}" class="form-control"
                                     placeholder="{{translate('Ex : First Name')}}" required>
                             </div>
                             <div class="col-md-12">
                                 <label class="input-label"
                                     for="exampleFormControlInput1">{{translate('Last Name')}}</label>
-                                <input type="text" name="l_name" value="{{ old('l_name') }}" class="form-control"
+                                <input type="text" name="l_name" value="{{ $customers->l_name }}" class="form-control"
                                     placeholder="{{translate('Ex : Last Name')}}" required>
                             </div>
                         <div class="col-md-12">
                             <div>
                                 <label class="input-label" for="exampleFormControlInput1">{{translate('phone')}}</label>
-                                <input type="text" name="phone" value="{{ old('phone') }}" class="form-control"
+                                <input type="text" name="phone" value="{{ $customers->phone }}" class="form-control"
                                     placeholder="{{ translate('Ex : 017********') }}" required>
                             </div>
                         </div>
-                    </div>
+                    </div> 
                 </div>
                 <div class="col-md-6">
-                    <div class="form-group mb-3">
-                        <label class="form-label d-none d-md-block ">
-                            &nbsp;
-                        </label>
-                        <center class="mb-4">
-                            <img class="initial-24" id="viewer"
-                                src="{{asset('public/assets/admin/img/upload-vertical.png')}}"
-                                alt="Deliveryman thumbnail" />
-                        </center>
-                        <div class="form-group mb-0">
-                            <label class="form-label d-block">
-                                {{ translate('Customer Image') }} <span
-                                    class="text-danger">{{ translate('(Ratio 1:1)') }}</span>
-                            </label>
-                            <div class="custom-file">
-                                <input type="file" name="image" id="customFileUpload" class="custom-file-input h--45px"
-                                    accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" required>
-                                <label class="custom-file-label h--45px" for="customFileUpload"></label>
+                <div class="form-group mb-3">
+                                <label class="form-label d-none d-md-block ">
+                                    &nbsp;
+                                </label>
+                                <center class="mb-4">
+                                    <img class="initial-24" id="viewer" onerror="this.src='{{asset('public/assets/admin/img/upload-vertical.png')}}'" src="{{asset('storage/app/public/customer').'/'.$customers['image']}}"alt="Customer thumbnail"/>
+                                </center>
+                                <div class="form-group mb-0">
+                                    <label class="form-label d-block">{{translate('Customer')}} {{translate('image')}} <small class="text-danger">* ( {{translate('ratio')}} 1:1 )</small></label>
+                                    <div class="custom-file">
+                                        <input type="file" name="image" id="customFileUpload" class="custom-file-input h--45px" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*">
+                                        <label class="custom-file-label h--45px" for="customFileUpload"></label>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                  
                 </div>
             </div>
         </div>
@@ -97,17 +90,17 @@
         <div class="row g-3">
             <div class="col-md-4 col-sm-6">
                 <label class="input-label" for="exampleFormControlInput1">{{translate('email')}}</label>
-                <input type="email" name="email" value="{{ old('email') }}" class="form-control"
+                <input type="email" name="email" value="{{ $customers->email }}" class="form-control"
                     placeholder="{{ translate('Ex : ex@example.com') }}" required>
             </div>
             <div class="col-md-4 col-sm-6">
                 <label class="input-label" for="exampleFormControlInput1">{{translate('password')}}</label>
-                <input type="text" name="password" class="form-control" placeholder="{{ translate('7+ Characters') }}"
+                <input type="text" name="password"  class="form-control" placeholder="{{ translate('7+ Characters') }}"
                     required>
             </div>
             <div class="col-md-4 col-sm-6">
                 <label class="input-label" for="exampleFormControlInput1">{{translate('Confirm password')}}</label>
-                <input type="text" name="password_confirmation" class="form-control"
+                <input type="text" name="confirm_password" class="form-control"
                     placeholder="{{ translate('7+ Characters') }}" required>
             </div>
         </div>

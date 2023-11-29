@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Mail;
 
 class OrderLogic
 {
+    
     public static function track_order($order_id)
     {
         return Order::with(['details', 'delivery_man.rating'])->where(['id' => $order_id])->first();
@@ -33,7 +34,7 @@ class OrderLogic
                 'updated_at' => now()
             ];
 
-            $o_id = DB::table('orders')->insertGetId($or);
+            $o_id = DB::table('user_warehouse_orders')->insertGetId($or);
 
             foreach ($cart as $c) {
                 $product = Product::where('id', $c['id'])->first();

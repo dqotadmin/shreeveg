@@ -497,9 +497,10 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
 
             Route::get('add', 'CustomerController@create')->name('add');
             Route::post('update-settings', 'CustomerController@update_settings')->name('update-settings');
+            Route::get('edit/{id}', 'CustomerController@edit')->name('edit');
+            Route::post('update/{id}', 'CustomerController@update')->name('update');
 
             Route::get('select-list', 'CustomerWalletController@get_customers')->name('select-list');
-
             Route::group(['prefix' => 'wallet', 'as' => 'wallet.'], function () {
                 Route::get('add-fund', 'CustomerWalletController@add_fund_view')->name('add-fund');
                 Route::post('add-fund', 'CustomerWalletController@add_fund')->name('add-fund-store');

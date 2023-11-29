@@ -124,12 +124,12 @@ class WarehouseController extends Controller
         ]); 
              $revise = $deliver =  $order_cancel =  $pre_order = [];
         // echo '<pre>';
-     
         if($request->delivery_open_time){
             foreach($request->delivery_open_time as $deliveryKey => $delivery_open){
                 if(isset($request->delivery_close_time[$deliveryKey])){
                     $deliver[$deliveryKey]['open'] = $delivery_open;
                     $deliver[$deliveryKey]['close'] = $request->delivery_close_time[$deliveryKey];
+                    $deliver[$deliveryKey]['hide_option_before'] = $request->hide_option_before[$deliveryKey];
                 }
             }
             $delivery_time = json_encode($deliver,true);
@@ -215,6 +215,7 @@ class WarehouseController extends Controller
                 if(isset($request->delivery_close_time[$deliveryKey])){
                     $deliver[$deliveryKey]['open'] = $delivery_open;
                     $deliver[$deliveryKey]['close'] = $request->delivery_close_time[$deliveryKey];
+                    $deliver[$deliveryKey]['hide_option_before'] = $request->hide_option_before[$deliveryKey];
                 }
             }
             $delivery_time = json_encode($deliver,true);

@@ -156,18 +156,94 @@
                                 </div>
                             </div>
 
-                            <div class="d-flex justify-content-end">
-                          
-                            <a href="{{route('admin.warehouse-admin',['role_id'=>$role->id])}}" type="button" class="btn btn--reset mr-2">  {{translate('Back')}}</a>
-                                <button type="submit" class="btn btn-primary">{{ translate('Update') }}</button>
-                            </div>
+                           
 
                             <!-- End Form -->
                         </div>
                         <!-- End Body -->
                     </div>
                     <!-- End Card -->
+                    <div id="bankDiv" class="card mb-3 mb-lg-5">
+                        <div class="card-header">
+                            <h4 class="card-title"><i class="tio-lock"></i> {{ translate('Bank Details') }}
+                            </h4>
+                        </div>
+                        			
+                        <!-- Body -->
+                        <div class="card-body">
+                            <!-- Form -->
 
+                            <div class="row form-group">
+                                <label for="phoneLabel"
+                                    class="col-sm-3 col-form-label input-label">{{ translate('Account Number') }} <span
+                                        class="input-label-secondary"></span></label>
+
+                                <div class="col-sm-9">
+                                    <input type="text" class="js-masked-input form-control" name="account_number" id="phoneLabel"
+                                    value="{{$admins->bankDetail ? $admins->bankDetail->account_number: ''}}">
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="phoneLabel"
+                                    class="col-sm-3 col-form-label input-label">{{ translate('Account Holder') }} <span
+                                        class="input-label-secondary"></span></label>
+
+                                <div class="col-sm-9">
+                                    <input type="text" class="js-masked-input form-control" name="account_holder" id="phoneLabel"
+                                    value="{{$admins->bankDetail ? $admins->bankDetail->account_holder: '';}}">
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <label for="phoneLabel"
+                                    class="col-sm-3 col-form-label input-label">{{ translate('Bank Name') }} <span
+                                        class="input-label-secondary"></span></label>
+
+                                <div class="col-sm-9">
+                                    <input type="text" class="js-masked-input form-control" name="bank_name" id="phoneLabel"
+                                    value="{{$admins->bankDetail ? $admins->bankDetail->bank_name: '';}}">
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="phoneLabel"
+                                    class="col-sm-3 col-form-label input-label">{{ translate('IFSC Code') }} <span
+                                        class="input-label-secondary"></span></label>
+
+                                <div class="col-sm-9">
+                                    <input type="text" class="js-masked-input form-control" name="ifsc_code" id="phoneLabel"
+                                    value="{{$admins->bankDetail ? $admins->bankDetail->ifsc_code: '';}}">
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="phoneLabel"
+                                    class="col-sm-3 col-form-label input-label">{{ translate('UPI Id') }} <span
+                                        class="input-label-secondary"></span></label>
+
+                                <div class="col-sm-9">
+                                    <input type="text" class="js-masked-input form-control" name="upi_id" id="phoneLabel"
+                                    value="{{$admins->bankDetail ? $admins->bankDetail->upi_id: '';}}">
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="phoneLabel"
+                                    class="col-sm-3 col-form-label input-label">{{ translate('UPI Number') }} <span
+                                        class="input-label-secondary"></span></label>
+
+                                <div class="col-sm-9">
+                                    <input type="text" class="js-masked-input form-control" name="upi_number" id="upi_number"
+                                    value="{{$admins->bankDetail ? $admins->bankDetail->upi_number : '';}}">
+                                </div>
+                            </div>
+ 
+                        </div>
+                       
+                        <!-- End Body -->
+                    </div>
+                    <div class="d-flex justify-content-end">
+                          
+                          <a href="{{route('admin.warehouse-admin',['role_id'=>$role->id])}}" type="button" class="btn btn--reset mr-2">  {{translate('Back')}}</a>
+                              <button type="submit" class="btn btn-primary">{{ translate('Update') }}</button>
+                          </div>
                 </form>
 
                     <!-- Sticky Block End Point -->

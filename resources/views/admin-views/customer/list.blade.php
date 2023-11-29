@@ -77,7 +77,7 @@
                 <thead class="thead-light">
                     <tr class="word-nobreak">
                         <th class="">
-                            {{translate('#')}}
+                             {{translate('#')}}
                         </th>
                         <th class="table-column-pl-0">{{translate('customer name')}}</th>
                         <th>{{translate('contact info')}}</th>
@@ -97,7 +97,7 @@
                         <td class="table-column-pl-0">
                             <a href="{{route('admin.customer.view',[$customer['id']])}}" class="product-list-media">
                                 <img class="rounded-full"
-                                    src="{{asset('storage/app/public/profile/'.$customer->image)}}"
+                                    src="{{asset('storage/app/public/customer/'.$customer->image)}}"
                                     onerror="this.src='{{asset('/public/assets/admin/img/admin.png')}}'">
                                 <div class="table--media-body">
                                     <h5 class="title m-0">
@@ -144,6 +144,10 @@
                                 <a class="action-btn" href="{{route('admin.customer.view',[$customer['id']])}}">
                                     <i class="tio-invisible"></i>
                                 </a>
+                                <a class="action-btn   btn-outline-info"
+                                    href="{{route('admin.customer.edit',[$customer['id']])}}">
+                                    <i class="tio-edit"></i>
+                                </a>
                                 <a class="action-btn btn--danger btn-outline-danger" href="javascript:"
                                     onclick="form_alert('customer-{{$customer['id']}}','{{translate('Want to remove this customer ?')}}')">
                                     <i class="tio-delete-outlined"></i>
@@ -152,10 +156,8 @@
                                     id="customer-{{$customer['id']}}">
                                     @csrf @method('delete')
                                 </form>
-                                    <a class="action-btn btn--warning btn-outline-warning" href="{{route('admin.customer.edit',[$customer['id']])}}">
-                                        <i class="tio-edit"></i>
-                                    </a>
-                                </div>
+                               
+                            </div>
                         </td>
                     </tr>
                     @endforeach

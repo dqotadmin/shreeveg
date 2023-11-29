@@ -210,12 +210,12 @@ class CustomerController extends Controller
             ->get();
 
         foreach($customers as $customer){
-
             $storage[] = [
                 'first_name' => $customer['f_name'],
                 'last_name' => $customer['l_name'],
                 'phone' => $customer['phone'],
                 'email' => $customer['email'],
+                'status' => $customer['is_block'],
             ];
         }
         return (new FastExcel($storage))->download('customers.xlsx');

@@ -111,8 +111,6 @@ class AdminUserController extends Controller
         $admin->password = bcrypt($request['password']);
 
         $admin->admin_role_id = $request->admin_role_id;
-        $admin->warehouse_id = $request->warehouse_id ?  $request->warehouse_id :0;
-        $admin->store_id = $request->store_id ?  $request->store_id :0 ;
         $admin->save();
        
         $adminId = $admin->id;
@@ -132,7 +130,8 @@ class AdminUserController extends Controller
     }
         
     public function edit(Request $request,$id){
-        $admins = $this->admin->find($id);
+        $admins = $this->admin->with('bankDetail')->find($id);
+  
         $role = $this->admin_role->where('id', $request->role_id)->first();
         return view('admin-views.warehouse-admin.edit', compact('admins','role'));
     }
@@ -172,9 +171,21 @@ class AdminUserController extends Controller
         $admin->phone = $request->phone;
         $admin->email = $request->email;
         $admin->image = $image_name;
-        $admin->warehouse_id = $request->warehouse_id;
-        $admin->store_id = $request->store_id;
-          $admin->save();
+        $admin->save();
+        $bankDetail = BankDetail::first();
+    if ($id == $bankDetail->user_id) {
+        $bankDetail->user_id = $id;
+        $bankDetail->account_number = $request->account_number;
+        $bankDetail->account_holder = $request->account_holder;
+        $bankDetail->bank_name = $request->bank_name;
+        $bankDetail->ifsc_code = $request->ifsc_code;
+        $bankDetail->upi_id = $request->upi_id;
+        $bankDetail->upi_number = $request->upi_number;
+        $bankDetail->save();
+    } else {
+        // Handle the case where the BankDetail record with the given ID is not found
+        // You might want to throw an exception or return an error response
+    }
         Toastr::success( translate($request->name.' updated successfully!') );
         return redirect()->route('admin.warehouse-admin',['role_id'=>$request->admin_role_id]);
     }

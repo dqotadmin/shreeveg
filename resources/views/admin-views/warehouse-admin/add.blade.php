@@ -192,9 +192,9 @@
 
                                 <div class="col-sm-9">
                                     <input type="text" class="js-masked-input form-control" name="account_number" id="phoneLabel"
-                                        placeholder="5678886545" aria-label=" "
+                                        placeholder="Account Number" aria-label=" "
                                         value="{{old('account_holder')}}" data-hs-mask-options='{
-                                           "template": "5678886545"
+                                           "template": "Account Number"
                                          }'>
                                 </div>
                             </div>
@@ -205,10 +205,8 @@
 
                                 <div class="col-sm-9">
                                     <input type="text" class="js-masked-input form-control" name="account_holder" id="phoneLabel"
-                                        placeholder="Pooran Joshi" aria-label=" "
-                                        value="{{old('account_holder')}}" data-hs-mask-options='{
-                                           "template": "Pooran Joshi"
-                                         }'>
+                                        placeholder="Account Holder" aria-label=" "
+                                     >
                                 </div>
                             </div>
 
@@ -219,10 +217,7 @@
 
                                 <div class="col-sm-9">
                                     <input type="text" class="js-masked-input form-control" name="bank_name" id="phoneLabel"
-                                        placeholder="Union Bank Of India" aria-label=" "
-                                        value="{{old('account_holder')}}" data-hs-mask-options='{
-                                           "template": "Union Bank Of India"
-                                         }'>
+                                        placeholder="Bank Name" >
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -232,10 +227,7 @@
 
                                 <div class="col-sm-9">
                                     <input type="text" class="js-masked-input form-control" name="ifsc_code" id="phoneLabel"
-                                        placeholder="UBN564" aria-label=" "
-                                        value="{{old('account_holder')}}" data-hs-mask-options='{
-                                           "template": "UBN564"
-                                         }'>
+                                        placeholder="IFSC Code" >
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -245,10 +237,7 @@
 
                                 <div class="col-sm-9">
                                     <input type="text" class="js-masked-input form-control" name="upi_id" id="phoneLabel"
-                                        placeholder="e57yut" aria-label=" "
-                                        value="{{old('account_holder')}}" data-hs-mask-options='{
-                                           "template": "e57yut"
-                                         }'>
+                                        placeholder="UPI Id" >
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -258,10 +247,7 @@
 
                                 <div class="col-sm-9">
                                     <input type="text" class="js-masked-input form-control" name="upi_number" id="upi_number"
-                                        placeholder="5464564" aria-label=" "
-                                        value="{{old('upi_number')}}" data-hs-mask-options='{
-                                           "template": "5464564"
-                                         }'>
+                                        placeholder="UPI Number" >
                                 </div>
                             </div>
  

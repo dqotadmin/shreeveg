@@ -1,4 +1,4 @@
-<?php return array(
+<?php return array (
   'attribute' => 'Attribute',
   'update' => 'Update',
   'name' => 'Name',
@@ -962,7 +962,7 @@
   'Product status updated!' => 'Product status updated!',
   'you_want_to_active_this_product' => 'You want to active this product',
   'product_name' => 'Product name',
-  'product updated successfully!' => 'Product updated successfully!',
+  'product updated successfully!' => 'product updated successfully!',
   'selling_price' => 'Selling price',
   'show_in_daily_needs' => 'Show in daily needs',
   'export' => 'Export',
@@ -2362,7 +2362,6 @@
   'Ex:Area Name' => 'Ex:Area Name',
   'Area Information' => 'Area Information',
   'Area location' => 'Area location',
-  'product updated successfully!' => 'product updated successfully!',
   'hide option before in minute' => 'Hide option before in minute',
   'Hide Option Before' => 'Hide Option Before',
   'add Customer' => 'Add Customer',
@@ -2382,4 +2381,6 @@
   'Ex : IFSC Code' => 'Ex : IFSC Code',
   'Ex : UPI Id' => 'Ex : UPI Id',
   'Ex : UPI Number' => 'Ex : UPI Number',
+  'create rate list' => 'Create rate list',
+  'rate list' => 'Rate list',
 );

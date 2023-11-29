@@ -65,7 +65,7 @@ class BrokerRateListController extends Controller
         }
         $rows = $rows->orderBy('id', 'desc')->paginate(Helpers::getPagination())->appends($query_param);
 
-        return view('admin-views.broker.index', compact('rows', 'search'));
+        return view($this->view_folder . '.index', compact('rows', 'search'));
     }
 
     public function destroy($id)
@@ -78,9 +78,8 @@ class BrokerRateListController extends Controller
 
     public function create(Request $request)
     {
-
-        $role = $this->admin_role->where('id', $request->role_id)->first();
-        return view('admin-views.warehouse-admin.add', compact('role'));
+        $categories = Category::whereStatus(1)->orderBy('name', 'asc')->get();
+        return view($this->view_folder . '.create', compact('categories'));
     }
 
     public function store(Request $request): \Illuminate\Http\RedirectResponse

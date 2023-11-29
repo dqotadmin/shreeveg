@@ -25,10 +25,7 @@
                 <div class="btn--container justify-content-end m-2">
                     <a type="button"  href="{{route('admin.broker-rate-list.create')}}" class="btn btn--primary">{{translate('Add New')}}</a>
                 </div>
-                    @php($data = Helpers::get_business_settings('language'))
-                    @php($default_lang = Helpers::get_default_language())
-                    {{-- @php($default_lang = 'en') --}}
-                
+                    
                 </div>
             </div>
 

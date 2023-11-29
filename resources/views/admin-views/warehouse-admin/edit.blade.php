@@ -79,7 +79,7 @@
 
                                 </div>
                             </div>
-                             @if($role->id == '3' || $role->id == '8' || $role->id == '5' || $role->id == '4')
+                             @if($role->id == '3' || $role->id == '5' || $role->id == '4')
                             <div class="row form-group">
                                 <label for="phoneLabel"
                                     class="col-sm-3 col-form-label input-label">{{ translate('Warehouse Name') }} <span
@@ -88,7 +88,7 @@
                                 <div class="col-sm-9">
                                     <select id="state" name="warehouse_id" class="form-control js-select2-custom" required>
                                         <option value="" disabled selected>Select Warehouse </option>
-                                        @foreach(\App\Model\Warehouse::orderBy('id', 'DESC')->get() as $warehouse)
+                                        @foreach(\App\Model\Warehouse::where('status', 1)->where('deleted_at', null)->get() as $warehouse)
                                         <option value="{{$warehouse['id']}}"   {{$warehouse->id == $admins->warehouse_id ? 'selected' : '';}}>{{$warehouse['name']}}</option>
                                         @endforeach
                                     </select>
@@ -103,7 +103,7 @@
                                 <div class="col-sm-9">
                                     <select id="state" name="store_id" class="form-control js-select2-custom" required>
                                         <option value="" disabled selected>Select Store </option>
-                                        @foreach(\App\Model\Store::orderBy('id', 'DESC')->get() as $store)
+                                        @foreach(\App\Model\Store::where('status', 1)->where('deleted_at', null)->get() as $store)
                                         <option value="{{$store['id']}}"  {{$store->id == $admins->store_id ? 'selected' : '';}}>{{$store['name']}}</option>
                                         @endforeach
                                     </select>

@@ -44,7 +44,7 @@
                                         <select id=" " name="city_id" class="form-control js-select2-custom" required>
                                             <option value="" disabled selected>Select City</option>
                                             @foreach(\App\Model\City::orderBy('id',
-                                            'DESC')->where(['state_id'=>19])->get() as $city)
+                                            'DESC')->where(['state_id'=>19])->where('status','1')->get() as $city)
                                             <option value="{{$city['id']}}">{{$city['city']}}</option>
                                             @endforeach
                                         </select>

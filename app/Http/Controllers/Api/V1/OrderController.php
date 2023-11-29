@@ -253,7 +253,7 @@ class OrderController extends Controller
                 DB::table('order_details')->insert($or_d);
             }
             $or['total_tax_amount'] = $total_tax_amount;
-            DB::table('orders')->insertGetId($or);
+            DB::table('user_warehouse_orders')->insertGetId($or);
 
             if($request->payment_method == 'wallet_payment'){
                 $amount = $or['order_amount'];

@@ -45,8 +45,8 @@
                                         </label>
                                         <select id="exampleFormControlSelect1" name="city_id" class="form-control "
                                             required>
-                                            @foreach(\App\Model\City::orderBy('id', 'DESC')->get() as $city)
-                                            <option value="{{$city['id']}}"
+                                            @foreach(\App\Model\City::orderBy('id','DESC')->where(['state_id'=>19])->where('status','1')->get() as $city)
+                                              <option value="{{$city['id']}}"
                                                 {{$city['id']==$cityareas['city_id']?'selected':''}}>
                                                 {{$city['city']}}</option>
                                             @endforeach

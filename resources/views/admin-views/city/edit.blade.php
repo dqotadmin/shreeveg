@@ -33,7 +33,7 @@
                     <div class="col-sm-6 ">{{translate('city')}}
                         </label>
                         <input type="text" name="city" maxlength="255" value="{{$cities['city']}}" class="form-control"
-                            placeholder="{{ translate('city') }}">
+                            placeholder="{{ translate('Ex: City') }}">
                     </div>
                     <div class="col-sm-6">
                         <label class="form-label" for="">{{ translate('City') }} {{ translate('Code') }}

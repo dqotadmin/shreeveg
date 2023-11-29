@@ -56,7 +56,7 @@ class OrderLogic
                     'created_at' => now(),
                     'updated_at' => now()
                 ];
-                DB::table('order_details')->insert($or_d);
+                DB::table('user_warehouse_order_details')->insert($or_d);
             }
 
             $emailServices = Helpers::get_business_settings('mail_config');

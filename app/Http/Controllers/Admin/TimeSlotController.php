@@ -48,16 +48,17 @@ class TimeSlotController extends Controller
         foreach ($slots as $slot) {
             $exist_start = date('H:i', strtotime($slot->start_time));
             $exist_end = date('H:i', strtotime($slot->end_time));
-            if(($start_time >= $exist_start && $start_time <= $exist_end) || ($end_time >= $exist_start && $end_time <= $exist_end)) {
-                Toastr::error(translate('Time slot overlaps with existing timeslot...'));
-                return back();
-            }
-            if(($exist_start >= $start_time && $exist_start <= $end_time) || ($exist_end >= $start_time && $exist_end <= $end_time)) {
-                Toastr::error(translate('Time slot overlaps with existing timeslot!!!'));
-                return back();
-            }
+   
+        // if(($start_time >= $exist_start && $start_time <= $exist_end) || ($end_time >= $exist_start && $end_time <= $exist_end)) {
+        //         Toastr::error(translate('Time slot overlaps with existing timeslot...'));
+        //         return back();
+        //     }
+        //     if(($exist_start >= $start_time && $exist_start <= $end_time) || ($exist_end >= $start_time && $exist_end <= $end_time)) {
+        //         Toastr::error(translate('Time slot overlaps with existing timeslot!!!'));
+        //         return back();
+        //     }
         }
-
+     
         DB::table('time_slots')->insert([
             'start_time' => $start_time,
             'end_time'   => $end_time,

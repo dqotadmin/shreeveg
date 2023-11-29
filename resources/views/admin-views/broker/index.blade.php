@@ -37,8 +37,8 @@
                     <form action="{{url()->current()}}" method="GET">
                         <div class="input-group">
                             <input type="search" name="search" class="form-control"
-                                   placeholder="{{translate('Search_by_ID_or_name')}}" aria-label="Search"
-                                   value="{{$search}}" required autocomplete="off">
+                                   placeholder="{{translate('search')}}" aria-label="Search"
+                                   value="{{$search}}" autocomplete="off">
                             <div class="input-group-append">
                                 <button type="submit" class="input-group-text">
                                     {{translate('search')}}
@@ -82,7 +82,9 @@
                             <td>
                                 <!-- Dropdown -->
                                 <div class="btn--container justify-content-center">
-                                    
+                                    <a class="action-btn" href="{{route('admin.broker-rate-list.show',[$row->id])}}">
+                                        <i class="tio-invisible"></i>
+                                    </a>
                                     <a class="action-btn btn--danger btn-outline-danger" href="javascript:"
                                        onclick="form_alert('rate_list-{{$row->id}}','{{ translate("Want to delete this") }}')">
                                         <i class="tio-delete-outlined"></i>

@@ -2383,4 +2383,7 @@
   'Ex : UPI Number' => 'Ex : UPI Number',
   'create rate list' => 'Create rate list',
   'rate list' => 'Rate list',
+  ' Inserted Successfully!' => ' Inserted Successfully!',
+  'order list' => 'Order list',
+  'order_list' => 'Order list',
 );

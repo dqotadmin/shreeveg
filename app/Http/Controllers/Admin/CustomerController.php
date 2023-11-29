@@ -272,4 +272,7 @@ class CustomerController extends Controller
         return back();
     }
 
+    public function create(){
+        return view('admin-views.customer.add');
+    }
 }

@@ -33,13 +33,13 @@
                                 <label class="form-label" for="">{{ translate('City') }}
                                 </label>
                                 <input type="text" name="city" class="form-control"
-                                    placeholder="{{ translate('Ex: Jaipur') }}" maxlength="255">
+                                    placeholder="{{ translate('Ex: City') }}" maxlength="255">
                             </div>
                             <div class="col-sm-6">
                                 <label class="form-label" for="">{{ translate('City') }} {{ translate('Code') }}
                                 </label>
                                 <input type="text" name="city_code" class="form-control"
-                                    placeholder="{{ translate('Ex: 0141') }}" maxlength="255">
+                                    placeholder="{{ translate('Ex: City Code') }}" maxlength="255">
                             </div>
                             <div class="col-sm-6">
                                 <label class="form-label" for="">{{ translate('State') }}

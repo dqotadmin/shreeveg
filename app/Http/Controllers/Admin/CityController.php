@@ -47,7 +47,7 @@ class CityController extends Controller
         } else {
             $cities = $this->city;
         }
-        $cities = $cities->latest()->paginate(Helpers::getPagination())->appends($query_param);
+        $cities = $cities->orderby('status','DESC')->latest()->paginate(Helpers::getPagination())->appends($query_param);
         return view('admin-views.city.index', compact('cities', 'search'));
     }
     function create(Request $request): View|Factory|Application

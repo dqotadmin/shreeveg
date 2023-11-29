@@ -40,6 +40,8 @@ class TimeSlotController extends Controller
 
         $start_time = $request->start_time;
         $end_time = $request->end_time;
+        $hide_option_before = $request->hide_option_before;
+        
         //time overlap check
         $slots = $this->time_slot->latest()->get(['start_time', 'end_time']);
 
@@ -59,6 +61,7 @@ class TimeSlotController extends Controller
         DB::table('time_slots')->insert([
             'start_time' => $start_time,
             'end_time'   => $end_time,
+            'hide_option_before'   => $hide_option_before,
             'date'       => date('Y-m-d'),
             'status'     => 1,
             'created_at' => now(),
@@ -113,6 +116,7 @@ class TimeSlotController extends Controller
         DB::table('time_slots')->where(['id' => $id])->update([
             'start_time' => $request->start_time,
             'end_time'   => $request->end_time,
+            'hide_option_before'   => $request->hide_option_before,
             'date'       => date('Y-m-d'),
             'status'     => 1,
             'updated_at' => now(),

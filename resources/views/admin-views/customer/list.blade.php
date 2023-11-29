@@ -62,6 +62,9 @@
                         </div>
                     </div>
                     <!-- End Unfold -->
+                    <a href="{{route('admin.customer.add')}}" class="btn btn--primary py-2"><i class="tio-add-circle"></i> {{translate('add Customer')}}</a>
+
+                     
                 </div>
             </div>
             <!-- End Header -->

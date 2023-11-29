@@ -83,7 +83,7 @@ class ProductController extends Controller
      */
     public function get_categories(Request $request): \Illuminate\Http\JsonResponse
     {
-        $cat = $this->category->where(['parent_id' => $request->parent_id])->get();
+        $cat = $this->category->where('deleted_at',null)->where(['parent_id' => $request->parent_id])->get();
         $res = '<option value="' . 0 . '" disabled selected>---Select---</option>';
         foreach ($cat as $row) {
             if ($row->id == $request->sub_category) {
@@ -102,7 +102,7 @@ class ProductController extends Controller
      */
     public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        $categories = $this->category->get();
+        $categories = $this->category->where('deleted_at',null)->get();
         $units =  $this->unit->get();
         return view('admin-views.product.index', compact('categories','units'));
     }
@@ -339,7 +339,7 @@ class ProductController extends Controller
     {
         $product = $this->product->withoutGlobalScopes()->with('translations')->find($id);
         $product_category = json_decode($product->category_ids);
-        $categories = $this->category->get();
+        $categories = $this->category->where('deleted_at',null)->get();
         $units =  $this->unit->get();
         return view('admin-views.product.edit', compact('product', 'product_category', 'categories','units'));
     }

@@ -87,10 +87,10 @@
 
                                                 <div class="m_inputs">
                                                     <input type="number" name="category_order[]" value="{{$catOrder}}"
-                                                        placeholder="Ex. Order <?php  ?>" class="form-control " id="">
+                                                        placeholder="Ex. Order <?php echo $i++; ?>" class="form-control " id="">
 
                                                     <input type="text" name="margin[]" value="{{$margin}}"
-                                                        placeholder="Ex. Margin 5%" class="form-control" id="">
+                                                        placeholder="Ex. Margin {{rand(1,5)}}" class="form-control" id="">
 
                                                    
 

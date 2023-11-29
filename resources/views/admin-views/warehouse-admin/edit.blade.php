@@ -79,6 +79,37 @@
 
                                 </div>
                             </div>
+                             @if($role->id == '3' || $role->id == '8' || $role->id == '5' || $role->id == '4')
+                            <div class="row form-group">
+                                <label for="phoneLabel"
+                                    class="col-sm-3 col-form-label input-label">{{ translate('Warehouse Name') }} <span
+                                        class="input-label-secondary"></span></label>
+
+                                <div class="col-sm-9">
+                                    <select id="state" name="warehouse_id" class="form-control js-select2-custom" required>
+                                        <option value="" disabled selected>Select Warehouse </option>
+                                        @foreach(\App\Model\Warehouse::orderBy('id', 'DESC')->get() as $warehouse)
+                                        <option value="{{$warehouse['id']}}"   {{$warehouse->id == $admins->warehouse_id ? 'selected' : '';}}>{{$warehouse['name']}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            @elseif($role->id == '6' || $role->id == '7' )
+                            <div class="row form-group">
+                                <label for="phoneLabel"
+                                    class="col-sm-3 col-form-label input-label">{{ translate('Store Name') }} <span
+                                        class="input-label-secondary"></span></label>
+
+                                <div class="col-sm-9">
+                                    <select id="state" name="store_id" class="form-control js-select2-custom" required>
+                                        <option value="" disabled selected>Select Store </option>
+                                        @foreach(\App\Model\Store::orderBy('id', 'DESC')->get() as $store)
+                                        <option value="{{$store['id']}}"  {{$store->id == $admins->store_id ? 'selected' : '';}}>{{$store['name']}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            @endif
                               <div class="row form-group">
                                 <label for="firstNameLabel"
                                     class="col-sm-3 col-form-label input-label">{{ translate('Full name') }} <i

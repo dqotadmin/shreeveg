@@ -42,22 +42,6 @@
 
                                 <input type="hidden" id="prev_id" value=" ">
                                 <div class="row align-items-end g-4" style="padding-top: 50px;">
-
-                                    <div class="col-sm-4">
-                                        <label class="form-label" for=" ">{{ translate('Select Warehouse Admin') }}
-                                        </label>
-                                        <select name="warehouse_admin_id" class=" form-control">
-                                            <option value="" disabled selected>Select Name</option>
-                                            @foreach(\App\Model\Admin::orderBy('id',
-                                            'DESC')->where('admin_role_id',3)->get() as $admin)
-                                            <option value="{{$admin['id']}}"
-                                                {{$warehouses->warehouse_admin_id ==$admin->id ? 'selected': ''}}>
-                                                {{$admin['f_name']}} {{$admin['l_name']}}
-                                            </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
                                     <div class="col-sm-4">
                                         <label class="form-label"
                                             for="exampleFormControlInput1">{{ translate('Select City') }}
@@ -84,11 +68,9 @@
 
                                     <div class="col-sm-4">
                                         <label class="form-label"
-                                            for="exampleFormControlInput1">{{ translate('Warehouse Code') }}
-                                        </label>
-                                        <input type="text" name="code" class="form-control" readonly
-                                            value="{{$warehouses->code}}" id="dataAttributeValue"
-                                            placeholder="{{\Illuminate\Support\Str::random(8)}}">
+                                            for="exampleFormControlInput1">{{ translate('Warehouse Code') }} </label>
+                                        <input type="text" name="code" class="form-control city_by_code" value="{{$warehouses->code}}"
+                                            id="city_by_code">
                                     </div>
 
                                     <div class="col-sm-4">
@@ -236,56 +218,6 @@
                             <div class="card-header">
                                 <h5 class="card-title">
                                     <i class="tio-clock"></i>
-                                    {{translate('order revised time slot')}}
-                                </h5>
-                            </div>
-                            <div class="card-body pt-sm-0 pb-sm-4">
-                                <div class="row align-items-end g-4  mt-3">
-
-                                    <table class="table table-bordered" id="box-revise-pair">
-                                        <tr>
-                                            <th>Start Time</th>
-                                            <th> End Time</th>
-                                            <th>
-                                                <button type="button" id="add-revise-pair"
-                                                    class="remove-revise-pair btn btn-outline-success">Add More</button>
-                                            </th>
-                                        </tr>
-
-                                        @if($warehouses->revise_time)
-                                        @foreach(json_decode($warehouses->revise_time,true) as $key => $warehouse)
-
-
-                                        <tr class="row-revise-pair">
-                                            <td>
-                                                <input type="time" class="input-revise-pair form-control"
-                                                    name="revise_time_open[]" required value="{{$warehouse['open']}}">
-                                            </td>
-                                            <td>
-                                                <input type="time" class="input-revise-pair  form-control"
-                                                    name="revise_time_close[]" required value="{{$warehouse['close']}}">
-                                            </td>
-                                            <td>
-                                                <button type="button"
-                                                    class="remove-revise-pair btn btn-outline-danger">Remove</button>
-                                            </td>
-                                        </tr>
-
-                                        @endforeach
-                                        @endif
-
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="col-sm-6">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="card-title">
-                                    <i class="tio-clock"></i>
                                     {{translate('delivery order time slot')}}
                                 </h5>
                             </div>
@@ -339,49 +271,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="card-title">
-                                    <i class="tio-clock"></i>
-                                    {{translate('order cancel time slot')}}
-                                </h5>
-                            </div>
-                            <div class="card-body pt-sm-0 pb-sm-4">
-                                <div class="row align-items-end g-4  mt-3">
-                                    <table class="table table-bordered" id="box-order-cancel-pair">
-                                        <tr>
-                                            <th>Start Time</th>
-                                            <th> End Time</th>
-                                            <th> <button type="button" id="add-order-cancel-pair"
-                                                    class="remove-order-cancel-pair btn btn-outline-success">Add
-                                                    More</button> </th>
-
-                                        </tr>
-                                        @if($warehouses->order_cancel_time)
-                                        @foreach(json_decode($warehouses->order_cancel_time,true) as $key => $warehouse)
-                                        <tr class="row-order-cancel-pair">
-
-                                            <td><input type="time" name="order_cancel_open_time[]"
-                                                    class="form-control  input-order-cancel-pair" required
-                                                    value="{{$warehouse['open']}}" /></td>
-                                            <td><input type="time" name="order_cancel_close_time[]"
-                                                    class="form-control  input-order-cancel-pair" required
-                                                    value="{{$warehouse['close']}}" /></td>
-                                            <td><button type="button"
-                                                    class="remove-order-cancel-pair btn btn-outline-danger">Remove</button>
-                                            </td>
-
-                                        </tr>
-                                        @endforeach
-                                        @endif
-                                    </table>
-
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+             
                     <div class="col-sm-6">
                         <div class="card">
                             <div class="card-header">
@@ -611,18 +501,33 @@ $('.__right-eye').on('click', function() {
 
 <script>
 $('.city_code').on('change', function() {
-
     var city_code = $(this).val();
     var selectedOption = $(this).find("option:selected");
 
     // Get the data attribute value
     var dataAttributeValue = selectedOption.attr("data-val");
     var prev_id = $('#prev_id').val();
+    console.log('previous id' + 'RJ' + dataAttributeValue + prev_id);
 
-    // Display the data attribute value in the span
-    $("#dataAttributeValue").css('text-transform', 'uppercase');
-    $("#dataAttributeValue").val('RJ' + dataAttributeValue + prev_id);
-})
+
+    $.ajax({
+        url: '{{url('/')}}/admin/warehouse/get-code-by-city/' + city_code,
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            // $('.get_warehouse').html('<option value="">'+ message +'</option>');
+            $('.city_by_code').empty();
+            // Add the default option
+            $('.city_by_code').val(data.prevId);
+            // console.log(data.prevId);
+            // Display the data attribute value in the span
+            var warehouse_code = 'RJ' + dataAttributeValue + data.prevId;
+            // console.log(warehouse_code);
+            $(".city_by_code").val(warehouse_code);
+            $(".city_by_code").css('color', 'green');
+        }
+    });
+});
 </script>
 <!-- add multirows for revise time slot -->
 <script>

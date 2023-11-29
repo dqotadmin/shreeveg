@@ -111,6 +111,8 @@ class AdminUserController extends Controller
         $admin->password = bcrypt($request['password']);
 
         $admin->admin_role_id = $request->admin_role_id;
+        $admin->warehouse_id = $request->warehouse_id ?  $request->warehouse_id :0;
+        $admin->store_id = $request->store_id ?  $request->store_id :0 ;
         $admin->save();
        
         $adminId = $admin->id;
@@ -170,7 +172,9 @@ class AdminUserController extends Controller
         $admin->phone = $request->phone;
         $admin->email = $request->email;
         $admin->image = $image_name;
-        $admin->save();
+        $admin->warehouse_id = $request->warehouse_id;
+        $admin->store_id = $request->store_id;
+          $admin->save();
         Toastr::success( translate($request->name.' updated successfully!') );
         return redirect()->route('admin.warehouse-admin',['role_id'=>$request->admin_role_id]);
     }

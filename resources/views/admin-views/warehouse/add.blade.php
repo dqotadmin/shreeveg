@@ -42,20 +42,6 @@
                                 <div class="row align-items-end g-4" style="padding-top: 50px;">
                                     <div class="col-sm-4">
                                         <label class="form-label"
-                                            for="exampleFormControlInput1">{{ translate('Select Warehouse Admin') }}
-                                        </label>
-                                        <select name="warehouse_admin_id" class=" form-control">
-                                            <option value="" disabled selected>Select Name</option>
-                                            @foreach(\App\Model\Admin::orderBy('id',
-                                            'DESC')->where('admin_role_id',3)->get() as $admin)
-                                            <option value="{{$admin['id']}}">{{$admin['f_name']}} {{$admin['l_name']}}
-                                            </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <label class="form-label"
                                             for="exampleFormControlInput1">{{ translate('Select City') }} </label>
                                         <select id="city_code" name="city_id" class="city_code form-control">
                                             <option value="" disabled selected>Select City</option>
@@ -67,12 +53,7 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-sm-4">
-                                        <label class="form-label"
-                                            for="exampleFormControlInput1">{{ translate('Warehouse Name') }}
-                                        </label>
-                                        <input type="text" name="name" class="form-control" maxlength="255">
-                                    </div>
+                                 
 
                                     <div class="col-sm-4">
                                         <label class="form-label"
@@ -81,6 +62,13 @@
                                             id="city_by_code">
                                     </div>
 
+                                    <div class="col-sm-4">
+                                        <label class="form-label"
+                                            for="exampleFormControlInput1">{{ translate('Warehouse Name') }}
+                                        </label>
+                                        <input type="text" name="name" class="form-control" maxlength="255">
+                                    </div>
+                                    
                                     <div class="col-sm-4">
                                         <label class="form-label"
                                             for="exampleFormControlInput1">{{ translate('Warehouse Address') }} </label>
@@ -221,45 +209,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="card-title">
-                                    <i class="tio-clock"></i>
-                                    {{translate('order revised time slot')}}
-                                </h5>
-                            </div>
-                            <div class="card-body pt-sm-0 pb-sm-4">
-                                <div class="row align-items-end g-4  mt-3">
-
-                                    <table class="table table-bordered" id="box-revise-pair">
-                                        <tr>
-                                            <th>Start Time</th>
-                                            <th> End Time</th>
-                                            <th>
-                                                <button type="button" id="add-revise-pair"
-                                                    class="remove-revise-pair btn btn-outline-success">Add More</button>
-                                            </th>
-                                        </tr>
-                                        <tr class="row-revise-pair">
-                                            <td>
-                                                <input type="time" class="input-revise-pair form-control"
-                                                    name="revise_time_open[]" required>
-                                            </td>
-                                            <td>
-                                                <input type="time" class="input-revise-pair  form-control"
-                                                    name="revise_time_close[]" required>
-                                            </td>
-                                            <td>
-                                                <button type="button"
-                                                    class="remove-revise-pair btn btn-outline-danger">Remove</button>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                
                     <div class="col-sm-6">
                         <div class="card">
                             <div class="card-header">
@@ -297,43 +247,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="card-title">
-                                    <i class="tio-clock"></i>
-                                    {{translate('order cancel time slot')}}
-                                </h5>
-                            </div>
-                            <div class="card-body pt-sm-0 pb-sm-4">
-                                <div class="row align-items-end g-4  mt-3">
-                                    <table class="table table-bordered" id="box-order-cancel-pair">
-                                        <tr>
-                                            <th>Start Time</th>
-                                            <th> End Time</th>
-                                            <th> <button type="button" id="add-order-cancel-pair"
-                                                    class="remove-order-cancel-pair btn btn-outline-success">Add
-                                                    More</button> </th>
-
-                                        </tr>
-                                        <tr class="row-order-cancel-pair">
-
-                                            <td><input type="time" name="order_cancel_open_time[]"
-                                                    class="form-control input-order-cancel-pair" required /></td>
-                                            <td><input type="time" name="order_cancel_close_time[]"
-                                                    class="form-control input-order-cancel-pair" required /></td>
-                                            <td><button type="button"
-                                                    class="remove-order-cancel-pair btn btn-outline-danger">Remove</button>
-                                            </td>
-
-                                        </tr>
-                                    </table>
-
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+             
                     <div class="col-sm-6">
                         <div class="card">
                             <div class="card-header">
@@ -348,9 +262,9 @@
                                         <tr>
                                             <th>Start Time</th>
                                             <th> End Time</th>
-                                            <th> <button type="button" id="add-pre-order-pair"
+                                            <!-- <th> <button type="button" id="add-pre-order-pair"
                                                     class="remove-pre-order-pair btn btn-outline-success">Add
-                                                    More</button> </th>
+                                                    More</button> </th> -->
 
                                         </tr>
                                         <tr class="row-pre-order-pair">
@@ -362,9 +276,9 @@
                                             <td><input type="time" name="pre_order_close_time[]"
                                                     class="form-control input-pre-order-pair" required />
                                             </td>
-                                            <td><button type="button"
+                                            <!-- <td><button type="button"
                                                     class="remove-pre-order-pair btn btn-outline-danger">Remove</button>
-                                            </td>
+                                            </td> -->
 
                                         </tr>
                                     </table>
@@ -375,7 +289,8 @@
                     </div>
                     <div class="col-sm-12">
                         <div class="btn--container justify-content-end">
-                            <a type="button" href="{{route('admin.warehouse.add')}}"  class="btn btn--reset">{{translate('Back')}}</a>
+                            <a type="button" href="{{route('admin.warehouse.add')}}"
+                                class="btn btn--reset">{{translate('Back')}}</a>
                             <button type="submit" class="btn btn--primary">{{translate('submit')}}</button>
                         </div>
                     </div>
@@ -401,11 +316,24 @@ $('.city_code').on('change', function() {
     var prev_id = $('#prev_id').val();
     console.log('previous id' + 'RJ' + dataAttributeValue + prev_id);
 
-    // Display the data attribute value in the span
-    var warehouse_code = 'RJ' + dataAttributeValue + prev_id;
-    console.log(warehouse_code);
-    $(".city_by_code").val(warehouse_code);
-    $(".city_by_code").css('color', 'green');
+
+    $.ajax({
+        url: 'get-code-by-city/' + city_code,
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            // $('.get_warehouse').html('<option value="">'+ message +'</option>');
+            $('.city_by_code').empty();
+            // Add the default option
+            $('.city_by_code').val(data.prevId);
+            // console.log(data.prevId);
+            // Display the data attribute value in the span
+            var warehouse_code = 'RJ' + dataAttributeValue + data.prevId;
+            // console.log(warehouse_code);
+            $(".city_by_code").val(warehouse_code);
+            $(".city_by_code").css('color', 'green');
+        }
+    });
 });
 </script>
 <script>
@@ -454,6 +382,7 @@ function generateCode() {
     $('#codegenerate').val(code)
 }
 </script>
+
 <script>
 $(document).ready(function() {
     function initAutocomplete() {
@@ -575,120 +504,6 @@ $('.__right-eye').on('click', function() {
 
 
 <!-- add multirows for revise time slot -->
-<script>
-// Add more functionality
-$('#add-revise-pair').on('click', function() {
-    if (checkReviseTime()) {
-        var newPair = $('.row-revise-pair:first').clone();
-        newPair.find('input').val('');
-        newPair.appendTo('#box-revise-pair');
-    }
-});
-
-// Remove functionality
-$(document).on('click', '.remove-revise-pair', function() {
-    $(this).closest('.row-revise-pair').remove();
-});
-
-//  validation
-function checkReviseTime() {
-    var valid = true;
-
-    $('input[name^="revise_time_open"]').each(function(index) {
-
-        var startTime = $(this).val(); //get start time
-        var endTimeArray = document.getElementsByName('revise_time_close[]');
-        var endTime = endTimeArray[index].value; // get end time
-
-        //split hours and minutes
-        var startTimeSplit = startTime.split(':'); //10:30 -> 10,30
-        var endTimeSplit = endTime.split(':'); //11:30 -> 11,30
-
-        // Convert hours and minutes to integers
-        var startTimeHours = parseInt(startTimeSplit[0]); // get hourse ( 10,30)-> (10)
-        var startTimeMinutes = parseInt(startTimeSplit[1]); // get minutes ( 10,30)-> (30)
-        var endTimeHours = parseInt(endTimeSplit[0]);
-        var endTimeMinutes = parseInt(endTimeSplit[1]);
-
-        // Calculate the time difference in minutes
-        var timeDifferenceMinutes = (endTimeHours * 60 + endTimeMinutes) - (startTimeHours * 60 +
-            startTimeMinutes); // 60
-
-        if (startTime == '' || endTime == '') {
-            Swal.fire({
-                title: 'Alert',
-                html: 'Please fill start and end time of current row.',
-                icon: 'info',
-                confirmButtonText: 'OK'
-            });
-            valid = false;
-        } else if (startTime && endTime) {
-            var startMoment = moment(startTime, 'HH:mm');
-            var endMoment = moment(endTime, 'HH:mm');
-            if (!endMoment.isAfter(startMoment)) {
-                Swal.fire({
-                    title: 'Alert',
-                    html: 'End time must be after start time.',
-                    icon: 'info',
-                    confirmButtonText: 'OK'
-                });
-                valid = false;
-            }
-            if (timeDifferenceMinutes < 30) {
-                Swal.fire({
-                    title: 'Alert',
-                    html: 'Start time and end time difference is <strong>' + timeDifferenceMinutes +
-                        ' minutes</strong>. It should be 30 and greater than 30.',
-                    icon: 'info',
-                    confirmButtonText: 'OK'
-                });
-                valid = false;
-            }
-
-            if (index > 0 && valid) {
-                //get diff prev end time and new start time
-                var preEndTime = moment(endTimeArray[index - 1].value, 'HH:mm'); // get pre end time
-
-                //get diffrence
-                var preEndTimeSlot = (endTimeArray[index - 1].value).split(':'); //11:30 -> 11,30
-                var NewStartTime = startTime.split(':'); //12:30 -> 12,30
-
-                // Convert hours and minutes to integers
-                var preEndTimeHours = parseInt(preEndTimeSlot[0]); //11
-                var preEndTimeMinutes = parseInt(preEndTimeSlot[1]); //30
-                var startTimeHours = parseInt(NewStartTime[0]); //12
-                var endTimeMinutes = parseInt(NewStartTime[1]); //30
-
-                // Calculate the time difference in minutes
-                var newRowTimeDifferenceMinutes = (startTimeHours * 60 + endTimeMinutes) - (preEndTimeHours *
-                    60 + preEndTimeMinutes); //60
-
-                if (newRowTimeDifferenceMinutes < 30) {
-                    Swal.fire({
-                        title: 'Alert',
-                        html: 'Previous End Time And New start time difference is <strong>' +
-                            newRowTimeDifferenceMinutes +
-                            ' minutes</strong>. It should be 30 and greater than 30.',
-                        icon: 'info',
-                        confirmButtonText: 'OK'
-                    });
-                    valid = false;
-                }
-                if (!startMoment.isAfter(preEndTime)) {
-                    Swal.fire({
-                        title: 'Alert',
-                        html: ' Next time slot must be greater than previous.',
-                        icon: 'info',
-                        confirmButtonText: 'OK'
-                    });
-                    valid = false;
-                }
-            }
-        }
-    });
-    return valid;
-};
-</script>
 <!-- add multirows for delivery time slot -->
 <script>
 // Add more functionality
@@ -804,119 +619,6 @@ function checkDeliveryTime() {
 };
 </script>
 <!-- add multirows for order cancel time slot -->
-<script>
-// Add more functionality
-$('#add-order-cancel-pair').on('click', function() {
-    if (checkOrderCancelTime()) {
-        var newPair = $('.row-order-cancel-pair:first').clone();
-        newPair.find('input').val('');
-        newPair.appendTo('#box-order-cancel-pair');
-    }
-});
-
-// Remove functionality
-$(document).on('click', '.remove-order-cancel-pair', function() {
-    $(this).closest('.row-order-cancel-pair').remove();
-});
-
-//  validation
-function checkOrderCancelTime() {
-    var valid = true;
-
-    $('input[name^="order_cancel_open_time"]').each(function(index) {
-
-        var startTime = $(this).val(); //get start time
-        var endTimeArray = document.getElementsByName('order_cancel_close_time[]');
-        var endTime = endTimeArray[index].value; // get end time
-
-        //split hours and minutes
-        var startTimeSplit = startTime.split(':'); //10:30 -> 10,30
-        var endTimeSplit = endTime.split(':'); //11:30 -> 11,30
-
-        // Convert hours and minutes to integers
-        var startTimeHours = parseInt(startTimeSplit[0]); // get hourse ( 10,30)-> (10)
-        var startTimeMinutes = parseInt(startTimeSplit[1]); // get minutes ( 10,30)-> (30)
-        var endTimeHours = parseInt(endTimeSplit[0]);
-        var endTimeMinutes = parseInt(endTimeSplit[1]);
-
-        // Calculate the time difference in minutes
-        var timeDifferenceMinutes = (endTimeHours * 60 + endTimeMinutes) - (startTimeHours * 60 +
-            startTimeMinutes); // 60
-
-        if (startTime == '' || endTime == '') {
-            Swal.fire({
-                title: 'Alert',
-                html: 'Please fill start and end time of current row.',
-                icon: 'info',
-                confirmButtonText: 'OK'
-            });
-            valid = false;
-        } else if (startTime && endTime) {
-            var startMoment = moment(startTime, 'HH:mm');
-            var endMoment = moment(endTime, 'HH:mm');
-            if (!endMoment.isAfter(startMoment)) {
-                Swal.fire({
-                    title: 'Alert',
-                    html: 'End time must be after start time.',
-                    icon: 'info',
-                    confirmButtonText: 'OK'
-                });
-                valid = false;
-            }
-            if (timeDifferenceMinutes < 30) {
-                Swal.fire({
-                    title: 'Alert',
-                    html: 'Start time and end time difference is <strong>' + timeDifferenceMinutes +
-                        ' minutes</strong>. It should be 30 and greater than 30.',
-                    icon: 'info',
-                    confirmButtonText: 'OK'
-                });
-                valid = false;
-            }
-            if (index > 0 && valid) {
-                //get diff prev end time and new start time
-                var preEndTime = moment(endTimeArray[index - 1].value, 'HH:mm'); // get pre end time
-
-                //get diffrence
-                var preEndTimeSlot = (endTimeArray[index - 1].value).split(':'); //11:30 -> 11,30
-                var NewStartTime = startTime.split(':'); //12:30 -> 12,30
-
-                // Convert hours and minutes to integers
-                var preEndTimeHours = parseInt(preEndTimeSlot[0]); //11
-                var preEndTimeMinutes = parseInt(preEndTimeSlot[1]); //30
-                var startTimeHours = parseInt(NewStartTime[0]); //12
-                var endTimeMinutes = parseInt(NewStartTime[1]); //30
-
-                // Calculate the time difference in minutes
-                var newRowTimeDifferenceMinutes = (startTimeHours * 60 + endTimeMinutes) - (preEndTimeHours *
-                    60 + preEndTimeMinutes); //60
-                if (newRowTimeDifferenceMinutes < 30) {
-                    Swal.fire({
-                        title: 'Alert',
-                        html: 'Previous End Time And New start time difference is <strong>' +
-                            newRowTimeDifferenceMinutes +
-                            ' minutes</strong>. It should be 30 and greater than 30.',
-                        icon: 'info',
-                        confirmButtonText: 'OK'
-                    });
-                    valid = false;
-                }
-                if (!startMoment.isAfter(preEndTime)) {
-                    Swal.fire({
-                        title: 'Alert',
-                        html: ' Next time slot must be greater than previous.',
-                        icon: 'info',
-                        confirmButtonText: 'OK'
-                    });
-                    valid = false;
-                }
-            }
-        }
-    });
-    return valid;
-};
-</script>
-<!-- add multirows for pre order time slot -->
 <script>
 // Add more functionality
 $('#add-pre-order-pair').on('click', function() {

@@ -22,7 +22,8 @@ use Illuminate\Validation\Rule;
 class StoreController extends Controller
 {
     public function __construct(
-        private Store $store
+        private Store $store,
+        private City $city
     ){}
 
     /**
@@ -52,7 +53,14 @@ class StoreController extends Controller
 
     function create(Request $request): View|Factory|Application
     {
-       return view('admin-views.store.add');
+        $stores = $this->store->orderBy('id','desc')->first();
+        if($stores && $stores->id < 9){
+            $prevId = ($stores && $stores->id)?'0'.$stores->id+1:'01';
+        }else{
+            $prevId = ($stores && $stores->id)?$stores->id+1:'01';
+
+        }
+       return view('admin-views.store.add',compact('prevId'));
 
     }
 
@@ -202,17 +210,22 @@ class StoreController extends Controller
 
     }
     public function get_city($stateId = null){
-        $city = City::query();
-        if($stateId){
-            $city = $city->where('state_id',$stateId)->get();
-        }
+            $city = $this->city->whereStatus('1')->get();
+          
         return response()->json(['city' => $city]);
     }
     public function get_warehouse($cityId=null){
         $warehouse = Warehouse::query();
-    
+        $store_city_id = $this->store->where('status',1)->count();
+
+        if($store_city_id < 9){
+            $prevId = ($store_city_id)?'0'.$store_city_id+1:'01';
+        }else{
+            $prevId = ($store_city_id)? $store_city_id+1:'01';
+
+        }
         if ($cityId) {
-            $warehouse = $warehouse->where('city_id', $cityId)->get();
+            $warehouse = $warehouse->where('status',1)->where('city_id', $cityId)->get();
             
             if ($warehouse->isEmpty()) {
                 return response()->json(['message' => 'Warehouses not found for the given city.']);
@@ -220,7 +233,9 @@ class StoreController extends Controller
         } else {
             return response()->json(['message' => 'City ID is not provided.']);
         }
-        return response()->json(['warehouse' => $warehouse]);
+        return response()->json(['warehouse' => $warehouse, 'prevId' => $prevId]);
+        
+    
     }
    
 
@@ -231,6 +246,7 @@ class StoreController extends Controller
     public function delete(Request $request): RedirectResponse
     {
         $store = $this->store->find($request->id);
+        $store->update(['deleted_by' => auth('admin')->user()->id]);
        
         if ($store) {
             $store->delete();

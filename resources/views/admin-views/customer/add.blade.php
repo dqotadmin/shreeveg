@@ -15,7 +15,7 @@
                     <img src="{{asset('public/assets/admin/img/employee.png')}}" class="w--24" alt="mail">
                 </span>
                 <span>
-                    {{translate('add new deliveryman')}}
+                    {{translate('add new Customer')}}
                 </span>
             </h1>
         </div>
@@ -57,28 +57,7 @@
                                                 required>
                                     </div>
                                 </div>
-                                <div class="col-md-12">
-                                    <div>
-                                        <label class="input-label" for="exampleFormControlInput1">{{translate('Warehouse Name')}}</label>
-                                        <select name="Warehouse" class="form-control">
-                                            <option  disabled selected>{{translate('Select Warehouse')}}</option>
-                                            @foreach(\App\Model\Warehouse::all() as $warehouse)
-                                                <option value="{{$warehouse['id']}}">{{$warehouse['name']}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div>
-                                        <label class="input-label" for="exampleFormControlInput1">{{translate('identity')}} {{translate('type')}}</label>
-                                        <select name="identity_number" class="form-control">
-                                            <option value="passport">{{translate('passport')}}</option>
-                                            <option value="driving_license">{{translate('driving')}} {{translate('license')}}</option>
-                                            <option value="nid">{{translate('nid')}}</option>
-                                            <option value="restaurant_id">{{translate('store Id')}} {{translate('id')}}</option>
-                                        </select>
-                                    </div>
-                                </div>
+                               
                                 <div class="col-md-12">
                                     <div>
                                         <label class="input-label" for="exampleFormControlInput1">{{translate('identity')}} {{translate('number')}}</label>
@@ -99,7 +78,7 @@
                                 </center>
                                 <div class="form-group mb-0">
                                     <label class="form-label d-block">
-                                        {{ translate('Deliveryman Image') }} <span class="text-danger">{{ translate('(Ratio 1:1)') }}</span>
+                                        {{ translate('Customer Image') }} <span class="text-danger">{{ translate('(Ratio 1:1)') }}</span>
                                     </label>
                                     <div class="custom-file">
                                         <input type="file" name="image" id="customFileUpload" class="custom-file-input h--45px" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" required>
@@ -107,70 +86,19 @@
                                     </div>
                                 </div>
                             </div>
-                            <div>
+                            <!-- <div>
                                 <label class="form-label d-block mb-2">
                                     {{ translate('Identity Image') }}
                                 </label>
                                 <div class="product--coba">
                                     <div class="row g-2" id="coba"></div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="card mt-3">
-            <div class="card-header">
-                <h5 class="card-title">
-                    <span class="card-header-icon">
-                        <i class="tio-user"></i>
-                    </span> {{translate('Bank Details')}}
-                </h5>
-            </div>
 
-            <!-- Body -->
-            <div class="card-body">
-                <div class="row g-3">
-                    <div class="col-md-4">
-                        <label class="input-label" for="exampleFormControlInput1">{{ translate('Account Number') }}
-                        </label>
-                        <input type="text" name="account_number" value="{{ old('account_number') }}"
-                            class="form-control" placeholder="{{translate('Ex : Account Number')}}" required>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="input-label" for="exampleFormControlInput1">{{ translate('Account Holder') }}
-                        </label>
-                        <input type="text" name="account_holder" value="{{ old('account_holder') }}"
-                            class="form-control" placeholder="{{translate('Ex : Account Holder')}}" required>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="input-label" for="exampleFormControlInput1">{{ translate('Bank Name') }}
-                        </label>
-                        <input type="text" name="bank_name" value="{{ old('bank_name') }}" class="form-control"
-                            placeholder="{{translate('Ex : Account Number')}}" required>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="input-label" for="exampleFormControlInput1">{{ translate('IFSC Code') }}
-                        </label>
-                        <input type="text" name="ifsc_code" value="{{ old('ifsc_code') }}" class="form-control"
-                            placeholder="{{translate('Ex : Account Number')}}" required>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="input-label" for="exampleFormControlInput1">{{ translate('UPI Id') }} </label>
-                        <input type="text" name="upi_id" value="{{ old('upi_id') }}" class="form-control"
-                            placeholder="{{translate('Ex : Account Number')}}" required>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="input-label" for="exampleFormControlInput1">{{ translate('UPI Number') }}
-                        </label>
-                        <input type="text" name="upi_number" value="{{ old('upi_number') }}" class="form-control"
-                            placeholder="{{translate('Ex : Account Number')}}" required>
-                    </div>
-                </div>
-            </div>
-        </div>
 
             <div class="card mt-3">
                 <div class="card-header">

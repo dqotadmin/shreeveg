@@ -2382,4 +2382,10 @@
   'Ex : UPI Id' => 'Ex : UPI Id',
   'Ex : UPI Number' => 'Ex : UPI Number',
   'Ex: Area Name' => 'Ex: Area Name',
+  'create rate list' => 'Create rate list',
+  'rate list' => 'Rate list',
+  ' Inserted Successfully!' => ' Inserted Successfully!',
+  'order list' => 'Order list',
+  'order_list' => 'Order list',
+  'brokers rate list' => 'Brokers rate list',
 );

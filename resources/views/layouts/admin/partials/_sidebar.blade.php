@@ -225,24 +225,48 @@
                             
                             <li class="navbar-vertical-aside-has-menu ">
                                 <a class="js-navbar-vertical-aside-menu-link nav-link"
-                                    href="{{route('admin.user-management',['role_id'=>'3'])}}"
-                                    title="{{translate('Warehouse Admin')}}">
+                                    href="{{route('admin.broker-rate-list.index')}}"
+                                    title="{{translate('rate list')}}">
                                     <i class="tio-category nav-icon"></i>
                                     <span
-                                        class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Warehouse Admin')}}</span>
+                                        class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('rate list')}}</span>
                                 </a>
                             </li>
 
                             <li class="navbar-vertical-aside-has-menu ">
                                 <a class="js-navbar-vertical-aside-menu-link nav-link"
-                                    href="{{route('admin.user-management',['role_id'=>'8'])}}"
-                                    title="{{translate('warehouse_worker Admin')}}">
+                                    href="{{route('admin.broker-order-list.index')}}"
+                                    title="{{translate('order_list')}}">
                                     <i class="tio-map nav-icon"></i>
                                     <span
-                                        class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Broker')}}</span>
+                                        class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('order list')}}</span>
                                 </a>
                             </li>
                         @endif
+
+                        @if(auth('admin')->user()->admin_role_id == 5)
+                            
+                        <li class="navbar-vertical-aside-has-menu ">
+                            <a class="js-navbar-vertical-aside-menu-link nav-link"
+                                href="{{route('admin.broker-rate-list.wh_receiver_rate_list')}}"
+                                title="{{translate('rate list')}}">
+                                <i class="tio-category nav-icon"></i>
+                                <span
+                                    class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('rate list')}}</span>
+                            </a>
+                        </li>
+
+                        <li class="navbar-vertical-aside-has-menu ">
+                            <a class="js-navbar-vertical-aside-menu-link nav-link"
+                                href="{{route('admin.broker-order-list.index')}}"
+                                title="{{translate('order_list')}}">
+                                <i class="tio-map nav-icon"></i>
+                                <span
+                                    class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('order list')}}</span>
+                            </a>
+                        </li>
+                    @endif
+
                         @if(auth('admin')->user()->admin_role_id == 1)
                             
                             <li class="navbar-vertical-aside-has-menu ">

@@ -44,6 +44,9 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
         Route::get('warehouse-admin', 'AdminUserController@index')->name('user-management');
 
         Route::resource('broker-rate-list', 'BrokerRateListController');
+        Route::resource('broker-order-list', 'BrokerOrderListController');
+        Route::get('warehouse-receiver-rate-list', 'BrokerRateListController@wh_receiver_rate_list')->name('broker-rate-list.wh_receiver_rate_list');
+        Route::resource('warehouse-receiver-order-list', 'WarehouseReceiverOrderController');
 
         // });
 

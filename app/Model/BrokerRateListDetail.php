@@ -17,4 +17,9 @@ class BrokerRateListDetail extends Model
     {
         return $this->belongsTo(BrokerRateList::class, 'broker_rate_list_id');
     }
+
+    public function productDetail()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
+    }
 }

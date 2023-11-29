@@ -12,7 +12,10 @@ class BrokerRateList extends Model
     ];
 
 
-
+    public function brokerDetail()
+    {
+        return $this->belongsTo(Admin::class, 'admin_id');
+    }
     public function rateListDetail()
     {
         return $this->hasMany(BrokerRateListDetail::class, 'broker_rate_list_id');

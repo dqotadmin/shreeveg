@@ -26,8 +26,6 @@
     <div class="card">
         <div class="card-body">
            
-
-               
             <table class="table table-striped">
                 <thead>
                     <th>#</th>
@@ -46,16 +44,10 @@
                    <td>{{ $value->rate }}</td>
                   </tr>
                   @endforeach
-                  <tr>
-                    <th scope="row">3</th>
-                    <td colspan="2" class="table-active">Larry the Bird</td>
-                    <td>@twitter</td>
-                  </tr>
+                  
                 </tbody>
               </table>
 
-                
-            
         </div>
     </div>
 </div>

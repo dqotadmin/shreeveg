@@ -66,8 +66,7 @@
                         <th class="text-center">{{translate('#')}}</th>
                         <th>{{translate('image')}}</th>
                         <th>{{translate('full_name')}}</th>
-                        <th>{{translate('email')}}</th>
-                        <th>{{translate('mobile_no')}}</th>
+                        <th>{{translate('Contact Info')}}</th>
                         <th>{{translate('status')}}</th>
                         <th class="text-center">{{translate('action')}}</th>
                     </tr>
@@ -87,15 +86,14 @@
                             </span>
                         </td>
                         <td>
-                            <span class="d-block font-size-sm text-body text-trim-50">
-                                {{$admin['phone']}}
-                            </span>
+                            <h5 class="m-0">
+                                <a href="mailto:{{$admin['email']}}">{{$admin['email']}}</a>
+                            </h5>
+                            <div>
+                                <a href="Tel:{{$admin['phone']}}">{{$admin['phone']}}</a>
+                            </div>
                         </td>
-                        <td>
-                            <span class="d-block font-size-sm text-body text-trim-50">
-                                {{$admin['email']}}
-                            </span>
-                        </td>
+                       
                         <td>
                         <label class="toggle-switch">
                             <input type="checkbox"

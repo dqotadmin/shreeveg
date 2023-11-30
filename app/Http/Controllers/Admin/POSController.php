@@ -56,7 +56,7 @@ class POSController extends Controller
         $key = explode(' ', $keyword);
 
         $products = $this->product->when($request->has('category_id') && $request['category_id'] != 0, function ($query) use ($request) {
-            $query->whereJsonContains('category_ids', [['id' => (string)$request['category_id']]]);
+            $query->whereJsonContains('category_id', [['id' => (string)$request['category_id']]]);
         })->when($keyword, function ($query) use ($key) {
             return $query->where(function ($q) use ($key) {
                 foreach ($key as $value) {
@@ -128,7 +128,7 @@ class POSController extends Controller
     public function discount_calculation($product, $price) : float
     {
         $category_id = null;
-        foreach (json_decode($product['category_ids'], true) as $cat) {
+        foreach (json_decode($product['category_id'], true) as $cat) {
             if ($cat['position'] == 1) {
                 $category_id = ($cat['id']);
             }
@@ -501,7 +501,7 @@ class POSController extends Controller
                     $tax_on_product = Helpers::tax_calculate($product, $price);
 
                     $category_id = null;
-                    foreach (json_decode($product['category_ids'], true) as $cat) {
+                    foreach (json_decode($product['category_id'], true) as $cat) {
                         if ($cat['position'] == 1){
                             $category_id = ($cat['id']);
                         }

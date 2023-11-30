@@ -227,6 +227,7 @@
                                         <tr>
                                             <th>Start Time</th>
                                             <th> End Time</th>
+                                            <th> Hide Option Before(In minutes)</th>
                                             <th> <button type="button" id="add-delivery-pair"
                                                     class="remove-delivery-pair btn btn-outline-success">Add
                                                     More</button> </th>
@@ -243,6 +244,9 @@
                                             <td><input type="time" name="delivery_close_time[]"
                                                     class="form-control input-delivery-pair" required
                                                     value="{{$warehouse['close']}}">
+                                            </td>
+                                            <td><input type="number" name="hide_option_before[]"
+                                                    class="form-control input-delivery-pair" required value="{{$warehouse['hide_option_before']}}"/>
                                             </td>
                                             <td><button type="button"
                                                     class="remove-delivery-pair btn btn-outline-danger">Remove</button>
@@ -286,9 +290,9 @@
                                         <tr>
                                             <th>Start Time</th>
                                             <th> End Time</th>
-                                            <th> <button type="button" id="add-pre-order-pair"
+                                            <!-- <th> <button type="button" id="add-pre-order-pair"
                                                     class="remove-pre-order-pair btn btn-outline-success">Add
-                                                    More</button> </th>
+                                                    More</button> </th> -->
 
                                         </tr>
                                         @if($warehouses->pre_order_time)
@@ -302,9 +306,9 @@
                                                     class="form-control input-pre-order-pair" required
                                                     value="{{$warehouse['close']}}" />
                                             </td>
-                                            <td><button type="button"
+                                            <!-- <td><button type="button"
                                                     class="remove-pre-order-pair btn btn-outline-danger">Remove</button>
-                                            </td>
+                                            </td> -->
 
                                         </tr>
                                         @endforeach

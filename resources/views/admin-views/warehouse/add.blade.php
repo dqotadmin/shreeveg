@@ -98,14 +98,14 @@
                                         <label class="form-label"
                                             for="exampleFormControlInput1">{{ translate('Warehouse Start Time') }}
                                         </label>
-                                        <input type="time" name="open_time" class="form-control" maxlength="255">
+                                        <input type="time" name="open_time" class="form-control" maxlength="255" value="{{ config('custom.start_time') }}">
 
                                     </div>
                                     <div class="col-sm-6">
                                         <label class="form-label"
                                             for="exampleFormControlInput1">{{ translate('Warehouse End Time') }}
                                         </label>
-                                        <input type="time" name="close_time" class="form-control" maxlength="255">
+                                        <input type="time" name="close_time" class="form-control" maxlength="255" value="{{ config('custom.end_time') }}">
 
                                     </div>
                                 </div>
@@ -224,12 +224,13 @@
                                         <tr>
                                             <th>Start Time</th>
                                             <th> End Time</th>
+                                            <th> Hide Option Before(In minutes)</th>
                                             <th> <button type="button" id="add-delivery-pair"
                                                     class="remove-delivery-pair btn btn-outline-success">Add
                                                     More</button> </th>
 
                                         </tr>
-                                        <tr class="row-delivery-pair">
+                                        <!-- <tr class="row-delivery-pair">
                                             <td><input type="time" name="delivery_open_time[]"
                                                     class="form-control input-delivery-pair" required />
                                             </td>
@@ -240,7 +241,24 @@
                                                     class="remove-delivery-pair btn btn-outline-danger">Remove</button>
                                             </td>
 
+                                        </tr> -->
+                                        @foreach(\App\Model\TimeSlot::get() as $key=>$timeSlot)
+                                        <tr class="row-delivery-pair">
+                                            <td><input type="time" name="delivery_open_time[]"
+                                                    class="form-control input-delivery-pair" required value="{{$timeSlot->start_time}}"/>
+                                            </td>
+                                            <td><input type="time" name="delivery_close_time[]"
+                                                    class="form-control input-delivery-pair" required value="{{$timeSlot->end_time}}"/>
+                                            </td>
+                                            <td><input type="number" name="hide_option_before[]"
+                                                    class="form-control input-delivery-pair" required value="{{$timeSlot->hide_option_before}}"/>
+                                            </td>
+                                            <td><button type="button"
+                                                    class="remove-delivery-pair btn btn-outline-danger">Remove</button>
+                                            </td>
+
                                         </tr>
+                                        @endforeach
                                     </table>
 
                                 </div>

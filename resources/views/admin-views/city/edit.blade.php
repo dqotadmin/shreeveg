@@ -45,7 +45,7 @@
                         <label class="form-label">{{ translate('State') }}
                         </label>
                         <select id="exampleFormControlSelect1" name="state_id" class="form-control " required>
-                            @foreach(\App\Model\State::orderBy('id', 'DESC')->get() as $state)
+                            @foreach(\App\Model\State::where('status','1')->orderBy('id', 'DESC')->get() as $state)
                             <option value="{{$state['id']}}" {{$cities['state_id']==$state['id']?'selected':''}}>
                                 {{$state['name']}}</option>
                             @endforeach

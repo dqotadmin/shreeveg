@@ -1,11 +1,8 @@
 <div class="product-card card" onclick="quickView('{{$product->id}}')">
     <?php
         $category_id = null;
-        foreach (json_decode($product['category_ids'], true) as $cat) {
-            if ($cat['position'] == 1){
-                $category_id = ($cat['id']);
-            }
-        }
+        
+                $category_id =$product->category_id;
 
         $category_discount = \App\CentralLogics\Helpers::category_discount_calculate($category_id, $product['price']);
         $product_discount = \App\CentralLogics\Helpers::discount_calculate($product, $product['price']);

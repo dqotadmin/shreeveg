@@ -435,7 +435,7 @@
                                 style="display: {{Request::is('admin/area*')?'block':'none'}} ">
 
                                 <li class="nav-item {{Request::is('admin/city/add')?'active':''}}">
-                                    <a class="nav-link " href="{{route('admin.city.add')}}"
+                                    <a class="nav-link " href="{{route('admin.city.list')}}"
                                         title="{{translate('City')}}">
                                         <span class="tio-circle nav-indicator-icon"></span>
                                         <span class="text-truncate">{{translate('City')}}</span>
@@ -443,7 +443,7 @@
                                 </li>
 
                                 <li class="nav-item {{Request::is('admin/area/list')?'active':''}}">
-                                    <a class="nav-link " href="{{route('admin.area.add')}}"
+                                    <a class="nav-link " href="{{route('admin.area.list')}}"
                                         title="{{translate('categories')}}">
                                         <span class="tio-circle nav-indicator-icon"></span>
                                         <span class="text-truncate">{{translate('Area')}}</span>
@@ -456,14 +456,14 @@
 
                         <li class="navbar-vertical-aside-has-menu {{Request::is('admin/warehouse.add')?'active':''}}">
                             <a class="js-navbar-vertical-aside-menu-link nav-link"
-                                href="{{route('admin.warehouse.add')}}" title="{{translate('Warehouse')}}">
+                                href="{{route('admin.warehouse.list')}}" title="{{translate('Warehouse')}}">
                                 <i class="tio-map nav-icon"></i>
                                 <span
                                     class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Warehouse')}}</span>
                             </a>
                         </li>
                         <li class="navbar-vertical-aside-has-menu {{Request::is('admin/store.index')?'active':''}}">
-                            <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{route('admin.store.index')}}"
+                            <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{route('admin.store.list')}}"
                                 title="{{translate('Store')}}">
                                 <i class="tio-map nav-icon"></i>
                                 <span
@@ -490,7 +490,7 @@
                         </li>
 
                         <li class="navbar-vertical-aside-has-menu {{Request::is('admin/unit*')?'active':''}}">
-                            <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{route('admin.unit.add')}}"
+                            <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{route('admin.unit.list')}}"
                                 title="{{translate('units')}}">
                                 <i class="tio-category nav-icon"></i>
                                 <span

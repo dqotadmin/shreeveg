@@ -46,7 +46,7 @@
                                 </label>
                                 <select id=" " name="state_id" class="form-control js-select2-custom" required>
                                     <option value="" disabled selected>Select State </option>
-                                    @foreach(\App\Model\State::orderBy('id', 'DESC')->get() as $state)
+                                    @foreach(\App\Model\State::where('status','1')->orderBy('id', 'DESC')->get() as $state)
                                     <option value="{{$state['id']}}">{{$state['name']}}</option>
                                     @endforeach
                                 </select>

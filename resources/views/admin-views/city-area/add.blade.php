@@ -53,8 +53,8 @@
                                         <label class="form-label">{{ translate('Area') }}
                                             {{ translate('Name') }}
                                         </label>
-                                        <input type="text" name="area" class="form-control" placeholder=""
-                                            maxlength="255">
+                                        <input type="text" name="area" class="form-control"  
+                                        placeholder="{{ translate('Ex: Area Name') }}"     maxlength="255">
                                     </div>
                                 </div>
                             </div>

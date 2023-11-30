@@ -2400,4 +2400,6 @@
   'status updated Successfully!' => 'Status updated Successfully!',
   'broker' => 'Broker',
   'order detail' => 'Order detail',
+  'Apna Bazar Inserted Successfully!' => 'Apna Bazar Inserted Successfully!',
+  'order remved' => 'Order remved',
 );

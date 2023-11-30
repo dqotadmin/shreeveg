@@ -16,6 +16,16 @@
         </h1>
     </div>
     <!-- End Page Header -->
+    <div class="d-print-none pb-2">
+        <div class="row align-items-center">
+            <div class="col-auto mb-2 mb-sm-0">
+                <h1 class="page-header-title">{{$row->title}}</h1>
+                <span class="d-block">
+                    <i class="tio-date-range"></i> {{translate('date')}} : {{date('d M Y, H:i A '.config('timeformat'),strtotime($row->date_time))}}
+                </span>
+            </div>
+        </div>
+    </div>
     <div class="col-12">
         <div class="btn--container justify-content-end">
             <a href="{{route('admin.broker-rate-list.index')}}" type="reset" class="btn btn--reset">
@@ -26,8 +36,6 @@
     <div class="card">
         <div class="card-body">
            
-
-               
             <table class="table table-striped">
                 <thead>
                     <th>#</th>
@@ -46,16 +54,10 @@
                    <td>{{ $value->rate }}</td>
                   </tr>
                   @endforeach
-                  <tr>
-                    <th scope="row">3</th>
-                    <td colspan="2" class="table-active">Larry the Bird</td>
-                    <td>@twitter</td>
-                  </tr>
+                  
                 </tbody>
-              </table>
+            </table>
 
-                
-            
         </div>
     </div>
 </div>

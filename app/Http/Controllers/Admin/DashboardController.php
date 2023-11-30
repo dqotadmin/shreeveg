@@ -66,7 +66,7 @@ class DashboardController extends Controller
     {
         $top_sell = [];
 
-        if (auth('admin')->user()->admin_role_id != 5) {
+        if (auth('admin')->user()->admin_role_id == 2) {
             $top_sell = $this->order_detail->with(['product'])
                 ->whereHas('order', function ($query) {
                     $query->where('order_status', 'delivered');

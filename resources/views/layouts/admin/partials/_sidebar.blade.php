@@ -681,6 +681,40 @@
                         <!-- End Pages -->
                         @endif
 
+                        @if(Helpers::module_permission_check(MANAGEMENT_SECTION['category_management']))
+                        <li class="nav-item">
+                            <small class="nav-subtitle">{{translate('category_management')}}</small>
+                            <small class="tio-more-horizontal nav-subtitle-replacer"></small>
+                        </li>
+                        <!-- Pages -->
+                        <li class="navbar-vertical-aside-has-menu {{Request::is('warehouse-category*')?'active':''}}">
+                            <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle" href="javascript:"
+                                title="{{translate('orders')}}">
+                                <i class="tio-category nav-icon"></i>
+                                <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                    {{translate('Assign Categories')}}
+                                </span>
+                            </a>
+                            <ul class="js-navbar-vertical-aside-submenu nav nav-sub"
+                                style="display: {{Request::is('admin/warehouse-category*') ? 'block' : 'none'}}">
+
+                                <li class="nav-item {{Request::is('admin/warehouse-category/list')?'active':''}}">
+                                    <a class="nav-link" href="{{route('admin.warehouse-category.list')}}"
+                                        title="{{translate('all_categories')}}">
+                                        <span class="tio-circle nav-indicator-icon"></span>
+                                        <span class="text-truncate">{{translate('all Categories')}}</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {{Request::is('admin/warehouse-category/group-list')?'active':''}}">
+                                    <a class="nav-link" href="{{route('admin.warehouse-category.group-list')}}"
+                                        title="{{translate('all_categories')}}">
+                                        <span class="tio-circle nav-indicator-icon"></span>
+                                        <span class="text-truncate">{{translate('Grouping List')}}</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        @endif
 
                         @if(Helpers::module_permission_check(MANAGEMENT_SECTION['promotion_management']))
                         <!-- Promotion Manegement 

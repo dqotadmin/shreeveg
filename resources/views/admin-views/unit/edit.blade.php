@@ -48,7 +48,7 @@
 
                         <div class="col-12">
                             <div class="btn--container justify-content-end">
-                            <a type="button" href="{{route('admin.unit.add')}}" class="btn btn--reset">{{translate('Back')}}</a>
+                            <a type="button" href="{{route('admin.unit.list')}}" class="btn btn--reset">{{translate('Back')}}</a>
                             <button type="submit" class="btn btn--primary">{{translate('submit')}}</button>
                             </div>
                         </div>

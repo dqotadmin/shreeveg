@@ -21,17 +21,18 @@
         </h1>
     </div>
     <!-- End Page Header -->
-    <div class="row g-2">
-        <div class="col-sm-12 col-lg-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title">
-                        <i class="tio-user"></i>
-                        {{translate('Owner information')}}
-                    </h5>
-                </div>
-                <div class="card-body pt-sm-0 pb-sm-4">
-                    <form action="{{route('admin.store.store')}}" method="post" enctype="multipart/form-data">
+    <form action="{{route('admin.store.store')}}" method="post" enctype="multipart/form-data">
+
+        <div class="row g-2">
+            <div class="col-sm-12 col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">
+                            <i class="tio-user"></i>
+                            {{translate('Owner information')}}
+                        </h5>
+                    </div>
+                    <div class="card-body pt-sm-0 pb-sm-4">
                         @csrf
                         @php($data = Helpers::get_business_settings('language'))
                         @php($default_lang = Helpers::get_default_language())
@@ -40,23 +41,13 @@
                         </ul>
                         <!-- <input type="text" id="prev_id" value="{{$prevId}}"> -->
                         <div class="row align-items-end g-4" style="margin-top: 40px;">
-                            <!-- <div class="col-sm-6">
-                                <label class="form-label" for="exampleFormControlInput1">{{ translate('Owner') }}
-                                    {{ translate('Name') }} </label>
-                                <select name="owner_id" id="get_city_name_by_owner" class="form-control">
-                                    <option value="" disabled selected>Select Owner Name</option>
-                                    @foreach(App\Model\Admin::where('admin_role_id',6)->get() as $store)
-                                    @if(isset($store->city->city) && isset($store))
-                                    <option value="{{$store->id}}" city-val="{{$store->city->city}}"
-                                        state-id="{{$store->state_id}}" city-id="{{$store->city_id}}">{{$store->f_name}}
-                                        {{$store->l_name}}</option>
-                                        @endif
-                                    @endforeach
-                                </select>
-                            </div> -->
                             <div class="col-sm-6">
                                 <label class="form-label" for=" "> {{ translate('City') }} </label>
-                                <select name="city_id" id="click_on_city" class="get_city  form-control">
+                                <select name="city_id" id="click_on_city" class="sget_city  form-control">
+                                    <option value="" disabled selected>Select City</option>
+                                    @foreach(\App\Model\City::where('status','1')->get() as $city)
+                                    <option value="{{$city->id}}">{{$city->city}}</option>
+                                    @endforeach
                                 </select>
                             </div>
 
@@ -68,44 +59,48 @@
                                 <span class="warehoues_error"></span>
                             </div>
                         </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-sm-12 col-lg-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title">
-                        <i class="tio-user"></i>
-                        {{translate('Store information')}}
-                    </h5>
-                </div>
-                <div class="card-body pt-sm-0 pb-sm-4">
+            <div class="col-sm-12 col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">
+                            <i class="tio-user"></i>
+                            {{translate('Store information')}}
+                        </h5>
+                    </div>
+                    <div class="card-body pt-sm-0 pb-sm-4">
                     <div class="row align-items-end g-4" style="margin-top: 40px;">
 
                         <div class="col-sm-6 ">
                             <label class="form-label" for="exampleFormControlInput1">{{ translate('Store') }}
                                 {{ translate('Name') }} </label>
                             <input type="text" name="name" class="form-control"
-                                placeholder="{{ translate('Ex: Store Name') }}" maxlength="255">
+                                placeholder="{{ translate('Ex: Store Name') }}"  maxlength="255">
                         </div>
                         <div class="col-sm-6">
                             <label class="form-label" for="exampleFormControlInput1">{{ translate('Store') }}
                                 {{ translate('Code') }} </label>
                             <input type="text" name="code" class="get_wh_code form-control"
-                                style="text-transform: uppercase;" placeholder="{{ translate('Ex: QUINN1') }}"
+                                style="text-transform: uppercase;"placeholder="{{ translate('Ex: QUINN1') }}" readonly
                                 maxlength="255">
                         </div>
                         <div class="col-sm-6">
                             <label class="form-label" for="exampleFormControlInput1">{{ translate('Shop') }}
                                 {{ translate('Licence') }} </label>
-                            <input type="text" name="shop_licence" class="form-control"
+                            <input type="text" name="shop_licence" class="form-control"  
                                 placeholder="{{ translate('Ex: Shop Licence') }}" maxlength="255">
                         </div>
                         <div class="col-sm-6">
                             <label class="form-label" for="exampleFormControlInput1">
-                                {{ translate('Area Pin Code') }} </label>
-                            <input type="text" name="pin_code" class="form-control"
-                                placeholder="{{ translate('Ex: Area Pin Code') }}" maxlength="255">
+                                {{ translate('Area') }} </label>
+                            <select name="area_id" id="" class="form-control">
+                                <option value="">Select Area</option>
+                                @foreach(\App\Model\CityArea::where('status','1')->get() as $area)
+                                <option value="{{$area->id}}">{{$area->area}}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="col-sm-6">
                             <label class="form-label" for="exampleFormControlInput1">{{ translate('Store') }}
@@ -113,125 +108,134 @@
                             <textarea type="text" name="address" class="form-control"
                                 placeholder="{{ translate('Ex: Address)') }}" maxlength="255"></textarea>
                         </div>
+                       
                         <div class="col-sm-6">
-                            <div>
-                                <div class="text-center mb-3">
-                                    <img id="viewer" class="img--105"
-                                        src="{{ asset('public/assets/admin/img/160x160/1.png') }}" alt="image" />
-                                </div>
-                            </div>
-                            <label class="form-label text-capitalize">{{ translate('Document  ') }}</label><small
-                                class="text-danger">*
-                                ( {{ translate('ratio') }}
-                                3:1 )</small>
-                            <div class="custom-file">
-                                <input type="file" name="document" id="customFileEg1" class="custom-file-input"
-                                    accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*"
-                                    oninvalid="document.getElementById('en-link').click()">
-                                <label class="custom-file-label" for="customFileEg1">{{ translate('choose') }}
-                                    {{ translate('file') }}</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-12 col-lg-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title">
-                        <i class="tio-user"></i>
-                        {{translate('Business information')}}
-                    </h5>
-                </div>
-                <div class="card-body pt-sm-0 pb-sm-4">
-                    <div class="row align-items-end g-4" style="margin-top: 40px;">
-                        <div class="col-sm-6">
-                            <label class="form-label" for="exampleFormControlInput1"> {{ translate('BRN No.') }}
-                            </label>
-                            <input type="text" name="brn_number" class="form-control"
-                                placeholder="{{ translate('Ex: BRN No.') }}" maxlength="255">
-                        </div>
-                        <div class="col-sm-6">
-                            <label class="form-label" for="exampleFormControlInput1"> {{ translate('MSME No.') }}
-                            </label>
-                            <input type="text" name="msme_number" class="form-control"
-                                placeholder="{{ translate('Ex: MSME No.') }}" maxlength="255">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-12 col-lg-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title">
-                        <i class="tio-user"></i>
-                        {{translate('Location')}}
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <div class="row g-3">
-                                <div class="col-12">
-                                    <div class="form-group mb-0">
-                                        <label class="form-label text-capitalize"
-                                            for="latitude">{{ translate('latitude') }}
-                                            <i class="tio-info-outined" data-toggle="tooltip" data-placement="top"
-                                                title="{{ translate('click_on_the_map_select_your_default_location') }}">
-                                            </i>
-                                        </label>
-                                        <input type="text" id="latitude" name="latitude" class="form-control"
-                                            placeholder="{{ translate('Ex:') }} 23.8118428"
-                                            value="{{ old('latitude') }}" readonly>
+                                <div>
+                                    <div class="text-center mb-3">
+                                        <img id="viewer" class="img--105"
+                                            onerror="this.src='{{asset('public/assets/admin/img/900x400/img1.jpg')}}'"
+                                            src="{{asset('storage/app/public/store')}}/"
+                                            alt="image" />
                                     </div>
                                 </div>
-                                <div class="col-12">
-                                    <div class="form-group mb-0">
-                                        <label class="form-label text-capitalize"
-                                            for="longitude">{{ translate('longitude') }}
-                                            <i class="tio-info-outined" data-toggle="tooltip" data-placement="top"
-                                                title="{{ translate('click_on_the_map_select_your_default_location') }}">
-                                            </i>
-                                        </label>
-                                        <input type="text" step="0.1" name="longitude" class="form-control"
-                                            placeholder="{{ translate('Ex:') }} 90.356331" id="longitude"
-                                            value="{{ old('longitude') }}" readonly>
-                                    </div>
+                                <label class="form-label text-capitalize">{{ translate('Document  ') }}</label><small
+                                    class="text-danger">*
+                                    ( {{ translate('ratio') }}
+                                    3:1 )</small>
+                                <div class="custom-file">
+                                    <input type="file" name="document" id="customFileEg1" class="custom-file-input"
+                                        accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*"
+                                        oninvalid="document.getElementById('en-link').click()">
+                                    <label class="custom-file-label" for="customFileEg1">{{ translate('choose') }}
+                                        {{ translate('file') }}</label>
                                 </div>
-                                <div class="col-12">
-                                    <div class="form-group mb-0">
-                                        <label class="input-label">
-                                            {{translate('coverage (km)')}}
-                                            <i class="tio-info-outined" data-toggle="tooltip" data-placement="top"
-                                                title="{{ translate('This value is the radius from your branch location, and customer can order inside  the circle calculated by this radius. The coverage area value must be less or equal than 1000.') }}">
-                                            </i>
-                                        </label>
-                                        <input type="number" name="coverage" min="1" max="1000" class="form-control"
-                                            placeholder="{{ translate('Ex : 3') }}" value="{{ old('coverage') }}">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6" id="location_map_div">
-                            <input id="pac-input" class="controls rounded" data-toggle="tooltip" data-placement="right"
-                                name="map_location" data-original-title="{{ translate('search_your_location_here') }}"
-                                type="text" placeholder="{{ translate('search_here') }}" />
-                            <div id="location_map_canvas" class="overflow-hidden rounded" style="height: 100%"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <div class="col-12">
-            <div class="btn--container justify-content-end">
-                <a type="button" href="{{route('admin.store.index')}}" class="btn btn--reset">{{translate('Back')}}</a>
-                <button type="submit" class="btn btn--primary">{{translate('submit')}}</button>
+                            </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">
+                            <i class="tio-user"></i>
+                            {{translate('Business information')}}
+                        </h5>
+                    </div>
+                    <div class="card-body pt-sm-0 pb-sm-4">
+                        <div class="row align-items-end g-4" style="margin-top: 40px;">
+                            <div class="col-sm-6">
+                                <label class="form-label" for="exampleFormControlInput1">
+                                    {{ translate('BRN No.') }}
+                                </label>
+                                <input type="text" name="brn_number" class="form-control"
+                                    placeholder="{{ translate('Ex: BRN No.') }}" maxlength="255">
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="form-label" for="exampleFormControlInput1">
+                                    {{ translate('MSME No.') }}
+                                </label>
+                                <input type="text" name="msme_number" class="form-control"
+                                    placeholder="{{ translate('Ex: MSME No.') }}" maxlength="255">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">
+                            <i class="tio-user"></i>
+                            {{translate('Location')}}
+                        </h5>
+                    </div>
+                    <div class="card-body ">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <div class="form-group mb-0">
+                                            <label class="form-label text-capitalize"
+                                                for="latitude">{{ translate('latitude') }}
+                                                <i class="tio-info-outined" data-toggle="tooltip" data-placement="top"
+                                                    title="{{ translate('click_on_the_map_select_your_default_location') }}">
+                                                </i>
+                                            </label>
+                                            <input type="text" id="latitude" name="latitude" class="form-control"
+                                                placeholder="{{ translate('Ex:') }} 23.8118428"
+                                                value="{{ old('latitude') }}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group mb-0">
+                                            <label class="form-label text-capitalize"
+                                                for="longitude">{{ translate('longitude') }}
+                                                <i class="tio-info-outined" data-toggle="tooltip" data-placement="top"
+                                                    title="{{ translate('click_on_the_map_select_your_default_location') }}">
+                                                </i>
+                                            </label>
+                                            <input type="text" step="0.1" name="longitude" class="form-control"
+                                                placeholder="{{ translate('Ex:') }} 90.356331" id="longitude"
+                                                value="{{ old('longitude') }}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group mb-0">
+                                            <label class="input-label">
+                                                {{translate('coverage (km)')}}
+                                                <i class="tio-info-outined" data-toggle="tooltip" data-placement="top"
+                                                    title="{{ translate('This value is the radius from your branch location, and customer can order inside  the circle calculated by this radius. The coverage area value must be less or equal than 1000.') }}">
+                                                </i>
+                                            </label>
+                                            <input type="number" name="coverage" min="1" max="1000" class="form-control"
+                                                placeholder="{{ translate('Ex : 3') }}" value="{{ old('coverage') }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6" id="location_map_div">
+                                <input id="pac-input" class="controls rounded" data-toggle="tooltip"
+                                    data-placement="right" name="map_location"
+                                    data-original-title="{{ translate('search_your_location_here') }}" type="text"
+                                    placeholder="{{ translate('search_here') }}" />
+                                <div id="location_map_canvas" class="overflow-hidden rounded" style="height: 100%">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="btn--container justify-content-end">
+                    <a type="button" href="{{route('admin.store.list')}}"
+                        class="btn btn--reset">{{translate('Back')}}</a>
+                    <button type="submit" class="btn btn--primary">{{translate('submit')}}</button>
+                </div>
             </div>
         </div>
-    </div>
 
     </form>
 </div>
@@ -241,84 +245,99 @@
 @push('script_2')
 <script>
 $(document).ready(function() {
-    $('#get_city_name_by_owner').on('change', function() {
-        var owner_id = $(this).val();
-        var selectedOption = $(this).find('option:selected');
-        var city_id = selectedOption.attr('city-id');
-        var city_name = selectedOption.attr('city-val');
-        let stateId = selectedOption.attr('state-id');
-        //console.log(stateId);
-        getWarehouse(city_id);
-        // $('.get_city').append('<option value="' + city_id + '">' + city_name + '</option>');
-    });
-    $('.get_city').html('<option value="">Select City</option>');
-
-    $('#click_on_city').on('click', function() {
-        // let selectedOptionOwner = $('#get_city_name_by_owner').find('option:selected');
-        // var stateId = selectedOptionOwner.attr('state-id');
-
+    $('#click_on_city').on('change', function() {
+        $('.get_wh_code').val('');
+        var citySelected = $(this).find('option:selected');
+        var cityId = citySelected.val();
         $.ajax({
-            url: 'get-city-by-owner/',
+            url: 'get-warehouse/' + cityId,
             type: 'GET',
             dataType: 'json',
             success: function(data) {
-                    $('.get_city').empty();
-                    $.each(data.city, function(key, value) {
-                    $('.get_city').append('<option value="' + value.id + '">' +
-                        value.city + '</option>');
+                if (data.message) {
+                    var message = data.message;
+                    Swal.fire({
+                        title: 'Alert',
+                        html: message,
+                        icon: 'info',
+                        confirmButtonText: 'OK'
+                    });
+                    // $('.get_warehouse').html('<option value="">'+ message +'</option>');
+                } else {
+                    $('.get_warehouse').empty();
 
+                    // Add the default option
+                    $('.get_warehouse').html('<option value="">Select Warehouse</option>');
 
-                });
+                    $.each(data.warehouse, function(key, value) {
+                        $('.get_warehouse').append('<option code="' + value.code +
+                            '" value="' +
+                            value
+                            .id + '">' +
+                            value.name + '</option>');
+                    });
+
+                    console.log(data.prevId);
+                    $('.get_warehouse').on('change', function() {
+                        var code = $(this).find('option:selected');
+                        var selectedCode = code.attr('code');
+                        var prev_id = $('#prev_id').val();
+
+                        $('.get_wh_code').val(selectedCode + data.prevId);
+                    });
+                }
+
             }
         });
     });
 });
-$('.get_city').on('change', function() {
-    getWarehouse($(this).val());
-});
+// $('#click_on_city').on('click', function() {
+//     $('.get_wh_code').empty();
 
-function getWarehouse(cityId = null) {
-    $('.get_warehouse').empty();
-    $.ajax({
-        url: 'get-warehouse-by-city/' + cityId,
-        type: 'GET',
-        dataType: 'json',
-        success: function(data) {
-            if (data.message) {
-                var message = data.message;
-                Swal.fire({
-                    title: 'Alert',
-                    html: message,
-                    icon: 'info',
-                    confirmButtonText: 'OK'
-                });
-                // $('.get_warehouse').html('<option value="">'+ message +'</option>');
-            } else {
-                $('.get_warehouse').empty();
+// });
 
-                // Add the default option
-                $('.get_warehouse').html('<option value="">Select Warehouse</option>');
+// function getWarehouse(cityId = null) {
+//     $('.get_warehouse').empty();
+//     $.ajax({
+//         url: 'get-warehouse-by-city/' + cityId,
+//         type: 'GET',
+//         dataType: 'json',
+//         success: function(data) {
+//             if (data.message) {
+//                 var message = data.message;
+//                 Swal.fire({
+//                     title: 'Alert',
+//                     html: message,
+//                     icon: 'info',
+//                     confirmButtonText: 'OK'
+//                 });
+//                 // $('.get_warehouse').html('<option value="">'+ message +'</option>');
+//             } else {
+//                 $('.get_warehouse').empty();
 
-                $.each(data.warehouse, function(key, value) {
-                    $('.get_warehouse').append('<option code="' + value.code + '" value="' +
-                        value
-                        .id + '">' +
-                        value.name + '</option>');
-                });
+//                 // Add the default option
+//                 $('.get_warehouse').html('<option value="">Select Warehouse</option>');
 
-                console.log(data.prevId);
-                $('.get_warehouse').on('change', function() {
-                    var code = $(this).find('option:selected');
-                    var selectedCode = code.attr('code');
-                    var prev_id = $('#prev_id').val();
+//                 $.each(data.warehouse, function(key, value) {
+//                     $('.get_warehouse').append('<option code="' + value.code + '" value="' +
+//                         value
+//                         .id + '">' +
+//                         value.name + '</option>');
+//                 });
 
-                    $('.get_wh_code').val(selectedCode + data.prevId);
-                });
-            }
+//                 console.log(data.prevId);
+//                 $('.get_warehouse').on('change', function() {
+//                     var code = $(this).find('option:selected');
+//                     var selectedCode = code.attr('code');
+//                     var prev_id = $('#prev_id').val();
 
-        }
-    });
-};
+//                     $('.get_wh_code').val(selectedCode + data.prevId);
+//                 });
+//             }
+
+//         }
+//     });
+// };
 </script>
 
 <script>

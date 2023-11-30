@@ -53,7 +53,7 @@
                             </div>
                             <div class="col-12">
                                 <div class="btn--container justify-content-end">
-                                    <a href="{{route('admin.city.add')}}" type="reset" class="btn btn--reset">
+                                    <a href="{{route('admin.city.list')}}" type="reset" class="btn btn--reset">
                                         {{translate('Back')}}</a>
                                     <button type="submit" class="btn btn--primary">{{translate('submit')}}</button>
                                 </div>

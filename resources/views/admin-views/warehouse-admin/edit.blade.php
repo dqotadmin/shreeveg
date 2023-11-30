@@ -180,7 +180,7 @@
 
                                 <div class="col-sm-9">
                                     <input type="text" class="js-masked-input form-control" name="account_number" id="phoneLabel"
-                                    value="{{$admins->bankDetail ? $admins->bankDetail->account_number: ''}}">
+                                    placeholder="Account Number"    value="{{$admins->bankDetail ? $admins->bankDetail->account_number: ''}}">
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -190,7 +190,7 @@
 
                                 <div class="col-sm-9">
                                     <input type="text" class="js-masked-input form-control" name="account_holder" id="phoneLabel"
-                                    value="{{$admins->bankDetail ? $admins->bankDetail->account_holder: '';}}">
+                                    placeholder="Account Holder" value="{{$admins->bankDetail ? $admins->bankDetail->account_holder: '';}}">
                                 </div>
                             </div>
 
@@ -201,9 +201,9 @@
 
                                 <div class="col-sm-9">
                                     <input type="text" class="js-masked-input form-control" name="bank_name" id="phoneLabel"
-                                    value="{{$admins->bankDetail ? $admins->bankDetail->bank_name: '';}}">
+                                    placeholder="Bank Name" value="{{$admins->bankDetail ? $admins->bankDetail->bank_name: '';}}">
                                 </div>
-                            </div>
+                            </div> 
                             <div class="row form-group">
                                 <label for="phoneLabel"
                                     class="col-sm-3 col-form-label input-label">{{ translate('IFSC Code') }} <span
@@ -211,7 +211,7 @@
 
                                 <div class="col-sm-9">
                                     <input type="text" class="js-masked-input form-control" name="ifsc_code" id="phoneLabel"
-                                    value="{{$admins->bankDetail ? $admins->bankDetail->ifsc_code: '';}}">
+                                    placeholder="IFSC Code" value="{{$admins->bankDetail ? $admins->bankDetail->ifsc_code: '';}}">
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -221,7 +221,7 @@
 
                                 <div class="col-sm-9">
                                     <input type="text" class="js-masked-input form-control" name="upi_id" id="phoneLabel"
-                                    value="{{$admins->bankDetail ? $admins->bankDetail->upi_id: '';}}">
+                                    placeholder="UPI Id"  value="{{$admins->bankDetail ? $admins->bankDetail->upi_id: '';}}">
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -231,7 +231,7 @@
 
                                 <div class="col-sm-9">
                                     <input type="text" class="js-masked-input form-control" name="upi_number" id="upi_number"
-                                    value="{{$admins->bankDetail ? $admins->bankDetail->upi_number : '';}}">
+                                    value="{{$admins->bankDetail ? $admins->bankDetail->upi_number : '';}}"  placeholder="UPI Number" >
                                 </div>
                             </div>
  

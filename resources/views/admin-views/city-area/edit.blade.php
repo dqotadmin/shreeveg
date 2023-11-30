@@ -40,7 +40,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="row align-items-end g-4" style="padding-top: 50px;">
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <label class="form-label">{{ translate('City') }}
                                         </label>
                                         <select id="exampleFormControlSelect1" name="city_id" class="form-control "
@@ -52,12 +52,18 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <label class="form-label">{{ translate('Area') }}
                                             {{ translate('Name') }}
                                         </label>
                                         <input type="text" name="area" class="form-control" placeholder=""
                                             value="{{$cityareas['area']}}" maxlength="255">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">{{ translate('Pin Code') }}
+                                        </label>
+                                        <input type="number" name="pincode" class="form-control"  
+                                        value="{{$cityareas['pincode']}}"  maxlength="255">
                                     </div>
                                 </div>
                             </div>
@@ -136,7 +142,7 @@
                     </div>
                     <div class="col-12">
                         <div class="btn--container justify-content-end">
-                            <a type="button" href="{{route('admin.area.add')}}"
+                            <a type="button" href="{{route('admin.area.list')}}"
                                 class="btn btn--reset">{{translate('Back')}}</a>
 
                             <button type="submit" class="btn btn--primary">{{translate('update')}}</button>

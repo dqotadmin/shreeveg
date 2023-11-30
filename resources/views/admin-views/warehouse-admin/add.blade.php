@@ -192,10 +192,7 @@
 
                                 <div class="col-sm-9">
                                     <input type="text" class="js-masked-input form-control" name="account_number" id="phoneLabel"
-                                        placeholder="Account Number" aria-label=" "
-                                        value="{{old('account_holder')}}" data-hs-mask-options='{
-                                           "template": "Account Number"
-                                         }'>
+                                        placeholder="Account Number" >
                                 </div>
                             </div>
                             <div class="row form-group">

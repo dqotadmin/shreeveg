@@ -95,13 +95,13 @@
             </div>
             <div class="col-md-4 col-sm-6">
                 <label class="input-label" for="exampleFormControlInput1">{{translate('password')}}</label>
-                <input type="text" name="password"  class="form-control" placeholder="{{ translate('7+ Characters') }}"
-                    required>
+                <input type="text" name="password"  class="form-control" placeholder="{{ translate('7+ Characters') }} "   
+                     >
             </div>
             <div class="col-md-4 col-sm-6">
                 <label class="input-label" for="exampleFormControlInput1">{{translate('Confirm password')}}</label>
                 <input type="text" name="confirm_password" class="form-control"
-                    placeholder="{{ translate('7+ Characters') }}" required>
+                    placeholder="{{ translate('7+ Characters') }}"  >
             </div>
         </div>
     </div>

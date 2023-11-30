@@ -1254,6 +1254,8 @@
   'Limited Stocks' => 'Limited Stocks',
   'promotion management' => 'Promotion management',
   'promotion_management' => 'Promotion management',
+  'Category Management' => 'Category Management',
+
   'business section' => 'Business section',
   'Help & Support Section' => 'Help & Support Section',
   'send notifications' => 'Send notifications',

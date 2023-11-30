@@ -286,7 +286,7 @@ class CustomerController extends Controller
         $validatedData = $request->validate([
             'f_name' => 'required',
             'l_name' => 'required',
-            'password' => 'required|same:confirm_password|min:8',
+            'password' => 'nullable|same:confirm_password|min:8',
             'email' =>  ['required',
             Rule::unique('users')->ignore($id)
         ],
@@ -314,8 +314,10 @@ class CustomerController extends Controller
         $customer->email = $request->email;
         $customer->phone = $request->phone;
         $customer->image = $image_name;
-        $customer->password = $request->password ?  Hash::make($request->password) :Hash::make('12345678');
-
+        if($request->password){
+            $customer->password = Hash::make($request->password);
+        }
+        
         $customer->save();
         Toastr::success(translate('Customer updated successfully!'));
         return redirect()->route('admin.customer.list');

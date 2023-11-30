@@ -161,7 +161,11 @@ class Helpers
         }
         return $config;
     }
-
+    public static function getAlphabet() {
+        // Generate an array containing A to Z
+        return range('A', 'Z');
+    }
+    
     public static function getWhCategoriesData($catid, $whId)
     {
         $row = [];
@@ -872,3 +876,4 @@ function translate($key)
 
     return $result;
 }
+

@@ -111,7 +111,7 @@ class CityController extends Controller
 
 
         Toastr::success(translate('City Added Successfully!') );
-        return redirect()->route('admin.city.add');
+        return redirect()->route('admin.city.list');
     }
 
     /**
@@ -162,7 +162,7 @@ class CityController extends Controller
         $city->save();
        
         Toastr::success( translate('city updated successfully!') );
-        return redirect()->route('admin.city.add');
+        return redirect()->route('admin.city.list');
 
     }
 

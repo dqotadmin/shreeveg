@@ -108,6 +108,12 @@ class AdminUserController extends Controller
         $admin->city_id = $request->city_id;
         $admin->state_id = $request->state_id;
         $admin->image = $image_name;
+        if($request->warehouse_id){
+        $admin->warehouse_id = $request->warehouse_id;
+        }
+        if($request->store_id){
+            $admin->store_id = $request->store_id;
+            }
         $admin->password = bcrypt($request['password']);
 
         $admin->admin_role_id = $request->admin_role_id;
@@ -171,6 +177,12 @@ class AdminUserController extends Controller
         $admin->phone = $request->phone;
         $admin->email = $request->email;
         $admin->image = $image_name;
+        if($request->warehouse_id){
+            $admin->warehouse_id = $request->warehouse_id;
+            }
+            if($request->store_id){
+                $admin->store_id = $request->store_id;
+                }
         $admin->save();
         $bankDetail = BankDetail::first();
     if ($id == $bankDetail->user_id) {

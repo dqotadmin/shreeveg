@@ -648,7 +648,7 @@ class POSController extends Controller
         $customer->email = $request->email;
         $customer->phone = $request->phone;
         $customer->image = $image_name;
-        $customer->password = $request->password ?  $request->password :Hash::make('12345678');
+        $customer->password = $request->password ? Hash::make($request->password) :Hash::make('12345678');
         $customer->save();
         Toastr::success(translate('Customer added successfully!'));
         return back();

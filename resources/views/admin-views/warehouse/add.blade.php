@@ -307,7 +307,7 @@
                     </div>
                     <div class="col-sm-12">
                         <div class="btn--container justify-content-end">
-                            <a type="button" href="{{route('admin.warehouse.add')}}"
+                            <a type="button" href="{{route('admin.warehouse.list')}}"
                                 class="btn btn--reset">{{translate('Back')}}</a>
                             <button type="submit" class="btn btn--primary">{{translate('submit')}}</button>
                         </div>

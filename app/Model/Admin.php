@@ -22,5 +22,12 @@ class Admin extends Authenticatable
     return $this->hasOne(BankDetail::class,'user_id');
 
   }
+  public function Warehouse(){
+    return $this->belongsTo(Warehouse::class,'warehouse_id');
 
+  }
+  public function Store(){
+    return $this->belongsTo(Store::class,'store_id');
+
+  }
 }

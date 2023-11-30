@@ -19,7 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use DateTime;
-class WarehouseController extends Controller
+class WarehouseCategoryController extends Controller
 {
     public function __construct(
         private Warehouse $warehouse,
@@ -34,50 +34,27 @@ class WarehouseController extends Controller
      */
     function index(Request $request): View|Factory|Application
     {
-        $query_param = [];
-        $search = $request['search'];
-        if ($request->has('search')) {
-            $key = explode(' ', $request['search']);
-            $warehouses = $this->warehouse->where(function ($q) use ($key) {
-                foreach ($key as $value) {
-                    $q->orWhere('name', 'like', "%{$value}%");
-                    $q->orWhere('code', 'like', "%{$value}%");
-                }
-            });
-            $query_param = ['search' => $request['search']];
-        } else {
-            $warehouses = $this->warehouse;
-        }
-        $warehouses = $warehouses->latest()->paginate(Helpers::getPagination())->appends($query_param);
-        return view('admin-views.warehouse.index', compact('warehouses', 'search'));
+        $warehouseId= auth('admin')->user()->warehouse_id;
+        $warehouses = $this->warehouse_categories->where('warehouse_id', $warehouseId)->orderby('group_name')->paginate(Helpers::getPagination());
+        return view('admin-views.warehouse-category.index', compact('warehouses'));
+    }
+    function group_index(Request $request): View|Factory|Application
+    {
+        $warehouseId= auth('admin')->user()->warehouse_id;
+        $warehouses = $this->warehouse_categories->where('warehouse_id', $warehouseId)->groupby('group_name')->paginate(Helpers::getPagination());
+        return view('admin-views.warehouse-category.group_list', compact('warehouses'));
     }
     function create(Request $request): View|Factory|Application
     {
-        $warehouses = $this->warehouse->orderBy('id','desc')->first();
-        if(!empty($warehouses) && ($warehouses->id < 9)){
-            $prevId = ($warehouses && $warehouses->id)?'0'.$warehouses->id+1:1;
-        }else{
-            $prevId = ($warehouses && $warehouses->id)?$warehouses->id+1:1;
+        $warehouseId= auth('admin')->user()->warehouse_id;
+        $warehouses = $this->warehouse_categories->where('warehouse_id', $warehouseId)->paginate(Helpers::getPagination());
 
-        }
         
-       return view('admin-views.warehouse.add',compact('prevId'));
+       return view('admin-views.warehouse-category.add',compact('warehouses'));
 
     }
 
-    public function get_code($city_code=null){
-        $warehouse = Warehouse::query();
-        $wh_city_id = $this->warehouse->where('city_id', $city_code)->count();
-
-        if($wh_city_id < 9){
-            $prevId = ($wh_city_id)? '0'.($wh_city_id+1):'01';
-        }else{
-            $prevId = ($wh_city_id)? $wh_city_id+1:'01';
-
-        }
-        return response()->json(['warehouse' => $warehouse, 'prevId' => $prevId]);
-    }
-  
+    
 
     /**
      * @param Request $request
@@ -91,18 +68,7 @@ class WarehouseController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function search(Request $request): JsonResponse
-    {
-        $key = explode(' ', $request['search']);
-        $warehouses = $this->warehouse->where(function ($q) use ($key) {
-            foreach ($key as $value) {
-                $q->orWhere('code', 'like', "%{$value}%");
-            }
-        })->get();
-        return response()->json([
-            'view' => view('admin-views.warehouse.index', compact('warehouses'))->render()
-        ]);
-    }
+   
 
     /**
      * @return Factory|View|Application
@@ -114,60 +80,60 @@ class WarehouseController extends Controller
      */
     function store(Request $request): RedirectResponse
     {  
-       
-        $request->validate([
-            'name'  => 'required|unique:warehouses',
-            'code'  => 'required|unique:warehouses',
-            'address'  => 'required',
-            'brn_number'  => 'required',
-            'msme_number'  => 'required',
-        ]); 
-             $revise = $deliver =  $order_cancel =  $pre_order = [];
-        // echo '<pre>';
-        if($request->delivery_open_time){
-            foreach($request->delivery_open_time as $deliveryKey => $delivery_open){
-                if(isset($request->delivery_close_time[$deliveryKey])){
-                    $deliver[$deliveryKey]['open'] = $delivery_open;
-                    $deliver[$deliveryKey]['close'] = $request->delivery_close_time[$deliveryKey];
-                    $deliver[$deliveryKey]['hide_option_before'] = $request->hide_option_before[$deliveryKey];
-                }
-            }
-            $delivery_time = json_encode($deliver,true);
+        $warehouseId= auth('admin')->user()->warehouse_id;
+     
+        foreach($request->category_id as $catId){
+            $row = $this->warehouse_categories->where('warehouse_id', $warehouseId)->where('category_id',$catId)->first();
+            // dd($row,$catId,$warehouseId);
+            $row->group_name = $request->group_name;
+            $row->save();
         }
-      
-        if($request->pre_order_open_time){
-         
-            foreach($request->pre_order_open_time as $preOrderKey => $pre_order_opentime){
-                if(isset($request->pre_order_close_time[$preOrderKey])){
-                    $pre_order[$preOrderKey]['open'] = $pre_order_opentime;
-                    $pre_order[$preOrderKey]['close'] = $request->pre_order_close_time[$preOrderKey];
-                }
-            }
-            $pre_order_time = json_encode($pre_order,true);
-        } 
-        //into db
-        $warehouse = $this->warehouse;
-
-        $warehouse->name = $request->name == null ? null : $request->name;
-        $warehouse->code =  $request->code == null ? null : $request->code;
-        $warehouse->address =  $request->address == null ? null : $request->address;
-        $warehouse->city_id =  $request->city_id == null ? null : $request->city_id;
-        $warehouse->brn_number =  $request->brn_number == null ? null : $request->brn_number;
-        $warehouse->msme_number =  $request->msme_number == null ? null : $request->msme_number;
-        $warehouse->coverage =  $request->coverage == null ? null : $request->coverage;
-        $warehouse->open_time =  $request->open_time == null ? null : $request->open_time;
-        $warehouse->close_time =  $request->close_time == null ? null : $request->close_time;
-
-        $warehouse->latitude = $request->latitude;
-        $warehouse->longitude = $request->longitude;
-        $warehouse->delivery_time =  isset($delivery_time) ? $delivery_time :null ;
-        $warehouse->pre_order_time =  isset($pre_order_time) ?  $pre_order_time : null;
-        $warehouse->save();
- 
-        Toastr::success(translate('Warehouse Added Successfully!') );
-        return redirect()->route('admin.warehouse.list');
+        // dd($request->all());
+        Toastr::success(translate('Warehouse Category Group Added Successfully!') );
+        return redirect()->route('admin.warehouse-category.list');
     }
+    function store_group_margin(Request $request): RedirectResponse
+    {
+        $warehouseId= auth('admin')->user()->warehouse_id;
+     $group_name = $request->group_name;
+     $rows = $this->warehouse_categories->where('warehouse_id', $warehouseId)->where('group_name',$group_name)->get();
+     foreach($rows as $row){
+        $row->customer_margin = $request->customer_margin;
+        $row->store_margin = $request->store_margin;
+        $row->save();
 
+     }
+        Toastr::success(translate('Warehouse Category Group Added Successfully!') );
+        return redirect()->route('admin.warehouse-category.group-list');
+    }
+    function create_group_margin_individual($group_name,Request $request): View|Factory|Application
+    {
+        $warehouseId= auth('admin')->user()->warehouse_id;
+        $warehouses = $this->warehouse_categories->where('warehouse_id', $warehouseId)->where('group_name', $group_name)->paginate(Helpers::getPagination());
+       return view('admin-views.warehouse-category.group_store_individual',compact('warehouses'));
+    }
+    function store_group_margin_individual(Request $request): RedirectResponse
+    {  
+        $warehouseId= auth('admin')->user()->warehouse_id;
+     
+        foreach($request->category_id as $key =>$catId){
+            $row = $this->warehouse_categories->where('warehouse_id', $warehouseId)->where('category_id',$catId)->first();
+            // dd($row,$catId,$warehouseId);
+            if(isset($request->store_margin[$key])){
+                $row->store_margin = $request->store_margin[$key];
+            }
+            if(isset($request->customer_margin[$key])){
+                $row->customer_margin = $request->customer_margin[$key];
+            }
+           
+            $row->save();
+        }
+        // dd($request->all());
+        Toastr::success(translate('Warehouse Category Group Added Successfully!') );
+        return redirect()->back();
+    }
+    
+    
     /**
      * @param $id
      * @return Factory|View|Application

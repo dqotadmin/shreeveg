@@ -40,33 +40,23 @@
 
                         </ul>
                         <div class="row align-items-end g-4" style="margin-top: 40px;">
-                            <div class="col-sm-6">
-                                <label class="form-label" for="exampleFormControlInput1">{{ translate('Owner') }}
-                                    {{ translate('Name') }} </label>
-                                <select name="owner_id" id="get_city_name_by_owner" class="form-control">
-                                    <option value="" disabled selected>Select Owner Name</option>
-                                    @foreach(App\Model\Admin::where('admin_role_id',6)->get() as $store)
-                                    <option value="{{$store->id}}" city-val="{{$store->city->city}}"
-                                        state-id="{{$store->state_id}}" city-id="{{$store->city_id}}"
-                                        {{$stores->owner_id == $store->id ? 'selected' : '';}}>
-                                        {{$store->f_name}} {{$store->l_name}}</option>
+                        <div class="col-sm-6">
+                                <label class="form-label" for=" "> {{ translate('City') }} </label>
+                                <select name="city_id" id="click_on_city" class="sget_city  form-control" disabled="true">
+                                <option value="" disabled selected>Select City</option>
+                                    @foreach(\App\Model\City::where('status','1')->get() as $city)
+                                    <option value="{{$city->id}}" {{$city->id==$stores->city_id ? 'selected' : '';}}>{{$city->city}}</option>
                                     @endforeach
-                                </select>
-                            </div>
-                            <div class="col-sm-6">
-                                <select name="city_id" id="click_on_city" class="get_city  form-control">
-                                    <option value="{{$stores->city_id}}">{{$stores->city->city}}</option>
                                 </select>
                             </div>
 
                             <div class="col-sm-6">
                                 <label class="form-label" for="">{{ translate('Warehouse') }}
                                 </label>
-                                <select name="warehouse_id" id="" class="get_warehouse form-control">
+                                <select name="warehouse_id" id="" class="get_warehouse form-control" disabled="true">
                                 <option value="{{$stores->warehouse_id}}" >
                                 @if (isset($stores) && isset($stores->warehouse) && isset($stores->warehouse->name)) 
                                 {{$stores->warehouse->name}}
-                              
                                 @endif
                                 </option>
                                 </select>
@@ -96,7 +86,7 @@
                             <label class="form-label" for="exampleFormControlInput1">{{ translate('Store') }}
                                 {{ translate('Code') }} </label>
                             <input type="text" name="code" class="get_wh_code form-control"
-                                style="text-transform: uppercase;" value="{{$stores->code}}" placeholder="{{ translate('Ex: QUINN1') }}"
+                                style="text-transform: uppercase;" value="{{$stores->code}}" placeholder="{{ translate('Ex: QUINN1') }}" readonly
                                 maxlength="255">
                         </div>
                         <div class="col-sm-6">
@@ -107,9 +97,13 @@
                         </div>
                         <div class="col-sm-6">
                             <label class="form-label" for="exampleFormControlInput1">
-                                {{ translate('Area Pin Code') }} </label>
-                            <input type="text" name="pin_code" class="form-control" value="{{$stores->pin_code}}"
-                                placeholder="{{ translate('Ex: Area Pin Code') }}" maxlength="255">
+                                {{ translate('Area') }} </label>
+                            <select name="area_id" id="" class="form-control">
+                                <option value="">Select Area</option>
+                                @foreach(\App\Model\CityArea::where('status','1')->get() as $area)
+                                <option value="{{$area->id}}" {{$area->id == $stores->area_id? 'selected': '';}}>{{$area->area}}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="col-sm-6">
                             <label class="form-label" for="exampleFormControlInput1">{{ translate('Store') }}
@@ -236,7 +230,7 @@
 
         <div class="col-12">
             <div class="btn--container justify-content-end">
-                <a type="button" href="{{route('admin.store.index')}}" class="btn btn--reset">{{translate('Back')}}</a>
+                <a type="button" href="{{route('admin.store.list')}}" class="btn btn--reset">{{translate('Back')}}</a>
                 <button type="submit" class="btn btn--primary">{{translate('submit')}}</button>
             </div>
         </div>
@@ -249,87 +243,52 @@
 
 @push('script_2')
 <script>
-$(document).ready(function() {
-    $('#get_city_name_by_owner').on('change', function() {
-        var owner_id = $(this).val();
-        var selectedOption = $(this).find('option:selected');
-        var city_id = selectedOption.attr('city-id');
-        var city_name = selectedOption.attr('city-val');
-        let stateId = selectedOption.attr('state-id');
-        //console.log(stateId);
-        getWarehouse(city_id); 
-        // $('.get_city').empty();
-        $('.get_city').append('<option value="' + city_id + '">' + city_name + '</option>');
-    });
-    // $('.get_city').html('<option value="">Select City</option>');
-
-    $('#click_on_city').on('click', function() {
-        let selectedOptionOwner = $('#get_city_name_by_owner').find('option:selected');
-        var stateId = selectedOptionOwner.attr('state-id');
-
+    $(document).ready(function() {
+    $('#click_on_city').on('change', function() {
+        $('.get_wh_code').val('');
+        var citySelected = $(this).find('option:selected');
+        var cityId = citySelected.val();
         $.ajax({
-            url: '{{url('/')}}/admin/store/get-city-by-owner/' + stateId,
+            url: '{{url('/')}}/admin/store/get-warehouse/'+cityId,
             type: 'GET',
             dataType: 'json',
             success: function(data) {
-                console.log(data);
-                $.each(data.city, function(key, value) {
-                    // $('.get_city').empty();
-                    $('.get_city').append('<option value="' + value.id + '">' +
-                        value.city + '</option>');
+                if (data.message) {
+                    var message = data.message;
+                    Swal.fire({
+                        title: 'Alert',
+                        html: message,
+                        icon: 'info',
+                        confirmButtonText: 'OK'
+                    });
+                // $('.get_warehouse').html('<option value="">'+ message +'</option>');
+                } else {
+                    $('.get_warehouse').empty();
 
+                    // Add the default option
+                    $('.get_warehouse').html('<option value="">Select Warehouse</option>');
 
-                });
-            }
+                    $.each(data.warehouse, function(key, value) {
+                        $('.get_warehouse').append('<option code="' + value.code + '" value="' +
+                            value
+                            .id + '">' +
+                            value.name + '</option>');
+                    });
+
+                    console.log(data.prevId);
+                    $('.get_warehouse').on('change', function() {
+                        var code = $(this).find('option:selected');
+                        var selectedCode = code.attr('code');
+                        var prev_id = $('#prev_id').val();
+
+                        $('.get_wh_code').val(selectedCode + data.prevId);
+                    });
+                }
+
+                }
         });
     });
 });
-$('.get_city').on('change', function() {
-    getWarehouse($(this).val());
-});
-
-function getWarehouse(cityId = null) {
-    $('.get_warehouse').empty();
-    $.ajax({
-        url: '{{url('/')}}/admin/store/get-warehouse-by-city/' + cityId,
-        type: 'GET',
-        dataType: 'json',
-        success: function(data) {
-            if (data.message) {
-                var message = data.message;
-                Swal.fire({
-                    title: 'Alert',
-                    html: message,
-                    icon: 'info',
-                    confirmButtonText: 'OK'
-                });
-                // $('.get_warehouse').html('<option value="">'+ message +'</option>');
-            } else {
-                $('.get_warehouse').empty();
-
-                // Add the default option
-                $('.get_warehouse').html('<option value="">Select Warehouse</option>');
-
-                $.each(data.warehouse, function(key, value) {
-                    $('.get_warehouse').append('<option code="' + value.code + '" value="' +
-                        value
-                        .id + '">' +
-                        value.name + '</option>');
-                });
-
-                console.log(data.prevId);
-                $('.get_warehouse').on('change', function() {
-                    var code = $(this).find('option:selected');
-                    var selectedCode = code.attr('code');
-                    var prev_id = $('#prev_id').val();
-
-                    $('.get_wh_code').val(selectedCode + data.prevId);
-                });
-            }
-
-        }
-    });
-};
 </script>
 
 <script>

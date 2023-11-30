@@ -1935,6 +1935,14 @@ a[class*=btn--]:hover {
   object-fit: cover;
   border-radius: 5px;
 }
+.img_store {
+  border: 1px solid #d0dbe9;
+  width: 94px !important;
+  height: 94px !important;
+  -o-object-fit: cover;
+  object-fit: cover;
+  border-radius: 5px;
+}
 
 .img--50 {
   border: 1px solid #d0dbe9;

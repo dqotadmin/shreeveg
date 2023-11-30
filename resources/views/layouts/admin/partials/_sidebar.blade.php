@@ -235,7 +235,7 @@
 
                             <li class="navbar-vertical-aside-has-menu ">
                                 <a class="js-navbar-vertical-aside-menu-link nav-link"
-                                    href="{{route('admin.broker-order-list.index')}}"
+                                    href="{{route('admin.purchase-warehouse-order.index')}}"
                                     title="{{translate('order_list')}}">
                                     <i class="tio-map nav-icon"></i>
                                     <span
@@ -258,7 +258,7 @@
 
                         <li class="navbar-vertical-aside-has-menu ">
                             <a class="js-navbar-vertical-aside-menu-link nav-link"
-                                href="{{route('admin.broker-order-list.index')}}"
+                                href="{{route('admin.purchase-warehouse-order.index')}}"
                                 title="{{translate('order_list')}}">
                                 <i class="tio-map nav-icon"></i>
                                 <span

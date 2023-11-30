@@ -77,17 +77,17 @@
                                         {{$warehouse->getCategory->name}}
                                     </span>
                                     <input type="hidden" class="form-control" name="category_id[]"
-                                        value="{{$warehouse->category_id}}">
+                                        value="{{$warehouse->category_id}}" readonly>
                                         <input type="hidden" class="form-control" name="group_name[]"
                                         value="{{$warehouse->group_name}}">
                                 </td>
                                 <td>
                                     <input type="text" class="form-control" name="store_margin[]"
-                                        value="{{$warehouse->store_margin}}">
+                                        value="{{$warehouse->store_margin}}" readonly>
                                 </td>
                                 <td>
                                     <input type="text" class="form-control" name="customer_margin[]"
-                                        value="{{$warehouse->customer_margin}}">
+                                        value="{{$warehouse->customer_margin}}" readonly>
                                 </td>
 
 
@@ -99,11 +99,11 @@
                         </tbody>
 
                     </table>
-
+<!-- 
                     <div class="  justify-content-end mt-4">
                         <a type="button" href=" " class="btn btn--reset">{{translate('back')}}</a>
                         <button type="submit" class="btn btn--primary">{{translate('Submit')}}</button>
-                    </div>
+                    </div> -->
                 </form>
 
                     @if(count($warehouses) == 0)

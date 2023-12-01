@@ -479,8 +479,19 @@
                                         class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Store')}}</span>
                                 </a>
                             </li>
+
+                            <li class="navbar-vertical-aside-has-menu {{Request::is('admin/store.index')?'active':''}}">
+                                <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{route('admin.store.purchase-store-orders.index')}}"
+                                    title="{{translate('Store orders')}}">
+                                    <i class="tio-map nav-icon"></i>
+                                    <span
+                                        class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Store orders')}}</span>
+                                </a>
+                            </li>
                             <!-- Warehouse, store, location management end here -->
                             @endif
+
+                            
                         @endif
 
 

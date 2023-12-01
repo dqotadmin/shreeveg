@@ -1,4 +1,4 @@
-<?php return array (
+<?php return array(
   'attribute' => 'Attribute',
   'update' => 'Update',
   'name' => 'Name',
@@ -2450,6 +2450,12 @@
   'worker management' => 'Worker management',
   'broker management' => 'Broker management',
   'store sales management' => 'Store sales management',
+  'Store orders' => 'Store orders',
+  'store orders' => 'Store orders',
+  'Add new' => 'Add new',
+  'store order' => 'Store order',
+  'sdfsf Inserted Successfully!' => 'Sdfsf Inserted Successfully!',
+  'mkkk Inserted Successfully!' => 'Mkkk Inserted Successfully!',
   'Warehouse Receiver Inserted Successfully!' => 'Warehouse Receiver Inserted Successfully!',
   'Store Sales Person Inserted Successfully!' => 'Store Sales Person Inserted Successfully!',
   'Broker Inserted Successfully!' => 'Broker Inserted Successfully!',

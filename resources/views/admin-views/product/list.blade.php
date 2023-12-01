@@ -39,13 +39,13 @@
                             </form>
                             <!-- Unfold -->
                             <div class="hs-unfold mr-2">
-                                <a class="js-hs-unfold-invoker btn btn-sm btn-outline-primary-2 dropdown-toggle min-height-40" href="javascript:;"
+                                <!-- <a class="js-hs-unfold-invoker btn btn-sm btn-outline-primary-2 dropdown-toggle min-height-40" href="javascript:;"
                                     data-hs-unfold-options='{
                                             "target": "#usersExportDropdown",
                                             "type": "css-animation"
                                         }'>
                                     <i class="tio-download-to mr-1"></i> {{ translate('export') }}
-                                </a>
+                                </a> -->
 
                                 <div id="usersExportDropdown"
                                     class="hs-unfold-content dropdown-unfold dropdown-menu dropdown-menu-sm-right">
@@ -62,7 +62,7 @@
                                             alt="Image Description">
                                         {{ translate('print') }}
                                     </a>
-                                    <div class="dropdown-divider"></div>-->
+                                    <div class="dropdown-divider"></div>
                                     <span class="dropdown-header">{{ translate('download') }}
                                         {{ translate('options') }}</span>
                                     <a id="export-excel" class="dropdown-item" href="{{route('admin.product.bulk-export')}}">
@@ -71,7 +71,7 @@
                                             alt="Image Description">
                                         {{ translate('excel') }}
                                     </a>
-<!--                                    <a id="export-csv" class="dropdown-item" href="javascript:;">
+                                    <a id="export-csv" class="dropdown-item" href="javascript:;">
                                         <img class="avatar avatar-xss avatar-4by3 mr-2"
                                             src="{{ asset('public/assets/admin') }}/svg/components/placeholder-csv-format.svg"
                                             alt="Image Description">
@@ -86,15 +86,17 @@
                                 </div>
                             </div>
                             <!-- End Unfold -->
-                            <div>
+                            <!-- <div>
                                 <a href="{{route('admin.product.limited-stock')}}" class="btn btn--primary-2 min-height-40">{{translate('limited stocks')}}</a>
-                            </div>
-                            <div>
-                                <a href="{{route('admin.product.add-new')}}" class="btn btn-primary min-height-40 py-2"><i
-                                        class="tio-add"></i>
-                                    {{translate('add new product')}}
-                                </a>
-                            </div>
+                            </div> -->
+                            @if( auth('admin')->user()->admin_role_id == 1 )
+                                <div>
+                                    <a href="{{route('admin.product.add-new')}}" class="btn btn-primary min-height-40 py-2">
+                                        <i class="tio-add"></i>
+                                        {{translate('add new product')}}
+                                    </a>
+                                </div>
+                            @endif
                         </div>
                     </div>
                     <div class="table-responsive datatable-custom">
@@ -103,10 +105,9 @@
                             <tr>
                                 <th>{{translate('#')}}</th>
                                 <th>{{translate('product_name')}}</th>
-                                <th>{{translate('selling_price')}}</th>
-                                <th class="text-center">{{translate('total_sale')}}</th>
-                                <th class="text-center">{{translate('show_in_daily_needs')}}</th>
-                                <th class="text-center">{{translate('featured')}}</th>
+                                <th>{{translate('product_code')}}</th>
+                                <th>{{translate('product_category')}}</th>
+                                
                                 <th class="text-center">{{translate('status')}}</th>
                                 <th class="text-center">{{translate('action')}}</th>
                             </tr>
@@ -132,31 +133,15 @@
                                     </td>
                                     <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
                                         <div class="max-85 text-right">
-                                            {{ Helpers::set_symbol($product['price']) }}
-                                        </div>
-                                    </td>
-                                    <td class="text-center">
-                                        {{ $product->total_sold }}
-                                    </td>
-                                    <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
-                                        <div class="text-center">
-                                            <label class="switch my-0">
-                                                <input type="checkbox" class="status" onchange="daily_needs('{{$product['id']}}','{{$product->daily_needs==1?0:1}}')"
-                                                    id="{{$product['id']}}" {{$product->daily_needs == 1?'checked':''}}>
-                                                <span class="slider round"></span>
-                                            </label>
+                                            {{ $product['product_code'] }}
                                         </div>
                                     </td>
                                     <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
-                                        <label class="toggle-switch my-0">
-                                            <input type="checkbox"
-                                                   onclick="featured_status_change_alert('{{ route('admin.product.feature', [$product->id, $product->is_featured ? 0 : 1]) }}', '{{ $product->is_featured? translate('want to remove from featured product'): translate('want to add in featured product') }}', event)"
-                                                   class="toggle-switch-input" id="stocksCheckbox{{ $product->id }}"
-                                                {{ $product->is_featured ? 'checked' : '' }}>
-                                            <span class="toggle-switch-label mx-auto text">
-                                                <span class="toggle-switch-indicator"></span>
-                                            </span>
-                                        </label>
+                                        <div class="max-85 text-right">
+                                            @if (!empty($product->category->name))
+                                                {{ $product->category->name }}
+                                            @endif
+                                        </div>
                                     </td>
                                     <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
                                         <label class="toggle-switch my-0">
@@ -170,21 +155,31 @@
                                         </label>
                                     </td>
                                     <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
-                                        <!-- Dropdown -->
-                                        <div class="btn--container justify-content-center">
-                                            <a class="action-btn"
-                                                href="{{route('admin.product.edit',[$product['id']])}}">
-                                            <i class="tio-edit"></i></a>
-                                            <a class="action-btn btn--danger btn-outline-danger" href="javascript:"
-                                                onclick="form_alert('product-{{$product['id']}}','{{ translate("Want to delete this") }}')">
-                                                <i class="tio-delete-outlined"></i>
-                                            </a>
-                                        </div>
-                                        <form action="{{route('admin.product.delete',[$product['id']])}}"
-                                                method="post" id="product-{{$product['id']}}">
-                                            @csrf @method('delete')
-                                        </form>
-                                        <!-- End Dropdown -->
+                                        @if( auth('admin')->user()->admin_role_id == 1 )
+                                            <!-- Dropdown -->
+                                            <div class="btn--container justify-content-center">
+                                                <a class="action-btn"
+                                                    href="{{route('admin.product.edit',[$product['id']])}}">
+                                                <i class="tio-edit"></i></a>
+                                                <a class="action-btn btn--danger btn-outline-danger" href="javascript:"
+                                                    onclick="form_alert('product-{{$product['id']}}','{{ translate("Want to delete this") }}')">
+                                                    <i class="tio-delete-outlined"></i>
+                                                </a>
+                                            </div>
+                                            <form action="{{route('admin.product.delete',[$product['id']])}}"
+                                                    method="post" id="product-{{$product['id']}}">
+                                                @csrf @method('delete')
+                                            </form>
+                                            <!-- End Dropdown -->
+                                        @endif
+
+                                        @if( auth('admin')->user()->admin_role_id == 1 )
+                                            <div class="btn--container justify-content-center">
+                                                <a class="action-btn" href="{{route('admin.product.edit',[$product['id']])}}">
+                                                    <i class="tio-edit"></i>
+                                                </a>
+                                            </div>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

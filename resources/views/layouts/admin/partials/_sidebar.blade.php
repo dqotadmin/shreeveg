@@ -215,11 +215,7 @@
                         @endif
                         <!-- User management end here -->
 
-                        <!-- Admin management start from here -->
-                        <li class="nav-item">
-                            <small class="nav-subtitle">{{translate('admin_management')}} </small>
-                            <small class="tio-more-horizontal nav-subtitle-replacer"></small>
-                        </li>
+                        
 
                         @if(auth('admin')->user()->admin_role_id == 8)
                             
@@ -268,6 +264,12 @@
                     @endif
 
                         @if(auth('admin')->user()->admin_role_id == 1)
+
+                            <!-- Admin management start from here -->
+                            <li class="nav-item">
+                                <small class="nav-subtitle">{{translate('admin_management')}} </small>
+                                <small class="tio-more-horizontal nav-subtitle-replacer"></small>
+                            </li>
                             
                             <li class="navbar-vertical-aside-has-menu ">
                                 <a class="js-navbar-vertical-aside-menu-link nav-link"
@@ -475,28 +477,31 @@
 
 
                         <!-- Product management start here -->
-                        @if(auth('admin')->user()->admin_role_id == 1)
+                        @if( auth('admin')->user()->admin_role_id == 1 || auth('admin')->user()->admin_role_id == 3 )
                         <li class="nav-item">
                             <small class="nav-subtitle">{{translate('product_management')}} </small>
                             <small class="tio-more-horizontal nav-subtitle-replacer"></small>
                         </li>
 
-                        <li class="navbar-vertical-aside-has-menu {{Request::is('admin/category*')?'active':''}}">
-                            <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{route('admin.category.list')}}"
-                                title="{{translate('categories')}}">
-                                <i class="tio-category nav-icon"></i>
-                                <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('categories')}}</span>
-                            </a>
-                        </li>
+                        <!-- Only Super Admin can view -->
+                        @if( auth('admin')->user()->admin_role_id == 1 )  
+                            <li class="navbar-vertical-aside-has-menu {{Request::is('admin/category*')?'active':''}}">
+                                <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{route('admin.category.list')}}"
+                                    title="{{translate('categories')}}">
+                                    <i class="tio-category nav-icon"></i>
+                                    <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('categories')}}</span>
+                                </a>
+                            </li>
 
-                        <li class="navbar-vertical-aside-has-menu {{Request::is('admin/unit*')?'active':''}}">
-                            <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{route('admin.unit.list')}}"
-                                title="{{translate('units')}}">
-                                <i class="tio-category nav-icon"></i>
-                                <span
-                                    class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('units')}}</span>
-                            </a>
-                        </li>
+                            <li class="navbar-vertical-aside-has-menu {{Request::is('admin/unit*')?'active':''}}">
+                                <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{route('admin.unit.add')}}"
+                                    title="{{translate('units')}}">
+                                    <i class="tio-category nav-icon"></i>
+                                    <span
+                                        class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('units')}}</span>
+                                </a>
+                            </li>
+                        @endif
                         
                         <li
                             class="navbar-vertical-aside-has-menu {{Request::is('admin/product*') || Request::is('admin/attribute*')?'active':''}}">
@@ -509,13 +514,25 @@
                             <ul class="js-navbar-vertical-aside-submenu nav nav-sub"
                                 style="display: {{Request::is('admin/product*') || Request::is('admin/attribute*') ? 'block' : 'none'}}">
 
-                                <li class="nav-item {{Request::is('admin/attribute*')?'active':''}}">
+                                <!-- <li class="nav-item {{Request::is('admin/attribute*')?'active':''}}">
                                     <a class="nav-link" href="{{route('admin.attribute.add-new')}}"
                                         title="{{translate('product attribute')}}">
                                         <span class="tio-circle nav-indicator-icon"></span>
                                         <span class="text-truncate">{{translate('product attribute')}}</span>
                                     </a>
-                                </li>
+                                </li> -->
+
+                                <!-- Only Super Admin can view -->
+                                @if( auth('admin')->user()->admin_role_id == 1 ) 
+                                    <li
+                                        class="nav-item {{Request::is('admin/product/add-new')?'active':''}}">
+                                        <a class="nav-link " href="{{route('admin.product.add-new')}}"
+                                            title="{{translate('list')}}">
+                                            <span class="tio-circle nav-indicator-icon"></span>
+                                            <span class="text-truncate">{{translate('add new product')}}</span>
+                                        </a>
+                                    </li>
+                                @endif
 
                                 <li
                                     class="nav-item {{Request::is('admin/product/list*')?'active':''}} {{Request::is('admin/product/add-new')?'active':''}}">
@@ -525,7 +542,8 @@
                                         <span class="text-truncate">{{translate('product list')}}</span>
                                     </a>
                                 </li>
-                                <li class="nav-item {{Request::is('admin/product/bulk-import')?'active':''}}">
+
+                                <!-- <li class="nav-item {{Request::is('admin/product/bulk-import')?'active':''}}">
                                     <a class="nav-link " href="{{route('admin.product.bulk-import')}}"
                                         title="{{translate('bulk_import')}}">
                                         <span class="tio-circle nav-indicator-icon"></span>
@@ -545,7 +563,8 @@
                                         <span class="tio-circle nav-indicator-icon"></span>
                                         <span class="text-truncate">{{translate('Limited Stocks')}}</span>
                                     </a>
-                                </li>
+                                </li> -->
+
                             </ul>
                         </li>
                         @endif
@@ -870,79 +889,80 @@
 
                         
 
+                        @if(auth('admin')->user()->admin_role_id == 1)
+                            <!-- ########### SYSTEM SETTING ###########  -->
+                            @if(Helpers::module_permission_check(MANAGEMENT_SECTION['system_management']))
+                                <li class="nav-item">
+                                    <small class="nav-subtitle" title="Layouts">{{translate('system setting')}}</small>
+                                    <small class="tio-more-horizontal nav-subtitle-replacer"></small>
+                                </li>
+                                
+                                <li
+                                    class="navbar-vertical-aside-has-menu {{Request::is('admin/business-settings/store*')?'active':''}}">
+                                    <a class="js-navbar-vertical-aside-menu-link nav-link"
+                                        href="{{route('admin.business-settings.store.ecom-setup')}}"
+                                        title="{{translate('Business Setup')}}">
+                                        <i class="tio-settings nav-icon"></i>
+                                        <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                            {{translate('Business Setup')}}
+                                        </span>
+                                    </a>
+                                </li>
+                                
+                                <li class="navbar-vertical-aside-has-menu {{Request::is('admin/business-settings/web-app/payment-method*')
+                                                || Request::is('admin/business-settings/web-app/third-party*')
+                                                || Request::is('admin/business-settings/web-app/mail-config*')
+                                                || Request::is('admin/business-settings/web-app/sms-module*') ?'active':''}}">
+                                    <a class="nav-link" href="{{route('admin.business-settings.web-app.payment-method')}}"
+                                        title="{{translate('Web & Apps Settings')}}">
+                                        <i class="tio-website nav-icon"></i>
+                                        <span
+                                            class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('3rd Party')}}</span>
+                                    </a>
+                                </li>
 
-                        <!-- ########### SYSTEM SETTING ###########  -->
-                        @if(Helpers::module_permission_check(MANAGEMENT_SECTION['system_management']))
-                            <li class="nav-item">
-                                <small class="nav-subtitle" title="Layouts">{{translate('system setting')}}</small>
-                                <small class="tio-more-horizontal nav-subtitle-replacer"></small>
-                            </li>
-                            
-                            <li
-                                class="navbar-vertical-aside-has-menu {{Request::is('admin/business-settings/store*')?'active':''}}">
-                                <a class="js-navbar-vertical-aside-menu-link nav-link"
-                                    href="{{route('admin.business-settings.store.ecom-setup')}}"
-                                    title="{{translate('Business Setup')}}">
-                                    <i class="tio-settings nav-icon"></i>
-                                    <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
-                                        {{translate('Business Setup')}}
-                                    </span>
-                                </a>
-                            </li>
-                            
-                            <li class="navbar-vertical-aside-has-menu {{Request::is('admin/business-settings/web-app/payment-method*')
-                                            || Request::is('admin/business-settings/web-app/third-party*')
-                                            || Request::is('admin/business-settings/web-app/mail-config*')
-                                            || Request::is('admin/business-settings/web-app/sms-module*') ?'active':''}}">
-                                <a class="nav-link" href="{{route('admin.business-settings.web-app.payment-method')}}"
-                                    title="{{translate('Web & Apps Settings')}}">
-                                    <i class="tio-website nav-icon"></i>
-                                    <span
-                                        class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('3rd Party')}}</span>
-                                </a>
-                            </li>
-
-                            <li
-                                class="navbar-vertical-aside-has-menu {{Request::is('admin/business-settings/page-setup/*')?'active':''}}">
-                                <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle" href="javascript:"
-                                    title="{{translate('Pages & Media')}}">
-                                    <i class="tio-pages-outlined nav-icon"></i>
-                                    <span
-                                        class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Pages & Media')}}</span>
-                                </a>
-                                <ul class="js-navbar-vertical-aside-submenu nav nav-sub"
-                                    style="display: {{Request::is('admin/business-settings/page-setup/*')?'block':''}} {{Request::is('admin/business-settings/web-app/third-party/social-media')?'block':''}}">
-                                    <li
-                                        class="nav-item mt-0 {{Request::is('admin/business-settings/page-setup/*')?'active':''}}">
-                                        <a class="nav-link" href="{{route('admin.business-settings.page-setup.about-us')}}"
-                                            title="{{translate('Page Setup')}}">
-                                            <span class="tio-circle nav-indicator-icon"></span>
-                                            <span
-                                                class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Page Setup')}}</span>
-                                        </a>
-                                    </li>
-                                    <li
-                                        class="nav-item {{Request::is('admin/business-settings/web-app/third-party/social-media')?'active':''}}">
-                                        <a class="nav-link "
-                                            href="{{route('admin.business-settings.web-app.third-party.social-media')}}"
-                                            title="{{translate('Social Media')}}">
-                                            <span class="tio-circle nav-indicator-icon"></span>
-                                            <span class="text-truncate">{{translate('Social Media')}}</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            
-                            <li class="nav-item mt-0
-                                    {{Request::is('admin/business-settings/web-app/system-setup*')?'active':''}}">
-                                <a class="nav-link"
-                                    href="{{route('admin.business-settings.web-app.system-setup.language.index')}}"
-                                    title="{{translate('system_settings')}}">
-                                    <i class="tio-security-on-outlined nav-icon"></i>
-                                    <span
-                                        class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('system_setup')}}</span>
-                                </a>
-                            </li>
+                                <li
+                                    class="navbar-vertical-aside-has-menu {{Request::is('admin/business-settings/page-setup/*')?'active':''}}">
+                                    <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle" href="javascript:"
+                                        title="{{translate('Pages & Media')}}">
+                                        <i class="tio-pages-outlined nav-icon"></i>
+                                        <span
+                                            class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Pages & Media')}}</span>
+                                    </a>
+                                    <ul class="js-navbar-vertical-aside-submenu nav nav-sub"
+                                        style="display: {{Request::is('admin/business-settings/page-setup/*')?'block':''}} {{Request::is('admin/business-settings/web-app/third-party/social-media')?'block':''}}">
+                                        <li
+                                            class="nav-item mt-0 {{Request::is('admin/business-settings/page-setup/*')?'active':''}}">
+                                            <a class="nav-link" href="{{route('admin.business-settings.page-setup.about-us')}}"
+                                                title="{{translate('Page Setup')}}">
+                                                <span class="tio-circle nav-indicator-icon"></span>
+                                                <span
+                                                    class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Page Setup')}}</span>
+                                            </a>
+                                        </li>
+                                        <li
+                                            class="nav-item {{Request::is('admin/business-settings/web-app/third-party/social-media')?'active':''}}">
+                                            <a class="nav-link "
+                                                href="{{route('admin.business-settings.web-app.third-party.social-media')}}"
+                                                title="{{translate('Social Media')}}">
+                                                <span class="tio-circle nav-indicator-icon"></span>
+                                                <span class="text-truncate">{{translate('Social Media')}}</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                
+                                <li class="nav-item mt-0
+                                        {{Request::is('admin/business-settings/web-app/system-setup*')?'active':''}}">
+                                    <a class="nav-link"
+                                        href="{{route('admin.business-settings.web-app.system-setup.language.index')}}"
+                                        title="{{translate('system_settings')}}">
+                                        <i class="tio-security-on-outlined nav-icon"></i>
+                                        <span
+                                            class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('system_setup')}}</span>
+                                    </a>
+                                </li>
+                            @endif
                         @endif
 
                         <li class="nav-item">

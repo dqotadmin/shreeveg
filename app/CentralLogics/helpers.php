@@ -19,6 +19,9 @@ use Illuminate\Support\Facades\DB;
 
 class Helpers
 {
+   
+    
+
     public static function error_processor($validator)
     {
         $err_keeper = [];
@@ -848,6 +851,37 @@ class Helpers
             return $query->count() === 0;
         };
     }
+
+    public static function getCategoryDropDown($categories, $parentId = 0, $level = 0, $selected = 0){
+        $categories_array = [];
+        if(!empty($categories)){
+            $index = 0;
+            foreach($categories AS $category) {
+                $categories_array[$index]['id'] = $category->id;
+                $categories_array[$index]['name'] = $category->name;
+                $categories_array[$index]['parent_id'] = $category->parent_id;
+                $index++;
+            }
+        }
+        $options = self::buildCategoryOptions($categories_array, $parentId, $level, $selected );
+        return $options;
+    }
+
+    public static function buildCategoryOptions($categories, $parentId = 0, $level = 0, $selected = 0) {
+        $html = '';
+        foreach ($categories as $category) {
+            if ($category['parent_id'] == $parentId) {
+    
+                $sel = ($category['id']==$selected) ? 'selected' : '';
+    
+                $name = str_repeat("&nbsp;", $level * 4) . $category['name']; // Indent based on level
+                $html .= "<option value='{$category['id']}' {$sel} >$name</option>";
+                $html .= self::buildCategoryOptions($categories, $category['id'], $level + 1, $selected);
+            }
+        }
+        return $html;
+    }
+
 }
 
 function translate($key)
@@ -876,4 +910,5 @@ function translate($key)
 
     return $result;
 }
+
 

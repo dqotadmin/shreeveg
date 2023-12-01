@@ -57,7 +57,7 @@
                             </div>
                         </div>
                     @endforeach
-                </div>
+          </div>
 
                 <div class="btn--container justify-content-end mt-4">
                     <a type="button" href="{{route('admin.custom-role.create')}}" class="btn btn--reset">{{translate('Back')}}</a>

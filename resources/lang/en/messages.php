@@ -1,4 +1,4 @@
-<?php return array (
+<?php return array(
   'attribute' => 'Attribute',
   'update' => 'Update',
   'name' => 'Name',
@@ -2442,15 +2442,17 @@
   'Margin Added Successfully!' => 'Margin Added Successfully!',
   'assign warehouse' => 'Assign warehouse',
   'assign warehouse by admin' => 'Assign warehouse by admin',
-  '
-                    product updated successfully!' => '
-                    product updated successfully!',
+  'product updated successfully!' => 'product updated successfully!',
   'store management' => 'Store management',
   'unit management' => 'Unit management',
   'warehouse management' => 'Warehouse management',
+  'Store Management' => 'Store Management',
+  'unit management' => 'Unit management',
+  'store management' => 'Store management',
   'receiver management' => 'Receiver management',
   'worker management' => 'Worker management',
   'broker management' => 'Broker management',
   'store sales management' => 'Store sales management',
   'Store Management' => 'Store Management',
+  'warehouse management' => 'Warehouse management',
 );

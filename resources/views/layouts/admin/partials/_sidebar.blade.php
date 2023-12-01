@@ -263,9 +263,7 @@
                         </li>
                     @endif
 
-<<<<<<< HEAD
                         @if(auth('admin')->user()->admin_role_id == 1 || auth('admin')->user()->admin_role_id == 3)
-=======
                        
 
                             <!-- Admin management start from here -->
@@ -273,7 +271,6 @@
                                 <small class="nav-subtitle">{{translate('admin_management')}} </small>
                                 <small class="tio-more-horizontal nav-subtitle-replacer"></small>
                             </li>
->>>>>>> 40dbb8ce2b4c3b87a13cdfb6cdba91da564e627b
                             
                             <li class="navbar-vertical-aside-has-menu ">
                                 <a class="js-navbar-vertical-aside-menu-link nav-link"

@@ -47,7 +47,6 @@
                                 src="{{asset('storage/app/public/admin/warehouse')}}/{{$admins['image']}}"
                                 alt="Image">
                             <input type="hidden" name="admin_role_id" value="  {{$admins->admin_role_id}}">
-                            <input type="hidden" name="admin_role_id" value="  {{$admins->admin_role_id}}">
                             <input type="file" name="image" class="js-file-attach avatar-uploader-input"
                                 id="customFileEg1" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*">
                             <label class="avatar-uploader-trigger" for="customFileEg1">
@@ -102,10 +101,14 @@
 
                                 <div class="col-sm-9">
                                     <select id="state" name="store_id" class="form-control js-select2-custom" required>
+                                        @if($user->admin_role_id == 6)
+                                        <option value="{{$user->Store->id}}">{{$user->Store->name}}</option>
+                                        @else
                                         <option value="" disabled selected>Select Store </option>
                                         @foreach(\App\Model\Store::where('status', 1)->where('deleted_at', null)->get() as $store)
                                         <option value="{{$store['id']}}"  {{$store->id == $admins->store_id ? 'selected' : '';}}>{{$store['name']}}</option>
                                         @endforeach
+                                        @endif
                                     </select>
                                 </div>
                             </div>

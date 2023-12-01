@@ -25,7 +25,8 @@ class StoreController extends Controller
     public function __construct(
         private Store $store,
         private City $city
-    ){}
+    ) {
+    }
 
     /**
      * @param Request $request 
@@ -33,41 +34,46 @@ class StoreController extends Controller
      */
     function index(Request $request): View|Factory|Application
     {
+        $user = auth('admin')->user();
         $query_param = [];
         $search = $request['search'];
-        if ($request->has('search')) {
+
+        $stores = $this->store;
+        if ($user->admin_role_id == 3) {
+            $stores =  $stores->where('warehouse_id', auth('admin')->user()->warehouse_id);
+        } elseif ($user->admin_role_id == 6) {
+
+            $stores =  $stores->where('id', $user->store_id);
+        }
+
+        if ($request->has('search') && $search) {
+
             $key = explode(' ', $request['search']);
-            $stores = $this->store->where(function ($q) use ($key) {
+            $stores = $stores->where(function ($q) use ($key) {
                 foreach ($key as $value) {
-                    $q->orWhere('title', 'like', "%{$value}%");
-                    $q->orWhere('description', 'like', "%{$value}%");
+                    $q->orWhere('name', 'like', "%{$value}%");
+                    $q->orWhere('code', 'like', "%{$value}%");
                 }
+            })->orWhereHas('warehouse', function ($q1) use ($search) {
+                $q1->where('name', 'like', "%$search%");
             });
             $query_param = ['search' => $request['search']];
-        } else {
-            $stores = $this->store;
         }
-        if(auth('admin')->user()->admin_role_id == 3){
-            $stores =  $this->store->where('warehouse_id',auth('admin')->user()->warehouse_id)->paginate(Helpers::getPagination())->appends($query_param);
-        }else{
-            $stores = $stores->latest()->paginate(Helpers::getPagination())->appends($query_param);
 
-        }
-        return view('admin-views.store.index', compact('stores', 'search'));
+        $stores = $stores->latest()->paginate(Helpers::getPagination())->appends($query_param);
+        return view('admin-views.store.index', compact('stores', 'search', 'user'));
     }
 
 
     function create(Request $request): View|Factory|Application
     {
-        $stores = $this->store->orderBy('id','desc')->first();
-        if($stores && $stores->id < 9){
-            $prevId = ($stores && $stores->id)?'0'.$stores->id+1:'01';
-        }else{
-            $prevId = ($stores && $stores->id)?$stores->id+1:'01';
-
+        $stores = $this->store->orderBy('id', 'desc')->first();
+        if ($stores && $stores->id < 9) {
+            $prevId = ($stores && $stores->id) ? '0' . $stores->id + 1 : '01';
+        } else {
+            $prevId = ($stores && $stores->id) ? $stores->id + 1 : '01';
         }
-       return view('admin-views.store.add',compact('prevId'));
-
+        return view('admin-views.store.add', compact('prevId'));
     }
 
 
@@ -77,8 +83,8 @@ class StoreController extends Controller
      */
 
 
-   
- 
+
+
     /**
      * @param Request $request
      * @return JsonResponse
@@ -95,11 +101,11 @@ class StoreController extends Controller
             'view' => view('admin-views.store.store', compact('stores'))->render()
         ]);
     }
- 
+
     /**
      * @return Factory|View|Application
      */
-  
+
     /**
      * @param Request $request
      * @return RedirectResponse
@@ -110,12 +116,12 @@ class StoreController extends Controller
             'warehouse_id' => 'required',
             'city_id' => 'required',
             'code' => 'required|unique:stores',
-        ],[
-            'warehouse_id.required'=>translate('Warehouse is required'),
-            'city_id.required'=>translate('City Name is required'),
+        ], [
+            'warehouse_id.required' => translate('Warehouse is required'),
+            'city_id.required' => translate('City Name is required'),
         ]);
 
-      
+
         //into db
         $store = $this->store;
         $store->name = $request->name == null ? null : $request->name;
@@ -133,11 +139,10 @@ class StoreController extends Controller
         $store->coverage = $request->coverage == null ? null : $request->coverage;
         $store->document = $request->has('document') ? Helpers::update('store/', $store->document, 'png', $request->file('document')) : $store->document;
         $store->save();
-       
 
-        Toastr::success(translate('unit Added Successfully!') );
+
+        Toastr::success(translate('unit Added Successfully!'));
         return redirect()->route('admin.store.list');
-
     }
 
     /**
@@ -174,11 +179,11 @@ class StoreController extends Controller
             'name' => 'required',
             'code' => [
                 'required',
-                    Rule::unique('stores')->ignore($id),
+                Rule::unique('stores')->ignore($id),
             ]
         ]);
 
-      
+
 
         $store = $this->store->find($id);
         $store->name = $request->name == null ? null : $request->name;
@@ -195,34 +200,33 @@ class StoreController extends Controller
         $store->longitude = $request->longitude == null ? null : $request->longitude;
         $store->coverage = $request->coverage == null ? null : $request->coverage;
         $store->document = $request->has('document') ? Helpers::update('store/', $store->document, 'png', $request->file('document')) : $store->document;
-       
-        $store->save();
-        
-        Toastr::success( translate('Store updated successfully!') );
-        return redirect()->route('admin.store.list');
 
+        $store->save();
+
+        Toastr::success(translate('Store updated successfully!'));
+        return redirect()->route('admin.store.list');
     }
-    public function get_warehouse($cityId = null){
+    public function get_warehouse($cityId = null)
+    {
         $warehouse = Warehouse::query();
-            $store_city_id = $this->store->where('status',1)->count();
-    
-            if($store_city_id < 9){
-                $store_city_id = $this->store->where('city_id', $cityId)->count();
-                    $prevId = ($store_city_id)? '00'.($store_city_id+1):'001';
-                }else{
-                    $prevId = ($store_city_id)? $store_city_id+1:'001';
-        
-                }
-            if ($cityId) {
-                $warehouse = $warehouse->where('status',1)->where('city_id', $cityId)->get();
-                
-                if ($warehouse->isEmpty()) {
-                    return response()->json(['message' => 'Warehouses not found for the given city.']);
-                }
-            } else {
-                return response()->json(['message' => 'City ID is not provided.']);
+        $store_city_id = $this->store->where('status', 1)->count();
+
+        if ($store_city_id < 9) {
+            $store_city_id = $this->store->where('city_id', $cityId)->count();
+            $prevId = ($store_city_id) ? '00' . ($store_city_id + 1) : '001';
+        } else {
+            $prevId = ($store_city_id) ? $store_city_id + 1 : '001';
+        }
+        if ($cityId) {
+            $warehouse = $warehouse->where('status', 1)->where('city_id', $cityId)->get();
+
+            if ($warehouse->isEmpty()) {
+                return response()->json(['message' => 'Warehouses not found for the given city.']);
             }
-            return response()->json(['warehouse' => $warehouse, 'prevId' => $prevId]);
+        } else {
+            return response()->json(['message' => 'City ID is not provided.']);
+        }
+        return response()->json(['warehouse' => $warehouse, 'prevId' => $prevId]);
     }
     // public function get_warehouse($cityId=null){
     //     $warehouse = Warehouse::query();
@@ -236,7 +240,7 @@ class StoreController extends Controller
     //     }
     //     if ($cityId) {
     //         $warehouse = $warehouse->where('status',1)->where('city_id', $cityId)->get();
-            
+
     //         if ($warehouse->isEmpty()) {
     //             return response()->json(['message' => 'Warehouses not found for the given city.']);
     //         }
@@ -244,10 +248,10 @@ class StoreController extends Controller
     //         return response()->json(['message' => 'City ID is not provided.']);
     //     }
     //     return response()->json(['warehouse' => $warehouse, 'prevId' => $prevId]);
-        
-    
+
+
     // }
-   
+
 
     /** 
      * @param Request $request
@@ -257,12 +261,12 @@ class StoreController extends Controller
     {
         $store = $this->store->find($request->id);
         $store->update(['deleted_by' => auth('admin')->user()->id]);
-       
+
         if ($store) {
             $store->delete();
-            Toastr::success( translate('Store removed!')  );
+            Toastr::success(translate('Store removed!'));
         } else {
-            Toastr::warning( translate('Store not removed!') );
+            Toastr::warning(translate('Store not removed!'));
         }
         return back();
     }

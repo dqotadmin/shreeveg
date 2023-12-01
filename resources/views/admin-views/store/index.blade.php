@@ -24,12 +24,13 @@
     <div class="row g-2">
         <div class="col-sm-12 col-lg-12">
             <div class="btn--container justify-content-end m-2">
+                @if(in_array($user->admin_role_id,[1,3]))
                 <a type="button" href="{{route('admin.store.create')}}"
                     class="btn btn--primary">{{translate('Add Store')}}</a>
+                @endif
             </div>
             @php($data = Helpers::get_business_settings('language'))
             @php($default_lang = Helpers::get_default_language())
-            {{-- @php($default_lang = 'en') --}}
         </div>
     </div>
 </div>
@@ -120,10 +121,12 @@
                             <div class="btn--container justify-content-center">
                                 <a class="action-btn" href="{{route('admin.store.edit',[$store['id']])}}">
                                     <i class="tio-edit"></i></a>
+                                    @if(in_array($user->admin_role_id,[1,3]))
                                 <a class="action-btn btn--danger btn-outline-danger" href="javascript:"
                                     onclick="form_alert('store-{{$store['id']}}','{{ translate("Want to delete this") }}')">
                                     <i class="tio-delete-outlined"></i>
                                 </a>
+                                @endif
                             </div>
                             <form action="{{route('admin.store.delete',[$store['id']])}}" method="post"
                                 id="store-{{$store['id']}}">

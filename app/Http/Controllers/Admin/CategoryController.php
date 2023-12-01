@@ -63,37 +63,13 @@ class CategoryController extends Controller
 
         //Category Dropdown
         $categories = $this->category->get();
-        
-        $categories_array = [];
-        if(!empty($categories)){
-            $index = 0;
-            foreach($categories AS $category) {
-                $categories_array[$index]['id'] = $category->id;
-                $categories_array[$index]['name'] = $category->name;
-                $categories_array[$index]['parent_id'] = $category->parent_id;
-                $index++;
-            }
-        }
-        $options = $this->buildCategoryOptions($categories_array);
+        $options = Helpers::getCategoryDropDown($categories);
 
         return view('admin-views.category.add', compact('options', 'search'));
 
     }
 
-    function buildCategoryOptions($categories, $parentId = 0, $level = 0, $selected = 0) {
-        $html = '';
-        foreach ($categories as $category) {
-            if ($category['parent_id'] == $parentId) {
-
-                $sel = ($category['id']==$selected) ? 'selected' : '';
-
-                $name = str_repeat("&nbsp;", $level * 4) . $category['name']; // Indent based on level
-                $html .= "<option value='{$category['id']}' {$sel} >$name</option>";
-                $html .= $this->buildCategoryOptions($categories, $category['id'], $level + 1, $selected);
-            }
-        }
-        return $html;
-    }
+    
 
     function sub_create(Request $request): View|Factory|Application
     {
@@ -286,20 +262,8 @@ class CategoryController extends Controller
 
         //Category Dropdown
         $categories = $this->category->where('id','!=',$category['id'])->get();
+        $options = Helpers::getCategoryDropDown($categories, 0, 0, $category['parent_id']);
         
-        $categories_array = [];
-        if(!empty($categories)){
-            $index = 0;
-            foreach($categories AS $cat) {
-                $categories_array[$index]['id'] = $cat->id;
-                $categories_array[$index]['name'] = $cat->name;
-                $categories_array[$index]['parent_id'] = $cat->parent_id;
-                $index++;
-            }
-        }
-        
-        $options = $this->buildCategoryOptions($categories_array, 0, 0, $category['parent_id']);
-        //dd($category);
         return view('admin-views.category.edit', compact('category','options'));
     }
 

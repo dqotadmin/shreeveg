@@ -26,7 +26,8 @@ class AdminUserController extends Controller
     public function __construct(
         private Admin $admin,
         private AdminRole $admin_role,
-    ){}
+    ) {
+    }
 
     /**
      * @return JsonResponse
@@ -39,7 +40,7 @@ class AdminUserController extends Controller
             'data' => ['new_order' => $new_order]
         ]);
     }
- 
+
     /**
      * @return Application|Factory|View
      */
@@ -52,8 +53,7 @@ class AdminUserController extends Controller
        // dd(auth('admin')->user()->admin_role_id);
         $query_param = [];
         $search = $request['search'];
-        if($request->has('search'))
-        {
+        if ($request->has('search')) {
             $key = explode(' ', $request['search']);
             $admins = $this->admin->where(function ($q) use ($key) {
                 foreach ($key as $value) {
@@ -64,21 +64,22 @@ class AdminUserController extends Controller
                 }
             })->orderBy('id', 'desc');
             $query_param = ['search' => $request['search']];
-        }else{
+        } else {
             $admins = $this->admin->orderBy('id', 'desc')->where('admin_role_id', $request->role_id);
         }
         $admins = $admins->paginate(Helpers::getPagination())->appends($query_param);
         $role = $this->admin_role->where('id', $request->role_id)->first();
-        return view('admin-views.warehouse-admin.index',compact('admins','role'));
+        return view('admin-views.warehouse-admin.index', compact('admins', 'role'));
     }
 
     public function user_management_create(Request $request): View|Factory|Application
     {
-        
+
         $role = $this->admin_role->where('id', $request->role_id)->first();
-        return view('admin-views.warehouse-admin.add',compact('role'));
+        $user = auth('admin')->user();
+        return view('admin-views.warehouse-admin.add', compact('role', 'user'));
     }
-    
+
     public function store(Request $request): \Illuminate\Http\RedirectResponse
     {
         $request->validate([
@@ -93,13 +94,13 @@ class AdminUserController extends Controller
             'email.required' => translate('Email is required!'),
             'email.unique' => translate('Email must be unique')
         ]);
-        
+
         if (!empty($request->file('image'))) {
             $image_name = Helpers::upload('admin/warehouse/', 'png', $request->file('image'));
         } else {
             $image_name = 'def.png';
         }
-            //into db
+        //into db
         $admin = $this->admin;
         $admin->f_name = $request->f_name;
         $admin->l_name = $request->l_name;
@@ -108,17 +109,17 @@ class AdminUserController extends Controller
         $admin->city_id = $request->city_id;
         $admin->state_id = $request->state_id;
         $admin->image = $image_name;
-        if($request->warehouse_id){
-        $admin->warehouse_id = $request->warehouse_id;
+        if ($request->warehouse_id) {
+            $admin->warehouse_id = $request->warehouse_id;
         }
-        if($request->store_id){
+        if ($request->store_id) {
             $admin->store_id = $request->store_id;
-            }
+        }
         $admin->password = bcrypt($request['password']);
 
         $admin->admin_role_id = $request->admin_role_id;
         $admin->save();
-       
+
         $adminId = $admin->id;
         $bankDetail = new BankDetail([
             'user_id' => $adminId,
@@ -131,20 +132,21 @@ class AdminUserController extends Controller
             // Add other fields as needed
         ]);
         $bankDetail->save();
-        Toastr::success(translate($request->name.' Inserted Successfully!'));
-        return redirect()->route('admin.warehouse-admin',['role_id'=>$request->admin_role_id]);
+        Toastr::success(translate($request->name . ' Inserted Successfully!'));
+        return redirect()->route('admin.warehouse-admin', ['role_id' => $request->admin_role_id]);
     }
-        
-    public function edit(Request $request,$id){
+
+    public function edit(Request $request, $id)
+    {
         $admins = $this->admin->with('bankDetail')->find($id);
-  
+
         $role = $this->admin_role->where('id', $request->role_id)->first();
-        return view('admin-views.warehouse-admin.edit', compact('admins','role'));
+        return view('admin-views.warehouse-admin.edit', compact('admins', 'role'));
     }
-  
+
     public function status(Request $request): RedirectResponse
     {
-       
+
         $admin = $this->admin->find($request->id);
         $admin->status = $request->status;
         $admin->save();
@@ -152,7 +154,7 @@ class AdminUserController extends Controller
         return back();
     }
 
-    public function update(Request $request,$id): \Illuminate\Http\RedirectResponse
+    public function update(Request $request, $id): \Illuminate\Http\RedirectResponse
     {
         $request->validate([
             'f_name' => 'required',
@@ -178,37 +180,36 @@ class AdminUserController extends Controller
         $admin->phone = $request->phone;
         $admin->email = $request->email;
         $admin->image = $image_name;
-        if($request->warehouse_id){
+        if ($request->warehouse_id) {
             $admin->warehouse_id = $request->warehouse_id;
-            }
-            if($request->store_id){
-                $admin->store_id = $request->store_id;
-                }
+        }
+        if ($request->store_id) {
+            $admin->store_id = $request->store_id;
+        }
         $admin->save();
         $bankDetail = BankDetail::first();
-    if ($id == $bankDetail->user_id) {
-        $bankDetail->user_id = $id;
-        $bankDetail->account_number = $request->account_number;
-        $bankDetail->account_holder = $request->account_holder;
-        $bankDetail->bank_name = $request->bank_name;
-        $bankDetail->ifsc_code = $request->ifsc_code;
-        $bankDetail->upi_id = $request->upi_id;
-        $bankDetail->upi_number = $request->upi_number;
-        $bankDetail->save();
-    } else {
-        // Handle the case where the BankDetail record with the given ID is not found
-        // You might want to throw an exception or return an error response
-    }
-        Toastr::success( translate($request->name.' updated successfully!') );
-        return redirect()->route('admin.warehouse-admin',['role_id'=>$request->admin_role_id]);
+        if ($id == $bankDetail->user_id) {
+            $bankDetail->user_id = $id;
+            $bankDetail->account_number = $request->account_number;
+            $bankDetail->account_holder = $request->account_holder;
+            $bankDetail->bank_name = $request->bank_name;
+            $bankDetail->ifsc_code = $request->ifsc_code;
+            $bankDetail->upi_id = $request->upi_id;
+            $bankDetail->upi_number = $request->upi_number;
+            $bankDetail->save();
+        } else {
+            // Handle the case where the BankDetail record with the given ID is not found
+            // You might want to throw an exception or return an error response
+        }
+        Toastr::success(translate($request->name . ' updated successfully!'));
+        return redirect()->route('admin.warehouse-admin', ['role_id' => $request->admin_role_id]);
     }
 
     function store_index(Request $request)
     {
         $query_param = [];
         $search = $request['search'];
-        if($request->has('search'))
-        {
+        if ($request->has('search')) {
             $key = explode(' ', $request['search']);
             $admins = $this->admin->where(function ($q) use ($key) {
                 foreach ($key as $value) {
@@ -219,18 +220,17 @@ class AdminUserController extends Controller
                 }
             })->orderBy('id', 'desc');
             $query_param = ['search' => $request['search']];
-        }else{
-            $admins = $this->admin->orderBy('id', 'desc')->where('admin_role_id','6');
+        } else {
+            $admins = $this->admin->orderBy('id', 'desc')->where('admin_role_id', '6');
         }
         $admins = $admins->paginate(Helpers::getPagination())->appends($query_param);
-        return view('admin-views.warehouse-admin.store_index',compact('admins'));
+        return view('admin-views.warehouse-admin.store_index', compact('admins'));
     }
     function wh_worker_index(Request $request)
     {
         $query_param = [];
         $search = $request['search'];
-        if($request->has('search'))
-        {
+        if ($request->has('search')) {
             $key = explode(' ', $request['search']);
             $admins = $this->admin->where(function ($q) use ($key) {
                 foreach ($key as $value) {
@@ -241,18 +241,17 @@ class AdminUserController extends Controller
                 }
             })->orderBy('id', 'desc');
             $query_param = ['search' => $request['search']];
-        }else{
-            $admins = $this->admin->orderBy('id', 'desc')->where('admin_role_id','4');
+        } else {
+            $admins = $this->admin->orderBy('id', 'desc')->where('admin_role_id', '4');
         }
         $admins = $admins->paginate(Helpers::getPagination())->appends($query_param);
-        return view('admin-views.warehouse-admin.customer_index',compact('admins'));  
+        return view('admin-views.warehouse-admin.customer_index', compact('admins'));
     }
     function store_sales_person_index(Request $request)
     {
         $query_param = [];
         $search = $request['search'];
-        if($request->has('search'))
-        {
+        if ($request->has('search')) {
             $key = explode(' ', $request['search']);
             $admins = $this->admin->where(function ($q) use ($key) {
                 foreach ($key as $value) {
@@ -263,18 +262,17 @@ class AdminUserController extends Controller
                 }
             })->orderBy('id', 'desc');
             $query_param = ['search' => $request['search']];
-        }else{
-            $admins = $this->admin->orderBy('id', 'desc')->where('admin_role_id','7');
+        } else {
+            $admins = $this->admin->orderBy('id', 'desc')->where('admin_role_id', '7');
         }
         $admins = $admins->paginate(Helpers::getPagination())->appends($query_param);
-        return view('admin-views.warehouse-admin.area_index',compact('admins'));  
+        return view('admin-views.warehouse-admin.area_index', compact('admins'));
     }
     function wh_receiver_index(Request $request)
     {
         $query_param = [];
         $search = $request['search'];
-        if($request->has('search'))
-        {
+        if ($request->has('search')) {
             $key = explode(' ', $request['search']);
             $admins = $this->admin->where(function ($q) use ($key) {
                 foreach ($key as $value) {
@@ -285,15 +283,15 @@ class AdminUserController extends Controller
                 }
             })->orderBy('id', 'desc');
             $query_param = ['search' => $request['search']];
-        }else{
-            $admins = $this->admin->orderBy('id', 'desc')->where('admin_role_id','5');
+        } else {
+            $admins = $this->admin->orderBy('id', 'desc')->where('admin_role_id', '5');
         }
         $admins = $admins->paginate(Helpers::getPagination())->appends($query_param);
-        return view('admin-views.warehouse-admin.delivery_index',compact('admins'));  
+        return view('admin-views.warehouse-admin.delivery_index', compact('admins'));
     }
-            
 
-        /**
+
+    /**
      * @param Request $request
      * @return RedirectResponse
      */
@@ -312,7 +310,7 @@ class AdminUserController extends Controller
         $admin = $this->admin->find(auth('admin')->id());
 
         if ($request->has('image')) {
-            $image_name =Helpers::update('admin/', $admin->image, 'png', $request->file('image'));
+            $image_name = Helpers::update('admin/', $admin->image, 'png', $request->file('image'));
         } else {
             $image_name = $admin['image'];
         }

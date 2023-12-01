@@ -81,5 +81,10 @@ class Product extends Model
         return $this->belongsToMany(Tag::class);
     }
 
+    public function category(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->BelongsTo(Category::class);
+    }
+
 
 }

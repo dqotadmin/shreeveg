@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-protected $table ='user_warehouse_orders';
-
+    protected $table = 'user_warehouse_orders';
     protected $casts = [
         'order_amount'           => 'float',
         'checked'                => 'integer',

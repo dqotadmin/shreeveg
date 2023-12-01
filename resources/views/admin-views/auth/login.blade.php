@@ -100,7 +100,7 @@
                     </div>
                     <!-- End Checkbox -->
 
-                    @php($recaptcha = \App\CentralLogics\Helpers::get_business_settings('recaptcha'))
+                    {{-- @php($recaptcha = \App\CentralLogics\Helpers::get_business_settings('recaptcha'))
                     @if(isset($recaptcha) && $recaptcha['status'] == 1)
                         <div id="recaptcha_element" class="w-100" data-type="image"></div>
                         <br/>
@@ -117,7 +117,7 @@
                                 </div>
                             </div>
                         </div>
-                    @endif
+                    @endif --}}
 
                     <button type="submit" class="btn btn-block btn--primary">{{translate('login')}}</button>
                 </form>

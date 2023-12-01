@@ -66,6 +66,9 @@
                         <th class="text-center">{{translate('#')}}</th>
                         <th>{{translate('image')}}</th>
                         <th>{{translate('full_name')}}</th>
+                        @if($role->id == '6' || $role->id == '7' )
+                        <th>{{translate('assign warehouse by admin')}}</th>
+                        @endif
                         @if($role->id == '3'   || $role->id == '5' || $role->id == '4')
                             <th>{{translate('warehouse')}}</th>
                         @elseif($role->id == '6' || $role->id == '7' )
@@ -82,6 +85,7 @@
                     <tr>
                         <td class="text-center">{{$admins->firstItem()+$key}}</td>
                         <td>
+                            
                         <img src="{{asset('storage/app/public/admin/warehouse')}}/{{$admin['image']}}"
                                             onerror="this.src='{{asset('public/assets/admin/img/400x400/img2.jpg')}}'" class="img--50 ml-3" alt="">
                         </td>
@@ -90,6 +94,15 @@
                                 {{$admin['f_name'] }} {{ $admin['l_name']}}
                             </span>
                         </td>
+                        @if($role->id == '6' || $role->id == '7' )
+
+                        <td>
+                            <span class="d-block font-size-sm text-body text-trim-50" style="text-transform: capitalize ;">
+                            {{ @$admin->Store->warehouse->name}}
+
+                            </span>
+                        </td>
+                        @endif
                         @if($role->id == '3'   || $role->id == '5' || $role->id == '4')
                         <td>
                             <span class="d-block font-size-sm text-body text-trim-50" style="text-transform: capitalize ;">

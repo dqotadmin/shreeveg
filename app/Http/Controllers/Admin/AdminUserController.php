@@ -49,7 +49,7 @@ class AdminUserController extends Controller
     }
     function index(Request $request)
     {
-        //dd($request->all());
+       // dd(auth('admin')->user()->admin_role_id);
         $query_param = [];
         $search = $request['search'];
         if($request->has('search'))

@@ -2332,7 +2332,6 @@
   'Warehouse  is required' => 'Warehouse  is required',
   'City Name is required' => 'City Name is required',
   'Warehouse Management' => 'Warehouse Management',
-  'Store Management' => 'Store Management',
   'location management' => 'Location management',
   'Receiver Management' => 'Receiver Management',
   'Worker Management' => 'Worker Management',
@@ -2437,4 +2436,9 @@
   'Apna Bazar Inserted Successfully!' => 'Apna Bazar Inserted Successfully!',
   'order remved' => 'Order remved',
   'Margin Added Successfully!' => 'Margin Added Successfully!',
+  'assign warehouse' => 'Assign warehouse',
+  'assign warehouse by admin' => 'Assign warehouse by admin',
+  '
+                    product updated successfully!' => '
+                    product updated successfully!',
 );

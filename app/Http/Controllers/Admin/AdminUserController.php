@@ -141,7 +141,8 @@ class AdminUserController extends Controller
         $admins = $this->admin->with('bankDetail')->find($id);
 
         $role = $this->admin_role->where('id', $request->role_id)->first();
-        return view('admin-views.warehouse-admin.edit', compact('admins', 'role'));
+        $user = auth('admin')->user();
+        return view('admin-views.warehouse-admin.edit', compact('admins', 'role','user'));
     }
 
     public function status(Request $request): RedirectResponse

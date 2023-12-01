@@ -100,6 +100,7 @@
                     </div>
                     <!-- End Checkbox -->
 
+                    {{--
                     @php($recaptcha = \App\CentralLogics\Helpers::get_business_settings('recaptcha'))
                     @if(isset($recaptcha) && $recaptcha['status'] == 1)
                         <div id="recaptcha_element" class="w-100" data-type="image"></div>
@@ -118,23 +119,11 @@
                             </div>
                         </div>
                     @endif
+                    --}}
 
                     <button type="submit" class="btn btn-block btn--primary">{{translate('login')}}</button>
                 </form>
-                @if(env('APP_MODE')=='demo')
-                <div class="auto-fill-data-copy">
-                    <div class="d-flex flex-wrap align-items-center justify-content-between">
-                        <div>
-                            <span class="d-block"><strong>Email</strong> : admin@admin.com</span>
-                            <span class="d-block"><strong>Password</strong> : 12345678</span>
-                        </div>
-                        <div>
-                            <button class="btn action-btn btn--primary m-0" onclick="copy_cred()"><i class="tio-copy"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                @endif
+                
             </div>
         </div>
     </div>

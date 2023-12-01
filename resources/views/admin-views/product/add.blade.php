@@ -1,10 +1,11 @@
 @extends('layouts.admin.app')
 
-@section('title', translate('Update product'))
+@section('title', translate('Add new product'))
 
 @push('css_or_js')
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="{{asset('public/assets/admin/css/tags-input.min.css')}}" rel="stylesheet">
+
 @endpush
 
 @section('content')
@@ -13,16 +14,17 @@
         <div class="page-header">
             <h1 class="page-header-title">
                 <span class="page-header-icon">
-                    <img src="{{asset('public/assets/admin/img/edit.png')}}" class="w--24" alt="">
+                    <img src="{{asset('public/assets/admin/img/add-product.png')}}" class="w--24" alt="">
                 </span>
                 <span>
-                    {{translate('product')}} {{translate('update')}}
+                    {{translate('add New Product')}}
                 </span>
             </h1>
         </div>
         <!-- End Page Header -->
+
         <form action="javascript:" method="post" id="product_form"
-                enctype="multipart/form-data"class="row g-2">
+                enctype="multipart/form-data" class="row g-2">
             @csrf
             @php($data = Helpers::get_business_settings('language'))
             @php($default_lang = Helpers::get_default_language())
@@ -31,61 +33,48 @@
                 <div class="card">
                     <div class="card-body pt-2">
                         @if($data && array_key_exists('code', $data[0]))
+
                             <ul class="nav nav-tabs mb-4">
 
                                 @foreach($data as $lang)
-                                <li class="nav-item">
-                                    <a class="nav-link lang_link {{$lang['code'] == 'en'? 'active':''}}" href="#" id="{{$lang['code']}}-link">{{Helpers::get_language_name($lang['code']).'('.strtoupper($lang['code']).')'}}</a>
-                                </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link lang_link {{$lang['default'] == true ? 'active':''}}" href="#" id="{{$lang['code']}}-link">{{Helpers::get_language_name($lang['code']).'('.strtoupper($lang['code']).')'}}</a>
+                                    </li>
                                 @endforeach
 
                             </ul>
                             @foreach($data as $lang)
-                                <?php
-                                    if(count($product['translations'])){
-                                        $translate = [];
-                                        foreach($product['translations'] as $t)
-                                        {
-                                            if($t->locale == $lang['code'] && $t->key=="name"){
-                                                $translate[$lang['code']]['name'] = $t->value;
-                                            }
-                                            if($t->locale == $lang['code'] && $t->key=="description"){
-                                                $translate[$lang['code']]['description'] = $t->value;
-                                            }
-
-                                        }
-                                    }
-                                ?>
-                                <div class="{{$lang['code'] != 'en'? 'd-none':''}} lang_form" id="{{$lang['code']}}-form">
+                                <div class="{{$lang['default'] == false ? 'd-none':''}} lang_form" id="{{$lang['code']}}-form">
                                     <div class="form-group">
                                         <label class="input-label" for="{{$lang['code']}}_name">{{translate('name')}} ({{strtoupper($lang['code'])}})</label>
-                                        <input type="text" {{$lang['status'] == true ? 'required':''}} name="name[]" id="{{$lang['code']}}_name" value="{{$translate[$lang['code']]['name']??$product['name']}}" class="form-control" placeholder="{{translate('New Product')}}" >
+                                        <input type="text" name="name[]" id="{{$lang['code']}}_name" class="form-control"
+                                            placeholder="{{translate('New Product')}}" {{$lang['status'] == true ? 'required':''}}
+                                            @if($lang['status'] == true) oninvalid="document.getElementById('{{$lang['code']}}-link').click()" @endif >
                                     </div>
                                     <input type="hidden" name="lang[]" value="{{$lang['code']}}">
                                     <div class="form-group mb-0">
-                                        <label class="input-label" for="{{$lang['code']}}_description">{{translate('short')}} {{translate('description')}}  ({{strtoupper($lang['code'])}})</label>
-                                        <textarea name="description[]" class="form-control h--172px" id="{{$lang['code']}}_hiddenArea">{{$translate[$lang['code']]['description']??$product['description']}}</textarea>
+                                        <label class="input-label"
+                                            for="{{$lang['code']}}_description">{{translate('short')}} {{translate('description')}}  ({{strtoupper($lang['code'])}})</label>
+                                        <textarea name="description[]" class="form-control h--172px " id="{{$lang['code']}}_hiddenArea" required></textarea>
                                     </div>
                                 </div>
                             @endforeach
                         @else
-                            <div id="english-form">
+                            <div id="{{$default_lang}}-form">
                                 <div class="form-group">
                                     <label class="input-label" for="exampleFormControlInput1">{{translate('name')}} (EN)</label>
-                                    <input type="text" name="name[]" value="{{$product['name']}}" class="form-control" placeholder="{{translate('New Product')}}" required >
+                                    <input type="text" name="name[]" class="form-control" placeholder="{{translate('New Product')}}" required >
                                 </div>
                                 <input type="hidden" name="lang[]" value="en">
                                 <div class="form-group mb-0">
-                                    <label class="input-label"
-                                        for="exampleFormControlInput1">{{translate('short')}} {{translate('description')}} (EN)</label>
-                                    <textarea name="description[]" class="form-control  h--172px " id="hiddenArea">{{ $product['description'] }}</textarea>
+                                    <label class="input-label" for="exampleFormControlInput1">{{translate('short')}} {{translate('description')}} (EN)</label>
+                                    <textarea name="description[]" class="form-control  h--172px" id="hiddenArea" required></textarea>
                                 </div>
                             </div>
                         @endif
                     </div>
                 </div>
             </div>
-
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-header">
@@ -116,7 +105,7 @@
                                 <div class="form-group">
                                     <label class="input-label"
                                            for="exampleFormControlInput1">{{translate('Product_Code')}}</label>
-                                    <input type="text" min="1" step="1" value="{{$product['product_code']}}"  name="product_code" style="text-transform: uppercase;"
+                                    <input type="text" min="1" step="1"   name="product_code" style="text-transform: uppercase;"
                                            class="form-control"
                                            placeholder="{{ translate('Product_Code') }}" required >
                                 </div>
@@ -126,8 +115,9 @@
                                     for="exampleFormControlInput1">{{translate('Unit')}}</label>
                                 <select name="unit_id" id="" class="form-control js-select2-custom required-select" >
                                     <option   disabled selected>Please Select Unit</option>
+
                                     @foreach($units as $unit)
-                                        <option value="{{$unit->id}}" {{ $unit->id == $product->unit_id ? 'selected' : ''}} style="text-transform: capitalize;">{{$unit->title}} ({{$unit->description}})</option>
+                                        <option value="{{$unit->id}}" style="text-transform: capitalize;">{{$unit->title}} ({{$unit->description}})</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -136,7 +126,7 @@
                                 <div class="form-group">
                                     <label class="input-label"
                                            for="exampleFormControlInput1">{{translate('Maximum_Order_Quantity')}}</label>
-                                    <input type="number" min="1" step="1" value="{{$product['maximum_order_quantity']}}" name="maximum_order_quantity" 
+                                    <input type="number" min="1" step="1" value="1" name="maximum_order_quantity"
                                            class="form-control"
                                            placeholder="{{ translate('Ex : 3') }}" >
                                 </div>
@@ -168,18 +158,7 @@
                     <h5 class="mb-3">{{translate('Single product')}} {{translate('image')}} <small
                         class="text-danger">* ( {{translate('ratio')}} 1:1 )</small></h5>
                         <div class="product--single">
-                            @if (!empty(json_decode($product['single_image'],true)))
-                                    @foreach(json_decode($product['single_image'],true) as $img)
-                                        <div class="row g-2" >
-                                            <div class="spartan_item_wrapper position-relative">
-                                                <img class="img-150 border rounded p-3" src="{{asset('storage/app/public/product/single')}}/{{$img}}">
-                                                <a href="{{route('admin.product.remove-single-image',[$product['id'],$img])}}" class="spartan__close"><i class="tio-add-to-trash"></i></a>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                            @else
-                                <div class="row g-2" id="single"></div>
-                            @endif
+                            <div class="row g-2" id="single"></div>
                         </div>
                     </div>
                 </div>
@@ -187,28 +166,19 @@
             <div class="col-lg-9">
                 <div class="card h-100">
                     <div class="card-body">
-                    <h5 class="mb-3">{{translate('product')}} {{translate('image')}} <small
+                    <h5 class="mb-3">{{translate('Multi product')}} {{translate('image')}} <small
                         class="text-danger">* ( {{translate('ratio')}} 1:1 )</small></h5>
                         <div class="product--coba">
-                            <div class="row g-2" id="coba">
-                                @if (!empty(json_decode($product['image'],true)))
-                                    @foreach(json_decode($product['image'],true) as $img)
-                                        <div class="spartan_item_wrapper position-relative">
-                                            <img class="img-150 border rounded p-3" src="{{asset('storage/app/public/product')}}/{{$img}}">
-                                            <a href="{{route('admin.product.remove-image',[$product['id'],$img])}}" class="spartan__close"><i class="tio-add-to-trash"></i></a>
-                                        </div>
-                                    @endforeach
-                                @endif
-                            </div>
+                            <div class="row g-2" id="coba"></div>
                         </div>
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-12">
                 <div class="btn--container justify-content-end">
-                    <button type="reset" class="btn btn--reset">{{translate('clear')}}</button>
-                    <button type="submit" class="btn btn--primary">{{translate('update')}}</button>
+                    <a href="" class="btn btn--reset min-w-120px">{{translate('reset')}}</a>
+                    <button type="submit" class="btn btn--primary">{{translate('submit')}}</button>
                 </div>
             </div>
         </form>
@@ -233,7 +203,7 @@
             let lang = form_id.split("-")[0];
             console.log(lang);
             $("#"+lang+"-form").removeClass('d-none');
-            if(lang == 'en')
+            if(lang == '{{$default_lang}}')
             {
                 $("#from_part_2").removeClass('d-none');
             }
@@ -245,16 +215,57 @@
 
         })
     </script>
+
+    <script>
+
+
+        $('#product_form').on('submit', function () {
+
+
+            var formData = new FormData(this);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.post({
+                url: '{{route('admin.product.store')}}',
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.errors) {
+                        for (var i = 0; i < data.errors.length; i++) {
+                            toastr.error(data.errors[i].message, {
+                                CloseButton: true,
+                                ProgressBar: true
+                            });
+                        }
+                    } else {
+                        toastr.success('{{ translate("product uploaded successfully!") }}', {
+                            CloseButton: true,
+                            ProgressBar: true
+                        });
+                        setTimeout(function () {
+                            location.href = '{{route('admin.product.list')}}';
+                        }, 1000);
+                    }
+                }
+            });
+        });
+    </script>
+
     <script type="text/javascript">
         $(function () {
             $("#coba").spartanMultiImagePicker({
                 fieldName: 'images[]',
-                maxCount: 4,
+                maxCount: 5,
                 rowHeight: '150px',
                 groupClassName: '',
                 maxFileSize: '',
                 placeholderImage: {
-                    image: '{{asset('/public/assets/admin/img/upload-en.png')}}',
+                    image: '{{asset('public/assets/admin/img/upload-en.png')}}',
                     width: '100%'
                 },
                 dropFileLabel: "Drop Here",
@@ -268,13 +279,13 @@
 
                 },
                 onExtensionErr: function (index, file) {
-                    toastr.error('Please only input png or jpg type file', {
+                    toastr.error('{{ translate("Please only input png or jpg type file") }}', {
                         CloseButton: true,
                         ProgressBar: true
                     });
                 },
                 onSizeErr: function (index, file) {
-                    toastr.error('File size too big', {
+                    toastr.error('{{ translate("File size too big") }}', {
                         CloseButton: true,
                         ProgressBar: true
                     });
@@ -328,10 +339,6 @@
                 },
             });
         }
-
-        $(document).ready(function () {
-            
-        });
     </script>
 
     <script>
@@ -354,7 +361,7 @@
 
         function add_more_customer_choice_option(i, name) {
             let n = name.split(' ').join('');
-            $('#customer_choice_options').append('<div class="row"><div class="col-md-3"><input type="hidden" name="choice_no[]" value="' + i + '"><input type="text" class="form-control" name="choice[]" value="' + n + '" placeholder="Choice Title" readonly></div><div class="col-lg-9"><input type="text" class="form-control" name="choice_options_' + i + '[]" placeholder="Enter choice values" data-role="tagsinput" onchange="combination_update()"></div></div>');
+            $('#customer_choice_options').append('<div class="row g-1"><div class="col-md-3 col-sm-4"><input type="hidden" name="choice_no[]" value="' + i + '"><input type="text" class="form-control" name="choice[]" value="' + n + '" placeholder="Choice Title" readonly></div><div class="col-lg-9 col-sm-8"><input type="text" class="form-control" name="choice_options_' + i + '[]" placeholder="Enter choice values" data-role="tagsinput" onchange="combination_update()"></div></div>');
             $("input[data-role=tagsinput], select[multiple][data-role=tagsinput]").tagsinput();
         }
 
@@ -381,25 +388,26 @@
         }
     </script>
 
-    {{-- <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script> --}}
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
     <script>
-
+        var quill = new Quill('#editor', {
+            theme: 'snow'
+        });
 
         $('#product_form').on('submit', function () {
 
-
+            var myEditor = document.querySelector('#editor')
+            $("#hiddenArea").val(myEditor.children[0].innerHTML);
 
             var formData = new FormData(this);
-
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
             $.post({
-                url: '{{route('admin.product.update',[$product['id']])}}',
-                // data: $('#product_form').serialize(),
+                url: '{{route('admin.product.store')}}',
                 data: formData,
                 cache: false,
                 contentType: false,
@@ -413,7 +421,7 @@
                             });
                         }
                     } else {
-                        toastr.success('{{translate('product updated successfully!')}}', {
+                        toastr.success('{{ translate("product uploaded successfully!") }}', {
                             CloseButton: true,
                             ProgressBar: true
                         });
@@ -424,26 +432,6 @@
                 }
             });
         });
-    </script>
-
-    <script>
-
-        $('#discount_type').change(function(){
-            if($('#discount_type').val() == 'percent') {
-                $("#discount_symbol").html('(%)')
-            } else {
-                $("#discount_symbol").html('')
-            }
-        });
-
-        $('#tax_type').change(function(){
-            if($('#tax_type').val() == 'percent') {
-                $("#tax_symbol").html('(%)')
-            } else {
-                $("#tax_symbol").html('')
-            }
-        });
-
     </script>
 
     <script>
@@ -464,6 +452,25 @@
                 $('input[name="total_stock"]').attr("readonly", false);
             }
         }
+    </script>
+
+    <script>
+
+        $('#discount_type').change(function(){
+            if($('#discount_type').val() == 'percent') {
+                $("#discount_symbol").html('(%)')
+            } else {
+                $("#discount_symbol").html('')
+            }
+        });
+
+        $('#tax_type').change(function(){
+            if($('#tax_type').val() == 'percent') {
+                $("#tax_symbol").html('(%)')
+            } else {
+                $("#tax_symbol").html('')
+            }
+        });
     </script>
 
 @endpush

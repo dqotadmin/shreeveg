@@ -52,7 +52,7 @@ class LoginController extends Controller
         ]);
 
         //recaptcha validation
-        $recaptcha = Helpers::get_business_settings('recaptcha');
+        /* $recaptcha = Helpers::get_business_settings('recaptcha');
         if (isset($recaptcha) && $recaptcha['status'] == 1) {
             $request->validate([
                 'g-recaptcha-response' => [
@@ -77,7 +77,7 @@ class LoginController extends Controller
 
         if(Session::has('default_captcha_code')) {
             Session::forget('default_captcha_code');
-        }
+        } */
         //end recaptcha validation
 
         if (auth('admin')->attempt(['email' => $request->email, 'password' => $request->password, 'status' => 1], $request->remember)) {

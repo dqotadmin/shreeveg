@@ -56,7 +56,7 @@ class POSController extends Controller
         $key = explode(' ', $keyword);
 
         $products = $this->product->when($request->has('category_id') && $request['category_id'] != 0, function ($query) use ($request) {
-            $query->whereJsonContains('category_ids', [['id' => (string)$request['category_id']]]);
+            $query->whereJsonContains('category_id', [['id' => (string)$request['category_id']]]);
         })->when($keyword, function ($query) use ($key) {
             return $query->where(function ($q) use ($key) {
                 foreach ($key as $value) {
@@ -67,6 +67,8 @@ class POSController extends Controller
 
         $branches = $this->branch->all();
         $users = $this->user->all();
+
+        //dd($products);
         return view('admin-views.pos.index', compact('categories', 'products', 'category', 'keyword', 'branches', 'users'));
     }
 
@@ -127,12 +129,12 @@ class POSController extends Controller
      */
     public function discount_calculation($product, $price) : float
     {
-        $category_id = null;
-        foreach (json_decode($product['category_ids'], true) as $cat) {
+        $category_id = $product['category_id'];
+        /* foreach (json_decode($product['category_ids'], true) as $cat) {
             if ($cat['position'] == 1) {
                 $category_id = ($cat['id']);
             }
-        }
+        } */
 
         $category_discount = Helpers::category_discount_calculate($category_id, $price);
         $product_discount = Helpers::discount_calculate($product, $price);
@@ -258,7 +260,7 @@ class POSController extends Controller
         }
 
         //Gets all the choice values of customer choice option and generate a string like Black-S-Cotton
-        foreach (json_decode($product->choice_options) as $key => $choice) {
+        /* foreach (json_decode($product->choice_options) as $key => $choice) {
             $data[$choice->name] = $request[$choice->name];
             $variations[$choice->title] = $request[$choice->name];
             if ($str != null) {
@@ -266,7 +268,7 @@ class POSController extends Controller
             } else {
                 $str .= str_replace(' ', '', $request[$choice->name]);
             }
-        }
+        } */
         $data['variations'] = $variations;
         $data['variant'] = $str;
         if ($request->session()->has('cart')) {
@@ -500,12 +502,12 @@ class POSController extends Controller
 
                     $tax_on_product = Helpers::tax_calculate($product, $price);
 
-                    $category_id = null;
-                    foreach (json_decode($product['category_ids'], true) as $cat) {
+                    $category_id = $product['category_id'];
+                    /* foreach (json_decode($product['category_ids'], true) as $cat) {
                         if ($cat['position'] == 1){
                             $category_id = ($cat['id']);
                         }
-                    }
+                    } */
 
                     $category_discount = Helpers::category_discount_calculate($category_id, $price);
                     $product_discount = Helpers::discount_calculate($product, $price);

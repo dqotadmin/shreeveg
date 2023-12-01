@@ -6,9 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrderDetail extends Model
 {
+    protected $table = 'user_warehouse_order_details';
     protected $casts = [
         'product_id' => 'integer',
-        'order_id' => 'integer',
+        'user_warehouse_order_id' => 'integer',
         'price' => 'float',
         'discount_on_product' => 'float',
         'quantity' => 'integer',
@@ -24,6 +25,6 @@ class OrderDetail extends Model
 
     public function order(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(Order::class, 'order_id');
+        return $this->belongsTo(Order::class, 'user_warehouse_order_id');
     }
 }

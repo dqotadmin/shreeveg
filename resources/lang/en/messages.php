@@ -2348,4 +2348,9 @@
   'earning_statistics' => 'Earning statistics',
   'recent_orders' => 'Recent orders',
   'view_all' => 'View all',
+  'Product code is required!' => 'Product code is required!',
+  'Product code must be unique!' => 'Product code must be unique!',
+  'product_code' => 'Product code',
+  'product_category' => 'Product category',
+  'category management' => 'Category management',
 );

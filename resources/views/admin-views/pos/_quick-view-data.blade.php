@@ -68,6 +68,8 @@
             <form id="add-to-cart-form" class="mb-2">
                 @csrf
                 <input type="hidden" name="id" value="{{ $product->id }}">
+
+                {{--
                 @foreach (json_decode($product->choice_options) as $key => $choice)
 
                     <div class="h3 p-0 pt-2 text-break">{{ $choice->title }}
@@ -83,7 +85,8 @@
                                    for="{{ $choice->name }}-{{ $option }}">{{ $option }}</label>
                         @endforeach
                     </div>
-            @endforeach
+                @endforeach
+                --}}
 
             <!-- Quantity + Add to cart -->
                 <div class="d-flex justify-content-between">

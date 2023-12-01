@@ -85,7 +85,7 @@
             <div class="col-md-6">
                 <label class="input-label" for="exampleFormControlInput1">{{translate('update status')}}</label>
                 <select name="status" class="form-control">
-                    @if(auth('admin')->user()->admin_role_id == 6)
+                    @if($user->admin_role_id == 3)
                         <option value="Pending" {{$row->status == 'Pending'?'selected':''}}>Pending</option>
                         <option value="Accepted" {{$row->status == 'Accepted'?'selected':''}}>Accepted</option>
                         <option value="Delivered" {{$row->status == 'Delivered'?'selected':''}}>Delivered</option>
@@ -96,10 +96,10 @@
                     @endif
                 </select>
             </div>
-            @if(auth('admin')->user()->admin_role_id == 8)
+            @if($user->admin_role_id == 6)
                 <div class="col-md-6">
                     <label class="input-label" for="exampleFormControlInput1">{{translate('comments')}}</label>
-                    <textarea name="broker_comments" class="form-control" rows="6" placeholder="{{ translate('enter comments if any') }}" required>{{$row->broker_comments}}</textarea>
+                    <textarea name="store_comments" class="form-control" rows="6" placeholder="{{ translate('enter comments if any') }}" required>{{$row->store_comments}}</textarea>
                 </div>
                 @if($row->status == 'Pending' || $row->status == 'Accepted')
                 <div class="text-right">

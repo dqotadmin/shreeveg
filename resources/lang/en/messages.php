@@ -2352,7 +2352,6 @@
   'Product code must be unique!' => 'Product code must be unique!',
   'product_code' => 'Product code',
   'product_category' => 'Product category',
-  'category management' => 'Category management',
   'failed_to_deliver' => 'Failed to deliver',
   'Unit updated successfully!' => 'Unit updated successfully!',
   'Store information' => 'Store information',
@@ -2446,4 +2445,12 @@
   '
                     product updated successfully!' => '
                     product updated successfully!',
+  'Store Management' => 'Store Management',
+  'unit management' => 'Unit management',
+  'store management' => 'Store management',
+  'receiver management' => 'Receiver management',
+  'worker management' => 'Worker management',
+  'broker management' => 'Broker management',
+  'store sales management' => 'Store sales management',
+  'warehouse management' => 'Warehouse management',
 );

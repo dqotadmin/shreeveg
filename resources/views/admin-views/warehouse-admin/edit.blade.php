@@ -47,7 +47,6 @@
                                 src="{{asset('storage/app/public/admin/warehouse')}}/{{$admins['image']}}"
                                 alt="Image">
                             <input type="hidden" name="admin_role_id" value="  {{$admins->admin_role_id}}">
-                            <input type="hidden" name="admin_role_id" value="  {{$admins->admin_role_id}}">
                             <input type="file" name="image" class="js-file-attach avatar-uploader-input"
                                 id="customFileEg1" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*">
                             <label class="avatar-uploader-trigger" for="customFileEg1">

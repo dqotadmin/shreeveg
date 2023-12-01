@@ -263,7 +263,8 @@
                         </li>
                     @endif
 
-                        @if(auth('admin')->user()->admin_role_id == 1)
+                        @if(auth('admin')->user()->admin_role_id == 1 || auth('admin')->user()->admin_role_id == 3)
+                       
 
                             <!-- Admin management start from here -->
                             <li class="nav-item">
@@ -380,6 +381,7 @@
                         @endif
 
                         @if( auth('admin')->user()->admin_role_id == 1 || auth('admin')->user()->admin_role_id == 6)
+
                         <li class="navbar-vertical-aside-has-menu ">
                             <a class="js-navbar-vertical-aside-menu-link nav-link"
                                 href="{{route('admin.user-management',['role_id'=>'7'])}}"
@@ -417,62 +419,68 @@
                         <!-- Admin management end from here -->
 
 
-
+             
+                        @if(Helpers::module_permission_check(MANAGEMENT_SECTION['store_management']))
+ 
                         <!-- Warehouse, store, location management from here -->
-                        @if(auth('admin')->user()->admin_role_id == 1)
-                        <li class="nav-item">
-                            <small class="nav-subtitle">{{translate('warehouse_&_store setup')}} </small>
-                            <small class="tio-more-horizontal nav-subtitle-replacer"></small>
-                        </li>
-                        
-                        <!-- location  -->
-                        <li class="navbar-vertical-aside-has-menu {{Request::is('admin/area*')?'active':''}}">
-                            <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle" href="javascript:"
-                                title="{{translate('Location setup')}}">
-                                <i class="tio-map nav-icon"></i>
-                                <span
-                                    class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Location')}}</span>
-                            </a>
-                            <ul class="js-navbar-vertical-aside-submenu nav nav-sub"
-                                style="display: {{Request::is('admin/area*')?'block':'none'}} ">
+                            @if( auth('admin')->user()->admin_role_id == 1 || auth('admin')->user()->admin_role_id == 3)
+                                <li class="nav-item">
+                                    <small class="nav-subtitle">{{translate('warehouse_&_store setup')}} </small>
+                                    <small class="tio-more-horizontal nav-subtitle-replacer"></small>
+                                </li>
+                                <!-- location  -->
+                                @if( auth('admin')->user()->admin_role_id == 1 )
+                                <li class="navbar-vertical-aside-has-menu {{Request::is('admin/area*')?'active':''}}">
+                                    <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle" href="javascript:"
+                                        title="{{translate('Location setup')}}">
+                                        <i class="tio-map nav-icon"></i>
+                                        <span
+                                            class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Location')}}</span>
+                                    </a>
+                                    <ul class="js-navbar-vertical-aside-submenu nav nav-sub"
+                                        style="display: {{Request::is('admin/area*')?'block':'none'}} ">
 
-                                <li class="nav-item {{Request::is('admin/city/add')?'active':''}}">
-                                    <a class="nav-link " href="{{route('admin.city.list')}}"
-                                        title="{{translate('City')}}">
-                                        <span class="tio-circle nav-indicator-icon"></span>
-                                        <span class="text-truncate">{{translate('City')}}</span>
+                                        <li class="nav-item {{Request::is('admin/city/add')?'active':''}}">
+                                            <a class="nav-link " href="{{route('admin.city.list')}}"
+                                                title="{{translate('City')}}">
+                                                <span class="tio-circle nav-indicator-icon"></span>
+                                                <span class="text-truncate">{{translate('City')}}</span>
+                                            </a>
+                                        </li>
+
+                                        <li class="nav-item {{Request::is('admin/area/list')?'active':''}}">
+                                            <a class="nav-link " href="{{route('admin.area.list')}}"
+                                                title="{{translate('categories')}}">
+                                                <span class="tio-circle nav-indicator-icon"></span>
+                                                <span class="text-truncate">{{translate('Area')}}</span>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                                <!-- location end  -->
+                                <li class="navbar-vertical-aside-has-menu {{Request::is('admin/warehouse.add')?'active':''}}">
+                                    <a class="js-navbar-vertical-aside-menu-link nav-link"
+                                        href="{{route('admin.warehouse.list')}}" title="{{translate('Warehouse')}}">
+                                        <i class="tio-map nav-icon"></i>
+                                        <span
+                                            class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Warehouse')}}</span>
                                     </a>
                                 </li>
+                                @endif
+                            @endif
+                            @if( auth('admin')->user()->admin_role_id == 1 || auth('admin')->user()->admin_role_id == 3)
 
-                                <li class="nav-item {{Request::is('admin/area/list')?'active':''}}">
-                                    <a class="nav-link " href="{{route('admin.area.list')}}"
-                                        title="{{translate('categories')}}">
-                                        <span class="tio-circle nav-indicator-icon"></span>
-                                        <span class="text-truncate">{{translate('Area')}}</span>
-                                    </a>
-                                </li>
-
-                            </ul>
-                        </li>
-                        <!-- location end  -->
-
-                        <li class="navbar-vertical-aside-has-menu {{Request::is('admin/warehouse.add')?'active':''}}">
-                            <a class="js-navbar-vertical-aside-menu-link nav-link"
-                                href="{{route('admin.warehouse.list')}}" title="{{translate('Warehouse')}}">
-                                <i class="tio-map nav-icon"></i>
-                                <span
-                                    class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Warehouse')}}</span>
-                            </a>
-                        </li>
-                        <li class="navbar-vertical-aside-has-menu {{Request::is('admin/store.index')?'active':''}}">
-                            <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{route('admin.store.list')}}"
-                                title="{{translate('Store')}}">
-                                <i class="tio-map nav-icon"></i>
-                                <span
-                                    class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Store')}}</span>
-                            </a>
-                        </li>
-                        <!-- Warehouse, store, location management end here -->
+                            <li class="navbar-vertical-aside-has-menu {{Request::is('admin/store.index')?'active':''}}">
+                                <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{route('admin.store.list')}}"
+                                    title="{{translate('Store')}}">
+                                    <i class="tio-map nav-icon"></i>
+                                    <span
+                                        class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Store')}}</span>
+                                </a>
+                            </li>
+                            <!-- Warehouse, store, location management end here -->
+                            @endif
                         @endif
 
 

@@ -30,7 +30,6 @@
             @php($data = Helpers::get_business_settings('language'))
             @php($default_lang = Helpers::get_default_language())
             {{-- @php($default_lang = 'en') --}}
-
         </div>
     </div>
 </div>
@@ -65,6 +64,7 @@
                         <th class="text-center">{{translate('#')}}</th>
                         <th>{{translate('Store Name')}}</th>
                         <th>{{translate('Store Code')}}</th>
+                        <th>{{translate('Warehouse Name')}}</th>
                         <th>{{translate('Address')}}</th>
                         <th>{{translate('Pin Code')}}</th>
                         <th>{{translate('status')}}</th>
@@ -85,6 +85,11 @@
                         <td>
                             <span class="d-block font-size-sm text-body text-trim-50">
                                 {{$store['code']}}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="d-block font-size-sm text-body text-trim-50">
+                                {{@$store->warehouse->name}}
                             </span>
                         </td>
                         <td>

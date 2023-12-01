@@ -18,6 +18,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 
 class StoreController extends Controller
 {
@@ -46,7 +47,12 @@ class StoreController extends Controller
         } else {
             $stores = $this->store;
         }
-        $stores = $stores->latest()->paginate(Helpers::getPagination())->appends($query_param);
+        if(auth('admin')->user()->admin_role_id == 3){
+            $stores =  $this->store->where('warehouse_id',auth('admin')->user()->warehouse_id)->paginate(Helpers::getPagination())->appends($query_param);
+        }else{
+            $stores = $stores->latest()->paginate(Helpers::getPagination())->appends($query_param);
+
+        }
         return view('admin-views.store.index', compact('stores', 'search'));
     }
 

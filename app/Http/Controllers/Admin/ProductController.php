@@ -83,7 +83,7 @@ class ProductController extends Controller
      */
     public function get_categories(Request $request): \Illuminate\Http\JsonResponse
     {
-        $cat = $this->category->where(['parent_id' => $request->parent_id])->get();
+        $cat = $this->category->where('deleted_at',null)->where(['parent_id' => $request->parent_id])->get();
         $res = '<option value="' . 0 . '" disabled selected>---Select---</option>';
         foreach ($cat as $row) {
             if ($row->id == $request->sub_category) {

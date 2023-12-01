@@ -77,6 +77,37 @@
 
                                 </div>
                             </div>
+                             @if($role->id == '3'   || $role->id == '5' || $role->id == '4')
+                            <div class="row form-group">
+                                <label for="phoneLabel"
+                                    class="col-sm-3 col-form-label input-label">{{ translate('Warehouse Name') }} <span
+                                        class="input-label-secondary"></span></label>
+
+                                <div class="col-sm-9">
+                                    <select id="state" name="warehouse_id" class="form-control js-select2-custom" required>
+                                        <option value="" disabled selected>Select Warehouse </option>
+                                         @foreach(\App\Model\Warehouse::where('status', 1)->where('deleted_at', null)->get() as $warehouse)
+                                        <option value="{{$warehouse['id']}}">{{$warehouse['name']}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            @elseif($role->id == '6' || $role->id == '7' )
+                            <div class="row form-group">
+                                <label for="phoneLabel"
+                                    class="col-sm-3 col-form-label input-label">{{ translate('Store Name') }} <span
+                                        class="input-label-secondary"></span></label>
+
+                                <div class="col-sm-9">
+                                    <select id="state" name="store_id" class="form-control js-select2-custom" required>
+                                        <option value="" disabled selected>Select Store </option>
+                                        @foreach(\App\Model\Store::where('status', 1)->where('deleted_at', null)->get() as $store)
+                                        <option value="{{$store['id']}}">{{$store['name']}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            @endif
                             <div class="row form-group">
                                 <label for="firstNameLabel"
                                     class="col-sm-3 col-form-label input-label">{{ translate('Full name') }} <i
@@ -127,27 +158,17 @@
 
                            
 
-                            <div class="row form-group">
-                                <label class="col-sm-3 col-form-label input-label" for="">{{ translate('State') }}
-                                </label>
-                                <div class="col-sm-9">
-                                    <select id="state" name="state_id" class="form-control js-select2-custom" required>
-                                        <option value="" disabled selected>Select State </option>
-                                        @foreach(\App\Model\State::orderBy('id', 'DESC')->get() as $state)
-                                        <option value="{{$state['id']}}">{{$state['name']}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <!-- End Form -->
-                            </div>
+                        
 
                             <div class="row form-group">
                                 <label class="col-sm-3 col-form-label input-label" for="">{{ translate('City') }}
                                 </label>
                                 <div class="col-sm-9">
-                                    <select id="city" name="city_id" class="form-control js-select2-custom" required>
+                                    <select id="" name="city_id" class="form-control js-select2-custom" required>
                                         <option value="" disabled selected>Select city </option>
-                                     
+                                        @foreach(\App\Model\City::where('status', '1')->orderBy('id', 'DESC')->get() as $city)
+                                        <option value="{{$city['id']}}">{{$city['city']}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -171,10 +192,7 @@
 
                                 <div class="col-sm-9">
                                     <input type="text" class="js-masked-input form-control" name="account_number" id="phoneLabel"
-                                        placeholder="5678886545" aria-label=" "
-                                        value="{{old('account_holder')}}" data-hs-mask-options='{
-                                           "template": "5678886545"
-                                         }'>
+                                        placeholder="Account Number" >
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -184,10 +202,8 @@
 
                                 <div class="col-sm-9">
                                     <input type="text" class="js-masked-input form-control" name="account_holder" id="phoneLabel"
-                                        placeholder="Pooran Joshi" aria-label=" "
-                                        value="{{old('account_holder')}}" data-hs-mask-options='{
-                                           "template": "Pooran Joshi"
-                                         }'>
+                                        placeholder="Account Holder" aria-label=" "
+                                     >
                                 </div>
                             </div>
 
@@ -198,10 +214,7 @@
 
                                 <div class="col-sm-9">
                                     <input type="text" class="js-masked-input form-control" name="bank_name" id="phoneLabel"
-                                        placeholder="Union Bank Of India" aria-label=" "
-                                        value="{{old('account_holder')}}" data-hs-mask-options='{
-                                           "template": "Union Bank Of India"
-                                         }'>
+                                        placeholder="Bank Name" >
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -211,10 +224,7 @@
 
                                 <div class="col-sm-9">
                                     <input type="text" class="js-masked-input form-control" name="ifsc_code" id="phoneLabel"
-                                        placeholder="UBN564" aria-label=" "
-                                        value="{{old('account_holder')}}" data-hs-mask-options='{
-                                           "template": "UBN564"
-                                         }'>
+                                        placeholder="IFSC Code" >
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -224,10 +234,7 @@
 
                                 <div class="col-sm-9">
                                     <input type="text" class="js-masked-input form-control" name="upi_id" id="phoneLabel"
-                                        placeholder="e57yut" aria-label=" "
-                                        value="{{old('account_holder')}}" data-hs-mask-options='{
-                                           "template": "e57yut"
-                                         }'>
+                                        placeholder="UPI Id" >
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -237,10 +244,7 @@
 
                                 <div class="col-sm-9">
                                     <input type="text" class="js-masked-input form-control" name="upi_number" id="upi_number"
-                                        placeholder="5464564" aria-label=" "
-                                        value="{{old('upi_number')}}" data-hs-mask-options='{
-                                           "template": "5464564"
-                                         }'>
+                                        placeholder="UPI Number" >
                                 </div>
                             </div>
  

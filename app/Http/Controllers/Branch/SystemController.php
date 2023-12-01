@@ -28,7 +28,7 @@ class SystemController extends Controller
      */
     public function restaurant_data(): \Illuminate\Http\JsonResponse
     {
-        $new_order = DB::table('orders')->where(['branch_id' => auth('branch')->id(), 'checked' => 0])->count();
+        $new_order = DB::table('user_warehouse_orders')->where(['branch_id' => auth('branch')->id(), 'checked' => 0])->count();
         return response()->json([
             'success' => 1,
             'data' => ['new_order' => $new_order]

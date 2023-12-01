@@ -112,7 +112,7 @@ class UnitController extends Controller
        
 
         Toastr::success(translate('unit Added Successfully!') );
-        return redirect()->route('admin.unit.add');
+        return redirect()->route('admin.unit.list');
 
     }
 
@@ -166,7 +166,7 @@ class UnitController extends Controller
         $unit->save();
         
         Toastr::success( translate('Unit updated successfully!') );
-        return redirect()->route('admin.unit.add');
+        return redirect()->route('admin.unit.list');
 
     }
 

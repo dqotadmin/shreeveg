@@ -166,7 +166,7 @@ class DeliveryManController extends Controller
         $dm->phone = $request->phone;
         $dm->identity_number = $request->identity_number;
         $dm->identity_type = $request->identity_type;
-        $dm->branch_id = $request->branch_id;
+        $dm->warehouse_id = $request->warehouse_id;
         $dm->identity_image = $identity_image;
         $dm->image = $image_name;
         $dm->is_active = 1;
@@ -255,7 +255,7 @@ class DeliveryManController extends Controller
         $delivery_man->phone = $request->phone;
         $delivery_man->identity_number = $request->identity_number;
         $delivery_man->identity_type = $request->identity_type;
-        $delivery_man->branch_id = $request->branch_id;
+        $delivery_man->warehouse_id = $request->warehouse_id;
         $delivery_man->identity_image = $identity_image;
         $delivery_man->image = $image_name;
         $delivery_man->password = strlen($request->password) > 1 ? bcrypt($request->password) : $delivery_man['password'];
@@ -319,7 +319,7 @@ class DeliveryManController extends Controller
 
         foreach($delivery_man as $dm){
 
-            if ($dm['branch_id'] == 0){
+            if ($dm['warehouse_id'] == 0){
                 $branch = 'All Branch';
             }else{
                 $branch = $dm->branch ? $dm->branch->name : '';

@@ -99,13 +99,14 @@ class CityAreaController extends Controller
         $cityarea = $this->cityarea;
         $cityarea->city_id = $request->city_id;
         $cityarea->area = $request->area;
+        $cityarea->pincode = $request->pincode;
         $cityarea->latitude_code = $request->latitude_code;
         $cityarea->longitude_code = $request->longitude_code;
         $cityarea->radius = $request->radius;
         $cityarea->save();
 
         Toastr::success(translate('Area Added Successfully!') );
-        return redirect()->route('admin.area.add');
+        return redirect()->route('admin.area.list');
 
     }
 
@@ -156,13 +157,14 @@ class CityAreaController extends Controller
         $cityarea = $this->cityarea->find($id);
         $cityarea->city_id = $request->city_id;
         $cityarea->area = $request->area;
+        $cityarea->pincode = $request->pincode;
         $cityarea->latitude_code = $request->latitude_code;
         $cityarea->longitude_code = $request->longitude_code;
         $cityarea->radius = $request->radius;
         $cityarea->save();
      
         Toastr::success( translate('Area updated successfully!') );
-        return redirect()->route('admin.area.add');
+        return redirect()->route('admin.area.list');
 
     }
 

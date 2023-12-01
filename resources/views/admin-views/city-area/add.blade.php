@@ -23,69 +23,131 @@
     <!-- End Page Header -->
 
     <div class="row g-2">
+        
         <div class="col-sm-12 col-lg-12">
-            <div class="card">
-                <div class="card-body pt-sm-0 pb-sm-4">
-                    <form action="{{route('admin.area.store')}}" method="post" enctype="multipart/form-data">
-                        @csrf
-                        <div class="row align-items-end g-4" style="padding-top:50px ;">
-                            <div class="col-sm-6 ">
-                                <label class="form-label">{{ translate('City') }}
-                                </label>
-                                <select id=" " name="city_id" class="form-control " required>
-                                    <option value="" disabled selected>Select City</option>
-                                    @foreach(\App\Model\City::orderBy('id', 'DESC')->where(['state_id'=>19])->get() as $city)
-                                    <option value="{{$city['id']}}">{{$city['city']}}</option>
-                                    @endforeach
-                                </select>
+            <form action="{{route('admin.area.store')}}" method="post" enctype="multipart/form-data">
+                @csrf
+                <div class="row g-2">
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">
+                                    <i class="tio-poi"></i>
+                                    {{translate('Area Information')}}
+                                </h5>
                             </div>
-                            <div class="col-sm-6">
-                                <label class="form-label">{{ translate('Area') }} {{ translate('Name') }}
-                                </label>
-                                <input type="text" name="area" class="form-control"
-                                    placeholder="{{ translate('Ex:jhotwara') }}" maxlength="255">
+                            <div class="card-body">
+                                <div class="row align-items-end g-4" style="padding-top: 50px;">
+                                    <div class="col-md-4">
+                                        <label class="form-label">{{ translate('City') }}
+                                        </label>
+                                        <select id=" " name="city_id" class="form-control js-select2-custom" required>
+                                            <option value="" disabled selected>Select City</option>
+                                            @foreach(\App\Model\City::orderBy('id',
+                                            'DESC')->where(['state_id'=>19])->where('status','1')->get() as $city)
+                                            <option value="{{$city['id']}}">{{$city['city']}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">{{ translate('Area') }}
+                                            {{ translate('Name') }}
+                                        </label>
+                                        <input type="text" name="area" class="form-control"  
+                                        placeholder="{{ translate('Ex: Area Name') }}"     maxlength="255">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">{{ translate('Pin Code') }}
+                                        </label>
+                                        <input type="number" name="pincode" class="form-control"  
+                                        placeholder="{{ translate('Ex: Pin Code') }}"     maxlength="255">
+                                    </div>
+                                </div>
                             </div>
-
-                            <div class="col-sm-4">
-                                <label class="form-label">{{ translate('latitude') }} {{ translate('code') }} </label>
-                                    <input type="text" name="latitude_code" id="latitude" class="form-control"
-                                        placeholder="{{ translate('Ex: 24.958302') }}" maxlength="255">
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">
+                                    <i class="tio-poi"></i>
+                                    {{translate('Area location')}}
+                                </h5>
                             </div>
-
-                            <div class="col-sm-4">
-                                <label class="form-label">{{ translate('longitude') }} {{ translate('code') }}
-                                </label>
-                                <input type="text" name="longitude_code" class="form-control" id="longitude"
-                                    placeholder="{{ translate('Ex: 75.743347') }}" maxlength="255">
-                            </div>
-
-                            <div class="col-sm-4">
-                                <label class="form-label">{{ translate('radius') }}
-                                </label>
-                                <input type="text" name="radius" class="form-control"
-                                    placeholder="{{ translate('') }}" maxlength="255">
-                            </div>
-
-                            <div class="col-md-6" id="location_map_div">
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div class="row g-3">
+                                            <div class="col-12">
+                                                <div class="form-group mb-0">
+                                                    <label class="form-label text-capitalize"
+                                                        for="latitude">{{ translate('latitude') }}
+                                                        <i class="tio-info-outined" data-toggle="tooltip"
+                                                            data-placement="top"
+                                                            title="{{ translate('click_on_the_map_select_your_default_location') }}">
+                                                        </i>
+                                                    </label>
+                                                    <input type="text" id="latitude" name="latitude_code"
+                                                        class="form-control"
+                                                        placeholder="{{ translate('Ex:') }} 23.8118428"
+                                                        value="{{ old('latitude') }}" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group mb-0">
+                                                    <label class="form-label text-capitalize"
+                                                        for="longitude">{{ translate('longitude') }}
+                                                        <i class="tio-info-outined" data-toggle="tooltip"
+                                                            data-placement="top"
+                                                            title="{{ translate('click_on_the_map_select_your_default_location') }}">
+                                                        </i>
+                                                    </label>
+                                                    <input type="text" step="0.1" name="longitude_code" class="form-control"
+                                                        placeholder="{{ translate('Ex:') }} 90.356331" id="longitude"
+                                                        value="{{ old('longitude') }}" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group mb-0">
+                                                    <label class="input-label">
+                                                        {{translate('coverage (km)')}}
+                                                        <i class="tio-info-outined" data-toggle="tooltip"
+                                                            data-placement="top"
+                                                            title="{{ translate('This value is the radius from your branch location, and customer can order inside  the circle calculated by this radius. The coverage area value must be less or equal than 1000.') }}">
+                                                        </i>
+                                                    </label>
+                                                    <input type="number" name="radius" min="1" max="1000"
+                                                        class="form-control" placeholder="{{ translate('Ex : 3') }}"
+                                                        value="{{ old('coverage') }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6" id="location_map_div">
                                         <input id="pac-input" class="controls rounded" data-toggle="tooltip"
                                             data-placement="right" name="map_location"
                                             data-original-title="{{ translate('search_your_location_here') }}"
                                             type="text" placeholder="{{ translate('search_here') }}" />
                                         <div id="location_map_canvas" class="overflow-hidden rounded"
-                                            style="height: 100%"></div>
+                                            style="height: 100%">
+                                        </div>
                                     </div>
-
-                            <div class="col-12">
-                                <div class="btn--container justify-content-end">
-                                <a type="button" href="{{route('admin.area.add')}}"  class="btn btn--reset">{{translate('Back')}}</a>
-
-                                    <button type="submit" class="btn btn--primary">{{translate('submit')}}</button>
                                 </div>
                             </div>
                         </div>
-                    </form>
+                    </div>
+                    <div class="col-12">
+                        <div class="btn--container justify-content-end">
+                            <a type="button" href="{{route('admin.area.list')}}"
+                                class="btn btn--reset">{{translate('Back')}}</a>
+
+                            <button type="submit" class="btn btn--primary">{{translate('submit')}}</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
+
+
+            </form>
         </div>
     </div>
 </div>
@@ -93,6 +155,7 @@
 @endsection
 
 @push('script_2')
+
 
 <script
     src="https://maps.googleapis.com/maps/api/js?key={{ \App\Model\BusinessSetting::where('key', 'map_api_client_key')->first()?->value }}&libraries=places&v=3.45.8">
@@ -200,7 +263,8 @@ $(document).ready(function() {
                 });
                 google.maps.event.addListener(mrkr, "click", function(event) {
                     document.getElementById('latitude').value = this.position.lat();
-                    document.getElementById('longitude').value = this.position.lng();
+                    document.getElementById('longitude').value = this.position
+                        .lng();
                 });
 
                 markers.push(mrkr);
@@ -219,7 +283,6 @@ $(document).ready(function() {
 });
 </script>
 <script>
-
 $('.__right-eye').on('click', function() {
     if ($(this).hasClass('active')) {
         $(this).removeClass('active')

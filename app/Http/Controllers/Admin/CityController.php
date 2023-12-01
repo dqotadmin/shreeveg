@@ -47,7 +47,7 @@ class CityController extends Controller
         } else {
             $cities = $this->city;
         }
-        $cities = $cities->latest()->paginate(Helpers::getPagination())->appends($query_param);
+        $cities = $cities->orderby('status','DESC')->latest()->paginate(Helpers::getPagination())->appends($query_param);
         return view('admin-views.city.index', compact('cities', 'search'));
     }
     function create(Request $request): View|Factory|Application
@@ -111,7 +111,7 @@ class CityController extends Controller
 
 
         Toastr::success(translate('City Added Successfully!') );
-        return redirect()->route('admin.city.add');
+        return redirect()->route('admin.city.list');
     }
 
     /**
@@ -162,7 +162,7 @@ class CityController extends Controller
         $city->save();
        
         Toastr::success( translate('city updated successfully!') );
-        return redirect()->route('admin.city.add');
+        return redirect()->route('admin.city.list');
 
     }
 

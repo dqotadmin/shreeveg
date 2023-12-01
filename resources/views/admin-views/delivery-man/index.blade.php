@@ -48,7 +48,7 @@
                                                    required>
                                         </div>
                                     </div>
-
+ 
                                 </div>
                                 <div class="col-md-12">
                                     <div>
@@ -59,11 +59,11 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div>
-                                        <label class="input-label" for="exampleFormControlInput1">{{translate('branch')}}</label>
-                                        <select name="branch_id" class="form-control">
-                                            <option value="0">{{translate('all')}}</option>
-                                            @foreach(\App\Model\Branch::all() as $branch)
-                                                <option value="{{$branch['id']}}">{{$branch['name']}}</option>
+                                        <label class="input-label" for="exampleFormControlInput1">{{translate('Warehouse Name')}}</label>
+                                        <select name="warehouse_id" class="form-control">
+                                            <option  disabled selected>{{translate('Select Warehouse')}}</option>
+                                            @foreach(\App\Model\Warehouse::where('status',1)->where('deleted_at',null)->get() as $warehouse)
+                                                <option value="{{$warehouse['id']}}">{{$warehouse['name']}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -119,7 +119,58 @@
                     </div>
                 </div>
             </div>
+            <div class="card mt-3">
+            <div class="card-header">
+                <h5 class="card-title">
+                    <span class="card-header-icon">
+                        <i class="tio-user"></i>
+                    </span> {{translate('Bank Details')}}
+                </h5>
+            </div>
 
+            <!-- Body -->
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="input-label" for="exampleFormControlInput1">{{ translate('Account Number') }}
+                        </label>
+                        <input type="text" name="account_number" value="{{ old('account_number') }}"
+                            class="form-control" placeholder="{{translate('Ex : Account Number')}}" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="input-label" for="exampleFormControlInput1">{{ translate('Account Holder') }}
+                        </label>
+                        <input type="text" name="account_holder" value="{{ old('account_holder') }}"
+                            class="form-control" placeholder="{{translate('Ex : Account Holder')}}" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="input-label" for="exampleFormControlInput1">{{ translate('Bank Name') }}
+                        </label>
+                        <input type="text" name="bank_name" value="{{ old('bank_name') }}" class="form-control"
+                            placeholder="{{translate('Ex : Bank Name')}}" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="input-label" for="exampleFormControlInput1">{{ translate('IFSC Code') }}
+                        </label>
+                        <input type="text" name="ifsc_code" value="{{ old('ifsc_code') }}" class="form-control"
+                            placeholder="{{translate('Ex : IFSC Code')}}" required>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="input-label" for="exampleFormControlInput1">{{ translate('UPI Id') }} </label>
+                        <input type="text" name="upi_id" value="{{ old('upi_id') }}" class="form-control"
+                            placeholder="{{translate('Ex : UPI Id')}}" required>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="input-label" for="exampleFormControlInput1">{{ translate('UPI Number') }}
+                        </label>
+                        <input type="text" name="upi_number" value="{{ old('upi_number') }}" class="form-control"
+                            placeholder="{{translate('Ex : UPI Number')}}" required>
+                    </div>
+                </div>
+            </div>
+        </div>
 
             <div class="card mt-3">
                 <div class="card-header">
@@ -149,7 +200,7 @@
             </div>
 
             <div class="btn--container justify-content-end mt-3">
-                <button type="reset" class="btn btn--reset">{{translate('reset')}}</button>
+            <a type="button" href="{{route('admin.delivery-man.list')}}" class="btn btn--reset">{{translate('back')}}</a>
                 <button type="submit" class="btn btn--primary">{{translate('submit')}}</button>
             </div>
 

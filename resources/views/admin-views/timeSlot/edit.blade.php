@@ -38,9 +38,16 @@
                                 <input type="time" value="{{$timeSlots['end_time']}}" name="end_time" class="form-control">
                             </div>
                         </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="form-label"> {{translate('hide option before in minute')}}   </label>
+                                <input type="number" name="hide_option_before" class="form-control" value="{{$timeSlots['hide_option_before']}}" 
+                                       required>
+                            </div>
+                        </div>
                     </div>
                     <div class="btn--container justify-content-end">
-                        <button type="reset" class="btn btn--reset">{{translate('reset')}}</button>
+                    <a type="button" href="{{route('admin.business-settings.store.timeSlot.add-new')}}" class="btn btn--reset">{{translate('back')}}</a>
                         <button type="submit" class="btn btn--primary">{{translate('update')}}</button>
                     </div>
                 </form>

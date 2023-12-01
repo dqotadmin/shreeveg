@@ -34,7 +34,7 @@
                     </span>
                 </div>
 
-                <div class="col-auto ml-auto">
+                <!-- <div class="col-auto ml-auto">
                     <a class="btn btn-icon btn-sm btn-soft-secondary rounded-circle mr-1"
                        href="{{route('admin.customer.view',[$customer['id']-1])}}"
                        data-toggle="tooltip" data-placement="top" title="{{ translate('Previous customer') }}">
@@ -45,7 +45,7 @@
                        data-placement="top" title="{{ translate('Next customer') }}">
                         <i class="tio-arrow-forward"></i>
                     </a>
-                </div>
+                </div> -->
             </div>
         </div>
         <!-- End Page Header -->

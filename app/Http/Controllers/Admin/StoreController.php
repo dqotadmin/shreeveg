@@ -22,7 +22,8 @@ use Illuminate\Validation\Rule;
 class StoreController extends Controller
 {
     public function __construct(
-        private Store $store
+        private Store $store,
+        private City $city
     ){}
 
     /**
@@ -52,7 +53,14 @@ class StoreController extends Controller
 
     function create(Request $request): View|Factory|Application
     {
-       return view('admin-views.store.add');
+        $stores = $this->store->orderBy('id','desc')->first();
+        if($stores && $stores->id < 9){
+            $prevId = ($stores && $stores->id)?'0'.$stores->id+1:'01';
+        }else{
+            $prevId = ($stores && $stores->id)?$stores->id+1:'01';
+
+        }
+       return view('admin-views.store.add',compact('prevId'));
 
     }
 
@@ -94,12 +102,10 @@ class StoreController extends Controller
     {
         $request->validate([
             'warehouse_id' => 'required',
-            'owner_id' => 'required',
             'city_id' => 'required',
             'code' => 'required|unique:stores',
         ],[
             'warehouse_id.required'=>translate('Warehouse is required'),
-            'owner_id.required'=>translate('Owner name is required'),
             'city_id.required'=>translate('City Name is required'),
         ]);
 
@@ -110,13 +116,11 @@ class StoreController extends Controller
         $store->code = $request->code == null ? null : $request->code;
         $store->address = $request->address == null ? null : $request->address;
         $store->warehouse_id = $request->warehouse_id == null ? null : $request->warehouse_id;
-        $store->owner_id = $request->owner_id == null ? null : $request->owner_id;
         $store->city_id = $request->city_id == null ? null : $request->city_id;
-        $store->pin_code = $request->pin_code == null ? null : $request->pin_code;
+        // $store->pin_code = $request->pin_code == null ? null : $request->pin_code;
         $store->brn_number = $request->brn_number == null ? null : $request->brn_number;
         $store->msme_number = $request->msme_number == null ? null : $request->msme_number;
         $store->shop_licence = $request->shop_licence == null ? null : $request->shop_licence;
-        $store->title = $request->title == null ? null : $request->title;
 
         $store->latitude = $request->latitude == null ? null : $request->latitude;
         $store->longitude = $request->longitude == null ? null : $request->longitude;
@@ -126,7 +130,7 @@ class StoreController extends Controller
        
 
         Toastr::success(translate('unit Added Successfully!') );
-        return redirect()->route('admin.store.index');
+        return redirect()->route('admin.store.list');
 
     }
 
@@ -161,18 +165,11 @@ class StoreController extends Controller
     public function update(Request $request, $id): RedirectResponse
     {
         $request->validate([
-            'warehouse_id' => 'required',
-            'owner_id' => 'required',
-            'city_id' => 'required',
             'name' => 'required',
             'code' => [
                 'required',
                     Rule::unique('stores')->ignore($id),
             ]
-        ],[
-            'warehouse_id.required'=>translate('Warehouse  is required'),
-            'owner_id.required'=>translate('Owner name is required'),
-            'city_id.required'=>translate('City Name is required'),
         ]);
 
       
@@ -182,13 +179,11 @@ class StoreController extends Controller
         $store->code = $request->code == null ? null : $request->code;
         $store->address = $request->address == null ? null : $request->address;
         $store->warehouse_id = $request->warehouse_id == null ? null : $request->warehouse_id;
-        $store->owner_id = $request->owner_id == null ? null : $request->owner_id;
         $store->city_id = $request->city_id == null ? null : $request->city_id;
-        $store->pin_code = $request->pin_code == null ? null : $request->pin_code;
+        $store->area_id = $request->area_id == null ? null : $request->area_id;
         $store->brn_number = $request->brn_number == null ? null : $request->brn_number;
         $store->msme_number = $request->msme_number == null ? null : $request->msme_number;
         $store->shop_licence = $request->shop_licence == null ? null : $request->shop_licence;
-        $store->title = $request->title == null ? null : $request->title;
 
         $store->latitude = $request->latitude == null ? null : $request->latitude;
         $store->longitude = $request->longitude == null ? null : $request->longitude;
@@ -198,30 +193,54 @@ class StoreController extends Controller
         $store->save();
         
         Toastr::success( translate('Store updated successfully!') );
-        return redirect()->route('admin.store.index');
+        return redirect()->route('admin.store.list');
 
     }
-    public function get_city($stateId = null){
-        $city = City::query();
-        if($stateId){
-            $city = $city->where('state_id',$stateId)->get();
-        }
-        return response()->json(['city' => $city]);
-    }
-    public function get_warehouse($cityId=null){
+    public function get_warehouse($cityId = null){
         $warehouse = Warehouse::query();
+            $store_city_id = $this->store->where('status',1)->count();
     
-        if ($cityId) {
-            $warehouse = $warehouse->where('city_id', $cityId)->get();
-            
-            if ($warehouse->isEmpty()) {
-                return response()->json(['message' => 'Warehouses not found for the given city.']);
+            if($store_city_id < 9){
+                $store_city_id = $this->store->where('city_id', $cityId)->count();
+                    $prevId = ($store_city_id)? '00'.($store_city_id+1):'001';
+                }else{
+                    $prevId = ($store_city_id)? $store_city_id+1:'001';
+        
+                }
+            if ($cityId) {
+                $warehouse = $warehouse->where('status',1)->where('city_id', $cityId)->get();
+                
+                if ($warehouse->isEmpty()) {
+                    return response()->json(['message' => 'Warehouses not found for the given city.']);
+                }
+            } else {
+                return response()->json(['message' => 'City ID is not provided.']);
             }
-        } else {
-            return response()->json(['message' => 'City ID is not provided.']);
-        }
-        return response()->json(['warehouse' => $warehouse]);
+            return response()->json(['warehouse' => $warehouse, 'prevId' => $prevId]);
     }
+    // public function get_warehouse($cityId=null){
+    //     $warehouse = Warehouse::query();
+    //     $store_city_id = $this->store->where('status',1)->count();
+
+    //     if($store_city_id < 9){
+    //         $prevId = ($store_city_id)?'0'.$store_city_id+1:'01';
+    //     }else{
+    //         $prevId = ($store_city_id)? $store_city_id+1:'01';
+
+    //     }
+    //     if ($cityId) {
+    //         $warehouse = $warehouse->where('status',1)->where('city_id', $cityId)->get();
+            
+    //         if ($warehouse->isEmpty()) {
+    //             return response()->json(['message' => 'Warehouses not found for the given city.']);
+    //         }
+    //     } else {
+    //         return response()->json(['message' => 'City ID is not provided.']);
+    //     }
+    //     return response()->json(['warehouse' => $warehouse, 'prevId' => $prevId]);
+        
+    
+    // }
    
 
     /** 
@@ -231,6 +250,7 @@ class StoreController extends Controller
     public function delete(Request $request): RedirectResponse
     {
         $store = $this->store->find($request->id);
+        $store->update(['deleted_by' => auth('admin')->user()->id]);
        
         if ($store) {
             $store->delete();

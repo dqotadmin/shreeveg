@@ -66,8 +66,12 @@
                         <th class="text-center">{{translate('#')}}</th>
                         <th>{{translate('image')}}</th>
                         <th>{{translate('full_name')}}</th>
-                        <th>{{translate('email')}}</th>
-                        <th>{{translate('mobile_no')}}</th>
+                        @if($role->id == '3'   || $role->id == '5' || $role->id == '4')
+                            <th>{{translate('warehouse')}}</th>
+                        @elseif($role->id == '6' || $role->id == '7' )
+                            <th>{{translate('store')}}</th>
+                        @endif
+                        <th>{{translate('Contact Info')}}</th>
                         <th>{{translate('status')}}</th>
                         <th class="text-center">{{translate('action')}}</th>
                     </tr>
@@ -86,16 +90,34 @@
                                 {{$admin['f_name'] }} {{ $admin['l_name']}}
                             </span>
                         </td>
+                        @if($role->id == '3'   || $role->id == '5' || $role->id == '4')
                         <td>
-                            <span class="d-block font-size-sm text-body text-trim-50">
-                                {{$admin['phone']}}
+                            <span class="d-block font-size-sm text-body text-trim-50" style="text-transform: capitalize ;">
+                                @if($admin->warehouse_id > 0 && !empty($admin->warehouse_id))
+                                    {{$admin->Warehouse->name }}
+                                @endif 
+                           
                             </span>
                         </td>
+                        @elseif($role->id == '6' || $role->id == '7' )
                         <td>
-                            <span class="d-block font-size-sm text-body text-trim-50">
-                                {{$admin['email']}}
+                            <span class="d-block font-size-sm text-body text-trim-50" style="text-transform: capitalize ;">
+                            
+                            @if($admin->store_id > 0 && $admin->store_id)
+                            {{$admin->Store->name }} 
+                            @endif
                             </span>
                         </td>
+                            @endif
+                        <td>
+                            <h5 class="m-0">
+                                <a href="mailto:{{$admin['email']}}">{{$admin['email']}}</a>
+                            </h5>
+                            <div>
+                                <a href="Tel:{{$admin['phone']}}">{{$admin['phone']}}</a>
+                            </div>
+                        </td>
+                       
                         <td>
                         <label class="toggle-switch">
                             <input type="checkbox"

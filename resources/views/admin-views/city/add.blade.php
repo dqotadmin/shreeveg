@@ -33,27 +33,27 @@
                                 <label class="form-label" for="">{{ translate('City') }}
                                 </label>
                                 <input type="text" name="city" class="form-control"
-                                    placeholder="{{ translate('Ex: Jaipur') }}" maxlength="255">
+                                    placeholder="{{ translate('Ex: City') }}" maxlength="255">
                             </div>
                             <div class="col-sm-6">
                                 <label class="form-label" for="">{{ translate('City') }} {{ translate('Code') }}
                                 </label>
                                 <input type="text" name="city_code" class="form-control"
-                                    placeholder="{{ translate('Ex: 0141') }}" maxlength="255">
+                                    placeholder="{{ translate('Ex: City Code') }}" maxlength="255">
                             </div>
                             <div class="col-sm-6">
                                 <label class="form-label" for="">{{ translate('State') }}
                                 </label>
                                 <select id=" " name="state_id" class="form-control js-select2-custom" required>
                                     <option value="" disabled selected>Select State </option>
-                                    @foreach(\App\Model\State::orderBy('id', 'DESC')->get() as $state)
+                                    @foreach(\App\Model\State::where('status','1')->orderBy('id', 'DESC')->get() as $state)
                                     <option value="{{$state['id']}}">{{$state['name']}}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="col-12">
                                 <div class="btn--container justify-content-end">
-                                    <a href="{{route('admin.city.add')}}" type="reset" class="btn btn--reset">
+                                    <a href="{{route('admin.city.list')}}" type="reset" class="btn btn--reset">
                                         {{translate('Back')}}</a>
                                     <button type="submit" class="btn btn--primary">{{translate('submit')}}</button>
                                 </div>

@@ -36,6 +36,13 @@
                                        required>
                             </div>
                         </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="form-label"> {{translate('hide option before in minute')}}   </label>
+                                <input type="number" name="hide_option_before" class="form-control" value="30" 
+                                       required>
+                            </div>
+                        </div>
                     </div>
                     <div class="btn--container justify-content-end">
                         <button type="submit" class="btn btn--primary">{{translate('submit')}}</button>
@@ -63,6 +70,8 @@
                         <th class="text-center">{{translate('#')}}</th>
                         <th class="text-center">{{translate('Start')}} {{translate('Time')}} </th>
                         <th class="text-center">{{translate('End')}} {{translate('Time')}}  </th>
+                        <th class="text-center">{{translate('Hide Option Before')}}   </th>
+                        
                         <th class="text-center">{{translate('duration')}}</th>
                         <th class="text-center">{{translate('status')}}</th>
                         <th class="text-center">{{translate('action')}}</th>
@@ -79,6 +88,9 @@
                             </td>
                             <td class="text-center">
                                 <div>{{ date(config('time_format'), strtotime($timeSlot['end_time'])) }}</div>
+                            </td>
+                            <td class="text-center">
+                                <div>{{ ($timeSlot['hide_option_before']) }} Minute</div>
                             </td>
                             <td class="text-center">
                                 @php

@@ -25,15 +25,16 @@ use Illuminate\Support\Facades\DB;
 class DashboardController extends Controller
 {
     public function __construct(
-       private Admin $admin,
-       private Branch $branch,
-       private Category $category,
-       private Order $order,
-       private OrderDetail $order_detail,
-       private Product $product,
-       private Review $review,
-       private User $user
-    ){}
+        private Admin $admin,
+        private Branch $branch,
+        private Category $category,
+        private Order $order,
+        private OrderDetail $order_detail,
+        private Product $product,
+        private Review $review,
+        private User $user
+    ) {
+    }
 
     /**
      * @param $id
@@ -63,18 +64,22 @@ class DashboardController extends Controller
      */
     public function dashboard(): View|Factory|Application
     {
-        $top_sell = $this->order_detail->with(['product'])
-            ->whereHas('order', function ($query){
-                $query->where('order_status', 'delivered');
-            })
-            ->select('product_id', DB::raw('SUM(quantity) as count'))
-            ->groupBy('product_id')
-            ->orderBy("count", 'desc')
-            ->take(6)
-            ->get();
+        $top_sell = [];
 
+        if (auth('admin')->user()->admin_role_id == 2) {
+            $top_sell = $this->order_detail->with(['product'])
+                ->whereHas('order', function ($query) {
+                    $query->where('order_status', 'delivered');
+                })
+                ->select('product_id', DB::raw('SUM(quantity) as count'))
+                ->groupBy('product_id')
+                ->orderBy("count", 'desc')
+                ->take(6)
+                ->get();
+        }
         $most_rated_products = $this->review->with(['product'])
-            ->select(['product_id',
+            ->select([
+                'product_id',
                 DB::raw('AVG(rating) as ratings_average'),
                 DB::raw('COUNT(rating) as total'),
             ])
@@ -220,8 +225,8 @@ class DashboardController extends Controller
             })
             ->count();
         $all = $this->order->when($today, function ($query) {
-                return $query->whereDate('created_at', Carbon::today());
-            })
+            return $query->whereDate('created_at', Carbon::today());
+        })
             ->when($this_month, function ($query) {
                 return $query->whereMonth('created_at', Carbon::now());
             })
@@ -263,7 +268,6 @@ class DashboardController extends Controller
             'failed' => $failed,
             'canceled' => $canceled
         ];
-
     }
 
     /**
@@ -274,16 +278,16 @@ class DashboardController extends Controller
         $dateType = $request->type;
 
         $order_data = array();
-        if($dateType == 'yearOrder') {
+        if ($dateType == 'yearOrder') {
             $number = 12;
             $from = Carbon::now()->startOfYear()->format('Y-m-d');
             $to = Carbon::now()->endOfYear()->format('Y-m-d');
 
             $orders = $this->order->where(['order_status' => 'delivered'])
-            ->select(
-                DB::raw('(count(id)) as total'),
-                DB::raw('YEAR(created_at) year, MONTH(created_at) month')
-            )->whereBetween('created_at', [$from, $to])->groupby('year', 'month')->get()->toArray();
+                ->select(
+                    DB::raw('(count(id)) as total'),
+                    DB::raw('YEAR(created_at) year, MONTH(created_at) month')
+                )->whereBetween('created_at', [$from, $to])->groupby('year', 'month')->get()->toArray();
 
             for ($inc = 1; $inc <= $number; $inc++) {
                 $order_data[$inc] = 0;
@@ -293,19 +297,18 @@ class DashboardController extends Controller
                     }
                 }
             }
-            $key_range = array("Jan","Feb","Mar","April","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec");
-
-        }elseif($dateType == 'MonthOrder') {
+            $key_range = array("Jan", "Feb", "Mar", "April", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+        } elseif ($dateType == 'MonthOrder') {
             $from = date('Y-m-01');
             $to = date('Y-m-t');
-            $number = date('d',strtotime($to));
+            $number = date('d', strtotime($to));
             $key_range = range(1, $number);
 
             $orders = $this->order->where(['order_status' => 'delivered'])
-            ->select(
-                DB::raw('(count(id)) as total'),
-                DB::raw('YEAR(created_at) year, MONTH(created_at) month, DAY(created_at) day')
-            )->whereBetween('created_at', [$from, $to])->groupby('day')->get()->toArray();
+                ->select(
+                    DB::raw('(count(id)) as total'),
+                    DB::raw('YEAR(created_at) year, MONTH(created_at) month, DAY(created_at) day')
+                )->whereBetween('created_at', [$from, $to])->groupby('day')->get()->toArray();
 
             for ($inc = 1; $inc <= $number; $inc++) {
                 $order_data[$inc] = 0;
@@ -315,8 +318,7 @@ class DashboardController extends Controller
                     }
                 }
             }
-
-        }elseif($dateType == 'WeekOrder') {
+        } elseif ($dateType == 'WeekOrder') {
             Carbon::setWeekStartsAt(Carbon::SUNDAY);
             Carbon::setWeekEndsAt(Carbon::SATURDAY);
 
@@ -324,8 +326,8 @@ class DashboardController extends Controller
             $to = Carbon::now()->endOfWeek()->format('Y-m-d 23:59:59');
             $date_range = CarbonPeriod::create($from, $to)->toArray();
             $day_range = array();
-            foreach($date_range as $date){
-                $day_range[] =$date->format('d');
+            foreach ($date_range as $date) {
+                $day_range[] = $date->format('d');
             }
             $day_range = array_flip($day_range);
             $day_range_keys = array_keys($day_range);
@@ -334,19 +336,19 @@ class DashboardController extends Controller
             $day_range = array_combine($day_range_intKeys, $day_range_values);
 
             $orders = $this->order->where(['order_status' => 'delivered'])
-            ->select(
-                DB::raw('(count(id)) as total'),
-                DB::raw('YEAR(created_at) year, MONTH(created_at) month, DAY(created_at) day')
-            )->whereBetween('created_at', [$from, $to])->groupby('day')->orderBy('created_at', 'ASC')->pluck('total', 'day')->toArray();
+                ->select(
+                    DB::raw('(count(id)) as total'),
+                    DB::raw('YEAR(created_at) year, MONTH(created_at) month, DAY(created_at) day')
+                )->whereBetween('created_at', [$from, $to])->groupby('day')->orderBy('created_at', 'ASC')->pluck('total', 'day')->toArray();
 
             $order_data = array();
-            foreach($day_range as $day=>$value){
+            foreach ($day_range as $day => $value) {
                 $day_value = 0;
                 $order_data[$day] = $day_value;
             }
 
-            foreach($orders as $order_day => $order_value){
-                if(array_key_exists($order_day, $order_data)){
+            foreach ($orders as $order_day => $order_value) {
+                if (array_key_exists($order_day, $order_data)) {
                     $order_data[$order_day] = $order_value;
                 }
             }
@@ -371,7 +373,7 @@ class DashboardController extends Controller
         $dateType = $request->type;
 
         $earning_data = array();
-        if($dateType == 'yearEarn') {
+        if ($dateType == 'yearEarn') {
             $number = 12;
             $from = Carbon::now()->startOfYear()->format('Y-m-d');
             $to = Carbon::now()->endOfYear()->format('Y-m-d');
@@ -391,13 +393,11 @@ class DashboardController extends Controller
                     }
                 }
             }
-            $key_range = array("Jan","Feb","Mar","April","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec");
-
-
-        }elseif($dateType == 'MonthEarn') {
+            $key_range = array("Jan", "Feb", "Mar", "April", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+        } elseif ($dateType == 'MonthEarn') {
             $from = date('Y-m-01');
             $to = date('Y-m-t');
-            $number = date('d',strtotime($to));
+            $number = date('d', strtotime($to));
             $key_range = range(1, $number);
 
             $earning = $this->order->where([
@@ -415,8 +415,7 @@ class DashboardController extends Controller
                     }
                 }
             }
-
-        }elseif($dateType == 'WeekEarn') {
+        } elseif ($dateType == 'WeekEarn') {
             Carbon::setWeekStartsAt(Carbon::SUNDAY);
             Carbon::setWeekEndsAt(Carbon::SATURDAY);
 
@@ -424,8 +423,8 @@ class DashboardController extends Controller
             $to = Carbon::now()->endOfWeek()->format('Y-m-d 23:59:59');
             $date_range = CarbonPeriod::create($from, $to)->toArray();
             $day_range = array();
-            foreach($date_range as $date){
-                $day_range[] =$date->format('d');
+            foreach ($date_range as $date) {
+                $day_range[] = $date->format('d');
             }
             $day_range = array_flip($day_range);
             $day_range_keys = array_keys($day_range);
@@ -441,13 +440,13 @@ class DashboardController extends Controller
             )->whereBetween('created_at', [$from, $to])->groupby('day')->orderBy('created_at', 'ASC')->pluck('sums', 'day')->toArray();
 
             $earning_data = array();
-            foreach($day_range as $day=>$value){
+            foreach ($day_range as $day => $value) {
                 $day_value = 0;
                 $earning_data[$day] = $day_value;
             }
 
-            foreach($earning as $order_day => $order_value){
-                if(array_key_exists($order_day, $earning_data)){
+            foreach ($earning as $order_day => $order_value) {
+                if (array_key_exists($order_day, $earning_data)) {
                     $earning_data[$order_day] = $order_value;
                 }
             }
@@ -464,5 +463,4 @@ class DashboardController extends Controller
         );
         return response()->json($data);
     }
-
 }

@@ -33,19 +33,19 @@
                     <div class="col-sm-6 ">{{translate('city')}}
                         </label>
                         <input type="text" name="city" maxlength="255" value="{{$cities['city']}}" class="form-control"
-                            placeholder="{{ translate('New city') }}">
+                            placeholder="{{ translate('Ex: City') }}">
                     </div>
                     <div class="col-sm-6">
                         <label class="form-label" for="">{{ translate('City') }} {{ translate('Code') }}
                         </label>
                         <input type="text" name="city_code" class="form-control"  value="{{$cities['city_code']}}"
-                            placeholder="{{ translate('Ex: 0141') }}" maxlength="255">
+                            placeholder="{{ translate('Ex: City Code') }}" maxlength="255">
                     </div>
                     <div class="col-sm-6">
                         <label class="form-label">{{ translate('State') }}
                         </label>
                         <select id="exampleFormControlSelect1" name="state_id" class="form-control " required>
-                            @foreach(\App\Model\State::orderBy('id', 'DESC')->get() as $state)
+                            @foreach(\App\Model\State::where('status','1')->orderBy('id', 'DESC')->get() as $state)
                             <option value="{{$state['id']}}" {{$cities['state_id']==$state['id']?'selected':''}}>
                                 {{$state['name']}}</option>
                             @endforeach
@@ -55,7 +55,7 @@
 
                     <div class="col-12">
                         <div class="btn--container justify-content-end">
-                            <a href="{{route('admin.city.add')}}" type="reset" class="btn btn--reset">
+                            <a href="{{route('admin.city.list')}}" type="reset" class="btn btn--reset">
                                 {{translate('Back')}}</a>
                             <button type="submit" class="btn btn--primary">{{translate('update')}}</button>
                         </div>

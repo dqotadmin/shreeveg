@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Rap2hpoutre\FastExcel\FastExcel;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Illuminate\Validation\Rule;
 
 class CustomerController extends Controller
 {
@@ -209,12 +210,12 @@ class CustomerController extends Controller
             ->get();
 
         foreach($customers as $customer){
-
             $storage[] = [
                 'first_name' => $customer['f_name'],
                 'last_name' => $customer['l_name'],
                 'phone' => $customer['phone'],
                 'email' => $customer['email'],
+                'status' => $customer['is_block'],
             ];
         }
         return (new FastExcel($storage))->download('customers.xlsx');
@@ -272,4 +273,53 @@ class CustomerController extends Controller
         return back();
     }
 
+    public function create(){ 
+        return view('admin-views.customer.add');
+    }
+    
+    public function edit($id){
+        $customers = $this->user->find($id);
+             return view('admin-views.customer.edit',compact('customers'));
+    }
+    public function update(Request $request, $id): RedirectResponse
+    {
+        $validatedData = $request->validate([
+            'f_name' => 'required',
+            'l_name' => 'required',
+            'password' => 'nullable|same:confirm_password|min:8',
+            'email' =>  ['required',
+            Rule::unique('users')->ignore($id)
+        ],
+        'phone' =>  ['required',
+        Rule::unique('users')->ignore($id)
+    ],
+        ], [
+            'f_name.required' => translate('first name is required'),
+            'l_name.required' => translate('last name is required'),
+            'email.required' => translate('email name is required'),
+            'phone.required' => translate('phone name is required'),
+            'email.unique' => translate('email must be unique'),
+            'phone.unique' => translate('phone must be unique'),
+        ]);
+      
+
+        $customer = $this->user->find($id);
+        if ($request->has('image')) {
+            $image_name = Helpers::update('customer/', $customer->image, 'png', $request->file('image'));
+        } else {
+            $image_name = $customer['image'];
+        }
+        $customer->f_name = $request->f_name;
+        $customer->l_name = $request->l_name;
+        $customer->email = $request->email;
+        $customer->phone = $request->phone;
+        $customer->image = $image_name;
+        if($request->password){
+            $customer->password = Hash::make($request->password);
+        }
+        
+        $customer->save();
+        Toastr::success(translate('Customer updated successfully!'));
+        return redirect()->route('admin.customer.list');
+    }
 }

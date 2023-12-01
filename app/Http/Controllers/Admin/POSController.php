@@ -618,7 +618,7 @@ class POSController extends Controller
         session()->put($request['key'], $request['value']);
         return response()->json('', 200);
     }
-
+ 
     /**
      * @param Request $request
      * @return RedirectResponse
@@ -638,13 +638,19 @@ class POSController extends Controller
             'email.unique' => translate('email must be unique'),
             'phone.unique' => translate('phone must be unique'),
         ]);
+        if ($request->has('image')) {
+            $image_name = Helpers::upload('customer/', 'png', $request->file('image'));
+        } else {
+            $image_name = 'def.png';
+        }
 
         $customer = $this->user;
         $customer->f_name = $request->f_name;
         $customer->l_name = $request->l_name;
         $customer->email = $request->email;
         $customer->phone = $request->phone;
-        $customer->password = Hash::make('12345678');
+        $customer->image = $image_name;
+        $customer->password = $request->password ? Hash::make($request->password) :Hash::make('12345678');
         $customer->save();
         Toastr::success(translate('Customer added successfully!'));
         return back();

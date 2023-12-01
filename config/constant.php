@@ -13,6 +13,7 @@ const MANAGEMENT_SECTION = [
     'order_management' => 'order_management',
     'product_management' => 'product_management',
     'promotion_management' => 'promotion_management',
+    'category_management' => 'category_management',
     'support_management' => 'support_management',
     'report_management' => 'report_management',
     'user_management' => 'user_management',

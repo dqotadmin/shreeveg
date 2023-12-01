@@ -151,7 +151,7 @@ class Helpers
 
         return $data;
     }
-    
+
     public static function get_business_settings($name)
     {
         $config = null;
@@ -164,17 +164,20 @@ class Helpers
         }
         return $config;
     }
-
-    public static function getWhCategoriesData($catid,$whId)
+    public static function getAlphabet() {
+        // Generate an array containing A to Z
+        return range('A', 'Z');
+    }
+    
+    public static function getWhCategoriesData($catid, $whId)
     {
-       $row = [];
-        $data = \App\Model\WarehouseCategory::where(['warehouse_id' => $whId,'category_id' =>$catid])->first();
+        $row = [];
+        $data = \App\Model\WarehouseCategory::where(['warehouse_id' => $whId, 'category_id' => $catid])->first();
         if (isset($data)) {
             $row = $data;
         }
         //dd($row);
         return $row;
-
     }
 
     public static function currency_code()
@@ -846,9 +849,7 @@ class Helpers
             }
 
             return $query->count() === 0;
-
         };
-
     }
 
     public static function getCategoryDropDown($categories, $parentId = 0, $level = 0, $selected = 0){

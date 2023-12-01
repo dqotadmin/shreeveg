@@ -66,16 +66,26 @@ class AdminUserController extends Controller
                 }
             })->orderBy('id', 'desc');
             $query_param = ['search' => $request['search']];
-        } else {
+        }else{
             $admins = $this->admin->orderBy('id', 'desc')->where('admin_role_id', $request->role_id);
         }
         if(auth('admin')->user()->admin_role_id == 3){
             if( $request->role_id == 8){
-            $admins = $this->admin->orderBy('id', 'desc')->where('admin_role_id', $request->role_id)->paginate(Helpers::getPagination())->appends($query_param);
-             }else{
-            $admins = $this->admin->orderBy('id', 'desc')->where('warehouse_id',auth('admin')->user()->warehouse_id)->where('admin_role_id', $request->role_id)->paginate(Helpers::getPagination())->appends($query_param);
-             }
-              $role = $this->admin_role->where('id', $request->role_id)->first();
+                $admins = $this->admin->orderBy('id', 'desc')->where('admin_role_id', $request->role_id)->paginate(Helpers::getPagination())->appends($query_param);
+            }elseif( $request->role_id == 6){
+                $admins = $this->admin->orderBy('id', 'desc')->where('admin_role_id', $request->role_id)->paginate(Helpers::getPagination())->appends($query_param);
+                $warehouse_id = '';
+                foreach($admins as $admin){
+                    $warehouse_id =   $admin->Store->warehouse_id;
+                }
+                $stores = $this->store->orderBy('id', 'desc')->where('warehouse_id', $warehouse_id)->pluck('id');
+                
+                $admins = $this->admin->orderBy('id', 'desc')->whereIn('store_id', $stores)->where('admin_role_id', $request->role_id)->paginate(Helpers::getPagination())->appends($query_param);
+
+            }else{
+                $admins = $this->admin->orderBy('id', 'desc')->where('warehouse_id',auth('admin')->user()->warehouse_id)->where('admin_role_id', $request->role_id)->paginate(Helpers::getPagination())->appends($query_param);
+            }
+                $role = $this->admin_role->where('id', $request->role_id)->first();
         }else{
             $admins = $admins->paginate(Helpers::getPagination())->appends($query_param);
             $role = $this->admin_role->where('id', $request->role_id)->first();

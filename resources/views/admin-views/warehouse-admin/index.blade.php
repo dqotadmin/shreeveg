@@ -152,6 +152,7 @@
                                             <a class="action-btn"
                                                 href="{{route('admin.warehouse-admin-edit',[$admin['id'],'role_id'=>$role->id])}}">
                                             <i class="tio-edit"></i></a>
+                                        @if( auth('admin')->user()->admin_role_id == 1)
                                             <a class="action-btn btn--danger btn-outline-danger" href="javascript:"
                                                 onclick="form_alert('admin-{{$admin['id']}}','{{ translate("Want to delete this") }}')">
                                                 <i class="tio-delete-outlined"></i>
@@ -161,6 +162,7 @@
                                                 method="post" id="admin-{{$admin['id']}}">
                                             @csrf @method('delete')
                                         </form>
+                                        @endif
                             <!-- End Dropdown -->
                         </td>
                     </tr>

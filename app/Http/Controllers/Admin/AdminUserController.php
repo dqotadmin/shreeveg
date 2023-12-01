@@ -6,6 +6,7 @@ use App\CentralLogics\Helpers;
 use App\Http\Controllers\Controller;
 use App\Model\Admin;
 use App\Model\AdminRole;
+use App\Model\Store;
 use App\Model\City;
 use App\Model\BankDetail;
 
@@ -26,6 +27,7 @@ class AdminUserController extends Controller
     public function __construct(
         private Admin $admin,
         private AdminRole $admin_role,
+        private Store $store,
     ) {
     }
 
@@ -67,8 +69,18 @@ class AdminUserController extends Controller
         } else {
             $admins = $this->admin->orderBy('id', 'desc')->where('admin_role_id', $request->role_id);
         }
-        $admins = $admins->paginate(Helpers::getPagination())->appends($query_param);
-        $role = $this->admin_role->where('id', $request->role_id)->first();
+        if(auth('admin')->user()->admin_role_id == 3){
+            if( $request->role_id == 8){
+            $admins = $this->admin->orderBy('id', 'desc')->where('admin_role_id', $request->role_id)->paginate(Helpers::getPagination())->appends($query_param);
+             }else{
+            $admins = $this->admin->orderBy('id', 'desc')->where('warehouse_id',auth('admin')->user()->warehouse_id)->where('admin_role_id', $request->role_id)->paginate(Helpers::getPagination())->appends($query_param);
+             }
+              $role = $this->admin_role->where('id', $request->role_id)->first();
+        }else{
+            $admins = $admins->paginate(Helpers::getPagination())->appends($query_param);
+            $role = $this->admin_role->where('id', $request->role_id)->first();
+        }
+        
         return view('admin-views.warehouse-admin.index', compact('admins', 'role'));
     }
 

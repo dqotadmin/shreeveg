@@ -24,10 +24,13 @@
 
     <div class="row g-2">
         <div class="col-sm-12 col-lg-12">
+            @if( auth('admin')->user()->admin_role_id == 1)
+
             <div class="btn--container justify-content-end m-2">
                 <a type="button" href="{{route('admin.user-management-create',['role_id'=>request('role_id')])}}"
                     class="btn btn--primary">{{translate('Add')}} {{$role->name}}</a>
             </div>
+            @endif
             @php($data = Helpers::get_business_settings('language'))
             @php($default_lang = Helpers::get_default_language())
 

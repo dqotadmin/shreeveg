@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', translate('Update Admin')) 
+@section('title', translate('Update Admin'))
 
 
 @push('css_or_js')
@@ -17,7 +17,7 @@
                 <img src="{{asset('public/assets/admin/img/category.png')}}" class="w--24" alt="">
             </span>
             <span>
-           Update {{$role->name}} 
+                Update {{$role->name}}
 
             </span>
         </h1>
@@ -27,7 +27,8 @@
         <div class="col-sm-12 col-lg-12">
             <div class="card-body pt-sm-0 pb-sm-4">
 
-                <form action="{{route('admin.warehouse-admin-update',[$admins['id']])}}" method="post" enctype="multipart/form-data">
+                <form action="{{route('admin.warehouse-admin-update',[$admins['id']])}}" method="post"
+                    enctype="multipart/form-data">
                     @csrf
                     <!-- Card -->
                     <div class="card mb-3 mb-lg-5" id="generalDiv">
@@ -43,9 +44,7 @@
                             for="avatarUploader">
                             <img id="viewer" onerror="this.src='{{asset('public/assets/admin/img/160x160/img1.jpg')}}'"
                                 class="avatar-img"
-                                
-                                src="{{asset('storage/app/public/admin/warehouse')}}/{{$admins['image']}}"
-                                alt="Image">
+                                src="{{asset('storage/app/public/admin/warehouse')}}/{{$admins['image']}}" alt="Image">
                             <input type="hidden" name="admin_role_id" value="  {{$admins->admin_role_id}}">
                             <input type="file" name="image" class="js-file-attach avatar-uploader-input"
                                 id="customFileEg1" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*">
@@ -74,22 +73,32 @@
 
                                 <div class="col-sm-9">
                                     <input name="name" id="" class="form-control" value="{{$role->name}}" readonly>
-                                    <input name="admin_role_id" type="hidden" class="form-control" value="{{$role->id}}">
+                                    <input name="admin_role_id" type="hidden" class="form-control"
+                                        value="{{$role->id}}">
 
                                 </div>
                             </div>
-                             @if($role->id == '3' || $role->id == '5' || $role->id == '4')
+                            @if($role->id == '3' || $role->id == '5' || $role->id == '4')
                             <div class="row form-group">
                                 <label for="phoneLabel"
                                     class="col-sm-3 col-form-label input-label">{{ translate('Warehouse Name') }} <span
                                         class="input-label-secondary"></span></label>
 
                                 <div class="col-sm-9">
-                                    <select id="state" name="warehouse_id" class="form-control js-select2-custom" required>
+                                    <select id="state" name="warehouse_id" class="form-control js-select2-custom"
+                                        required>
+                                        @if($user->admin_role_id == 3)
+                                        <option value="{{$user->Warehouse->id}}" selected>{{$user->Warehouse->name}}</option>
+                                        @else
                                         <option value="" disabled selected>Select Warehouse </option>
-                                        @foreach(\App\Model\Warehouse::where('status', 1)->where('deleted_at', null)->get() as $warehouse)
-                                        <option value="{{$warehouse['id']}}"   {{$warehouse->id == $admins->warehouse_id ? 'selected' : '';}}>{{$warehouse['name']}}</option>
+                                        @foreach(\App\Model\Warehouse::where('status', 1)->where('deleted_at',
+                                        null)->get() as $warehouse)
+                                        <option value="{{$warehouse['id']}}"
+                                            {{$warehouse->id == $admins->warehouse_id ? 'selected' : '';}}>
+                                            {{$warehouse['name']}}</option>
                                         @endforeach
+                                        @endif
+
                                     </select>
                                 </div>
                             </div>
@@ -105,15 +114,18 @@
                                         <option value="{{$user->Store->id}}">{{$user->Store->name}}</option>
                                         @else
                                         <option value="" disabled selected>Select Store </option>
-                                        @foreach(\App\Model\Store::where('status', 1)->where('deleted_at', null)->get() as $store)
-                                        <option value="{{$store['id']}}"  {{$store->id == $admins->store_id ? 'selected' : '';}}>{{$store['name']}}</option>
+                                        @foreach(\App\Model\Store::where('status', 1)->where('deleted_at', null)->get()
+                                        as $store)
+                                        <option value="{{$store['id']}}"
+                                            {{$store->id == $admins->store_id ? 'selected' : '';}}>{{$store['name']}}
+                                        </option>
                                         @endforeach
                                         @endif
                                     </select>
                                 </div>
                             </div>
                             @endif
-                              <div class="row form-group">
+                            <div class="row form-group">
                                 <label for="firstNameLabel"
                                     class="col-sm-3 col-form-label input-label">{{ translate('Full name') }} <i
                                         class="tio-help-outlined text-body ml-1" data-toggle="tooltip"
@@ -122,11 +134,11 @@
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-sm-down-break">
                                         <input type="text" class="form-control" name="f_name" id="firstNameLabel"
-                                            placeholder="{{ translate('Your first name') }}" 
+                                            placeholder="{{ translate('Your first name') }}"
                                             aria-label="Your first name" value="{{$admins->f_name}}">
                                         <input type="text" class="form-control" name="l_name" id="lastNameLabel"
-                                            placeholder="{{ translate('Your last name') }}" aria-label="Your last name" value="{{$admins->l_name}}"
-                                           >
+                                            placeholder="{{ translate('Your last name') }}" aria-label="Your last name"
+                                            value="{{$admins->l_name}}">
                                     </div>
                                 </div>
                             </div>
@@ -140,8 +152,8 @@
 
                                 <div class="col-sm-9">
                                     <input type="text" class="js-masked-input form-control" name="phone" id="phoneLabel"
-                                        placeholder="+x(xxx)xxx-xx-xx" aria-label="+(xxx)xx-xxx-xxxxx" value="{{$admins->phone}}"
-                                        data-hs-mask-options='{
+                                        placeholder="+x(xxx)xxx-xx-xx" aria-label="+(xxx)xx-xxx-xxxxx"
+                                        value="{{$admins->phone}}" data-hs-mask-options='{
                                            "template": "+(880)00-000-00000"
                                          }'>
                                 </div>
@@ -153,13 +165,14 @@
                                     class="col-sm-3 col-form-label input-label">{{ translate('Email') }}</label>
 
                                 <div class="col-sm-9">
-                                    <input type="email" class="form-control" name="email" id="newEmailLabel" value="{{$admins->email}}"
+                                    <input type="email" class="form-control" name="email" id="newEmailLabel"
+                                        value="{{$admins->email}}"
                                         placeholder="{{ translate('Enter new email address') }}"
                                         aria-label="Enter new email address">
                                 </div>
                             </div>
 
-                           
+
 
                             <!-- End Form -->
                         </div>
@@ -171,7 +184,7 @@
                             <h4 class="card-title"><i class="tio-lock"></i> {{ translate('Bank Details') }}
                             </h4>
                         </div>
-                        			
+
                         <!-- Body -->
                         <div class="card-body">
                             <!-- Form -->
@@ -182,8 +195,9 @@
                                         class="input-label-secondary"></span></label>
 
                                 <div class="col-sm-9">
-                                    <input type="text" class="js-masked-input form-control" name="account_number" id="phoneLabel"
-                                    placeholder="Account Number"    value="{{$admins->bankDetail ? $admins->bankDetail->account_number: ''}}">
+                                    <input type="text" class="js-masked-input form-control" name="account_number"
+                                        id="phoneLabel" placeholder="Account Number"
+                                        value="{{$admins->bankDetail ? $admins->bankDetail->account_number: ''}}">
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -192,8 +206,9 @@
                                         class="input-label-secondary"></span></label>
 
                                 <div class="col-sm-9">
-                                    <input type="text" class="js-masked-input form-control" name="account_holder" id="phoneLabel"
-                                    placeholder="Account Holder" value="{{$admins->bankDetail ? $admins->bankDetail->account_holder: '';}}">
+                                    <input type="text" class="js-masked-input form-control" name="account_holder"
+                                        id="phoneLabel" placeholder="Account Holder"
+                                        value="{{$admins->bankDetail ? $admins->bankDetail->account_holder: '';}}">
                                 </div>
                             </div>
 
@@ -203,18 +218,20 @@
                                         class="input-label-secondary"></span></label>
 
                                 <div class="col-sm-9">
-                                    <input type="text" class="js-masked-input form-control" name="bank_name" id="phoneLabel"
-                                    placeholder="Bank Name" value="{{$admins->bankDetail ? $admins->bankDetail->bank_name: '';}}">
+                                    <input type="text" class="js-masked-input form-control" name="bank_name"
+                                        id="phoneLabel" placeholder="Bank Name"
+                                        value="{{$admins->bankDetail ? $admins->bankDetail->bank_name: '';}}">
                                 </div>
-                            </div> 
+                            </div>
                             <div class="row form-group">
                                 <label for="phoneLabel"
                                     class="col-sm-3 col-form-label input-label">{{ translate('IFSC Code') }} <span
                                         class="input-label-secondary"></span></label>
 
                                 <div class="col-sm-9">
-                                    <input type="text" class="js-masked-input form-control" name="ifsc_code" id="phoneLabel"
-                                    placeholder="IFSC Code" value="{{$admins->bankDetail ? $admins->bankDetail->ifsc_code: '';}}">
+                                    <input type="text" class="js-masked-input form-control" name="ifsc_code"
+                                        id="phoneLabel" placeholder="IFSC Code"
+                                        value="{{$admins->bankDetail ? $admins->bankDetail->ifsc_code: '';}}">
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -223,8 +240,9 @@
                                         class="input-label-secondary"></span></label>
 
                                 <div class="col-sm-9">
-                                    <input type="text" class="js-masked-input form-control" name="upi_id" id="phoneLabel"
-                                    placeholder="UPI Id"  value="{{$admins->bankDetail ? $admins->bankDetail->upi_id: '';}}">
+                                    <input type="text" class="js-masked-input form-control" name="upi_id"
+                                        id="phoneLabel" placeholder="UPI Id"
+                                        value="{{$admins->bankDetail ? $admins->bankDetail->upi_id: '';}}">
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -233,24 +251,27 @@
                                         class="input-label-secondary"></span></label>
 
                                 <div class="col-sm-9">
-                                    <input type="text" class="js-masked-input form-control" name="upi_number" id="upi_number"
-                                    value="{{$admins->bankDetail ? $admins->bankDetail->upi_number : '';}}"  placeholder="UPI Number" >
+                                    <input type="text" class="js-masked-input form-control" name="upi_number"
+                                        id="upi_number"
+                                        value="{{$admins->bankDetail ? $admins->bankDetail->upi_number : '';}}"
+                                        placeholder="UPI Number">
                                 </div>
                             </div>
- 
+
                         </div>
-                       
+
                         <!-- End Body -->
                     </div>
                     <div class="d-flex justify-content-end">
-                          
-                          <a href="{{route('admin.warehouse-admin',['role_id'=>$role->id])}}" type="button" class="btn btn--reset mr-2">  {{translate('Back')}}</a>
-                              <button type="submit" class="btn btn-primary">{{ translate('Update') }}</button>
-                          </div>
+
+                        <a href="{{route('admin.warehouse-admin',['role_id'=>$role->id])}}" type="button"
+                            class="btn btn--reset mr-2"> {{translate('Back')}}</a>
+                        <button type="submit" class="btn btn-primary">{{ translate('Update') }}</button>
+                    </div>
                 </form>
 
-                    <!-- Sticky Block End Point -->
-                    <div id="stickyBlockEndPoint"></div>
+                <!-- Sticky Block End Point -->
+                <div id="stickyBlockEndPoint"></div>
             </div>
         </div>
     </div>

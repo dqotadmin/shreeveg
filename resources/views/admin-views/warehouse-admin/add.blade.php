@@ -100,6 +100,7 @@
 
                                 <div class="col-sm-9">
                                     <select id="state" name="store_id" class="form-control js-select2-custom" required>
+                                        
                                         <option value="" disabled selected>Select Store </option>
                                         @foreach(\App\Model\Store::where('status', 1)->where('deleted_at', null)->get() as $store)
                                         <option value="{{$store['id']}}">{{$store['name']}}</option>

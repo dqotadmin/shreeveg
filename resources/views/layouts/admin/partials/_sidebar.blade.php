@@ -494,7 +494,7 @@
                             </li>
 
                             <li class="navbar-vertical-aside-has-menu {{Request::is('admin/unit*')?'active':''}}">
-                                <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{route('admin.unit.add')}}"
+                                <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{route('admin.unit.list')}}"
                                     title="{{translate('units')}}">
                                     <i class="tio-category nav-icon"></i>
                                     <span

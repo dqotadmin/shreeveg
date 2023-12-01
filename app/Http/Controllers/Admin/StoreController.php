@@ -133,6 +133,7 @@ class StoreController extends Controller
         $store->brn_number = $request->brn_number == null ? null : $request->brn_number;
         $store->msme_number = $request->msme_number == null ? null : $request->msme_number;
         $store->shop_licence = $request->shop_licence == null ? null : $request->shop_licence;
+        $store->area_id = $request->area_id == null ? null : $request->area_id;
 
         $store->latitude = $request->latitude == null ? null : $request->latitude;
         $store->longitude = $request->longitude == null ? null : $request->longitude;
@@ -141,7 +142,7 @@ class StoreController extends Controller
         $store->save();
 
 
-        Toastr::success(translate('unit Added Successfully!'));
+        Toastr::success(translate('Store Added Successfully!'));
         return redirect()->route('admin.store.list');
     }
 
@@ -182,8 +183,6 @@ class StoreController extends Controller
                 Rule::unique('stores')->ignore($id),
             ]
         ]);
-
-
 
         $store = $this->store->find($id);
         $store->name = $request->name == null ? null : $request->name;

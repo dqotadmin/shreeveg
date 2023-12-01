@@ -26,7 +26,7 @@
         <div class="col-sm-12 col-lg-12">
             <div class="card-body pt-sm-0 pb-sm-4">
 
-                <form action="{{route('admin.warehouse-admin')}}" method="post" enctype="multipart/form-data">
+                <form action="{{route('admin.admin')}}" method="post" enctype="multipart/form-data">
                     @csrf
                     <!-- Card -->
                     <div class="card mb-3 mb-lg-5" id="generalDiv">
@@ -86,12 +86,31 @@
                                 <div class="col-sm-9">
                                     <select id="state" name="warehouse_id" class="form-control js-select2-custom" required>
                                         <option value="" disabled selected>Select Warehouse </option>
-                                         @foreach(\App\Model\Warehouse::where('status', 1)->where('deleted_at', null)->get() as $warehouse)
+                                        @if($user->admin_role_id == 3)
+                                        <option value="{{$user->Warehouse->id}}" selected>{{$user->Warehouse->name}}</option>
+                                        @else
+                                          @foreach(\App\Model\Warehouse::where('status', 1)->where('deleted_at', null)->get() as $warehouse)
+                                
+                                         
                                         <option value="{{$warehouse['id']}}">{{$warehouse['name']}}</option>
                                         @endforeach
+                                        @endif
                                     </select>
                                 </div>
                             </div>
+                            <!-- 
+                                  @if($user->admin_role_id == 3)
+                                        <option value="{{$user->Warehouse->id}}" selected>{{$user->Warehouse->name}}</option>
+                                        @else
+                                        <option value="" disabled selected>Select Warehouse </option>
+                                        @foreach(\App\Model\Warehouse::where('status', 1)->where('deleted_at',
+                                        null)->get() as $warehouse)
+                                        <option value="{{$warehouse['id']}}"
+                                            {{$warehouse->id == $admins->warehouse_id ? 'selected' : '';}}>
+                                            {{$warehouse['name']}}</option>
+                                        @endforeach
+                                        @endif
+                             -->
                             @elseif($role->id == '6' || $role->id == '7' )
                             <div class="row form-group">
                                 <label for="phoneLabel"
@@ -104,7 +123,7 @@
                                         <option value="{{$user->Store->id}}">{{$user->Store->name}}</option>
                                         @else
                                         <option value="" disabled selected>Select Store </option>
-                                        @foreach(\App\Model\Store::where('status', 1)->where('deleted_at', null)->get() as $store)
+                                        @foreach(\App\Model\Store::where('status', 1)->where('warehouse_id', auth('admin')->user()->warehouse_id)->where('deleted_at', null)->get() as $store)
                                         <option value="{{$store['id']}}">{{$store['name']}}</option>
                                         @endforeach
                                         @endif
@@ -309,7 +328,7 @@
                             <!-- End Form Group -->
 
                             <div class="d-flex justify-content-end">
-                                <a href="{{route('admin.warehouse-admin',['role_id'=>$role->id])}}" type="button" class="btn btn--reset mr-2">  {{translate('Back')}}</a>
+                                <a href="{{route('admin.admin',['role_id'=>$role->id])}}" type="button" class="btn btn--reset mr-2">  {{translate('Back')}}</a>
                                 <button type="submit" class="btn btn-primary">{{ translate('Submit') }}</button>
                             </div>
                             <!-- End Form -->

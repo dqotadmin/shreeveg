@@ -67,7 +67,7 @@
                         <th>{{translate('Store Code')}}</th>
                         <th>{{translate('Warehouse Name')}}</th>
                         <th>{{translate('Address')}}</th>
-                        <th>{{translate('Pin Code')}}</th>
+                        <th>{{translate('Area')}}</th>
                         <th>{{translate('status')}}</th>
                         <th class="text-center">{{translate('action')}}</th>
                     </tr>
@@ -79,12 +79,12 @@
                         <td class="text-center">{{$stores->firstItem()+$key}}</td>
 
                         <td>
-                            <span class="d-block font-size-sm text-body text-trim-50">
+                            <span class="d-block font-size-sm text-body text-trim-50" style="text-transform: uppercase;">
                                 {{$store['name']}}
                             </span>
                         </td>
                         <td>
-                            <span class="d-block font-size-sm text-body text-trim-50">
+                            <span class="d-block font-size-sm text-body text-trim-50" style="text-transform: uppercase;">
                                 {{$store['code']}}
                             </span>
                         </td>
@@ -100,7 +100,7 @@
                         </td>
                         <td>
                             <span class="d-block font-size-sm text-body text-trim-50">
-                                {{$store['pin_code']}}
+                                {{$store['area_id']}}
                             </span>
                         </td>
                         <td>

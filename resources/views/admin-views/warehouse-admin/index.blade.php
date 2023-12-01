@@ -24,13 +24,19 @@
 
     <div class="row g-2">
         <div class="col-sm-12 col-lg-12">
-            @if( auth('admin')->user()->admin_role_id == 1)
+       @if( in_array(auth('admin')->user()->admin_role_id, [1]) && $role->id != auth('admin')->user()->admin_role_id)
+       
 
             <div class="btn--container justify-content-end m-2">
                 <a type="button" href="{{route('admin.user-management-create',['role_id'=>request('role_id')])}}"
                     class="btn btn--primary">{{translate('Add')}} {{$role->name}}</a>
             </div>
-            @endif
+            @elseif(in_array(auth('admin')->user()->admin_role_id, [3]) && $role->id != auth('admin')->user()->admin_role_id && $role->id != 8)
+            <div class="btn--container justify-content-end m-2">
+                <a type="button" href="{{route('admin.user-management-create',['role_id'=>request('role_id')])}}"
+                    class="btn btn--primary">{{translate('Add')}} {{$role->name}}</a>
+            </div>   
+             @endif
             @php($data = Helpers::get_business_settings('language'))
             @php($default_lang = Helpers::get_default_language())
 
@@ -136,7 +142,7 @@
                         <td>
                         <label class="toggle-switch">
                             <input type="checkbox"
-                                onclick="status_change_alert('{{ route('admin.warehouse-admin-status', [$admin->id, $admin->status ? 0 : 1]) }}', '{{ $admin->status? translate('you_want_to_disable_this_admin'): translate('you_want_to_active_this_admin') }}', event)"
+                                onclick="status_change_alert('{{ route('admin.admin-status', [$admin->id, $admin->status ? 0 : 1]) }}', '{{ $admin->status? translate('you_want_to_disable_this_admin'): translate('you_want_to_active_this_admin') }}', event)"
                                 class="toggle-switch-input" id="stocksCheckbox{{ $admin->id }}"
                                 {{ $admin->status ? 'checked' : '' }}>
                             <span class="toggle-switch-label text">
@@ -150,17 +156,19 @@
                             <!-- Dropdown -->
                             <div class="btn--container justify-content-center">
                                             <a class="action-btn"
-                                                href="{{route('admin.warehouse-admin-edit',[$admin['id'],'role_id'=>$role->id])}}">
+                                                href="{{route('admin.admin-edit',[$admin['id'],'role_id'=>$role->id])}}">
                                             <i class="tio-edit"></i></a>
+                                        @if( auth('admin')->user()->admin_role_id == 1)
                                             <a class="action-btn btn--danger btn-outline-danger" href="javascript:"
                                                 onclick="form_alert('admin-{{$admin['id']}}','{{ translate("Want to delete this") }}')">
                                                 <i class="tio-delete-outlined"></i>
                                             </a>
                                         </div>
-                                        <form action="{{route('admin.warehouse-admin-delete',[$admin['id']])}}"
+                                        <form action="{{route('admin.admin-delete',[$admin['id']])}}"
                                                 method="post" id="admin-{{$admin['id']}}">
                                             @csrf @method('delete')
                                         </form>
+                                        @endif
                             <!-- End Dropdown -->
                         </td>
                     </tr>

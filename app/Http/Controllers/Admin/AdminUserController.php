@@ -66,16 +66,26 @@ class AdminUserController extends Controller
                 }
             })->orderBy('id', 'desc');
             $query_param = ['search' => $request['search']];
-        } else {
+        }else{
             $admins = $this->admin->orderBy('id', 'desc')->where('admin_role_id', $request->role_id);
         }
         if(auth('admin')->user()->admin_role_id == 3){
             if( $request->role_id == 8){
-            $admins = $this->admin->orderBy('id', 'desc')->where('admin_role_id', $request->role_id)->paginate(Helpers::getPagination())->appends($query_param);
-             }else{
-            $admins = $this->admin->orderBy('id', 'desc')->where('warehouse_id',auth('admin')->user()->warehouse_id)->where('admin_role_id', $request->role_id)->paginate(Helpers::getPagination())->appends($query_param);
-             }
-              $role = $this->admin_role->where('id', $request->role_id)->first();
+                $admins = $this->admin->orderBy('id', 'desc')->where('admin_role_id', $request->role_id)->paginate(Helpers::getPagination())->appends($query_param);
+            }elseif( $request->role_id == 6){
+                $admins = $this->admin->orderBy('id', 'desc')->where('admin_role_id', $request->role_id)->paginate(Helpers::getPagination())->appends($query_param);
+                $warehouse_id = '';
+                foreach($admins as $admin){
+                    $warehouse_id =   $admin->Store->warehouse_id;
+                }
+                $stores = $this->store->orderBy('id', 'desc')->where('warehouse_id', $warehouse_id)->pluck('id');
+                
+                $admins = $this->admin->orderBy('id', 'desc')->whereIn('store_id', $stores)->where('admin_role_id', $request->role_id)->paginate(Helpers::getPagination())->appends($query_param);
+
+            }else{
+                $admins = $this->admin->orderBy('id', 'desc')->where('warehouse_id',auth('admin')->user()->warehouse_id)->where('admin_role_id', $request->role_id)->paginate(Helpers::getPagination())->appends($query_param);
+            }
+                $role = $this->admin_role->where('id', $request->role_id)->first();
         }else{
             $admins = $admins->paginate(Helpers::getPagination())->appends($query_param);
             $role = $this->admin_role->where('id', $request->role_id)->first();
@@ -135,17 +145,17 @@ class AdminUserController extends Controller
         $adminId = $admin->id;
         $bankDetail = new BankDetail([
             'user_id' => $adminId,
-            'account_number' => $request->account_number,
-            'account_holder' => $request->account_holder,
-            'bank_name' => $request->bank_name,
-            'ifsc_code' => $request->ifsc_code,
-            'upi_id' => $request->upi_id,
-            'upi_number' => $request->upi_number,
+            'account_number' => $request->account_number ? $request->account_number : '',
+            'account_holder' => $request->account_holder ? $request->account_holder : '',
+            'bank_name' => $request->bank_name ? $request->bank_name : '',
+            'ifsc_code' => $request->ifsc_code ? $request->ifsc_code : '',
+            'upi_id' => $request->upi_id ? $request->upi_id : '',
+            'upi_number' => $request->upi_number ? $request->upi_number : '',
             // Add other fields as needed
         ]);
         $bankDetail->save();
         Toastr::success(translate($request->name . ' Inserted Successfully!'));
-        return redirect()->route('admin.warehouse-admin', ['role_id' => $request->admin_role_id]);
+        return redirect()->route('admin.admin', ['role_id' => $request->admin_role_id]);
     }
 
     public function edit(Request $request, $id)
@@ -215,7 +225,7 @@ class AdminUserController extends Controller
             // You might want to throw an exception or return an error response
         }
         Toastr::success(translate($request->name . ' updated successfully!'));
-        return redirect()->route('admin.warehouse-admin', ['role_id' => $request->admin_role_id]);
+        return redirect()->route('admin.admin', ['role_id' => $request->admin_role_id]);
     }
 
     function store_index(Request $request)

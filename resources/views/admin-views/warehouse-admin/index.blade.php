@@ -30,7 +30,6 @@
             </div>
             @php($data = Helpers::get_business_settings('language'))
             @php($default_lang = Helpers::get_default_language())
-            {{-- @php($default_lang = 'en') --}}
 
         </div>
     </div>

@@ -98,19 +98,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <!-- 
-                                  @if($user->admin_role_id == 3)
-                                        <option value="{{$user->Warehouse->id}}" selected>{{$user->Warehouse->name}}</option>
-                                        @else
-                                        <option value="" disabled selected>Select Warehouse </option>
-                                        @foreach(\App\Model\Warehouse::where('status', 1)->where('deleted_at',
-                                        null)->get() as $warehouse)
-                                        <option value="{{$warehouse['id']}}"
-                                            {{$warehouse->id == $admins->warehouse_id ? 'selected' : '';}}>
-                                            {{$warehouse['name']}}</option>
-                                        @endforeach
-                                        @endif
-                             -->
+                             
                             @elseif($role->id == '6' || $role->id == '7' )
                             <div class="row form-group">
                                 <label for="phoneLabel"
@@ -139,10 +127,10 @@
 
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-sm-down-break">
-                                        <input type="text" class="form-control" name="f_name" id="firstNameLabel"
+                                        <input type="text" class="form-control" name="f_name" id="firstNameLabel" style="text-transform: capitalize;"
                                             placeholder="{{ translate('Your first name') }}"
                                             aria-label="Your first name" value="{{old('f_name')}}">
-                                        <input type="text" class="form-control" name="l_name" id="lastNameLabel"
+                                        <input type="text" class="form-control" name="l_name" id="lastNameLabel" style="text-transform: capitalize;"
                                             placeholder="{{ translate('Your last name') }}" aria-label="Your last name"
                                             value="{{old('l_name')}}">
                                     </div>

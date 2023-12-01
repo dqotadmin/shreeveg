@@ -109,7 +109,8 @@ class AdminUserController extends Controller
             'l_name' => 'required',
             'email' => 'required|max:255|unique:admins',
             'password' => 'required|same:confirm_password|min:8',
-            'phone' => 'required',
+            'phone' => 'required|unique:admins',
+            'warehouse_id'=>'nullable|unique:admins',
         ], [
             'f_name.required' => 'First name is required!',
             'l_name.required' => 'Last name is required!',

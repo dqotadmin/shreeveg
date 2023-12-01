@@ -27,7 +27,7 @@
         <div class="col-sm-12 col-lg-12">
             <div class="card-body pt-sm-0 pb-sm-4">
 
-                <form action="{{route('admin.warehouse-admin-update',[$admins['id']])}}" method="post"
+                <form action="{{route('admin.admin-update',[$admins['id']])}}" method="post"
                     enctype="multipart/form-data">
                     @csrf
                     <!-- Card -->
@@ -114,7 +114,7 @@
                                         <option value="{{$user->Store->id}}">{{$user->Store->name}}</option>
                                         @else
                                         <option value="" disabled selected>Select Store </option>
-                                        @foreach(\App\Model\Store::where('status', 1)->where('deleted_at', null)->get()
+                                        @foreach(\App\Model\Store::where('status', 1)->where('warehouse_id', auth('admin')->user()->warehouse_id)->where('deleted_at', null)->get()
                                         as $store)
                                         <option value="{{$store['id']}}"
                                             {{$store->id == $admins->store_id ? 'selected' : '';}}>{{$store['name']}}
@@ -264,7 +264,7 @@
                     </div>
                     <div class="d-flex justify-content-end">
 
-                        <a href="{{route('admin.warehouse-admin',['role_id'=>$role->id])}}" type="button"
+                        <a href="{{route('admin.admin',['role_id'=>$role->id])}}" type="button"
                             class="btn btn--reset mr-2"> {{translate('Back')}}</a>
                         <button type="submit" class="btn btn-primary">{{ translate('Update') }}</button>
                     </div>

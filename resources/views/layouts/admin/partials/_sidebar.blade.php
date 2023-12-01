@@ -380,7 +380,7 @@
 
                         @endif
 
-                        @if( auth('admin')->user()->admin_role_id == 1 || auth('admin')->user()->admin_role_id == 6  || auth('admin')->user()->admin_role_id == 3)
+                        @if( auth('admin')->user()->admin_role_id == 1 || auth('admin')->user()->admin_role_id == 6  )
 
                         <li class="navbar-vertical-aside-has-menu ">
                             <a class="js-navbar-vertical-aside-menu-link nav-link"

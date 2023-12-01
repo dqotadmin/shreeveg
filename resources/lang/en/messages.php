@@ -2451,4 +2451,8 @@
   'broker management' => 'Broker management',
   'store sales management' => 'Store sales management',
   'Warehouse Receiver Inserted Successfully!' => 'Warehouse Receiver Inserted Successfully!',
+  'Store Sales Person Inserted Successfully!' => 'Store Sales Person Inserted Successfully!',
+  'Broker Inserted Successfully!' => 'Broker Inserted Successfully!',
+  'Broker updated successfully!' => 'Broker updated successfully!',
+  'Store Added Successfully!' => 'Store Added Successfully!',
 );

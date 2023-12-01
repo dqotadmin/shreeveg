@@ -24,13 +24,13 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
         Route::get('/', 'DashboardController@dashboard')->name('dashboard');
         Route::post('order-stats', 'DashboardController@order_stats')->name('order-stats');
         //  admin roles start
-        Route::get('warehouse-admin', 'AdminUserController@index')->name('warehouse-admin');
+        Route::get('admin', 'AdminUserController@index')->name('admin');
         Route::get('user-management-create', 'AdminUserController@user_management_create')->name('user-management-create');
-        Route::post('warehouse-admin', 'AdminUserController@store')->name('warehouse-admin');
-        Route::get('warehouse-admin-status/{id}/{status}', 'AdminUserController@status')->name('warehouse-admin-status');
-        Route::get('warehouse-admin-edit/{id}', 'AdminUserController@edit')->name('warehouse-admin-edit');
-        Route::delete('warehouse-admin-delete/{id}', 'AdminUserController@delete')->name('warehouse-admin-delete');
-        Route::post('warehouse-admin-update/{id}', 'AdminUserController@update')->name('warehouse-admin-update');
+        Route::post('admin', 'AdminUserController@store')->name('admin');
+        Route::get('admin-status/{id}/{status}', 'AdminUserController@status')->name('admin-status');
+        Route::get('admin-edit/{id}', 'AdminUserController@edit')->name('admin-edit');
+        Route::delete('admin-delete/{id}', 'AdminUserController@delete')->name('admin-delete');
+        Route::post('admin-update/{id}', 'AdminUserController@update')->name('admin-update');
         Route::get('get-cities/{state}', 'AdminUserController@getCities')->name('get-cities');
 
         //end
@@ -41,7 +41,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
         Route::get('dashboard/order-statistics', 'DashboardController@get_order_statitics')->name('dashboard.order-statistics');
         Route::get('dashboard/earning-statistics', 'DashboardController@get_earning_statitics')->name('dashboard.earning-statistics');
 
-        Route::get('warehouse-admin', 'AdminUserController@index')->name('user-management');
+        Route::get('admin', 'AdminUserController@index')->name('user-management');
 
         Route::resource('broker-rate-list', 'BrokerRateListController');
         Route::resource('broker-order-list', 'BrokerOrderListController');

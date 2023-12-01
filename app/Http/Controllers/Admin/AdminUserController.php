@@ -145,17 +145,17 @@ class AdminUserController extends Controller
         $adminId = $admin->id;
         $bankDetail = new BankDetail([
             'user_id' => $adminId,
-            'account_number' => $request->account_number,
-            'account_holder' => $request->account_holder,
-            'bank_name' => $request->bank_name,
-            'ifsc_code' => $request->ifsc_code,
-            'upi_id' => $request->upi_id,
-            'upi_number' => $request->upi_number,
+            'account_number' => $request->account_number ? $request->account_number : '',
+            'account_holder' => $request->account_holder ? $request->account_holder : '',
+            'bank_name' => $request->bank_name ? $request->bank_name : '',
+            'ifsc_code' => $request->ifsc_code ? $request->ifsc_code : '',
+            'upi_id' => $request->upi_id ? $request->upi_id : '',
+            'upi_number' => $request->upi_number ? $request->upi_number : '',
             // Add other fields as needed
         ]);
         $bankDetail->save();
         Toastr::success(translate($request->name . ' Inserted Successfully!'));
-        return redirect()->route('admin.warehouse-admin', ['role_id' => $request->admin_role_id]);
+        return redirect()->route('admin.admin', ['role_id' => $request->admin_role_id]);
     }
 
     public function edit(Request $request, $id)
@@ -225,7 +225,7 @@ class AdminUserController extends Controller
             // You might want to throw an exception or return an error response
         }
         Toastr::success(translate($request->name . ' updated successfully!'));
-        return redirect()->route('admin.warehouse-admin', ['role_id' => $request->admin_role_id]);
+        return redirect()->route('admin.admin', ['role_id' => $request->admin_role_id]);
     }
 
     function store_index(Request $request)

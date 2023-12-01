@@ -42,24 +42,32 @@
                         <div class="row align-items-end g-4" style="margin-top: 40px;">
                         <div class="col-sm-6">
                                 <label class="form-label" for=" "> {{ translate('City') }} </label>
-                                <select name="city_id" id="click_on_city" class="sget_city  form-control" disabled="true">
+                                @if(auth('admin')->user()->admin_role_id == 3)
+                                <input value="{{auth('admin')->user()->city->city}}" class="form-control" readonly>
+                                <input value="{{auth('admin')->user()->city_id}}" name="city_id" type="hidden" class="form-control" readonly>
+                                      @else <select name="city_id" id="click_on_city" class="sget_city  form-control" >
                                 <option value="" disabled selected>Select City</option>
                                     @foreach(\App\Model\City::where('status','1')->get() as $city)
                                     <option value="{{$city->id}}" {{$city->id==$stores->city_id ? 'selected' : '';}}>{{$city->city}}</option>
                                     @endforeach
                                 </select>
+                                @endif
                             </div>
 
                             <div class="col-sm-6">
                                 <label class="form-label" for="">{{ translate('Warehouse') }}
                                 </label>
-                                <select name="warehouse_id" id="" class="get_warehouse form-control" disabled="true">
+                                @if(auth('admin')->user()->admin_role_id == 3)
+                                <input value="{{auth('admin')->user()->warehouse->name}}" class="form-control" readonly>
+                                <input value="{{auth('admin')->user()->warehouse_id}}" name="warehouse_id" type="hidden" class="form-control" readonly>
+                                @else  <select name="warehouse_id" id="" class="get_warehouse form-control" >
                                 <option value="{{$stores->warehouse_id}}" >
                                 @if (isset($stores) && isset($stores->warehouse) && isset($stores->warehouse->name)) 
                                 {{$stores->warehouse->name}}
                                 @endif
                                 </option>
                                 </select>
+                                @endif
                             </div>
                         </div>
                 </div>

@@ -2436,4 +2436,5 @@
   'order detail' => 'Order detail',
   'Apna Bazar Inserted Successfully!' => 'Apna Bazar Inserted Successfully!',
   'order remved' => 'Order remved',
+  'Margin Added Successfully!' => 'Margin Added Successfully!',
 );

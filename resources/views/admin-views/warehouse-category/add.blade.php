@@ -54,7 +54,7 @@
                                         </label>
                                         <select id="city_code" name="category_id[]"
                                             class="city_code form-control chosen-select" multiple>
-                                            @foreach($warehouses->where('status','1') as $key=>$warehouse)
+                                            @foreach($warehouses as $key=>$warehouse)
                                             <option value="{{$warehouse['category_id']}}">{{$warehouse->getCategory->name}}
                                             </option>
                                             @endforeach

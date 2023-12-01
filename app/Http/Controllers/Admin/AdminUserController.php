@@ -144,6 +144,7 @@ class AdminUserController extends Controller
   
     public function status(Request $request): RedirectResponse
     {
+       
         $admin = $this->admin->find($request->id);
         $admin->status = $request->status;
         $admin->save();

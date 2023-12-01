@@ -103,7 +103,7 @@ class WarehouseCategoryController extends Controller
         $row->save();
 
      }
-        Toastr::success(translate('Warehouse Category Group Added Successfully!') );
+        Toastr::success(translate('Margin Added Successfully!') );
         return redirect()->route('admin.warehouse-category.group-list');
     }
     function create_group_margin_individual($group_name,Request $request): View|Factory|Application
@@ -124,12 +124,12 @@ class WarehouseCategoryController extends Controller
             }
             if(isset($request->customer_margin[$key])){
                 $row->customer_margin = $request->customer_margin[$key];
-            }
+            } 
            
             $row->save();
         }
         // dd($request->all());
-        Toastr::success(translate('Warehouse Category Group Added Successfully!') );
+        Toastr::success(translate('Margin Added Successfully!') );
         return redirect()->back();
     }
     
@@ -150,11 +150,12 @@ class WarehouseCategoryController extends Controller
      */
     public function status(Request $request): RedirectResponse
     {
-        $city = $this->warehouse->find($request->id);
-        $city->status = $request->status;
-        $city->save();
-        Toastr::success(translate('Warehouse status updated!'));
+        $warehouse_categories = $this->warehouse_categories->find($request->id);
+        $warehouse_categories->status = $request->status;
+        $warehouse_categories->save();
+        Toastr::success(translate('Warehouse category status updated!'));
         return back();
+         
     }
 
     /**

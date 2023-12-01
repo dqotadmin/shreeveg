@@ -42,6 +42,7 @@
                 </div>
             </div>
             <!-- Table -->
+
             <div class="table-responsive datatable-custom">
                 <table class="table table-borderless table-thead-bordered table-nowrap table-align-middle card-table">
                     <thead class="thead-light">
@@ -76,13 +77,17 @@
                             </td>
                             <td>
                                 <div class="btn--container">
-                                    <button type="submit" class="action-btn btn--primary btn-outline-primary">{{translate('save')}}</button>
-                                    <a class="action-btn btn--primary btn-outline-primary"
+                                    <button type="submit" class="action-btn btn--primary ">{{translate('save')}}</button>
+                                    <div>
+                                        <a class="action-btn btn--primary btn-outline-primary" style="width: 94px;height: 46px;"
                                         href="{{route('admin.warehouse-category.create-group-margin-individual',[$warehouse->group_name])}}">  
-                                        <i class="tio-invisible"></i></a>
+                                       
+                                            View all
+                                        
+                                        </a>
+                                    </div>
                                 </div>
                             </td> 
-
                         </tr>
                         </form>
                         @endforeach

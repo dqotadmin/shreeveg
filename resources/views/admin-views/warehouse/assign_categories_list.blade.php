@@ -86,7 +86,7 @@
                                             <th class="text-center">{{translate('#')}}</th>
                                             <th>{{translate('Category Name')}}</th>
                                             <th>{{translate('Order')}}</th>
-                                            <th>{{translate('status')}}</th>
+                                            <!-- <th>{{translate('status')}}</th> -->
                                         </tr>
                                     </thead>
 
@@ -108,7 +108,7 @@
                                             </td>
                                            
 
-                                            <td>
+                                            <!-- <td>
 
                                                 <label class="toggle-switch">
                                                     <input type="checkbox" name="status[]"
@@ -123,7 +123,7 @@
                                                     </span>
                                                 </label>
 
-                                            </td>
+                                            </td> -->
 
                                        </tr>
                                         @endif

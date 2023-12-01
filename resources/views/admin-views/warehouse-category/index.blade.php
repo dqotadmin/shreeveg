@@ -87,7 +87,7 @@
 
                             <label class="toggle-switch">
                                 <input type="checkbox" name="status[]"
-                                    onclick="status_change_alert('{{ route('admin.warehouse.wh-assign-category-status', [$warehouse->id, $warehouse->status ? 0 : 1]) }}', '{{ $warehouse->status? translate('you_want_to_disable_this_category'): translate('you_want_to_active_this_category') }}', event)"
+                                    onclick="status_change_alert('{{ route('admin.warehouse-category.status', [$warehouse->id, $warehouse->status ? 0 : 1]) }}', '{{ $warehouse->status? translate('you_want_to_disable_this_category'): translate('you_want_to_active_this_category') }}', event)"
                                     class="toggle-switch-input"
                                     id="stocksCheckbox{{ $warehouse->id }}"
                                     {{ $warehouse->status ? 'checked' : '' }}>

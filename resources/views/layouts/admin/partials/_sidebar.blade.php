@@ -421,7 +421,7 @@
 
              
                         @if(Helpers::module_permission_check(MANAGEMENT_SECTION['store_management']))
- 
+                       
                         <!-- Warehouse, store, location management from here -->
                             @if( auth('admin')->user()->admin_role_id == 1 || auth('admin')->user()->admin_role_id == 3)
                                 <li class="nav-item">
@@ -469,8 +469,8 @@
                                 </li>
                                 @endif
                             @endif
-                            @if( auth('admin')->user()->admin_role_id == 1 || auth('admin')->user()->admin_role_id == 3)
-
+                           
+                            @if(in_array(auth('admin')->user()->admin_role_id,[1,3,6]))
                             <li class="navbar-vertical-aside-has-menu {{Request::is('admin/store.index')?'active':''}}">
                                 <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{route('admin.store.list')}}"
                                     title="{{translate('Store')}}">

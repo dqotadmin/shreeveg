@@ -152,8 +152,6 @@ class PurchaseStoreOrderController extends Controller
         return view($this->view_folder . '.show', compact('row', 'user'));
     }
 
-
-
     public function updateStatus(Request $request, $id)
     {
 
@@ -167,7 +165,7 @@ class PurchaseStoreOrderController extends Controller
             }
 
             $row->status = $request->status;
-            if ($role == 8) {
+            if ($role == 6) {
                 $row->broker_comments = $request->broker_comments;
             } else {
                 $row->warehouse_comments = $request->warehouse_comments;

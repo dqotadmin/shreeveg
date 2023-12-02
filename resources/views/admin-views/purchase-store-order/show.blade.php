@@ -34,7 +34,7 @@
     </div>
     <div class="col-12">
         <div class="btn--container justify-content-end">
-            <a href="{{route('admin.purchase-warehouse-order.index')}}" type="reset" class="btn btn--reset">
+            <a href="{{route('admin.store.purchase-store-orders.index')}}" type="reset" class="btn btn--reset">
             {{translate('Back')}}</a>
         </div>
     </div>
@@ -79,7 +79,7 @@
                 </tbody>
             </table>
 
-
+            @if(in_array($user->admin_role_id ,[3,6]))
             <form action="{{route('admin.store.updateStatus',$row->id)}}" method="post">
             @csrf
             <div class="col-md-6">
@@ -96,6 +96,7 @@
                     @endif
                 </select>
             </div>
+            
             @if($user->admin_role_id == 6)
                 <div class="col-md-6">
                     <label class="input-label" for="exampleFormControlInput1">{{translate('comments')}}</label>
@@ -114,6 +115,9 @@
                 <div class="text-right">
                     <button type="submit" class="btn btn-primary px-5">{{translate('save')}}</button>
                 </div>
+            @endif
+
+
             @endif
         </div>
     </div>

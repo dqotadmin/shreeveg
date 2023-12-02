@@ -2466,4 +2466,5 @@
   'Create New Group' => 'Create New Group',
   'Update Group' => 'Update Group',
   'With margin Group List' => 'With margin Group List',
+  'order not delivered till now!' => 'Order not delivered till now!',
 );

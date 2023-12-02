@@ -146,12 +146,12 @@ if ($extra_discount) {
                             <span>{{translate('cash')}}</span>
                         </label>
                     </li>
-                    <li>
+                    {{-- <li>
                         <label>
                             <input type="radio" name="type" value="card" hidden="">
                             <span>{{translate('card')}}</span>
                         </label>
-                    </li>
+                    </li> --}}
                 </ul>
             </div>
             <div class="row button--bottom-fixed g-1 bg-white ">

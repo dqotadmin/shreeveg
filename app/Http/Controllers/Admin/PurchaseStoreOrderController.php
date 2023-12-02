@@ -49,7 +49,7 @@ class PurchaseStoreOrderController extends Controller
         $rows = $this->mTable::query();
         if ($user->admin_role_id == 6) {
             $rows->where('store_id', $user->store_id);
-        } else {
+        } elseif ($user->admin_role_id == 3) {
             $rows->where('warehouse_id', $user->warehouse_id);
         }
 
@@ -58,10 +58,13 @@ class PurchaseStoreOrderController extends Controller
             $rows->where(function ($q) use ($key) {
                 foreach ($key as $value) {
                     $q->orWhere('invoice_number', 'like', "%{$value}%");
+                    $q->orWhere('title', 'like', "%{$value}%");
                     $q->orWhere('gstin_number', 'like', "%{$value}%");
                     $q->orWhere('status', 'like', "%{$value}%");
                 }
             })->orWhereHas('warehouseDetail', function ($q1) use ($search) {
+                $q1->where('name', 'like', "%{$search}%");
+            })->orWhereHas('storeDetail', function ($q1) use ($search) {
                 $q1->where('name', 'like', "%{$search}%");
             });
             $query_param = ['search' => $request['search']];
@@ -132,7 +135,7 @@ class PurchaseStoreOrderController extends Controller
             $row->save();
             //DB::commit();
             Toastr::success(translate($request->title . ' Inserted Successfully!'));
-            return redirect()->route('admin.broker-rate-list.index');
+            return redirect()->route('admin.store.purchase-store-orders.index');
         } catch (\Exception $e) {
             // DB::rollback();
             $msg = $e->getMessage();
@@ -151,13 +154,18 @@ class PurchaseStoreOrderController extends Controller
 
 
 
-    public function wh_receiver_update_status(Request $request, $id)
+    public function updateStatus(Request $request, $id)
     {
 
         try {
             DB::beginTransaction();
             $role = auth('admin')->user()->admin_role_id;
             $row = $this->mTable::find($id);
+            if ($request->status == 'Received' && $row->status != 'Delivered') {
+                Toastr::error(translate('order not delivered till now!'));
+                return redirect()->back()->withInput();
+            }
+
             $row->status = $request->status;
             if ($role == 8) {
                 $row->broker_comments = $request->broker_comments;
@@ -169,7 +177,7 @@ class PurchaseStoreOrderController extends Controller
 
             DB::commit();
             Toastr::success(translate('status updated Successfully!'));
-            return redirect()->route('admin.purchase-warehouse-order.index');
+            return redirect()->route('admin.store.purchase-store-orders.index');
         } catch (\Exception $e) {
             DB::rollback();
             $msg = $e->getMessage();

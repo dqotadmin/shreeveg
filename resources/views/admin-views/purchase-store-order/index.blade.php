@@ -19,12 +19,10 @@
     <div class="row g-2">
         <div class="col-sm-12 col-lg-12">
             <div class="btn--container justify-content-end m-2">
+                @if(in_array($user->admin_role_id,[3,6]))
                 <a type="button"  href="{{route('admin.store.purchase-store-orders.create')}}" class="btn btn--primary">{{translate('Add new')}}</a>
+                @endif
             </div>
-                @php($data = Helpers::get_business_settings('language'))
-                @php($default_lang = Helpers::get_default_language())
-                {{-- @php($default_lang = 'en') --}}
-            
             </div>
         </div>
     <div class="card">
@@ -53,11 +51,13 @@
                 <thead class="thead-light">
                     <tr>
                         <th class="border-0">{{translate('#')}}</th>
-                        @if($user->admin_role_id == 6)
+                        @if(in_array($user->admin_role_id ,[6,1]))
                         <th class="border-0">{{translate('warehouse')}}</th>
-                        @else
+                        @endif
+                        @if(in_array($user->admin_role_id ,[3,1]))
                         <th class="border-0">{{translate('store')}}</th>
                         @endif
+                        <th class="border-0">{{translate('title')}}</th>
                         <th class="border-0">{{translate('invoice no')}}</th>
                         <th class="border-0">{{translate('item')}}</th>
                         <th class="border-0">{{translate('amount')}}</th>
@@ -70,13 +70,25 @@
                     @foreach($rows as $key=>$row)
                     <tr>
                         <td>{{$key+1}}</td>
-                      
+                        @if(in_array($user->admin_role_id ,[6,1]))
                         <td>
                             <span class="d-block font-size-sm text-body text-trim-25">
-                                {{ ($user->admin_role_id == 6)?$row->warehouseDetail->name:$row->storeDetail->name  }} 
+                                {{ $row->warehouseDetail->name }} 
                             </span>
                         </td>
-                       
+                        @endif
+                        @if(in_array($user->admin_role_id ,[3,1]))
+                        <td>
+                            <span class="d-block font-size-sm text-body text-trim-25">
+                                {{ $row->storeDetail->name  }} 
+                            </span>
+                        </td>
+                        @endif
+                        <td>
+                            <span class="d-block font-size-sm text-body text-trim-25">
+                            {{$row->title }}
+                            </span>
+                        </td>
                         <td>
                             <span class="d-block font-size-sm text-body text-trim-25">
                             {{$row->invoice_number }}

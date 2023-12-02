@@ -2461,5 +2461,10 @@
   'Broker Inserted Successfully!' => 'Broker Inserted Successfully!',
   'Broker updated successfully!' => 'Broker updated successfully!',
   'Store Added Successfully!' => 'Store Added Successfully!',
+  'Add New Group' => 'Add New Group',
+  'groups' => 'Groups',
+  'Create New Group' => 'Create New Group',
+  'Update Group' => 'Update Group',
+  'With margin Group List' => 'With margin Group List',
   'order not delivered till now!' => 'Order not delivered till now!',
 );

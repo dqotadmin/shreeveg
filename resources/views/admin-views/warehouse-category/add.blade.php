@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', translate('Add New Warehouse'))
+@section('title', translate('Add New Group'))
 
 @push('css_or_js')
 <style>
@@ -18,7 +18,7 @@
                 <img src="{{asset('public/assets/admin/img/category.png')}}" class="w--24" alt="">
             </span>
             <span>
-                {{translate('warehouse')}}
+                {{translate('Create New Group')}}
             </span>
         </h1>
     </div>
@@ -34,7 +34,7 @@
                             <div class="card-header">
                                 <h5 class="card-title">
                                     <i class="tio-user"></i>
-                                    {{translate('Grouping')}}
+                                    {{translate('Group')}}
                                 </h5>
                             </div>
                             <div class="card-body pt-sm-0 pb-sm-4">
@@ -80,9 +80,9 @@
 @endsection
 
 @push('script_2')
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
-<link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet" />
+<link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet" /> -->
 
 
 </body>

@@ -294,8 +294,8 @@ class WarehouseCategoryController extends Controller
         }
 
         Toastr::success(translate('Warehouse Categories Added Successfully!'));
-        return redirect()->route('admin.warehouse.wh-assign-category-page',[$warehouse_id]);
-        
+        // return redirect()->route('admin.warehouse.wh-assign-category-page',[$warehouse_id]);
+        return redirect()->route('admin.warehouse.wh-assign-category-page', ['warehouse_id' => $warehouse_id]);
     }
   
 

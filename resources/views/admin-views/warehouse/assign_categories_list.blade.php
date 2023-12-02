@@ -24,7 +24,10 @@
     <div class="row g-2">
         <div class="col-sm-12 col-lg-12">
             <div class="btn--container justify-content-end m-2">
-                <a type="button" href="{{route('admin.warehouse.wh-assign-category-page-create',[$warehouses['id']])}}"
+            <a type="button" href="{{route('admin.warehouse.list')}}"
+            class="btn btn--reset">{{translate('Back')}}</a>
+                    
+                    <a type="button" href="{{route('admin.warehouse.wh-assign-category-page-create',[$warehouses['id']])}}"
                     class="btn btn--primary">{{translate('Category Assign')}}</a>
             </div>
             @php($data = Helpers::get_business_settings('language'))

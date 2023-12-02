@@ -718,7 +718,7 @@
                         </li>
                         <!-- End Pages -->
                         @endif
-
+                        @if(auth('admin')->user()->admin_role_id == 3)
                         @if(Helpers::module_permission_check(MANAGEMENT_SECTION['category_management']))
                         <li class="nav-item">
                             <small class="nav-subtitle">{{translate('category_management')}}</small>
@@ -747,13 +747,13 @@
                                     <a class="nav-link" href="{{route('admin.warehouse-category.group-list')}}"
                                         title="{{translate('all_categories')}}">
                                         <span class="tio-circle nav-indicator-icon"></span>
-                                        <span class="text-truncate">{{translate('Grouping List')}}</span>
+                                        <span class="text-truncate">{{translate('Group List')}}</span>
                                     </a>
                                 </li>
                             </ul>
                         </li>
                         @endif
-
+                        @endif
                         @if(Helpers::module_permission_check(MANAGEMENT_SECTION['promotion_management']))
                         <!-- Promotion Manegement 
                             <li class="nav-item">

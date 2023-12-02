@@ -155,9 +155,8 @@ class CategoryController extends Controller
     function store(Request $request): RedirectResponse
     {
 
-        //dd($request);die;
         $request->validate([
-            'parent_id' => 'required',
+            'category_type' => 'required',
             'name' => 'required|unique:categories',
             'category_code' => 'required|unique:categories',
             'title_silver' => 'required',
@@ -307,9 +306,8 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id): RedirectResponse
     {
-        //dd($request);die;
         $request->validate([
-            'parent_id' => 'required',
+            'category_type' => 'required',
             //'name' => 'required|unique:categories',
             'name' =>'required|unique:categories,name,'.$request->id,
             //'category_code' => 'required|unique:categories',

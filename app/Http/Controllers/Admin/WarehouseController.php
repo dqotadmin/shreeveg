@@ -38,7 +38,7 @@ class WarehouseController extends Controller
         $search = $request['search'];
         if ($request->has('search')) {
             $key = explode(' ', $request['search']);
-            $warehouses = $this->warehouse->where(function ($q) use ($key) {
+            $warehouses = $this->warehouse->where('deleted_at', null)->where(function ($q) use ($key) {
                 foreach ($key as $value) {
                     $q->orWhere('name', 'like', "%{$value}%");
                     $q->orWhere('code', 'like', "%{$value}%");
@@ -46,7 +46,7 @@ class WarehouseController extends Controller
             });
             $query_param = ['search' => $request['search']];
         } else {
-            $warehouses = $this->warehouse;
+            $warehouses = $this->warehouse->where('deleted_at', null);
         }
         $warehouses = $warehouses->latest()->paginate(Helpers::getPagination())->appends($query_param);
         return view('admin-views.warehouse.index', compact('warehouses', 'search'));

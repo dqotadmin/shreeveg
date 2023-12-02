@@ -100,7 +100,7 @@
                                     src="{{asset('storage/app/public/customer/'.$customer->image)}}"
                                     onerror="this.src='{{asset('/public/assets/admin/img/admin.png')}}'">
                                 <div class="table--media-body">
-                                    <h5 class="title m-0">
+                                    <h5 class="title m-0" style="text-transform: capitalize;">
                                         {{$customer['f_name']." ".$customer['l_name']}}
                                     </h5>
                                 </div>

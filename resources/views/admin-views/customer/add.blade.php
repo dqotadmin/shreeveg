@@ -38,13 +38,13 @@
                             <div class="col-md-12">
                                 <label class="input-label"
                                     for="exampleFormControlInput1">{{translate('First Name')}}</label>
-                                <input type="text" name="f_name" value="{{ old('f_name') }}" class="form-control"
+                                <input type="text" name="f_name" value="{{ old('f_name') }}" class="form-control" style="text-transform: capitalize;"
                                     placeholder="{{translate('Ex : First Name')}}" required>
                             </div>
                             <div class="col-md-12">
                                 <label class="input-label"
                                     for="exampleFormControlInput1">{{translate('Last Name')}}</label>
-                                <input type="text" name="l_name" value="{{ old('l_name') }}" class="form-control"
+                                <input type="text" name="l_name" value="{{ old('l_name') }}" class="form-control"style="text-transform: capitalize;"
                                     placeholder="{{translate('Ex : Last Name')}}" required>
                             </div>
                         <div class="col-md-12">

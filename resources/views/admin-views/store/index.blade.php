@@ -100,7 +100,7 @@
                         </td>
                         <td>
                             <span class="d-block font-size-sm text-body text-trim-50">
-                                {{$store['area_id']}}
+                                {{@$store->area->area}}
                             </span>
                         </td>
                         <td>

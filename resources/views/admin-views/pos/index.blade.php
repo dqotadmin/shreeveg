@@ -94,11 +94,12 @@
                                     </div>
                                 </div>
                                 <div class="w-100 py-2">
-                                    <h5>{{translate('Select Warehouse')}}</h5>
+                                    <h5>{{translate('Select store' )}}</h5>
                                     <select onchange="store_key('branch_id',this.value)" id='branch' name="branch_id" class="js-data-example-ajax-2 form-control">
-                                        @foreach($branches as $branch)
+                                        <option value="{{ @$authUser->Store->id }}" selected>{{ @$authUser->Store->name }}</option>
+                                        {{-- @foreach($branches as $branch)
                                             <option value="{{$branch['id']}}" {{session('branch_id') == $branch['id'] ? 'selected' : '' }}>{{$branch['name']}}</option>
-                                        @endforeach
+                                        @endforeach --}}
                                     </select>
                                 </div>
                                 <div class='w-100' id="cart">

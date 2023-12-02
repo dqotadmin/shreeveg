@@ -69,6 +69,7 @@
                                 </a>
                                 <ul class="js-navbar-vertical-aside-submenu nav nav-sub"
                                     style="display: {{Request::is('admin/pos*')?'block':'none'}}">
+                                    @if(in_array(auth('admin')->user()->admin_role_id,[3,6]))
                                     <li class="nav-item {{Request::is('admin/pos')?'active':''}}">
                                         <a class="nav-link " href="{{route('admin.pos.index')}}"
                                            title="{{translate('New Sale')}}">
@@ -77,6 +78,7 @@
                                                 class="text-truncate">{{translate('New Sale')}}</span>
                                         </a>
                                     </li>
+                                    @endif
                                     <li class="nav-item {{Request::is('admin/pos/orders')?'active':''}}">
                                         <a class="nav-link " href="{{route('admin.pos.orders')}}"
                                            title="{{translate('orders')}}">

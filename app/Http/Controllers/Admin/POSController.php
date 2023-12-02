@@ -42,7 +42,8 @@ class POSController extends Controller
         private OrderDetail $order_detail,
         private Product $product,
         private User $user
-    ){}
+    ) {
+    }
 
     /**
      * @param Request $request
@@ -67,9 +68,9 @@ class POSController extends Controller
 
         $branches = $this->branch->all();
         $users = $this->user->all();
-
+        $authUser = auth('admin')->user();
         //dd($products);
-        return view('admin-views.pos.index', compact('categories', 'products', 'category', 'keyword', 'branches', 'users'));
+        return view('admin-views.pos.index', compact('categories', 'products', 'category', 'keyword', 'branches', 'users', 'authUser'));
     }
 
     /**
@@ -127,7 +128,7 @@ class POSController extends Controller
      * @param $price
      * @return float
      */
-    public function discount_calculation($product, $price) : float
+    public function discount_calculation($product, $price): float
     {
         $category_id = $product['category_id'];
         /* foreach (json_decode($product['category_ids'], true) as $cat) {
@@ -138,9 +139,9 @@ class POSController extends Controller
 
         $category_discount = Helpers::category_discount_calculate($category_id, $price);
         $product_discount = Helpers::discount_calculate($product, $price);
-        if ($category_discount >= $price){
+        if ($category_discount >= $price) {
             $discount = $product_discount;
-        }else{
+        } else {
             $discount = max($category_discount, $product_discount);
         }
         return $discount;
@@ -206,8 +207,7 @@ class POSController extends Controller
         } elseif ($request->type == 'percent' && $request->discount > 100) {
             Toastr::error(translate('Extra_discount_can_not_be_more_than_100_percent'));
             return back();
-        }
-        elseif ($request->type == 'amount' && $request->discount > $total) {
+        } elseif ($request->type == 'amount' && $request->discount > $total) {
             Toastr::error(translate('Extra_discount_can_not_be_more_than_total_price'));
             return back();
         }
@@ -253,7 +253,7 @@ class POSController extends Controller
         $variations = [];
         $price = 0;
 
-        if ($product['total_stock'] < $request['quantity']){
+        if ($product['total_stock'] < $request['quantity']) {
             return response()->json([
                 'data' => 0
             ]);
@@ -280,7 +280,6 @@ class POSController extends Controller
                         ]);
                     }
                 }
-
             }
         }
         //Check the string and decreases quantity for the stock
@@ -378,7 +377,7 @@ class POSController extends Controller
                 return $query->whereDate('created_at', '>=', $start_date)
                     ->whereDate('created_at', '<=', $end_date);
             });
-        $query_param = ['branch_id' => $branch_id, 'start_date' => $start_date,'end_date' => $end_date ];
+        $query_param = ['branch_id' => $branch_id, 'start_date' => $start_date, 'end_date' => $end_date];
 
         if ($request->has('search')) {
             $key = explode(' ', $request['search']);
@@ -396,7 +395,7 @@ class POSController extends Controller
 
         //return $orders;
 
-        return view('admin-views.pos.order.list', compact('orders','search', 'branches', 'branch_id', 'start_date', 'end_date'));
+        return view('admin-views.pos.order.list', compact('orders', 'search', 'branches', 'branch_id', 'start_date', 'end_date'));
     }
 
     /**
@@ -406,8 +405,8 @@ class POSController extends Controller
     public function order_details($id): View|Factory|RedirectResponse|Application
     {
         $order = $this->order->with('details')->where(['id' => $id])->first();
-        $delivery_man = $this->delivery_man->where(['is_active'=>1])
-            ->where(function($query) use ($order) {
+        $delivery_man = $this->delivery_man->where(['is_active' => 1])
+            ->where(function ($query) use ($order) {
                 $query->where('branch_id', $order->branch_id)
                     ->orWhere('branch_id', 0);
             })
@@ -469,7 +468,7 @@ class POSController extends Controller
         foreach ($cart as $c) {
             if (is_array($c)) {
                 $product = $this->product->find($c['id']);
-                if(!empty($product['variations'])){
+                if (!empty($product['variations'])) {
                     $type = $c['variant'];
                     foreach (json_decode($product['variations'], true) as $var) {
                         if ($type == $var['type'] && $var['stock'] < $c['quantity']) {
@@ -477,8 +476,8 @@ class POSController extends Controller
                             return back();
                         }
                     }
-                }else{
-                    if(($product->total_stock - $c['quantity']) < 0) {
+                } else {
+                    if (($product->total_stock - $c['quantity']) < 0) {
                         Toastr::error($product->name . ' ' . translate('is out of stock'));
                         return back();
                     }
@@ -512,10 +511,10 @@ class POSController extends Controller
                     $category_discount = Helpers::category_discount_calculate($category_id, $price);
                     $product_discount = Helpers::discount_calculate($product, $price);
 
-                    if ($category_discount >= $price){
+                    if ($category_discount >= $price) {
                         $discount = $product_discount;
                         $discount_type = 'discount_on_product';
-                    }else{
+                    } else {
                         $discount = max($category_discount, $product_discount);
                         $discount_type = $product_discount > $category_discount ? 'discount_on_product' : 'discount_on_category';
                     }
@@ -541,7 +540,7 @@ class POSController extends Controller
                     $order_details[] = $or_d;
                 }
                 $var_store = [];
-                if(!empty($product['variations'])){
+                if (!empty($product['variations'])) {
                     $type = $c['variant'];
                     foreach ($product['variations'] as $var) {
                         if ($type == $var['type']) {
@@ -554,7 +553,7 @@ class POSController extends Controller
                 $this->product->where(['id' => $product['id']])->update([
                     'variations' => json_encode($var_store),
                     'total_stock' => $product['total_stock'] - $c['quantity'],
-                    'popularity_count'=>$product['popularity_count']+1
+                    'popularity_count' => $product['popularity_count'] + 1
                 ]);
             }
         }
@@ -618,7 +617,7 @@ class POSController extends Controller
         session()->put($request['key'], $request['value']);
         return response()->json('', 200);
     }
- 
+
     /**
      * @param Request $request
      * @return RedirectResponse
@@ -650,7 +649,7 @@ class POSController extends Controller
         $customer->email = $request->email;
         $customer->phone = $request->phone;
         $customer->image = $image_name;
-        $customer->password = $request->password ? Hash::make($request->password) :Hash::make('12345678');
+        $customer->password = $request->password ? Hash::make($request->password) : Hash::make('12345678');
         $customer->save();
         Toastr::success(translate('Customer added successfully!'));
         return back();
@@ -697,21 +696,21 @@ class POSController extends Controller
         $orders = $query->with('details')->orderBy('id', 'DESC')->get();
 
         $storage = [];
-        foreach($orders as $order){
+        foreach ($orders as $order) {
             $vat_status = $order->details[0] ? $order->details[0]->vat_status : '';
-            if($vat_status == 'included'){
+            if ($vat_status == 'included') {
                 $order_amount = $order['order_amount'] - $order['total_tax_amount'];
-            }else{
+            } else {
                 $order_amount = $order['order_amount'];
             }
 
             $branch = $order->branch ? $order->branch->name : '';
-            $customer = $order->customer ? $order->customer->f_name .' '. $order->customer->l_name : 'Walking Customer';
+            $customer = $order->customer ? $order->customer->f_name . ' ' . $order->customer->l_name : 'Walking Customer';
             $storage[] = [
                 'Order Id' => $order['id'],
-                'Order Date' => date('d M Y',strtotime($order['created_at'])),
+                'Order Date' => date('d M Y', strtotime($order['created_at'])),
                 'Customer' => $customer,
-                'Branch'=>$branch,
+                'Branch' => $branch,
                 'Order Amount' => $order_amount,
                 'Order Status' => $order['order_status'],
                 'Order Type' => $order['order_type'],
@@ -723,6 +722,4 @@ class POSController extends Controller
 
         return (new FastExcel($storage))->download('pos-orders.xlsx');
     }
-
-
 }

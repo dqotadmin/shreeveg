@@ -83,23 +83,6 @@
                             </div>
                         @endif
                     </div>
-                    @endforeach
-                    @else
-                    <div id="english-form">
-                        <div class="form-group">
-                            <label class="input-label" for="exampleFormControlInput1">{{translate('name')}} (EN)</label>
-                            <input type="text" name="name[]" value="{{$product['name']}}" class="form-control"
-                                placeholder="{{translate('New Product')}}" required>
-                        </div>
-                        <input type="hidden" name="lang[]" value="en">
-                        <div class="form-group mb-0">
-                            <label class="input-label" for="exampleFormControlInput1">{{translate('short')}}
-                                {{translate('description')}} (EN)</label>
-                            <textarea name="description[]" class="form-control "
-                                id="hiddenArea">{{ $product['description'] }}</textarea>
-                        </div>
-                    </div>
-                    @endif
                 </div>
             </div>
 

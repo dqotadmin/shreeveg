@@ -19,7 +19,7 @@
                 <span>
                     {{translate('add New Product')}}
                 </span>
-            </h1>
+            </h1> 
         </div>
         <!-- End Page Header -->
 

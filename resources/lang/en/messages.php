@@ -2467,4 +2467,7 @@
   'Update Group' => 'Update Group',
   'With margin Group List' => 'With margin Group List',
   'order not delivered till now!' => 'Order not delivered till now!',
+  '
+                    product updated successfully!' => '
+                    product updated successfully!',
 );

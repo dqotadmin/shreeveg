@@ -27,7 +27,7 @@ class WarehouseCategoryController extends Controller
         private WarehouseCategory $warehouse_categories
 
     ){}
-
+ 
     /**
      * @param Request $request 
      * @return Application|Factory|View

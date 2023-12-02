@@ -24,7 +24,10 @@
 
     <div class="row g-2">
         <div class="col-sm-12 col-lg-12">
-
+        <div class="btn--container justify-content-end m-2">
+                      <a type="button" href="{{route('admin.warehouse-category.group-list')}}"
+                      class="btn btn--reset">{{translate('back')}}</a>
+            </div>
             @php($data = Helpers::get_business_settings('language'))
             @php($default_lang = Helpers::get_default_language())
             {{-- @php($default_lang = 'en') --}}

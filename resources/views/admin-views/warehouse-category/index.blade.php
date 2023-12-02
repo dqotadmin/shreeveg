@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', translate('Add New Warehouse'))
+@section('title', translate('Group'))
 
 @push('css_or_js')
 
@@ -16,7 +16,7 @@
                 <img src="{{asset('public/assets/admin/img/category.png')}}" class="w--24" alt="">
             </span>
             <span>
-                {{translate('Warehouse')}}
+                {{translate('Group List')}}
             </span>
         </h1>
     </div>
@@ -25,9 +25,13 @@
     <div class="row g-2">
         <div class="col-sm-12 col-lg-12">
             <div class="btn--container justify-content-end m-2">
-                <a type="button" href="{{route('admin.warehouse-category.create')}}"
-                    class="btn btn--primary">{{translate('Create Group')}}</a>
+            <a type="button" href="{{route('admin.warehouse-category.group-list')}}"
+                    class="btn btn--info">{{translate('With margin Group List')}}</a>
+                      <a type="button" href="{{route('admin.warehouse-category.create')}}"
+                    class="btn btn--primary">{{translate('Update Group')}}</a>
+                   
             </div>
+            
             @php($data = Helpers::get_business_settings('language'))
             @php($default_lang = Helpers::get_default_language())
             {{-- @php($default_lang = 'en') --}}
@@ -38,7 +42,7 @@
         <div class="card">
             <div class="card-header border-0">
                 <div class="card--header">
-                    <h5 class="card-title">{{translate('Warehouses')}} <span
+                    <h5 class="card-title">{{translate('All Categories')}} <span
                             class="badge badge-soft-secondary">{{ $warehouses->total() }}</span>
                     </h5>
                     <form action="{{url()->current()}}" method="GET">

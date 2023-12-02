@@ -1,4 +1,4 @@
-<?php return array(
+<?php return array (
   'attribute' => 'Attribute',
   'update' => 'Update',
   'name' => 'Name',
@@ -2461,4 +2461,5 @@
   'Broker Inserted Successfully!' => 'Broker Inserted Successfully!',
   'Broker updated successfully!' => 'Broker updated successfully!',
   'Store Added Successfully!' => 'Store Added Successfully!',
+  'order not delivered till now!' => 'Order not delivered till now!',
 );

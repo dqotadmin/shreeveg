@@ -81,7 +81,7 @@
                         <div class="row g-3">
                             <div class="col-md-2">
                                 <div class="form-group mb-0">
-                                    <h5>{{$category->getCategory->name }}</h5>
+                                    <h5>{{@$category->getCategory->name }}</h5>
                                 </div>
                             </div>
                             <?php //dump($category->category_id);

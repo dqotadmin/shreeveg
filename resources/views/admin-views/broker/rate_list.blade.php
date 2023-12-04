@@ -59,7 +59,7 @@
                                                 <tr class="">
                                                     <input type="hidden" name="products[]" value="{{($value->product_id)}}">
                                                 <td>{{ $key+1}}</td>
-                                                <td>{{ $value->productDetail->name }}</td>
+                                                <td>{{ @$value->productDetail->name }}</td>
                                                 <td>{{ $value->available_qty }}</td>
                                                 <td>{{ $value->unit }}</td>
                                                 <td>{{ $value->rate }}</td>

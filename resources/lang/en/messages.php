@@ -1,4 +1,4 @@
-<?php return array(
+<?php return array (
   'attribute' => 'Attribute',
   'update' => 'Update',
   'name' => 'Name',
@@ -2468,5 +2468,5 @@
   'With margin Group List' => 'With margin Group List',
   'order not delivered till now!' => 'Order not delivered till now!',
   'Select store' => 'Select store',
-  'product updated successfully!' => 'product updated successfully!',
+  'four december rate Inserted Successfully!' => 'Four december rate Inserted Successfully!',
 );

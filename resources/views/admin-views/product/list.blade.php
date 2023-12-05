@@ -112,7 +112,9 @@
                                 <th>{{translate('product_name')}}</th>
                                 <th>{{translate('product_code')}}</th>
                                 <th>{{translate('product_category')}}</th>
-                                
+                                @if(auth('admin')->user()->admin_role_id == 3)
+                                <th class="">{{translate('stock')}}</th>
+                                @endif
                                 <th class="text-center">{{translate('status')}}</th>
                                 <th class="text-center">{{translate('action')}}</th>
                             </tr>
@@ -142,12 +144,21 @@
                                         </div>
                                     </td>
                                     <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
-                                        <div class="max-85 text-right">
+                                        <div class="max-85 text-left">
                                             @if (!empty($product->category->name))
                                                 {{ $product->category->name }}
                                             @endif
                                         </div>
                                     </td>
+                                    @if(auth('admin')->user()->admin_role_id == 3)
+                                    <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
+                                        <?php
+                                        foreach(\App\Model\WarehouseProduct::where('warehouse_id',auth('admin')->user()->warehouse_id)->where('product_id',$product->id)->get() as $stock){
+                                            echo $stock->total_stock;
+                                        }
+                                        ?>
+                                       </td>
+                                       @endif
                                     <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
                                         <label class="toggle-switch my-0">
                                             <input type="checkbox"
@@ -163,26 +174,25 @@
                                         @if( auth('admin')->user()->admin_role_id == 1 )
                                             <!-- Dropdown -->
                                             <div class="btn--container justify-content-center">
-                                                <a class="action-btn"
-                                                    href="{{route('admin.product.edit',[$product['id']])}}">
+                                            <a class="action-btn   btn-outline-info" href="{{route('admin.product.view',[$product['id']])}}">
+                                                    <i class="tio-invisible"></i>
+                                                </a>
+                                                 <a class="action-btn"  href="{{route('admin.product.edit',[$product['id']])}}">
                                                 <i class="tio-edit"></i></a>
-                                                <a class="action-btn btn--danger btn-outline-danger" href="javascript:"
-                                                    onclick="form_alert('product-{{$product['id']}}','{{ translate("Want to delete this") }}')">
+                                                <a class="action-btn btn--danger btn-outline-danger" href="javascript:" onclick="form_alert('product-{{$product['id']}}','{{ translate("Want to delete this") }}')">
                                                     <i class="tio-delete-outlined"></i>
                                                 </a>
-                                            </div>
-                                            <form action="{{route('admin.product.delete',[$product['id']])}}"
-                                                    method="post" id="product-{{$product['id']}}">
-                                                @csrf @method('delete')
-                                            </form>
-                                            <!-- End Dropdown -->
-                                        @endif
+                                                <form action="{{route('admin.product.delete',[$product['id']])}}"
+                                                        method="post" id="product-{{$product['id']}}">
+                                                    @csrf @method('delete')
+                                                </form>
+                                                @endif
+                                        @if( auth('admin')->user()->admin_role_id == 3 )
 
-                                        @if( auth('admin')->user()->admin_role_id == 1 )
-                                            <div class="btn--container justify-content-center">
-                                                <a class="action-btn" href="{{route('admin.product.edit',[$product['id']])}}">
-                                                    <i class="tio-edit"></i>
-                                                </a>
+                                                <a class="action-btn"  href="{{route('admin.product.warehouse-edit',[$product['id']])}}">
+                                                <i class="tio-money"></i></a>
+                                            <!-- End Dropdown -->
+                                             
                                             </div>
                                         @endif
                                     </td>

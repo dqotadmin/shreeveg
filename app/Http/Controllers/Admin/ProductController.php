@@ -7,9 +7,11 @@ use App\Http\Controllers\Controller;
 use App\Model\BusinessSetting;
 use App\Model\Category;
 use App\Model\Unit;
+use App\Model\WarehouseProduct;
 use App\Model\FlashDealProduct;
 use App\Model\Product;
 use App\Model\Review;
+use App\Model\WarehouseCategory;
 use App\Model\Tag;
 use App\Model\Translation;
 use Box\Spout\Common\Exception\InvalidArgumentException;
@@ -25,7 +27,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Storage; 
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
 use Rap2hpoutre\FastExcel\FastExcel;
@@ -40,7 +42,9 @@ class ProductController extends Controller
         private Product $product,
         private Review $review,
         private Tag $tag,
-        private Translation $translation
+        private Translation $translation,
+        private WarehouseCategory $warehouse_categories,
+        private WarehouseProduct $warehouse_products
     ){}
 
     /**
@@ -105,21 +109,27 @@ class ProductController extends Controller
      */
     public function list(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
+        $query = $this->product;
+        $authUser = auth('admin')->user();
+        if($authUser->admin_role_id == 3){
+            $assign_categories =  $this->warehouse_categories->where('warehouse_id',$authUser->warehouse_id)->pluck('category_id')->toArray();
+            $query = $query->whereIn('category_id',$assign_categories);
+        }
+      
         $query_param = [];
         $search = $request['search'];
-        if ($request->has('search')) {
+        if ($request->has('search') && $search) {
             $key = explode(' ', $request['search']);
-            $query = $this->product->where(function ($q) use ($key) {
+            $query = $query->where(function ($q) use ($key) {
                 foreach ($key as $value) {
                     $q->orWhere('id', 'like', "%{$value}%")
                         ->orWhere('name', 'like', "%{$value}%");
                 }
-            })->latest();
+            });
             $query_param = ['search' => $request['search']];
-        }else{
-            $query = $this->product->latest();
         }
-        $products = $query->with('category')->paginate(Helpers::getPagination())->appends($query_param);
+
+        $products = $query->latest()->with('category')->paginate(Helpers::getPagination())->appends($query_param);
 
         return view('admin-views.product.list', compact('products','search'));
     }
@@ -161,9 +171,18 @@ class ProductController extends Controller
     {
         $product = $this->product->where(['id' => $id])->first();
         $reviews = $this->review->where(['product_id' => $id])->latest()->paginate(20);
-        return view('admin-views.product.view', compact('product', 'reviews'));
+        $product_id = isset($id) ? $id : 0;
+        return view('admin-views.product.view', compact('product', 'reviews','product_id'));
     }
 
+    public function prices_by_wareohuse($warehouse_id, $product_id){
+        $data =  $this->warehouse_products->where('warehouse_id',$warehouse_id)->where('product_id',$product_id)->pluck('product_details');
+                // Decode JSON data to an associative array
+
+                return response()->json([
+                    'view'=>view('admin-views.product.render_warehouse_price',compact('data'))->render()
+                ]);
+    }
     /**
      * @param Request $request
      * @return JsonResponse
@@ -263,13 +282,27 @@ class ProductController extends Controller
     public function edit($id): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         $product = $this->product->withoutGlobalScopes()->with('translations')->find($id);
-        
         $product_category = $product->category_id;
         $categories = $this->category->get();
         $options = Helpers::getCategoryDropDown($categories,0,0,$product->category_id);
         $units =  $this->unit->get();
+        // dd($product_category);
         return view('admin-views.product.edit', compact('product', 'product_category', 'options','units'));
     }
+    
+    public function warehouse_edit($id): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    {
+        $warehouse_id = auth('admin')->user()->warehouse_id;
+        $assign_categories =  $this->warehouse_categories->where('warehouse_id',$warehouse_id)->pluck('category_id'); //    0 => 1 // 1 => 4  // 2 => 22
+        $warehouse_products =  $this->warehouse_products->where('warehouse_id',$warehouse_id)->where('product_id',$id)->first(); //    0 => 1 // 1 => 4  // 2 => 22
+        $product = $this->product->withoutGlobalScopes()->with('translations')->find($id);
+        $product_category = $product->category_id;
+        $categories = $this->category->get();
+        $options = Helpers::getCategoryDropDown($categories,0,0,$product->category_id);
+        $units =  $this->unit->get();
+        return view('admin-views.product.warehouse_edit', compact('product', 'product_category', 'options','units','warehouse_products'));
+    }
+    
 
     /**
      * @param Request $request
@@ -343,6 +376,7 @@ class ProductController extends Controller
                 $img_names[] = $image_data;
             }
             $image_data = json_encode($img_names);
+            $p->image = $image_data;
         }
 
 
@@ -353,6 +387,7 @@ class ProductController extends Controller
                 $single_img_names[] = $single_img_data;
             }
             $single_img_names = json_encode($single_img_names);
+            $p->single_image = $single_img_names;
         }
  
         
@@ -363,8 +398,7 @@ class ProductController extends Controller
         $p->product_code = $request->product_code;
         
         $p->unit_id = $request->unit_id;
-        $p->image = $image_data;
-        $p->single_image = $single_img_names;
+       
         $p->maximum_order_quantity = $request->maximum_order_quantity;
         $p->status = $request->status? $request->status:0;
         //dd($p);
@@ -396,6 +430,57 @@ class ProductController extends Controller
 
         return response()->json([], 200);
     }
+
+    public function warehouse_rate_insertupdate(Request $request, $id): \Illuminate\Http\JsonResponse
+    {
+        Validator::make($request->all(), [
+            'quantity' => 'required',
+            'store_price' => 'required',
+            'customer_price' => 'required',
+            'unit_id' => 'required',
+            'offer_price' => 'required',
+        ]);
+        $product_details = [];
+            foreach($request->quantity as $key => $qty){    
+                if(isset($request->offer_price[$key])){
+                    $product_details[$key]['quantity']  = $qty;
+                    $product_details[$key]['offer_price'] = $request->offer_price[$key];
+                }
+                if(isset($request->actual_price[$key])){
+                    $product_details[$key]['actual_price'] = $request->actual_price[$key];
+                }
+                if(isset($request->approx_piece[$key])){
+                    $product_details[$key]['approx_piece'] = $request->approx_piece[$key];
+                }
+                if(isset($request->title[$key])){
+                    $product_details[$key]['title'] = $request->title[$key];
+                }
+                
+                if(isset($request->unit_id[$key])){
+                    $product_details[$key]['unit_id'] = $request->unit_id[$key];
+                }
+            
+                $productData = json_encode($product_details,true); 
+            }
+        $authUser = auth('admin')->user();
+        $row = $this->warehouse_products->where('product_id',$id)->where('warehouse_id',$authUser->warehouse_id)->first();
+        // $row = $this->warehouse_products->find($id);
+        if(!$row){
+            $row = $this->warehouse_products;
+        }
+       
+        $row->warehouse_id = $authUser->warehouse_id;
+        $row->product_id = $id;
+        $row->avg_price = $request->avg_price;
+        $row->customer_price = $request->customer_price;
+        $row->store_price = $request->store_price;
+        $row->product_details = $productData;
+
+        $row->save();
+
+      
+        return response()->json([], 200);
+}
 
     /**
      * @param Request $request

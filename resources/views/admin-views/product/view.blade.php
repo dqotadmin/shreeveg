@@ -145,7 +145,8 @@
                     </div>
                 </div>
             </div>
-<!--            <div class="col-lg-3">
+                <!-- 
+            <div class="col-lg-3">
                 <div class="card h-100">
                     <div class="card-body d-flex flex-column justify-content-center">
                                 @if($product->store)
@@ -174,9 +175,11 @@
                         <thead class="thead-light">
                             <tr>
                                 <th class="px-4 border-0"><h4 class="m-0 text-capitalize">{{translate('short_description')}}</h4></th>
-                                <th class="px-4 border-0"><h4 class="m-0 text-capitalize">{{translate('price')}}</h4></th>
-                                <th class="px-4 border-0"><h4 class="m-0 text-capitalize">{{translate('variations')}}</h4></th>
-                                <th class="px-4 border-0"><h4 class="m-0 text-capitalize">{{translate('Tags')}}</h4></th>
+                                <th class="px-4 border-0"><h4 class="m-0 text-capitalize">{{translate('Product Details')}}</h4></th>
+                                   <!--  <th class="px-4 border-0"><h4 class="m-0 text-capitalize">{{translate('Unit')}}</h4></th>
+                                <th class="px-4 border-0"><h4 class="m-0 text-capitalize">{{translate('Maximum Order Quantity')}}</h4></th> -->
+                                <!-- <th class="px-4 border-0"><h4 class="m-0 text-capitalize">{{translate('variations')}}</h4></th> -->
+                                <!-- <th class="px-4 border-0"><h4 class="m-0 text-capitalize">{{translate('Tags')}}</h4></th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -187,17 +190,23 @@
                                     </div>
                                 </td>
                                 <td>
+                                 
                                    <div>
-                                        <strong class="text--title">{{translate('price')}} :</strong>
-                                        <span>{{ Helpers::set_symbol($product['price']) }} / {{translate(''.$product['unit'])}}</span>
+                                        <span><strong class="text--title">{{translate('Category')}} :</strong>
+                                        <span>{!! @$product->Category->name !!}</span></span>
                                    </div>
                                    <div>
-                                        <strong class="text--title">{{translate('tax')}} :</strong>
-                                        <span>{{ Helpers::set_symbol(\App\CentralLogics\Helpers::tax_calculate($product,$product['price'])) }}</span>
+                                        <strong class="text--title">{{translate('Product Code')}} :</strong>
+                                        <span>{!! $product['product_code'] !!}</span>
                                    </div>
                                    <div>
-                                        <strong class="text--title">{{translate('discount')}} :</strong>
-                                        <span>{{ Helpers::set_symbol(\App\CentralLogics\Helpers::discount_calculate($product,$product['price'])) }}</span>
+                                        <strong class="text--title">{{translate('Unit')}} :</strong>
+                                        <span>{!! @$product->unit->title !!}({!! @$product->unit->description !!})</span>
+                                   </div>
+                                   <div>
+                                        <strong class="text--title">{{translate('Maximum Order Quantity')}} :</strong>
+                                        <span>{!! @$product->maximum_order_quantity!!}</span>
+
                                    </div>
                                 </td>
                                 <td>
@@ -213,7 +222,24 @@
                 </div>
             </div>
         </div>
-
+        <div class="card mb-3 text-sm">
+        <div class="card-header border-0">
+                <h5 class="card-title">{{translate('Prices by Warehouse')}}</h5>
+            </div>
+            <div class="row">
+                <div class="col-md-3 m-2">
+                <select name="" id="fetch_price_warehouse_by" class="form-control">
+                <option value="">{{translate('Select Warehouse')}}</option>
+                    @foreach(\App\Model\Warehouse::where('status','1')->where('deleted_at',null)->get() as $warehouse)
+                    <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
+                    @endforeach
+                </select>
+                <input type="hidden" id="product_id" value="{{$product_id}}">
+                </div>
+            </div>
+            <div id="product_detail"></div>
+            
+        </div>
         <!-- Card -->
         <div class="card">
             <div class="card-header border-0">
@@ -326,6 +352,7 @@
             @endif
         </div>
         <!-- End Card -->
+        
     </div>
 @endsection
 
@@ -336,13 +363,29 @@
         $('.see__more').on('click', function(){
             $(this).closest('.__see-more-txt-item').find('.__see-more-txt').toggleClass('line--limit-3')
             if($(this).hasClass('active')) {
-                $(this).text('{{translate('...See More')}}')
+                $(this).text('{{translate('...See More')}}');
                 $(this).removeClass('active')
             }else {
-                $(this).text('{{translate('...See Less')}}')
+                $(this).text('{{translate('...See Less')}}');
                 $(this).addClass('active')
             }
-        })
+        });
 
+    </script>
+    <script>
+        $('#fetch_price_warehouse_by').on('change',function(){
+        var warehouse_id = $(this).val();
+        var product_id = $('#product_id').val();
+
+        $.ajax({
+            url: '{{url('/')}}/admin/product/get-prices-by-warehouse/'+warehouse_id+'/'+product_id,
+            type:'GET',
+            dataType:'json',
+            success:function(data){
+                $('#product_detail').html(data.view);
+
+            }
+        });
+        });
     </script>
 @endpush

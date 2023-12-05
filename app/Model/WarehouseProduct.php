@@ -18,4 +18,8 @@ class WarehouseProduct extends Model
     {
         return $this->belongsTo(Product::class, 'product_id');
     }
+
+    public function unit(){
+        return $this->belongTo(Unit::class,'unit_id');
+    }
 }

@@ -167,7 +167,12 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::post('variant-combination', 'ProductController@variant_combination')->name('variant-combination');
             Route::post('store', 'ProductController@store')->name('store');
             Route::get('edit/{id}', 'ProductController@edit')->name('edit');
+            Route::get('warehouse-edit/{id}', 'ProductController@warehouse_edit')->name('warehouse-edit');
+            Route::get('get-prices-by-warehouse/{warehouse_id}/{product_id}', 'ProductController@prices_by_wareohuse')->name('get-prices-by-warehouse');
+           
             Route::post('update/{id}', 'ProductController@update')->name('update');
+            Route::post('warehouse-rate-insertupdate/{id}', 'ProductController@warehouse_rate_insertupdate')->name('warehouse-rate-insertupdate');
+
             Route::get('list', 'ProductController@list')->name('list');
             Route::delete('delete/{id}', 'ProductController@delete')->name('delete');
             Route::get('status/{id}/{status}', 'ProductController@status')->name('status');

@@ -69,7 +69,7 @@
                     @foreach($row->purchaseStoreOrderDetail as $key => $value)
                     <tr class="">
                         <td>{{ $key+1}}</td>
-                        <td>{{ $value->productDetail->name }}</td>
+                        <td>{{ @$value->productDetail->name }}</td>
                         <td>{{ $value->qty }}</td>
                         <td>{{ $value->unit_name }}</td>
                         <td>{{ $value->price_per_unit }}</td>

@@ -1272,11 +1272,19 @@ class BusinessSettingsController extends Controller
         if($request['shipping_per_km'] == null) {
             $request['shipping_per_km'] = Helpers::get_business_settings('delivery_management')['shipping_per_km'];
         }
+        if($request['tax_type'] == null) {
+            $request['tax_type'] = Helpers::get_business_settings('delivery_management')['tax_type'];
+        }
+        if($request['tax'] == null) {
+            $request['tax'] = Helpers::get_business_settings('delivery_management')['tax'];
+        }
         DB::table('business_settings')->updateOrInsert(['key' => 'delivery_management'], [
             'value' => json_encode([
                 'status'  => $request['shipping_status'],
                 'min_shipping_charge' => $request['min_shipping_charge'],
                 'shipping_per_km' => $request['shipping_per_km'],
+                'tax_type' => $request['tax_type'],
+                'tax' => $request['tax'],
             ]),
         ]);
 

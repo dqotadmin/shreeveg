@@ -79,7 +79,7 @@
 
                             <td>
                                 <span class="d-block font-size-sm text-body text-trim-50">
-                                    {{$warehouse->getCategory->name}}    
+                                    {{@$warehouse->getCategory->name}}    
                                 </span>
                             </td>
                             <td>

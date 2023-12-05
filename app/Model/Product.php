@@ -86,5 +86,7 @@ class Product extends Model
         return $this->BelongsTo(Category::class);
     }
 
-
+    public function unit(){
+        return $this->belongsTo((Unit::class));
+    }
 }

@@ -286,6 +286,8 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::get('wh-assign-category/{id}/{status}', 'WarehouseController@wh_assign_category_status')->name('wh-assign-category-status');
             Route::post('wh-assign-category', 'WarehouseController@wh_assign_category_store')->name('wh-assign-category');
             Route::get('get-code-by-city/{city_code?}', 'WarehouseController@get_code')->name('get-code-by-city');
+            Route::get('subcategories/{id}', 'WarehouseController@subcategories')->name('subcategories');
+            Route::get('get-sub-categories/{sub_cat_id}', 'WarehouseController@get_subcategories')->name('get-sub-categories');
         });
 
 

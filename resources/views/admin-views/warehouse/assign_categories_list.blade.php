@@ -88,7 +88,7 @@
                                         <tr>
                                             <th class="text-center">{{translate('#')}}</th>
                                             <th>{{translate('Category Name')}}</th>
-                                            <th>{{translate('Order')}}</th>
+                                            <!-- <th>{{translate('Order')}}</th> -->
                                             <!-- <th>{{translate('status')}}</th> -->
                                         </tr>
                                     </thead>
@@ -104,11 +104,11 @@
                                                     {{$wh_assign_category->getCategory?$wh_assign_category->getCategory->name:''}}
                                                 </span>
                                             </td>
-                                            <td>
+                                            <!-- <td>
                                                 <span class="d-block font-size-sm text-body text-trim-50">
                                                     {{$wh_assign_category['category_order']}}
                                                 </span>
-                                            </td>
+                                            </td> -->
                                            
 
                                             <!-- <td>

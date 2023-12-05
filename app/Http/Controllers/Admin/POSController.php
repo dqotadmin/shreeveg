@@ -6,10 +6,12 @@ use App\CentralLogics\Helpers;
 use App\Http\Controllers\Controller;
 use App\Model\Branch;
 use App\Model\Category;
+use App\Model\Store;
 use App\Model\DeliveryMan;
 use App\Model\Order;
 use App\Model\OrderDetail;
 use App\Model\Product;
+use App\Model\WarehouseCategory;
 use App\User;
 use Box\Spout\Common\Exception\InvalidArgumentException;
 use Box\Spout\Common\Exception\IOException;
@@ -41,8 +43,10 @@ class POSController extends Controller
         private Order $order,
         private OrderDetail $order_detail,
         private Product $product,
-        private User $user
-    ) {
+        private User $user,
+        private WarehouseCategory $warehouse_categories,
+        private Store $store
+    ) { 
     }
 
     /**
@@ -51,8 +55,18 @@ class POSController extends Controller
      */
     public function index(Request $request): View|Factory|Application
     {
+        $authUser = auth('admin')->user();
+       
+        $assign_categories = $this->warehouse_categories->where('warehouse_id', $authUser->Store->warehouse_id)->get('category_id');
+        $categorie = $this->category->whereIn('id',$assign_categories)->get();
+        $options = Helpers::getCategoryDropDown($categorie);
+        // dd($options);
+        $categories = $this->category->whereIn('id',$assign_categories)->get();
+
+        $get_warehouse_id = $this->store->where('id', auth('admin')->user()->store_id)->pluck('warehouse_id')->toArray();
+        $category_ids = $this->warehouse_categories->where('warehouse_id', $get_warehouse_id)->pluck('category_id');
         $category = $request->query('category_id', 0);
-        $categories = $this->category->active()->get();
+        $categories = $this->category->whereIn('id',$category_ids)->get();
         $keyword = $request->keyword;
         $key = explode(' ', $keyword);
 

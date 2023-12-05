@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', translate('Assign categories'))
+@section('title', translate('Assign Subcategories'))
 
 @push('css_or_js')
 
@@ -16,7 +16,7 @@
                 <img src="{{asset('public/assets/admin/img/category.png')}}" class="w--24" alt="">
             </span>
             <span>
-                {{ translate('Assign categories') }}
+                {{ translate('Assign Subcategories') }}
             </span>
         </h1>
     </div>
@@ -30,7 +30,7 @@
                         <div class="card-header">
                             <h5 class="card-title">
                                 <i class="tio-category"></i>
-                                {{translate('Category Assign')}}
+                                {{translate('Category SubAssign')}}
                             </h5>
                         </div>
 
@@ -39,7 +39,6 @@
                                 action="{{route('admin.warehouse.wh-assign-category')}}"
                                 style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
                                 @csrf
-                                <input type="hidden" name="warehouse_id" value="{{$warehouses->id}}">
                                 <div class="d-flex">
                                     <h5 class="input-label m-0 text-capitalize">{{translate('category_permission')}} :
                                     </h5>
@@ -53,26 +52,26 @@
                                 <div class="check--item-wrapper" style="display: inherit;">
                                     <div class="row">
                                         <?php $i=1; ?>
-
                                         @foreach($categories as $category)
 
 
-
                                         <?php
-                                        $editRow = Helpers::getWhCategoriesData($category->id,$warehouses->id);
-                                        $checked = $status = $margin = $catOrder=''; 
-                                            if(!empty($editRow) && $editRow->category_id == $category->id){
-                                                $checked ='checked';
-                                                $catOrder = $editRow->category_order;
-                                                $status =  $editRow->status;
-                                            }
+                                        // $editRow = Helpers::getWhCategoriesData($category->id,$warehouses->id);
+                                        // $checked = $status = $margin = $catOrder=''; 
+                                        //     if(!empty($editRow) && $editRow->category_id == $category->id){
+                                        //         $checked ='checked';
+                                        //         $catOrder = $editRow->category_order;
+                                        //         $status =  $editRow->status;
+                                        //     }
                                         
                                         ?>
+
+
                                         <div class="col-md-12">
                                             <div class="check_category_main">
                                                 <div class="check-item pb-0">
                                                     <div class="form-group form-check form--check">
-                                                        <input type="checkbox" {{$checked}} name="category_id[]"
+                                                        <input type="checkbox"  name="category_id[]"
                                                             value="{{$category->id}}"
                                                             class="form-check-input module-permission"
                                                             id="{{$category->name}}">
@@ -83,8 +82,12 @@
                                                 </div>
 
                                                 <div class="m_inputs">
-                                                    <input type="number" name="category_order[]" value="{{$catOrder}}"
+                                                    <input type="number" name="category_order[]" 
                                                         placeholder="Ex. Order <?php echo $i++; ?>" class="form-control " id="">
+
+
+                                                   
+
                                                 </div>
                                             </div>
                                         </div>
@@ -93,7 +96,6 @@
                                     </div>
                                 </div>
                                 <div class="btn--container justify-content-end mt-4">
-                            <a type="button" href="{{route('admin.warehouse.wh-assign-category-page',[$warehouses['id']])}}" class="btn btn--reset">{{translate('back')}}</a>
                                     <button type="submit" class="btn btn--primary">{{translate('Submit')}}</button>
                                 </div>
                             </form>
@@ -134,5 +136,16 @@
             $("#select_all").prop("checked", true);
         }
     });
+  $('.module-permission').on('click', function(){
+   var sub_cat_id =  $(this).val();
+   $.ajax({
+        url: '{{url('/')}}/admin/warehouse/get-sub-categories/' + sub_cat_id,
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            console.log(data);
+        }
+    });
+  });
     </script>
     @endpush

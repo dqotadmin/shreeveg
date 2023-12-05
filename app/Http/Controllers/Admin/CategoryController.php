@@ -258,7 +258,6 @@ class CategoryController extends Controller
     {
         
         $category = $this->category->withoutGlobalScopes()->with('translations')->find($id);
-
         //Category Dropdown
         $categories = $this->category->where('id','!=',$category['id'])->get();
         $options = Helpers::getCategoryDropDown($categories, 0, 0, $category['parent_id']);

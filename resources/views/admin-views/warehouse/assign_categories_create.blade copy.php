@@ -68,6 +68,8 @@
                                             }
                                         
                                         ?>
+
+
                                         <div class="col-md-12">
                                             <div class="check_category_main">
                                                 <div class="check-item pb-0">
@@ -85,6 +87,10 @@
                                                 <div class="m_inputs">
                                                     <input type="number" name="category_order[]" value="{{$catOrder}}"
                                                         placeholder="Ex. Order <?php echo $i++; ?>" class="form-control " id="">
+
+
+                                                   
+
                                                 </div>
                                             </div>
                                         </div>

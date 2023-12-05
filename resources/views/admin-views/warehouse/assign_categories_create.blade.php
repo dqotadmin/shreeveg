@@ -31,75 +31,39 @@
                             <h5 class="card-title">
                                 <i class="tio-category"></i>
                                 {{translate('Category Assign')}}
-                            </h5>
+                            </h5> 
                         </div>
 
                         <div class="card-body">
-                            <form id="submit-create-role" method="post"
+                        <form id="submit-create-role" method="post"
                                 action="{{route('admin.warehouse.wh-assign-category')}}"
                                 style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
                                 @csrf
                                 <input type="hidden" name="warehouse_id" value="{{$warehouses->id}}">
-                                <div class="d-flex">
-                                    <h5 class="input-label m-0 text-capitalize">{{translate('category_permission')}} :
-                                    </h5>
-                                    <div class="check-item pb-0 w-auto">
-                                        <input type="checkbox" id="select_all">
-                                        <label class="title-color mb-0 pl-2"
-                                            for="select_all">{{ translate('select_all')}}</label>
-                                    </div>
-                                </div>
-
-                                <div class="check--item-wrapper" style="display: inherit;">
-                                    <div class="row">
-                                        <?php $i=1; ?>
-
-                                        @foreach($categories as $category)
-
-
-
-                                        <?php
-                                        $editRow = Helpers::getWhCategoriesData($category->id,$warehouses->id);
-                                        $checked = $status = $margin = $catOrder=''; 
-                                            if(!empty($editRow) && $editRow->category_id == $category->id){
-                                                $checked ='checked';
-                                                $catOrder = $editRow->category_order;
-                                                $status =  $editRow->status;
-                                            }
-                                        
-                                        ?>
-
-
-                                        <div class="col-md-12">
-                                            <div class="check_category_main">
-                                                <div class="check-item pb-0">
-                                                    <div class="form-group form-check form--check">
-                                                        <input type="checkbox" {{$checked}} name="category_id[]"
-                                                            value="{{$category->id}}"
-                                                            class="form-check-input module-permission"
-                                                            id="{{$category->name}}">
-                                                        <label class="form-check-label"
-                                                            style="{{Session::get('direction') === "rtl" ? 'margin-right: 1.25rem;' : ''}};"
-                                                            for="{{$category->name}}">{{translate($category->name)}}</label>
-                                                    </div>
-                                                </div>
-
-                                                <div class="m_inputs">
-                                                    <input type="number" name="category_order[]" value="{{$catOrder}}"
-                                                        placeholder="Ex. Order <?php echo $i++; ?>" class="form-control " id="">
-
-
-                                                   
-
-                                                </div>
-                                            </div>
+                                <div class="row align-items-end g-4" style="margin-top: 20px;">
+                                    <div class="col-sm-12" id="category_box">
+                                        <div class="form-group">
+                                            <label class="input-label" for="exampleFormControlInput1">{{translate('Select Parent Category')}}</label>
+                                            <select name="category_id[]" id="category_id"    class="form-control chosen-select" multiple >
+                                                 <option value="" disabled>---{{translate('Select Category')}}---</option>
+                                                <?php echo $options; ?>
+                                            </select>
                                         </div>
-
-                                        @endforeach
                                     </div>
                                 </div>
+                                {{ $options}}
+                                <?php echo '<br>'; ?>
+                                <?php echo '<br>'; ?>
+                                <?php echo '<br>'; 
+                               $wh_assign_category=  json_decode($wh_assign_categories,true);
+                            //    print_r($wh_assign_category);
+                               foreach($wh_assign_category as $wh){
+                                echo ($wh['category_id']);
+                                echo '<br>';
+                               }
+                                ?>
                                 <div class="btn--container justify-content-end mt-4">
-                            <a type="button" href="{{route('admin.warehouse.wh-assign-category-page',[$warehouses['id']])}}" class="btn btn--reset">{{translate('back')}}</a>
+                                    <a type="button" href="{{route('admin.warehouse.wh-assign-category-page',[$warehouses['id']])}}" class="btn btn--reset">{{translate('back')}}</a>
                                     <button type="submit" class="btn btn--primary">{{translate('Submit')}}</button>
                                 </div>
                             </form>

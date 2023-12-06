@@ -43,7 +43,7 @@
                                 <div class="row align-items-end g-4" style="margin-top: 20px;">
                                     <div class="col-sm-12" id="category_box">
                                         <div class="form-group">
-                                            <label class="input-label" for="exampleFormControlInput1">{{translate('Select Parent Category')}}</label>
+                                            <label class="input-label" for="exampleFormControlInput1">{{translate('Select Categories')}}</label>
                                             <select name="category_id[]" id="category_id"    class="form-control chosen-select" multiple >
                                                  <option value="" disabled>---{{translate('Select Category')}}---</option>
                                                 <?php echo $options; ?>
@@ -51,17 +51,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{ $options}}
-                                <?php echo '<br>'; ?>
-                                <?php echo '<br>'; ?>
-                                <?php echo '<br>'; 
-                               $wh_assign_category=  json_decode($wh_assign_categories,true);
-                            //    print_r($wh_assign_category);
-                               foreach($wh_assign_category as $wh){
-                                echo ($wh['category_id']);
-                                echo '<br>';
-                               }
-                                ?>
+                                
                                 <div class="btn--container justify-content-end mt-4">
                                     <a type="button" href="{{route('admin.warehouse.wh-assign-category-page',[$warehouses['id']])}}" class="btn btn--reset">{{translate('back')}}</a>
                                     <button type="submit" class="btn btn--primary">{{translate('Submit')}}</button>

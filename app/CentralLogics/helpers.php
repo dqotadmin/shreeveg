@@ -871,8 +871,11 @@ class Helpers
         $html = '';
         foreach ($categories as $category) {
             if ($category['parent_id'] == $parentId) {
-    
-                $sel = ($category['id']==$selected) ? 'selected' : '';
+                
+                if(is_array($selected))
+                    $sel = (in_array($category['id'],$selected)) ? 'selected' : '';
+                else 
+                    $sel = ($category['id']==$selected) ? 'selected' : '';
     
                 $name = str_repeat("&nbsp;", $level * 4) . $category['name']; // Indent based on level
                 $html .= "<option value='{$category['id']}' {$sel} >$name</option>";

@@ -65,9 +65,9 @@
                                 <th >{{translate('category_image')}}</th>
                                 <th >{{translate('name')}}</th>
                                 <th >{{translate('Category Code')}}</th>
-                                <th >{{translate('Title Silver')}}</th>
+                                <!-- <th >{{translate('Title Silver')}}</th>
                                 <th >{{translate('Title Gold')}}</th>
-                                <th >{{translate('Title Platinum')}}</th>
+                                <th >{{translate('Title Platinum')}}</th> -->
                                 <th >{{translate('status')}}</th>
                                 <th class="text-center">{{translate('action')}}</th>
                             </tr>
@@ -103,7 +103,7 @@
                                  {{$category['category_code']}}
                                     </span>
                                     </td>
-                                    <td>
+                                    <!-- <td>
                                     <span class="d-block font-size-sm text-body text-trim-50">
                                  {{Str::words($category['title_silver'],10)}}
                                     </span>
@@ -118,7 +118,7 @@
                                     <span class="d-block font-size-sm text-body text-trim-50">
                                     {{Str::words($category['title_platinum'],10)}}
                                     </span>
-                                    </td>
+                                    </td> -->
                                     <td>
 
                                         <label class="toggle-switch">

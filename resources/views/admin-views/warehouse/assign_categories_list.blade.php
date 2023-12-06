@@ -88,7 +88,6 @@
                                         <tr>
                                             <th class="text-center">{{translate('#')}}</th>
                                             <th>{{translate('Category Name')}}</th>
-                                            <!-- <th>{{translate('Order')}}</th> -->
                                             <!-- <th>{{translate('status')}}</th> -->
                                         </tr>
                                     </thead>
@@ -96,39 +95,34 @@
                                     <tbody>
                                         @foreach($wh_assign_categories as $key => $wh_assign_category)
                                             @if($wh_assign_category->getCategory)
-                                        <tr>
-                                            <td class="text-center">{{$key+1}}</td>
+                                            <tr>
+                                                <td class="text-center">{{$key+1}}</td>
 
-                                            <td>
-                                                <span class="d-block font-size-sm text-body text-trim-50">
-                                                    {{$wh_assign_category->getCategory?$wh_assign_category->getCategory->name:''}}
-                                                </span>
-                                            </td>
-                                            <!-- <td>
-                                                <span class="d-block font-size-sm text-body text-trim-50">
-                                                    {{$wh_assign_category['category_order']}}
-                                                </span>
-                                            </td> -->
-                                           
-
-                                            <!-- <td>
-
-                                                <label class="toggle-switch">
-                                                    <input type="checkbox" name="status[]"
-                                                        onclick="status_change_alert('{{ route('admin.warehouse.wh-assign-category-status', [$wh_assign_category->id, $wh_assign_category->status ? 0 : 1]) }}', '{{ $wh_assign_category->status? translate('you_want_to_disable_this_category'): translate('you_want_to_active_this_category') }}', event)"
-                                                        class="toggle-switch-input"
-                                                        id="stocksCheckbox{{ $wh_assign_category->id }}"
-                                                        {{ $wh_assign_category->status ? 'checked' : '' }}>
-
-
-                                                    <span class="toggle-switch-label text">
-                                                        <span class="toggle-switch-indicator"></span>
+                                                <td>
+                                                    <span class="d-block font-size-sm text-body text-trim-50">
+                                                        {{$wh_assign_category->getCategory?$wh_assign_category->getCategory->name:''}}
                                                     </span>
-                                                </label>
+                                                </td>
+                                                <!-- <td>
 
-                                            </td> -->
+                                                    <label class="toggle-switch">
+                                                        <input type="checkbox" name="status[]"
+                                                            onclick="status_change_alert('{{ route('admin.warehouse.wh-assign-category-status', [$wh_assign_category->id, $wh_assign_category->status ? 0 : 1]) }}', '{{ $wh_assign_category->status? translate('you_want_to_disable_this_category'): translate('you_want_to_active_this_category') }}', event)"
+                                                            class="toggle-switch-input"
+                                                            id="stocksCheckbox{{ $wh_assign_category->id }}"
+                                                            {{ $wh_assign_category->status ? 'checked' : '' }}>
 
-                                       </tr>
+
+                                                        <span class="toggle-switch-label text">
+                                                            <span class="toggle-switch-indicator"></span>
+                                                        </span>
+                                                    </label>
+
+                                                </td> -->
+
+                                        </tr>
+                                    
+                                        </tr>
                                         @endif
                                        @endforeach
 
@@ -141,7 +135,7 @@
                                     <img class="w-120px mb-3"
                                         src="{{asset('/public/assets/admin/svg/illustrations/sorry.svg')}}"
                                         alt="Image Description">
-                                    <p class="mb-0">{{translate('No_data_to_show')}}</p>
+                                    <p class="mb-0">{{translate('No_category_assign')}}</p>
                                 </div>
                                 @endif
 

@@ -32,9 +32,8 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
+                                <!-- <div class="col-sm-6">
                                     <form id="search-form">
-                                        <!-- Search -->
                                         <div class="input-group input-group-merge input-group-flush">
                                             <div class="input-group-prepend w--30 justify-content-center">
                                                 <div class="input-group-text">
@@ -46,9 +45,8 @@
                                                 placeholder="{{translate('Search by product name')}}"
                                                 aria-label="Search here">
                                         </div>
-                                        <!-- End Search -->
                                     </form>
-                                </div>
+                                </div> -->
                             </div>
                             <div id="items">
                                 <div class="row g-1">

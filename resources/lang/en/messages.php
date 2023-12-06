@@ -2507,4 +2507,6 @@
   'su  bmit' => 'Su  bmit',
   'Select  Category' => 'Select  Category',
   'Select Category' => 'Select Category',
+  'No_category_assign' => 'No category assign',
+  'Select Categories' => 'Select Categories',
 );

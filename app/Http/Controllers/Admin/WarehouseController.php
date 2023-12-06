@@ -278,16 +278,15 @@ class WarehouseController extends Controller
     
     public function wh_assign_category_page_create($id): View|Factory|Application
     {
-        $categories = $this->category->where('deleted_at',null)->where('parent_id',0)->get();
-        $wh_assign_categories = $this->warehouse_categories->where('warehouse_id',$id)->get();
+        //$categories = $this->category->where('deleted_at',null)->where('parent_id',0)->get();
+        $wh_assign_categories = $this->warehouse_categories->where('warehouse_id',$id)->pluck('category_id')->toArray();
+        //dd($wh_assign_categories);
         $wh_assign_id = $this->warehouse_categories->find($id);
         $warehouses = $this->warehouse->withoutGlobalScopes()->with('translations')->find($id);
+
         $categories = $this->category->get();
-        $options = Helpers::getCategoryDropDown($categories);
-// -----------
-        // $category = $this->category->withoutGlobalScopes()->with('translations')->find($id);
-        // $categories = $this->category->where('id','!=',$category['id'])->get();
-        // $options = Helpers::getCategoryDropDown($categories, 0, 0, $category['parent_id']);
+       
+        $options = Helpers::getCategoryDropDown($categories, 0, 0, $wh_assign_categories);
         return view('admin-views.warehouse.assign_categories_create', compact('warehouses','categories','wh_assign_categories','wh_assign_id','options'));
     }
 

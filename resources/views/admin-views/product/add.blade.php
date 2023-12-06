@@ -177,7 +177,7 @@
 
             <div class="col-12">
                 <div class="btn--container justify-content-end">
-                    <a href="" class="btn btn--reset min-w-120px">{{translate('reset')}}</a>
+                    <a href="{{route('admin.product.list')}}" class="btn btn--reset min-w-120px">{{translate('back')}}</a>
                     <button type="submit" class="btn btn--primary">{{translate('submit')}}</button>
                 </div>
             </div>

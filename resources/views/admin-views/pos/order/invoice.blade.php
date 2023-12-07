@@ -85,10 +85,6 @@
                         {{$detail['quantity']}}
                     </td>
                     <td class="">
-<<<<<<< HEAD
-                         <br>
-                 
-=======
                         {{@$product['name']}} <br>
                         @if(isset($detail['variation']) && count(json_decode($detail['variation'],true))>0)
                             <strong><u>Variation : </u></strong>
@@ -99,7 +95,6 @@
                                 </div>
                             @endforeach
                         @endif
->>>>>>> 87106a3951f0dee2479a8726830efccab5d6eeff
                         <span>{{ translate('Unit Price') }} : {{ Helpers::set_symbol($detail['price']) }}</span><br>
                         <span>{{ translate('Qty') }} : {{ $detail['quantity']}}</span><br>
                         <span>{{ translate('Discount') }} : {{ Helpers::set_symbol($detail['discount_on_product']) }}</span>

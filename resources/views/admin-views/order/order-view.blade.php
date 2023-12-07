@@ -210,7 +210,7 @@
                                                         >
                                                     @endif
                                                 </div>
-                                                <div class="media-body">    
+                                                <div class="media-body">
                                                     <h5 class="line--limit-1">{{@$product['name']}}</h5>
                                                     @if($detail['variation'])
                                                         @if(count(json_decode($detail['variation'],true)) > 0)

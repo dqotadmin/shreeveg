@@ -10,7 +10,7 @@
                 <center>
                     <input type="button" class="btn btn--primary non-printable text-white" onclick="printDiv('printableArea')"
                            value="{{translate('Proceed, If thermal printer is ready.')}}"/>
-                    <a href="{{url()->previous()}}" class="btn btn--danger non-printable text-white">{{ translate('Back') }}</a>
+                    <a href="{{route('admin.pos.orders')}}" class="btn btn--danger non-printable text-white">{{ translate('Back') }}</a>
                 </center>
                 <hr class="non-printable">
             </div>
@@ -97,7 +97,7 @@
                                     {{$detail['quantity']}}
                                 </td>
                                 <td class="">
-                                    {{$product['name']}} <br>
+                                    {{@$product['name']}} <br>
                                     @if(isset($detail['variation']) && count(json_decode($detail['variation'],true))>0)
                                         <strong><u>Variation : </u></strong>
                                         @foreach(json_decode($detail['variation'],true)[0] ?? json_decode($detail['variation'],true) as $key1 =>$variation)

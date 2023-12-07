@@ -41,7 +41,7 @@
                         <div class="order-invoice-left">
                             <h1 class="page-header-title">
                                 <span class="mr-3">{{translate('order ID')}} #{{$order['id']}}</span>
-                                <span class="badge badge-soft-info py-2 px-3">{{$order->branch?$order->branch->name:'Branch deleted!'}}</span>
+                                <span class="badge badge-soft-info py-2 px-3">{{$order->warehouse_id?$order->warehouse->name:'Branch deleted!'}}</span>
                             </h1>
                             <span><i class="tio-date-range"></i>
                                 {{date('d M Y',strtotime($order['created_at']))}} {{ date(config('time_format'), strtotime($order['created_at'])) }}</span>
@@ -212,15 +212,17 @@
                                                 </div>
                                                 <div class="media-body">
                                                     <h5 class="line--limit-1">{{$product['name']}}</h5>
-                                                    @if(count(json_decode($detail['variation'],true)) > 0)
-                                                        @foreach(json_decode($detail['variation'],true)[0]??json_decode($detail['variation'],true) as $key1 =>$variation)
-                                                            <div class="font-size-sm text-body text-capitalize">
-                                                                @if($variation != null)
-                                                                <span>{{$key1}} :  </span>
-                                                                @endif
-                                                                <span class="font-weight-bold">{{$variation}}</span>
-                                                            </div>
-                                                        @endforeach
+                                                    @if($detail['variation'])
+                                                        @if(count(json_decode($detail['variation'],true)) > 0)
+                                                            @foreach(json_decode($detail['variation'],true)[0]??json_decode($detail['variation'],true) as $key1 =>$variation)
+                                                                <div class="font-size-sm text-body text-capitalize">
+                                                                    @if($variation != null)
+                                                                    <span>{{$key1}} :  </span>
+                                                                    @endif
+                                                                    <span class="font-weight-bold">{{$variation}}</span>
+                                                                </div>
+                                                            @endforeach
+                                                        @endif
                                                     @endif
                                                     <h5 class="mt-1"><span class="text-body">{{translate('Unit')}}</span> : {{$detail['unit']}} </h5>
                                                     <h5 class="mt-1"><span class="text-body">{{translate('Unit Price')}}</span> : {{$detail['price']}} </h5>
@@ -489,7 +491,6 @@
                                 @endif
                         @endif
 
-
                         @if($order['order_type']!='self_pickup')
                             @php($address=\App\Model\CustomerAddress::find($order['delivery_address_id']))
                             @if(isset($address))
@@ -605,7 +606,6 @@
                     </div>
 
 
-
                 <!-- End Card -->
                 <div class="card mt-2">
                     <div class="card-body">
@@ -613,32 +613,44 @@
                         <span class="card-header-icon">
                         <i class="tio-shop-outlined"></i>
                         </span>
-                        <span>{{translate('Branch information')}}</span>
+                        <?php   $auth = auth('admin')->user();  ?>
+                        @if($auth->store_id > 0)
+                        <span>{{translate('Store information')}}</span>
+                        @else
+                        <span>{{translate('Warehouse information')}}</span>
+                        @endif
                     </h5>
                     <div class="media align-items-center deco-none resturant--information-single">
                         <div class="avatar avatar-circle">
-                        <img class="avatar-img w-75px" onerror="this.src='{{asset("public/assets/admin/img/100x100/1.png")}}'" src="{{asset('storage/app/public/branch/'.$order->branch->image)}}" alt="Image Description">
+                        <img class="avatar-img w-75px" onerror="this.src='{{asset("public/assets/admin/img/100x100/1.png")}}'" src="{{asset('storage/app/public/branch/'.@$order->warehouse->image)}}" alt="Image Description">
                         </div>
                         <div class="media-body">
                             <span class="fz--14px text--title font-semibold text-hover-primary d-block">
-                                {{$order->branch->name}}
                             </span>
-                            <span>{{\App\Model\Order::where('branch_id',$order['branch_id'])->count()}} {{translate('Orders')}}</span>
+                            @if($auth->store_id > 0)
+                            {{$order->store->name}}
+
+                        @else
+                        {{$order->warehouse->name}}
+
+                        @endif
+
+                            <span>{{\App\Model\Order::where('warehouse_id',$order['warehouse_id'])->count()}} {{translate('Orders')}}</span>
                             <span class="text--title font-semibold d-block">
                                 <i class="tio-call-talking-quiet mr-2"></i>
-                                <a href="Tel:{{$order->branch->phone}}">{{$order->branch->phone}}</a>
+                                <a href="Tel:{{@$auth->phone}}">{{@$auth->phone}}</a>
                             </span>
                             <span class="text--title" >
                                 <i class="tio-email mr-2"></i>
-                                <a href="mailto:{{$order->branch->email}}">{{$order->branch->email}}</a>
+                                <a href="mailto:{{@$auth->email}}">{{@$auth->email}}</a>
                             </span>
                         </div>
                     </div>
                     <hr>
                     <span class="d-block">
                         <a target="_blank"
-                           href="http://maps.google.com/maps?z=12&t=m&q=loc:{{ $order->branch['latitude']}}+{{$order->branch['longitude'] }}">
-                            <i class="tio-poi"></i> {{ $order->branch['address']}}
+                           href="http://maps.google.com/maps?z=12&t=m&q=loc:{{ @$order->warehouse['latitude']}}+{{@$order->warehouse['longitude'] }}">
+                            <i class="tio-poi"></i> {{ @$order->branch['address']}}
                         </a>
                     </span>
                     </div>

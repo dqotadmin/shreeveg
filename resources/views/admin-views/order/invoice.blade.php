@@ -21,17 +21,17 @@
                 <div class="text-center pt-2 mb-3">
                     <h2  class="initial-38-3">{{ @$order->branch->name }}</h2>
                     <h5 class="text-break initial-38-4">
-                        {{ $order->branch->address }}
+                        {{ @$order->branch->address }}
                     </h5>
                     <h5 class="initial-38-4 initial-38-3">
                         {{ translate('Phone') }} : {{\App\Model\BusinessSetting::where(['key'=>'phone'])->first()->value}}
                     </h5>
-                    @if ($order->branch->gst_status)
+                    @if (@$order->branch->gst_status)
                         <h5 class="initial-38-4 initial-38-3 fz-12px">
-                            {{ translate('Gst No') }} : {{ $order->branch->gst_code }}
+                            {{ translate('Gst No') }} : {{ @$order->branch->gst_code }}
                         </h5>
                     @endif
-                    {{-- <span class="text-center">Gst: {{$order->branch->gst_code}}</span> --}}
+                    {{-- <span class="text-center">Gst: {{@$order->branch->gst_code}}</span> --}}
                 </div>
                 <span class="initial-38-5">---------------------------------------------------------------------------------</span>
                 <div class="row mt-3">
@@ -98,7 +98,7 @@
                                 </td>
                                 <td class="">
                                     {{$product['name']}} <br>
-                                    @if(count(json_decode($detail['variation'],true))>0)
+                                    @if(isset($detail['variation']) && count(json_decode($detail['variation'],true))>0)
                                         <strong><u>Variation : </u></strong>
                                         @foreach(json_decode($detail['variation'],true)[0] ?? json_decode($detail['variation'],true) as $key1 =>$variation)
                                             <div class="font-size-sm text-body">

@@ -27,9 +27,10 @@ class DeliveryMan extends Authenticatable
         return $this->hasMany(Order::class,'delivery_man_id');
     }
 
-    public function branch(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+  
+    public function warehouse(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(Branch::class, 'branch_id');
+        return $this->belongsTo(Warehouse::class, 'warehouse_id');
     }
 
 

@@ -4,7 +4,7 @@
         <img src="{{asset('/public/assets/admin/img/food.png')}}" class="initial-38-2" alt="">
     </div>
     <div class="text-center pt-2 mb-3">
-        <h2  class="initial-38-3">{{ @$order->branch->name }}</h2>
+        <h2  class="initial-38-3">{{ @$order->warehouse->name }}</h2>
         <h5 class="text-break initial-38-4">
             {{ @$order->branch->address }}
         </h5>
@@ -26,7 +26,6 @@
             </h5>
         </div>
         <div class="col-6">
-            <?php die ?>
             <h5>
                 <span class="font-light">
                 {{date('d M Y h:i a',strtotime($order['created_at']))}}
@@ -44,7 +43,7 @@
             <h5>
                 {{ translate('phone') }} :
                 <span class="font-light">
-                    {{$order->customer['phone']}}
+                    {{@$order->customer['phone']}}
                 </span>
             </h5>
                 @php($address=\App\Model\CustomerAddress::find($order['delivery_address_id']))
@@ -55,6 +54,7 @@
                 </span>
             </h5>
             @endif
+
         </div>
     </div>
     <h5 class="text-uppercase"></h5>
@@ -69,6 +69,8 @@
         </thead>
 
         <tbody>
+
+        
         @php($sub_total=0)
         @php($total_tax=0)
         @php($total_dis_on_pro=0)
@@ -84,7 +86,7 @@
                     </td>
                     <td class="">
                         {{$product['name']}} <br>
-                        @if(count(json_decode($detail['variation'],true))>0)
+                        @if(isset($detail['variation']) && count(json_decode($detail['variation'],true))>0)
                             <strong><u>Variation : </u></strong>
                             @foreach(json_decode($detail['variation'],true)[0] ?? json_decode($detail['variation'],true) as $key1 =>$variation)
                                 <div class="font-size-sm text-body">

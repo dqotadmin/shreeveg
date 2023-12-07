@@ -37,10 +37,10 @@
                     </div>
                     <div class="col-12">
                         <h5>
-                            Customer Name : {{$order->customer['f_name'].' '.$order->customer['l_name']}}
+                            Customer Name : {{@$order->customer['f_name'].' '.@$order->customer['l_name']}}
                         </h5>
                         <h5>
-                            Phone : {{$order->customer['phone']}}
+                            Phone : {{@$order->customer['phone']}}
                         </h5>
                         @php($address=\App\Model\CustomerAddress::find($order['delivery_address_id']))
                         <h5>

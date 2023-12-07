@@ -11,7 +11,7 @@ class Order extends Model
     protected $casts = [
         'order_amount'           => 'float',
         'checked'                => 'integer',
-        'branch_id'              => 'integer',
+        'warehouse_id'              => 'integer',
         'time_slot_id'           => 'integer',
         'coupon_discount_amount' => 'float',
         'total_tax_amount'       => 'float',
@@ -28,7 +28,7 @@ class Order extends Model
 
     public function details(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(OrderDetail::class);
+        return $this->hasMany(OrderDetail::class,'user_warehouse_order_id');
     }
 
     public function delivery_man(): \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -72,6 +72,10 @@ class Order extends Model
     public function coupon(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Coupon::class, 'coupon_code', 'code');
+    }
+    public function store(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Store::class, 'store_id');
     }
 
 }

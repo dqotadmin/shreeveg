@@ -46,7 +46,7 @@ class POSController extends Controller
         private User $user,
         private WarehouseCategory $warehouse_categories,
         private Store $store
-    ) { 
+    ) {
     }
 
     /**
@@ -55,22 +55,24 @@ class POSController extends Controller
      */
     public function index(Request $request): View|Factory|Application
     {
+        session()->forget('cart');
+        session()->forget('last_order');
         $authUser = auth('admin')->user();
-       
+
         $assign_categories = $this->warehouse_categories->where('warehouse_id', $authUser->Store->warehouse_id)->get('category_id');
-        $categorie = $this->category->whereIn('id',$assign_categories)->get();
+        $categorie = $this->category->whereIn('id', $assign_categories)->get();
         $options = Helpers::getCategoryDropDown($categorie);
         // dd($options);
-        $categories = $this->category->whereIn('id',$assign_categories)->get();
+        $categories = $this->category->whereIn('id', $assign_categories)->get();
 
         $get_warehouse_id = $this->store->where('id', auth('admin')->user()->store_id)->pluck('warehouse_id')->toArray();
         $category_ids = $this->warehouse_categories->where('warehouse_id', $get_warehouse_id)->pluck('category_id');
         $category = $request->query('category_id', 0);
-        $categories = $this->category->whereIn('id',$category_ids)->get();
+        $categories = $this->category->whereIn('id', $category_ids)->get();
         $keyword = $request->keyword;
         $key = explode(' ', $keyword);
 
-        $products = $this->product->whereIn('category_id',$category_ids)->when($request->has('category_id') && $request['category_id'] != 0, function ($query) use ($request) {
+        $products = $this->product->whereIn('category_id', $category_ids)->when($request->has('category_id') && $request['category_id'] != 0, function ($query) use ($request) {
             $query->whereJsonContains('category_id', [['id' => (string)$request['category_id']]]);
         })->when($keyword, function ($query) use ($key) {
             return $query->where(function ($q) use ($key) {
@@ -111,12 +113,12 @@ class POSController extends Controller
         $product = $this->product->find($request->id);
         $str = '';
         $price = 0;
-        if($product->choice_options){
-        foreach (json_decode($product->choice_options) as $key => $choice) {
-            if ($str != null) {
-                $str .= '-' . str_replace(' ', '', $request[$choice->name]);
-            } else {
-                $str .= str_replace(' ', '', $request[$choice->name]);
+        if ($product->choice_options) {
+            foreach (json_decode($product->choice_options) as $key => $choice) {
+                if ($str != null) {
+                    $str .= '-' . str_replace(' ', '', $request[$choice->name]);
+                } else {
+                    $str .= str_replace(' ', '', $request[$choice->name]);
                 }
             }
         }
@@ -135,8 +137,8 @@ class POSController extends Controller
         //     $price = $price - $discount;
         // }
         $price = $product->warehouseProducts->customer_price;
-            // $discount = self::discount_calculation($product, $price);
-            // $price = $price - $discount;
+        // $discount = self::discount_calculation($product, $price);
+        // $price = $price - $discount;
 
         return array('price' => Helpers::set_symbol(($price * $request->quantity)));
     }
@@ -263,14 +265,15 @@ class POSController extends Controller
      */
     public function addToCart(Request $request): \Illuminate\Http\JsonResponse
     {
-        $product = $this->product->find($request->id);
+        //dd($request->id, $this->product);
+        $product = \App\Model\WarehouseProduct::find($request->id);
         $data = array();
         $data['id'] = $product->id;
         $str = '';
         $variations = [];
         $price = 0;
 
-        if ($product->warehouseProducts->total_stock < $request['quantity']) {
+        if ($product->total_stock < $request['quantity']) {
             return response()->json([
                 'data' => 0
             ]);
@@ -286,9 +289,9 @@ class POSController extends Controller
                 $str .= str_replace(' ', '', $request[$choice->name]);
             }
         } */
-      if(isset($data['variations'])){
-        $data['variations']= $variations;
-      } 
+        if (isset($data['variations'])) {
+            $data['variations'] = $variations;
+        }
         $data['variant'] = $str;
         if ($request->session()->has('cart')) {
             if (count($request->session()->get('cart')) > 0) {
@@ -308,12 +311,11 @@ class POSController extends Controller
             for ($i = 0; $i < $count; $i++) {
                 if (json_decode($product->variations)[$i]->type == $str) {
                     // $price = json_decode($product->variations)[$i]->price;
-            $price = $product->warehouseProducts->customer_price;
-
+                    $price = $product->customer_price;
                 }
             }
         } else {
-            $price = $product->warehouseProducts->customer_price;
+            $price = $product->customer_price;
         }
 
         $tax_on_product = Helpers::tax_calculate($product, $price);
@@ -322,9 +324,9 @@ class POSController extends Controller
 
         $data['quantity'] = $request['quantity'];
         $data['price'] = $price;
-        $data['name'] = $product->name;
+        $data['name'] = $product->productDetail->name;
         $data['discount'] = $discount;
-        $data['image'] = $product->image;
+        $data['image'] = $product->productDetail->image;
         if ($request->session()->has('cart')) {
             $cart = $request->session()->get('cart', collect([]));
             $cart->push($data);
@@ -335,7 +337,7 @@ class POSController extends Controller
 
         return response()->json([
             'data' => $data,
-            'quantity' => $product->warehouseProducts->total_stock
+            'quantity' => $product->total_stock
         ]);
     }
 
@@ -447,6 +449,8 @@ class POSController extends Controller
      */
     public function place_order(Request $request): \Illuminate\Http\RedirectResponse
     {
+
+        $authUser = auth('admin')->user();
         if ($request->session()->has('cart')) {
             if (count($request->session()->get('cart')) < 1) {
                 Toastr::error(translate('cart_empty_warning'));
@@ -474,6 +478,15 @@ class POSController extends Controller
         $order->payment_status = 'paid';
         $order->order_status = 'delivered';
         $order->order_type = 'pos';
+        if ($authUser->admin_role_id == 6) {
+            $order->type = 'Store';
+            $order->store_id = $authUser->store_id;
+            $order->warehouse_id = $authUser->Store->warehouse_id;
+        }
+        if ($authUser->admin_role_id == 3) {
+            $order->warehouse_id = $authUser->warehouse_id;
+        }
+
         $order->coupon_code = $request->coupon_code ?? null;
         $order->payment_method = $request->type;
         $order->transaction_reference = $request->transaction_reference ?? null;
@@ -484,21 +497,22 @@ class POSController extends Controller
         $order->checked = 1;
         $order->created_at = now();
         $order->updated_at = now();
+
         foreach ($cart as $c) {
             if (is_array($c)) {
-                $product = $this->product->find($c['id']);
+                $product = \App\Model\WarehouseProduct::find($c['id']);
                 if (!empty($product['variations'])) {
                     $type = $c['variant'];
                     foreach (json_decode($product['variations'], true) as $var) {
                         if ($type == $var['type'] && $var['stock'] < $c['quantity']) {
                             Toastr::error($var['type'] . ' ' . translate('is out of stock'));
-                   
-                    return back();
+
+                            return back();
                         }
                     }
                 } else {
-                    if (($product->warehouseProducts->total_stock - $c['quantity']) < 0) {
-                        Toastr::error($product->name . ' ' . translate('is out of stock'));
+                    if (($product->total_stock - $c['quantity']) < 0) {
+                        Toastr::error($product->productDetail->name . ' ' . translate('is out of stock'));
                         return back();
                     }
                 }
@@ -511,26 +525,26 @@ class POSController extends Controller
                 $discount_on_product = 0;
                 $product_subtotal = ($c['price']) * $c['quantity'];
                 $discount_on_product += ($c['discount'] * $c['quantity']);
-          
-                $product = $this->product->find($c['id']);
-             
+
+                $product = \App\Model\WarehouseProduct::find($c['id']);
+
 
                 if ($product) {
 
                     $price = $c['price'];
-                
+
                     $tax_on_product = Helpers::tax_calculate($product, $price);
-               
-                    $category_id = $product['category_id'];
+
+                    $category_id = $product->productDetail['category_id'];
                     /* foreach (json_decode($product['category_ids'], true) as $cat) {
                         if ($cat['position'] == 1){
                             $category_id = ($cat['id']);
                         }
                     } */
-                 
+
                     $category_discount = Helpers::category_discount_calculate($category_id, $price);
-                      $product_discount = Helpers::discount_calculate($product, $price);
- 
+                    $product_discount = Helpers::discount_calculate($product, $price);
+
                     if ($category_discount >= $price) {
                         $discount = $product_discount;
                         $discount_type = 'discount_on_product';
@@ -538,8 +552,9 @@ class POSController extends Controller
                         $discount = max($category_discount, $product_discount);
                         $discount_type = $product_discount > $category_discount ? 'discount_on_product' : 'discount_on_category';
                     }
-                
+                    //dump($product);
                     $product = Helpers::product_data_formatting($product);
+                    // dd(1, $cart, $product);
                     $or_d = [
                         'product_id' => $c['id'],
                         'product_details' => $product,
@@ -556,8 +571,8 @@ class POSController extends Controller
                     $product_price += $product_subtotal - $discount_on_product;
                     $order_details[] = $or_d;
                 }
-               
-                $this->product->where(['id' => $product['id']])->update([
+
+                \App\Model\WarehouseProduct::where(['id' => $product['id']])->update([
                     'total_stock' => $product['total_stock'] - $c['quantity'],
                 ]);
             }
@@ -567,7 +582,7 @@ class POSController extends Controller
             $extra_discount = $cart['extra_discount_type'] == 'percent' && $cart['extra_discount'] > 0 ? (($total_price * $cart['extra_discount']) / 100) : $cart['extra_discount'];
             $total_price -= $extra_discount;
         }
-$tax = isset($cart['tax']) ? $cart['tax'] : 0;
+        $tax = isset($cart['tax']) ? $cart['tax'] : 0;
         $total_tax_amount = ($tax > 0) ? (($total_price * $tax) / 100) : $total_tax_amount;
         try {
             $order->extra_discount = $extra_discount ?? 0;
@@ -575,14 +590,14 @@ $tax = isset($cart['tax']) ? $cart['tax'] : 0;
             $order->order_amount = $total_price + $total_tax_amount + $order->delivery_charge;
 
             $order->coupon_discount_amount = 0.00;
-            $order->warehouse_id = session()->has('warehouse_id') ? session('warehouse_id') : 1;
 
             $order->save();
-
+            // dd($order_details);
             foreach ($order_details as $key => $item) {
                 $order_details[$key]['user_warehouse_order_id'] = $order->id;
+                $order_details[$key]['tax_amount'] = 0.00;
             }
-      $this->order_detail->insert($order_details);
+            $this->order_detail->insert($order_details);
             session()->forget('cart');
             session()->forget('customer_id');
             session()->forget('warehouse_id');
@@ -591,11 +606,10 @@ $tax = isset($cart['tax']) ? $cart['tax'] : 0;
             return back();
         } catch (\Exception $e) {
             info($e);
-        dd($e);
-
+            dd($e);
         }
-dd(1);
-Toastr::warning(translate('failed_to_place_order'));
+
+        Toastr::warning(translate('failed_to_place_order'));
         return back();
     }
 
@@ -605,6 +619,7 @@ Toastr::warning(translate('failed_to_place_order'));
      */
     public function generate_invoice($id): \Illuminate\Http\JsonResponse
     {
+        dd('mkk');
         $order = $this->order->where('id', $id)->first();
 
         return response()->json([

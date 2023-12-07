@@ -1,5 +1,6 @@
 <div class="product-card card" onclick="quickView('{{$product->id}}')">
     <?php
+    //dd( $product);
         $category_id = $product['category_id']; 
         /* foreach (json_decode($product['category_id'], true) as $cat) {
             if ($cat['position'] == 1){

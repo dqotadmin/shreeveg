@@ -65,7 +65,7 @@ class Product extends Model
     protected static function booted(): void
     {
         static::addGlobalScope('translate', function (Builder $builder) {
-            $builder->with(['translations' => function($query){
+            $builder->with(['translations' => function ($query) {
                 return $query->where('locale', app()->getLocale());
             }]);
         });
@@ -86,10 +86,18 @@ class Product extends Model
         return $this->BelongsTo(Category::class);
     }
 
-    public function unit(){
+    public function unit()
+    {
         return $this->belongsTo((Unit::class));
     }
-    public function warehouseProducts(){
-        return $this->belongsTo(WarehouseProduct::class,'id','product_id');
+    public function warehouseProducts()
+    {
+        return $this->belongsTo(WarehouseProduct::class, 'id', 'product_id');
+    }
+
+
+    public function getWarehouseProducts()
+    {
+        return $this->hasMany(WarehouseProduct::class)->where('product_id', $this->id)->where('warehouse_id', $this->warehouse_id);
     }
 }

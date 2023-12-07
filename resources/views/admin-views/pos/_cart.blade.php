@@ -33,9 +33,9 @@
                         $product_subtotal = ($cartItem['price']) * $cartItem['quantity'];
                         $discount_on_product += ($cartItem['discount'] * $cartItem['quantity']);
                         $subtotal += $product_subtotal;
-
+                   
                         //tax calculation
-                        $product = \App\Model\Product::find($cartItem['id']);
+                        $product =\App\Model\WarehouseProduct::find($cartItem['id']);
                         $total_tax += \App\CentralLogics\Helpers::tax_calculate($product, $cartItem['price']) * $cartItem['quantity'];
                         $updated_total_tax += $vat_status === 'included' ? 0 : \App\CentralLogics\Helpers::tax_calculate($product, $cartItem['price']) * $cartItem['quantity'];
 

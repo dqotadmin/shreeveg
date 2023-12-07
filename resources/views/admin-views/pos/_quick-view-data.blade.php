@@ -69,7 +69,7 @@
             </div>
             <form id="add-to-cart-form" class="mb-2">
                 @csrf
-                <input type="hidden" name="id" value="{{ $product->id }}">
+                <input type="hidden" name="id" value="{{ @$product->warehouseProducts->id }}">
 
                 {{--
                 @foreach (json_decode($product->choice_options) as $key => $choice)

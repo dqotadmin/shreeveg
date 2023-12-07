@@ -19,8 +19,8 @@ use Illuminate\Support\Facades\DB;
 
 class Helpers
 {
-   
-    
+
+
 
     public static function error_processor($validator)
     {
@@ -62,7 +62,7 @@ class Helpers
         return self::set_price($result);
     }
 
-    public static function product_data_formatting($data, $multi_data = false)
+    public static function product_data_formattingOld($data, $multi_data = false)
     {
 
         $storage = [];
@@ -120,22 +120,21 @@ class Helpers
 
             $categories = gettype($data['category_id']) == 'array' ? $data['category_id'] : json_decode($data['category_id']);
             if (!is_null($categories) && ($categories) > 0) {
-                        $ids[] = $categories;
+                $ids[] = $categories;
 
                 $data['category_discount'] = CategoryDiscount::active()->where('category_id', $ids)->first();
-
             } else {
                 $data['category_discount'] = [];
             }
 
-           if(isset($data['variations'])){
+            if (isset($data['variations'])) {
 
                 foreach (json_decode($data['variations'], true) as $var) {
-                $variations[] = [
-                    'type' => $var['type'],
-                    'price' => (float)$var['price'],
-                    'stock' => isset($var['stock']) ? (int)$var['stock'] : (int)0,
-                ];
+                    $variations[] = [
+                        'type' => $var['type'],
+                        'price' => (float)$var['price'],
+                        'stock' => isset($var['stock']) ? (int)$var['stock'] : (int)0,
+                    ];
                 }
             }
             $data['variations'] = $variations;
@@ -154,6 +153,54 @@ class Helpers
         return $data;
     }
 
+    public static function product_data_formatting($data, $multi_data = false)
+    {
+
+        $storage = [];
+        //dd($data->productDetail['image'], $data->productDetail->category->id);
+
+        $variations = [];
+        $data['category_id'] = json_decode($data->productDetail->category->id); //json_decode($data['category_id']);
+        $data['image'] = json_decode($data->productDetail['image']);
+        $data['customer_price'] = json_decode($data['customer_price']);
+        $data['store_price'] = json_decode($data['store_price']);
+        $data['attributes'] = json_decode($data['attributes']);
+        $data['choice_options'] = json_decode($data['choice_options']);
+
+        $categories = gettype($data['category_id']) == 'array' ? $data['category_id'] : json_decode($data['category_id']);
+        if (!is_null($categories) && ($categories) > 0) {
+            $ids[] = $categories;
+
+            $data['category_discount'] = CategoryDiscount::active()->where('category_id', $ids)->first();
+        } else {
+            $data['category_discount'] = [];
+        }
+
+        if (isset($data['variations'])) {
+
+            foreach (json_decode($data['variations'], true) as $var) {
+                $variations[] = [
+                    'type' => $var['type'],
+                    'price' => (float)$var['price'],
+                    'stock' => isset($var['stock']) ? (int)$var['stock'] : (int)0,
+                ];
+            }
+        }
+        $data['variations'] = $variations;
+        if ($variations && count($data['translations']) > 0) {
+            foreach ($data['translations'] as $translation) {
+                if ($translation->key == 'name') {
+                    $data['name'] = $translation->value;
+                }
+                if ($translation->key == 'description') {
+                    $data['description'] = $translation->value;
+                }
+            }
+        }
+
+
+        return $data;
+    }
     public static function get_business_settings($name)
     {
         $config = null;
@@ -166,11 +213,12 @@ class Helpers
         }
         return $config;
     }
-    public static function getAlphabet() {
+    public static function getAlphabet()
+    {
         // Generate an array containing A to Z
         return range('A', 'Z');
     }
-    
+
     public static function getWhCategoriesData($catid, $whId)
     {
         $row = [];
@@ -334,6 +382,7 @@ class Helpers
 
     public static function tax_calculate($product, $price)
     {
+
         if ($product['tax_type'] == 'percent') {
             $price_tax = ($price / 100) * $product['tax'];
         } else {
@@ -854,31 +903,33 @@ class Helpers
         };
     }
 
-    public static function getCategoryDropDown($categories, $parentId = 0, $level = 0, $selected = 0){
+    public static function getCategoryDropDown($categories, $parentId = 0, $level = 0, $selected = 0)
+    {
         $categories_array = [];
-        if(!empty($categories)){
+        if (!empty($categories)) {
             $index = 0;
-            foreach($categories AS $category) {
+            foreach ($categories as $category) {
                 $categories_array[$index]['id'] = $category->id;
                 $categories_array[$index]['name'] = $category->name;
                 $categories_array[$index]['parent_id'] = $category->parent_id;
                 $index++;
             }
         }
-        $options = self::buildCategoryOptions($categories_array, $parentId, $level, $selected );
+        $options = self::buildCategoryOptions($categories_array, $parentId, $level, $selected);
         return $options;
     }
 
-    public static function buildCategoryOptions($categories, $parentId = 0, $level = 0, $selected = 0) {
+    public static function buildCategoryOptions($categories, $parentId = 0, $level = 0, $selected = 0)
+    {
         $html = '';
         foreach ($categories as $category) {
             if ($category['parent_id'] == $parentId) {
-                
-                if(is_array($selected))
-                    $sel = (in_array($category['id'],$selected)) ? 'selected' : '';
-                else 
-                    $sel = ($category['id']==$selected) ? 'selected' : '';
-    
+
+                if (is_array($selected))
+                    $sel = (in_array($category['id'], $selected)) ? 'selected' : '';
+                else
+                    $sel = ($category['id'] == $selected) ? 'selected' : '';
+
                 $name = str_repeat("&nbsp;", $level * 4) . $category['name']; // Indent based on level
                 $html .= "<option value='{$category['id']}' {$sel} >$name</option>";
                 $html .= self::buildCategoryOptions($categories, $category['id'], $level + 1, $selected);
@@ -886,7 +937,6 @@ class Helpers
         }
         return $html;
     }
-
 }
 
 function translate($key)
@@ -915,5 +965,3 @@ function translate($key)
 
     return $result;
 }
-
-

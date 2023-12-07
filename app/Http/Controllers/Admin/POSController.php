@@ -55,8 +55,8 @@ class POSController extends Controller
      */
     public function index(Request $request): View|Factory|Application
     {
-        session()->forget('cart');
-        session()->forget('last_order');
+        //session()->forget('cart');
+        //session()->forget('last_order');
         $authUser = auth('admin')->user();
 
         $assign_categories = $this->warehouse_categories->where('warehouse_id', $authUser->Store->warehouse_id)->get('category_id');

@@ -19,7 +19,7 @@
                     <img src="{{asset('/public/assets/admin/img/food.png')}}" class="initial-38-2" alt="">
                 </div>
                 <div class="text-center pt-2 mb-3">
-                    <h2  class="initial-38-3">{{ $order->branch->name }}</h2>
+                    <h2  class="initial-38-3">{{ @$order->branch->name }}</h2>
                     <h5 class="text-break initial-38-4">
                         {{ $order->branch->address }}
                     </h5>

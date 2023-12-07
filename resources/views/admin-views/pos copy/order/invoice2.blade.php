@@ -1,22 +1,22 @@
 
 <div class="initial-38-1">
     <div class="pt-3">
-        <img src="{{asset('/public/assets/admin/img/food.png')}}" class="initial-38-2" alt="">
+        <img src="{{asset('/public/assets/admin/img/restaurant-invoice.png')}}" class="initial-38-2" alt="">
     </div>
     <div class="text-center pt-2 mb-3">
-        <h2  class="initial-38-3">{{ @$order->branch->name }}</h2>
+        <h2  class="initial-38-3">{{ $order->branch->name }}</h2>
         <h5 class="text-break initial-38-4">
-            {{ @$order->branch->address }}
+            {{ $order->branch->address }}
         </h5>
         <h5 class="initial-38-4 initial-38-3">
             {{ translate('Phone') }} : {{\App\Model\BusinessSetting::where(['key'=>'phone'])->first()->value}}
         </h5>
-        @if (@$order->branch->gst_status)
+        @if ($order->branch->gst_status)
             <h5 class="initial-38-4 initial-38-3 fz-12px">
-                {{ translate('Gst No') }} : {{ @$order->branch->gst_code }}
+                {{ translate('Gst No') }} : {{ $order->branch->gst_code }}
             </h5>
         @endif
-        {{-- <span class="text-center">Gst: {{@$order->branch->gst_code}}</span> --}}
+        {{-- <span class="text-center">Gst: {{$order->branch->gst_code}}</span> --}}
     </div>
     <span class="initial-38-5">---------------------------------------------------------------------------------</span>
     <div class="row mt-3">
@@ -26,11 +26,8 @@
             </h5>
         </div>
         <div class="col-6">
-            <?php die ?>
-            <h5>
                 <span class="font-light">
                 {{date('d M Y h:i a',strtotime($order['created_at']))}}
-                </span>
             </h5>
         </div>
         <div class="col-12">
@@ -72,18 +69,14 @@
         @php($sub_total=0)
         @php($total_tax=0)
         @php($total_dis_on_pro=0)
-        @php($updated_total_tax=0)
-        @php($vat_status = '')
         @foreach($order->details as $detail)
-
-            @if($detail->product_details !=null)
-                @php($product = json_decode($detail->product_details, true))
+            @if($detail->product)
                 <tr>
                     <td class="">
                         {{$detail['quantity']}}
                     </td>
                     <td class="">
-                        {{$product['name']}} <br>
+                        {{$detail->product['name']}} <br>
                         @if(count(json_decode($detail['variation'],true))>0)
                             <strong><u>Variation : </u></strong>
                             @foreach(json_decode($detail['variation'],true)[0] ?? json_decode($detail['variation'],true) as $key1 =>$variation)
@@ -93,23 +86,17 @@
                                 </div>
                             @endforeach
                         @endif
-                        <span>{{ translate('Unit Price') }} : {{ Helpers::set_symbol($detail['price']) }}</span><br>
-                        <span>{{ translate('Qty') }} : {{ $detail['quantity']}}</span><br>
-                        <span>{{ translate('Discount') }} : {{ Helpers::set_symbol($detail['discount_on_product']) }}</span>
 
+                        {{ translate('Discount') }} : {{ Helpers::set_symbol($detail['discount_on_product']) }}
                     </td>
-                    <td class="w-28p">
+                        <td class="w-28p">
                         @php($amount=($detail['price']-$detail['discount_on_product'])*$detail['quantity'])
                         {{ Helpers::set_symbol($amount) }}
                     </td>
                 </tr>
-
                 @php($sub_total+=$amount)
                 @php($total_tax+=$detail['tax_amount']*$detail['quantity'])
-                @php($updated_total_tax+= $detail['vat_status'] === 'included' ? 0 : $detail['tax_amount']*$detail['quantity'])
-                @php($vat_status = $detail['vat_status'])
             @endif
-
         @endforeach
         </tbody>
     </table>
@@ -117,12 +104,12 @@
         <dl class="row text-right justify-content-center">
             <dt class="col-6">{{ translate('Items Price') }}:</dt>
             <dd class="col-6">{{ Helpers::set_symbol($sub_total) }}</dd>
-            <dt class="col-6">{{translate('Tax / VAT')}} {{ $vat_status == 'included' ? translate('(included)') : '' }}:</dt>
+            <dt class="col-6">{{ translate('Tax / VAT') }}:</dt>
             <dd class="col-6">{{ Helpers::set_symbol($total_tax) }}</dd>
 
             <dt class="col-6">{{ translate('Subtotal') }}:</dt>
             <dd class="col-6">
-                {{ Helpers::set_symbol($sub_total+$updated_total_tax) }}</dd>
+                {{ Helpers::set_symbol($sub_total+$total_tax) }}</dd>
             <dt class="col-6">{{ translate('Coupon Discount') }}:</dt>
             <dd class="col-6">
                 - {{ Helpers::set_symbol($order['coupon_discount_amount']) }}</dd>
@@ -143,13 +130,13 @@
             </dd>
 
             <dt class="col-6 font-20px">{{ translate('Total') }}:</dt>
-            <dd class="col-6 font-20px">{{ Helpers::set_symbol($sub_total+$del_c+$updated_total_tax-$order['coupon_discount_amount']-$order['extra_discount']) }}</dd>
+            <dd class="col-6 font-20px">{{ Helpers::set_symbol($sub_total+$del_c+$total_tax-$order['coupon_discount_amount']-$order['extra_discount']) }}</dd>
         </dl>
         <span class="initial-38-5">---------------------------------------------------------------------------------</span>
         <h5 class="text-center pt-1">
             <span class="d-block">"""{{ translate('THANK YOU') }}"""</span>
         </h5>
         <span class="initial-38-5">---------------------------------------------------------------------------------</span>
-        <span class="d-block text-center">{{ $footer_text = \App\Model\BusinessSetting::where(['key' => 'footer_text'])->first()->value }}</span>
+        <span class="d-block text-center">© 2022 GrowFresh. All rights reserved.</span>
     </div>
 </div>

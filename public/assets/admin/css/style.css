@@ -2652,6 +2652,7 @@ a:hover .short-title {
   .review--information-wrapper .food--media .avatar {
     width: 184px;
     height: 184px;
+    object-fit: contain;
   }
 }
 @media screen and (max-width: 500px) {

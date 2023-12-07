@@ -47,7 +47,7 @@
                                         </div>
                                     </form>
                                 </div> -->
-                            </div> 
+                            </div>
                             <div id="items">
                                 <div class="row g-1">
                                     @foreach($products as $product)
@@ -279,7 +279,6 @@
 
         $('.input-number').focusin(function () {
             $(this).data('oldValue', $(this).val());
-            console.log('old value'+$(this).data('oldValue', $(this).val()));
         });
 
         $('.input-number').change(function () {
@@ -290,15 +289,10 @@
 
             var input_qty_max_val = parseInt($('#check_max_qty').val());
             var input_qty_max_val = input_qty_max_val + 1;
-          
-
 
 
             var name = $(this).attr('name');
-      
             if (valueCurrent >= minValue) {
-                console.log('name'+name);
-
                 $(".btn-number[data-type='minus'][data-field='" + name + "']").removeAttr('disabled');
             } else {
                 Swal.fire({
@@ -311,8 +305,8 @@
             }
 
             if(valueCurrent >= input_qty_max_val){
-                console.log('input_qty_max_val'+input_qty_max_val);
-               Swal.fire({
+                console.log(input_qty_max_val);
+                Swal.fire({
                     icon: 'error',
                     title: '{{translate("Cart")}}',
                     text: '{{translate('the maximum value was reached')}}',
@@ -383,7 +377,6 @@
                 success: function (data) {
                     console.log(data);
                     if (data.data == 1) {
-                        console.log('data data == 1'+data.data);
                         Swal.fire({
                             icon: 'info',
                             title: "{{translate('Cart')}}",
@@ -391,9 +384,7 @@
                             confirmButtonText: '{{translate("Yes")}}',
                         });
                         return false;
-                        console.log('data quantity'+data.quantity);
                     } else if (data.quantity <= 0) {
-                        console.log('data quantity <= 0'+data.quantity);
                         Swal.fire({
                             icon: 'info',
                             title: "{{translate('Cart')}}",
@@ -403,8 +394,6 @@
                         return false;
 
                     }   else if (data.data == 0) {
-                        console.log('data quantity=<= 0'+data.data);
-
                         Swal.fire({
                             icon: 'error',
                             title: "{{translate('Cart')}}",

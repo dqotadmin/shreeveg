@@ -89,4 +89,7 @@ class Product extends Model
     public function unit(){
         return $this->belongsTo((Unit::class));
     }
+    public function warehouseProducts(){
+        return $this->belongsTo(WarehouseProduct::class,'id','product_id');
+    }
 }

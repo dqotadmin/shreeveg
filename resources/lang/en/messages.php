@@ -2509,4 +2509,7 @@
   'Select Category' => 'Select Category',
   'No_category_assign' => 'No category assign',
   'Select Categories' => 'Select Categories',
+  '5%' => '5%',
+  'store price' => 'Store price',
+  ' customer price' => ' customer price',
 );

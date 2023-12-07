@@ -49,6 +49,10 @@ class Order extends Model
     {
         return $this->belongsTo(Branch::class, 'branch_id');
     }
+    public function warehouse(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Warehouse::class, 'warehouse_id');
+    }
 
     public function delivery_address(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {

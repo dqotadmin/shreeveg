@@ -4,19 +4,19 @@
         <img src="{{asset('/public/assets/admin/img/food.png')}}" class="initial-38-2" alt="">
     </div>
     <div class="text-center pt-2 mb-3">
-        <h2  class="initial-38-3">{{ @$order->branch->name }}</h2>
+        <h2  class="initial-38-3">{{ $order->branch->name }}</h2>
         <h5 class="text-break initial-38-4">
-            {{ @$order->branch->address }}
+            {{ $order->branch->address }}
         </h5>
         <h5 class="initial-38-4 initial-38-3">
             {{ translate('Phone') }} : {{\App\Model\BusinessSetting::where(['key'=>'phone'])->first()->value}}
         </h5>
-        @if (@$order->branch->gst_status)
+        @if ($order->branch->gst_status)
             <h5 class="initial-38-4 initial-38-3 fz-12px">
-                {{ translate('Gst No') }} : {{ @$order->branch->gst_code }}
+                {{ translate('Gst No') }} : {{ $order->branch->gst_code }}
             </h5>
         @endif
-        {{-- <span class="text-center">Gst: {{@$order->branch->gst_code}}</span> --}}
+        {{-- <span class="text-center">Gst: {{$order->branch->gst_code}}</span> --}}
     </div>
     <span class="initial-38-5">---------------------------------------------------------------------------------</span>
     <div class="row mt-3">
@@ -26,7 +26,6 @@
             </h5>
         </div>
         <div class="col-6">
-            <?php die ?>
             <h5>
                 <span class="font-light">
                 {{date('d M Y h:i a',strtotime($order['created_at']))}}

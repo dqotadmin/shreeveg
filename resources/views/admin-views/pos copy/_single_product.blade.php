@@ -1,11 +1,13 @@
 <div class="product-card card" onclick="quickView('{{$product->id}}')">
     <?php
-        $category_id = $product['category_id']; 
+        $category_id = $product['category_id'];
+        
         /* foreach (json_decode($product['category_id'], true) as $cat) {
             if ($cat['position'] == 1){
                 $category_id = ($cat['id']);
             }
         } */
+
         $category_discount = \App\CentralLogics\Helpers::category_discount_calculate($category_id, $product['price']);
         $product_discount = \App\CentralLogics\Helpers::discount_calculate($product, $product['price']);
 
@@ -18,9 +20,13 @@
 
     <div class="card-header inline_product clickable p-0">
         @if (!empty(json_decode($product['image'],true)))
-            <img src="{{asset('storage/app/public/product')}}/{{json_decode($product['image'], true)[0]}}"   onerror="this.src='{{asset('public/assets/admin/img/160x160/2.png')}}'" class="w-100 h-100 object-cover aspect-ratio-80">
+            <img src="{{asset('storage/app/public/product')}}/{{json_decode($product['image'], true)[0]}}"
+            onerror="this.src='{{asset('public/assets/admin/img/160x160/2.png')}}'" class="w-100 h-100 object-cover aspect-ratio-80">
         @else
-            <img src="{{asset('public/assets/admin/img/160x160/2.png')}}" class="w-100 h-100 object-cover aspect-ratio-80">
+            <img
+            src="{{asset('public/assets/admin/img/160x160/2.png')}}"
+                class="w-100 h-100 object-cover aspect-ratio-80"
+            >
         @endif
     </div>
 
@@ -30,8 +36,7 @@
         </div>
         <div class="justify-content-between text-center">
             <div class="product-price text-center">
-            {{ (@$product->warehouseProducts->customer_price) }}
-                <!-- {{ Helpers::set_symbol($product['price'] - $discount) }} -->
+                {{ Helpers::set_symbol($product['price'] - $discount) }}
             </div>
         </div>
     </div>

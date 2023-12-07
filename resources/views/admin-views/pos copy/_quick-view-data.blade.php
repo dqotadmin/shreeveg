@@ -21,9 +21,7 @@
 
             <div class="mb-3 text-dark">
                 <span class="h3 font-weight-normal text-accent mr-1">
-            {{ (@$product->warehouseProducts->customer_price) }}
-
-                    <!-- {{ Helpers::set_symbol(($product['price']- $discount)) }} -->
+                    {{ Helpers::set_symbol(($product['price']- $discount)) }}
                 </span>
                 @if($discount > 0)
                     <strike style="font-size: 12px!important;">
@@ -103,7 +101,7 @@
                                         <i class="tio-remove  font-weight-bold"></i>
                                 </button>
                             </span>
-                            <input type="hidden" id="check_max_qty" value="{{ $product->warehouseProducts->total_stock }}">
+                            <input type="hidden" id="check_max_qty" value="{{ $product['total_stock'] }}">
                             <input type="text" name="quantity"
                                    class="form-control input-number text-center cart-qty-field"
                                    placeholder="1" value="1" min="1" max="100">

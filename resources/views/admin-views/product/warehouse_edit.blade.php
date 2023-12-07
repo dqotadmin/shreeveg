@@ -198,11 +198,11 @@
                                             for="exampleFormControlInput1">{{translate('average_price')}}</label>
                                         <input type="number" min="0" max="100000" value="20" name="avg_price" step="any"
                                             style="font-weight:bold;" id="discount" class="form-control"
-                                            placeholder="{{ translate('Ex : 5%') }}" readonly required>
+                                            placeholder="{{ translate('5%') }}" readonly required>
 
                                     </div>
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-2 mt-2">
                                     <div class="form-group mt-5"> /{{@$product->unit->title}}
                                         ({{@$product->unit->description}})</div>
                                 </div>
@@ -213,10 +213,10 @@
                                         <input type="number" min="0" max="100000"
                                             value="{{@$warehouse_products->store_price}}" name="store_price" step="any"
                                             id="discount" class="form-control"
-                                            placeholder="{{ translate('Ex : store price') }}" required>
+                                            placeholder="{{ translate('store price') }}" required>
                                     </div>
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-2 mt-2">
                                     <div class="form-group mt-5"> /{{@$product->unit->title}}
                                         ({{@$product->unit->description}})</div>
                                 </div>
@@ -229,10 +229,10 @@
                                         <input type="number" min="0" max="100000"
                                             value="{{@$warehouse_products->customer_price}}" name="customer_price"
                                             step="any" id="discount" class="form-control"
-                                            placeholder="{{ translate('Ex : customer price') }}" required>
+                                            placeholder="{{ translate(' customer price') }}" required>
                                     </div>
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-2 mt-2">
                                     <div class="form-group mt-5"> /{{@$product->unit->title}}
                                         ({{@$product->unit->description}})</div>
                                 </div>
@@ -460,7 +460,7 @@ $(function() {
         groupClassName: '',
         maxFileSize: '',
         placeholderImage: {
-            image: '{{asset(' / public / assets / admin / img / upload - en.png ')}}',
+            image: '{{asset('/public/assets/admin/img/upload-en.png')}}',
             width: '100%'
         },
         dropFileLabel: "Drop Here",
@@ -495,8 +495,7 @@ $(function() {
         groupClassName: '',
         maxFileSize: '',
         placeholderImage: {
-            image: '{{asset('
-            public / assets / admin / img / upload - en.png ')}}',
+            image: '{{asset('public/assets/admin/img/upload-en.png')}}',
             width: '100%'
         },
         dropFileLabel: "Drop Here",
@@ -621,8 +620,7 @@ $('#product_form').on('submit', function() {
                     });
                 }
             } else {
-                toastr.success('{{translate('
-                    product updated successfully!')}}', {
+                toastr.success('{{translate('product updated successfully!')}}', {
                         CloseButton: true,
                         ProgressBar: true
                     });

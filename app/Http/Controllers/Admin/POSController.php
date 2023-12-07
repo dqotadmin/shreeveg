@@ -383,22 +383,28 @@ class POSController extends Controller
         $branches = $this->branch->all();
         $query_param = [];
         $search = $request['search'];
+        $query = $this->order;
+        $authUser = auth('admin')->user();
+        if($authUser->admin_role_id == 6){
+            $query = $query->whereType('Store')->where('store_id',$authUser->store_id );
+        }elseif($authUser->admin_role_id == 3){
+            $query = $query->whereType('Warehouse')->where('warehouse_id',$authUser->warehouse_id );
+        }
 
-        $branch_id = $request['branch_id'];
         $start_date = $request['start_date'];
         $end_date = $request['end_date'];
+ 
+        //$this->order->where(['checked' => 0])->update(['checked' => 1]);
 
-        $this->order->where(['checked' => 0])->update(['checked' => 1]);
-
-        $query = $this->order->pos()->with(['customer', 'branch', 'details'])
-            ->when((!is_null($branch_id) && $branch_id != 'all'), function ($query) use ($branch_id) {
-                return $query->where('branch_id', $branch_id);
-            })
-            ->when((!is_null($start_date) && !is_null($end_date)), function ($query) use ($start_date, $end_date) {
-                return $query->whereDate('created_at', '>=', $start_date)
-                    ->whereDate('created_at', '<=', $end_date);
-            });
-        $query_param = ['branch_id' => $branch_id, 'start_date' => $start_date, 'end_date' => $end_date];
+        // $query =  $query->pos()->with(['customer', 'branch', 'details'])
+        //     ->when((!is_null($branch_id) && $branch_id != 'all'), function ($query) use ($branch_id) {
+        //         return $query->where('branch_id', $branch_id);
+        //     })
+        //     ->when((!is_null($start_date) && !is_null($end_date)), function ($query) use ($start_date, $end_date) {
+        //         return $query->whereDate('created_at', '>=', $start_date)
+        //             ->whereDate('created_at', '<=', $end_date)->get;
+        //     });
+        //     $query_param = ['branch_id' => $branch_id, 'start_date' => $start_date, 'end_date' => $end_date];
 
         if ($request->has('search')) {
             $key = explode(' ', $request['search']);
@@ -411,12 +417,11 @@ class POSController extends Controller
             });
             $query_param = ['search' => $request['search']];
         }
+       
 
         $orders = $query->orderBy('id', 'desc')->paginate(Helpers::getPagination())->appends($query_param);
-
         //return $orders;
-
-        return view('admin-views.pos.order.list', compact('orders', 'search', 'branches', 'branch_id', 'start_date', 'end_date'));
+        return view('admin-views.pos.order.list', compact('orders', 'search', 'branches', 'start_date', 'end_date'));
     }
 
     /**
@@ -428,8 +433,7 @@ class POSController extends Controller
         $order = $this->order->with('details')->where(['id' => $id])->first();
         $delivery_man = $this->delivery_man->where(['is_active' => 1])
             ->where(function ($query) use ($order) {
-                $query->where('branch_id', $order->branch_id)
-                    ->orWhere('branch_id', 0);
+                $query->where('warehouse_id', $order->warehouse_id);
             })
             ->get();
 
@@ -591,10 +595,8 @@ $tax = isset($cart['tax']) ? $cart['tax'] : 0;
             return back();
         } catch (\Exception $e) {
             info($e);
-        dd($e);
 
         }
-dd(1);
 Toastr::warning(translate('failed_to_place_order'));
         return back();
     }

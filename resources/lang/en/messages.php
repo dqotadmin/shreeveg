@@ -2512,4 +2512,6 @@
   '5%' => '5%',
   'store price' => 'Store price',
   ' customer price' => ' customer price',
+  'ordder details' => 'Ordder details',
+  'odrder details' => 'Odrder details',
 );

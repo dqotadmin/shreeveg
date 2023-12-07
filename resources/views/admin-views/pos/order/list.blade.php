@@ -20,23 +20,19 @@
             </h1>
         </div>
         <!-- End Page Header -->
-
         <!-- Card -->
         <div class="card">
-
             <div class="card-header shadow flex-wrap p-20px border-0">
                 <h5 class="form-bold w-100 mb-3">{{ translate('Select Date Range') }}</h5>
                 <form class="w-100">
                     <div class="row g-3 g-sm-4 g-md-3 g-lg-4">
-                        <div class="col-sm-6 col-md-4 col-lg-2">
+                        <!-- <div class="col-sm-6 col-md-4 col-lg-2">
                             <select class="custom-select custom-select-sm text-capitalize min-h-45px" name="branch_id">
                                 <option disabled>--- {{translate('select')}} {{translate('branch')}} ---</option>
-                                <option value="all" {{ $branch_id == 'all' ? 'selected': ''}}>{{translate('all')}} {{translate('branch')}}</option>
                                 @foreach($branches as $branch)
-                                    <option value="{{$branch['id']}}" {{ $branch['id'] == $branch_id ? 'selected' : ''}}>{{$branch['name']}}</option>
                                 @endforeach
                             </select>
-                        </div>
+                        </div> -->
                         <div class="col-sm-6 col-md-4 col-lg-3">
                             <div class="input-date-group">
                                 <label class="input-label" for="start_date">{{ translate('Start Date') }}</label>
@@ -117,7 +113,6 @@
                             <th>{{translate('order id')}}</th>
                             <th>{{translate('order date')}}</th>
                             <th>{{translate('customer info')}}</th>
-                            <th>{{translate('Branch')}}</th>
                             <th>{{translate('total amount')}}</th>
                             <th class="text-center">{{translate('order')}} {{translate('status')}}</th>
                             <th class="text-center">{{translate('order')}} {{translate('type')}}</th>
@@ -127,7 +122,7 @@
 
                         <tbody id="set-rows">
                         @foreach($orders as $key=>$order)
-                            <tr class="status-{{$order['order_status']}} class-all">
+                        <tr class="status-{{$order['order_status']}} class-all">
                                 <td class="">
                                     {{$key+$orders->firstItem()}}
                                 </td>
@@ -135,7 +130,6 @@
                                     <a href="{{route('admin.pos.order-details',['id'=>$order['id']])}}">{{$order['id']}}</a>
                                 </td>
                                 <td>{{date('d M Y',strtotime($order['created_at']))}}</td>
-
                                 <td>
                                     @if(isset($order->customer))
                                         <div>
@@ -155,23 +149,21 @@
                                         </label>
                                     @endif
                                 </td>
-                                <td>
-                                    <label class="badge badge-soft-primary">{{$order->branch?$order->branch->name:'Branch deleted!'}}</label>
-                                </td>
+                                
                                 <td>
                                     <div class="mw-85">
                                         <div>
                                             <?php
                                                $vat_status = $order->details[0] ? $order->details[0]->vat_status : '';
-                                                if($vat_status == 'included'){
-                                                    $order_amount = $order['order_amount'] - $order['total_tax_amount'];
-                                                }else{
-                                                    $order_amount = $order['order_amount'];
-                                                }
-                                            ?>
+                                                if(isset($vat_status) && $vat_status == 'included'){
+                                                    $order_amount = @$order['order_amount'] - @$order['total_tax_amount'];
+                                        }else{
+                                                    $order_amount = @$order['order_amount'] ? @$order['order_amount'] : '';
+                                        }
+                                                ?>
                                             {{ Helpers::set_symbol($order_amount) }}
                                         </div>
-                                        @if($order->payment_status=='paid')
+                                        @if(@$order->payment_status=='paid')
                                             <span class="text-success">
                                                 {{translate('paid')}}
                                             </span>
@@ -180,6 +172,7 @@
                                                 {{translate('unpaid')}}
                                             </span>
                                         @endif
+
                                     </div>
                                 </td>
                                 <td class="text-capitalize text-center">
@@ -233,16 +226,15 @@
                                                 onclick="print_invoice('{{$order->id}}')"><i
                                                 class="tio-print"></i></button>
 
-<!--                                        <a class="action-btn btn-outline-primary-2" target="_blank" href="{{route('admin.orders.generate-invoice',[$order['id']])}}">
-                                            <i class="tio-print"></i>
-                                        </a>-->
+ 
                                     </div>
                                 </td>
-                            </tr>
+                        </tr>
                         @endforeach
                         </tbody>
                     </table>
                 </div>
+
                 <!-- End Table -->
                 @if(count($orders) == 0)
                 <div class="text-center p-4">

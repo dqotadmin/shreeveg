@@ -433,6 +433,7 @@ class POSController extends Controller
     public function order_details($id): View|Factory|RedirectResponse|Application
     {
         $order = $this->order->with('details')->where(['id' => $id])->first();
+        //dd($order->details);
         $delivery_man = $this->delivery_man->where(['is_active' => 1])
             ->where(function ($query) use ($order) {
                 $query->where('warehouse_id', $order->warehouse_id);
@@ -558,7 +559,7 @@ class POSController extends Controller
                     }
                     //dump($product);
                     $product = Helpers::product_data_formatting($product);
-                    // dd(1, $cart, $product);
+                    //dd(1, $product);
                     $or_d = [
                         'product_id' => $c['id'],
                         'product_details' => $product,
@@ -623,9 +624,9 @@ class POSController extends Controller
      */
     public function generate_invoice($id): \Illuminate\Http\JsonResponse
     {
-        dd('mkk');
-        $order = $this->order->where('id', $id)->first();
 
+        $order = $this->order->where('id', $id)->first();
+        //dd($order);
         return response()->json([
             'success' => 1,
             'view' => view('admin-views.pos.order.invoice', compact('order'))->render(),

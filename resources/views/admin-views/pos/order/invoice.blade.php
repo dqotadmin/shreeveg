@@ -85,7 +85,7 @@
                         {{$detail['quantity']}}
                     </td>
                     <td class="">
-                        {{$product['name']}} <br>
+                        {{@$product['name']}} <br>
                         @if(isset($detail['variation']) && count(json_decode($detail['variation'],true))>0)
                             <strong><u>Variation : </u></strong>
                             @foreach(json_decode($detail['variation'],true)[0] ?? json_decode($detail['variation'],true) as $key1 =>$variation)

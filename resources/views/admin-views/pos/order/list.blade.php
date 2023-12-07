@@ -299,6 +299,7 @@
                     $('#loading').show();
                 },
                 success: function (data) {
+                    console.log(data.view);
                     // console.log("success...")
                     $('#print-invoice').modal('show');
                     $('#printableArea').empty().html(data.view);

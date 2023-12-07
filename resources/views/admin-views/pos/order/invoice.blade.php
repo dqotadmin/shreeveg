@@ -85,16 +85,8 @@
                         {{$detail['quantity']}}
                     </td>
                     <td class="">
-                        {{$product['name']}} <br>
-                        @if(isset($detail['variation']) && count(json_decode($detail['variation'],true))>0)
-                            <strong><u>Variation : </u></strong>
-                            @foreach(json_decode($detail['variation'],true)[0] ?? json_decode($detail['variation'],true) as $key1 =>$variation)
-                                <div class="font-size-sm text-body">
-                                    <span class="text-capitalize">{{$key1}} :  </span>
-                                    <span class="font-weight-bold">{{$variation}} {{$key1=='price'?\App\CentralLogics\Helpers::currency_symbol():''}}</span>
-                                </div>
-                            @endforeach
-                        @endif
+                         <br>
+                 
                         <span>{{ translate('Unit Price') }} : {{ Helpers::set_symbol($detail['price']) }}</span><br>
                         <span>{{ translate('Qty') }} : {{ $detail['quantity']}}</span><br>
                         <span>{{ translate('Discount') }} : {{ Helpers::set_symbol($detail['discount_on_product']) }}</span>

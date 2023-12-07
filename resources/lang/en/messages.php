@@ -2514,4 +2514,7 @@
   ' customer price' => ' customer price',
   'ordder details' => 'Ordder details',
   'odrder details' => 'Odrder details',
+  'nimrah Inserted Successfully!' => 'Nimrah Inserted Successfully!',
+  'kapil broker Inserted Successfully!' => 'Kapil broker Inserted Successfully!',
+  'pradip broker Inserted Successfully!' => 'Pradip broker Inserted Successfully!',
 );

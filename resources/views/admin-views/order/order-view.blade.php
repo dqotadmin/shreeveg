@@ -210,8 +210,8 @@
                                                         >
                                                     @endif
                                                 </div>
-                                                <div class="media-body">
-                                                    <h5 class="line--limit-1">{{$product['name']}}</h5>
+                                                <div class="media-body">    
+                                                    <h5 class="line--limit-1">{{@$product['name']}}</h5>
                                                     @if($detail['variation'])
                                                         @if(count(json_decode($detail['variation'],true)) > 0)
                                                             @foreach(json_decode($detail['variation'],true)[0]??json_decode($detail['variation'],true) as $key1 =>$variation)

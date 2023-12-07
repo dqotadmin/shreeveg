@@ -76,7 +76,7 @@ class BrokerRateListController extends Controller
 
     public function create(Request $request)
     {
-        $categories = Category::whereHas('products')->whereStatus(1)->orderBy('name', 'asc')->get();
+        $categories = Category::whereHas('products')->whereStatus(1)->orderBy('name', 'asc')->where('deleted_at',null)->get();
         // $categories = Category::whereStatus(1)->orderBy('name', 'asc')->get();
         return view($this->view_folder . '.create', compact('categories'));
     }

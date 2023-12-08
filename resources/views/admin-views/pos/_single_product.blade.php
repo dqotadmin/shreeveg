@@ -31,8 +31,9 @@
         </div>
         <div class="justify-content-between text-center">
             <div class="product-price text-center">
-            {{ (@$product->warehouseProducts->customer_price) }}
-                <!-- {{ Helpers::set_symbol($product['price'] - $discount) }} -->
+                @php($whProduct =  Helpers::warehouseProductData($product['id']))
+               
+                {{ Helpers::set_symbol($whProduct->customer_price - $discount) }} 
             </div>
         </div>
     </div>

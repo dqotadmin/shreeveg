@@ -32,7 +32,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <!-- <div class="col-sm-6">
+                                <div class="col-sm-6">
                                     <form id="search-form">
                                         <div class="input-group input-group-merge input-group-flush">
                                             <div class="input-group-prepend w--30 justify-content-center">
@@ -46,7 +46,7 @@
                                                 aria-label="Search here">
                                         </div>
                                     </form>
-                                </div> -->
+                                </div>
                             </div> 
                             <div id="items">
                                 <div class="row g-1">
@@ -284,24 +284,24 @@
         });
 
         $('.input-number').change(function () {
-
-            minValue = parseInt($(this).attr('min'));
-            maxValue = parseInt($(this).attr('max'));
-            valueCurrent = parseInt($(this).val());
-
+           
+            minValue = parseFloat($(this).attr('min'));
+            maxValue = ($(this).attr('max'));
+            valueCurrent = parseFloat($(this).val());
+            console.log(minValue,maxValue,valueCurrent);
             var input_qty_max_val = parseInt($('#check_max_qty').val());
-            var input_qty_max_val = input_qty_max_val + 1;
+            //var input_qty_max_val = input_qty_max_val + 1;
           
 
 
 
             var name = $(this).attr('name');
       
-            if (valueCurrent >= minValue) {
+            if (valueCurrent >= minValue) { console.log('right');
                 console.log('name'+name);
 
                 $(".btn-number[data-type='minus'][data-field='" + name + "']").removeAttr('disabled');
-            } else {
+            } else {console.log('wrong');
                 Swal.fire({
                     icon: 'error',
                     title: '{{translate("Cart")}}',
@@ -310,7 +310,7 @@
                 });
                 $(this).val($(this).data('oldValue'));
             }
-
+            //console.log(valueCurrent, input_qty_max_val);die;
             if(valueCurrent >= input_qty_max_val){
                 console.log('input_qty_max_val'+input_qty_max_val);
                Swal.fire({
@@ -323,29 +323,29 @@
             } else if (valueCurrent <= maxValue) {
                 $(".btn-number[data-type='plus'][data-field='" + name + "']").removeAttr('disabled')
             } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: '{{translate("Cart")}}',
-                    text: '{{translate('Sorry, stock limit exceeded')}}.',
-                    confirmButtonText: '{{translate("Yes")}}',
-                });
+                // Swal.fire({
+                //     icon: 'error',
+                //     title: '{{translate("Cart")}}',
+                //     text: '{{translate('Sorry, stock limit exceeded')}}.',
+                //     confirmButtonText: '{{translate("Yes")}}',
+                // });
                 $(this).val(1)
             }
         });
         $(".input-number").keydown(function (e) {
             // Allow: backspace, delete, tab, escape, enter and .
-            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
-                // Allow: Ctrl+A
-                (e.keyCode == 65 && e.ctrlKey === true) ||
-                // Allow: home, end, left, right
-                (e.keyCode >= 35 && e.keyCode <= 39)) {
-                // let it happen, don't do anything
-                return;
-            }
-            // Ensure that it is a number and stop the keypress
-            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-                e.preventDefault();
-            }
+            // if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+            //     // Allow: Ctrl+A
+            //     (e.keyCode == 65 && e.ctrlKey === true) ||
+            //     // Allow: home, end, left, right
+            //     (e.keyCode >= 35 && e.keyCode <= 39)) {
+            //     // let it happen, don't do anything
+            //     return;
+            // }
+            // // Ensure that it is a number and stop the keypress
+            // if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            //     e.preventDefault();
+            // }
         });
     }
 

@@ -2522,4 +2522,5 @@
   'hemant broker Inserted Successfully!' => 'Hemant broker Inserted Successfully!',
   'update status BY RECEIVER' => 'Update status BY RECEIVER',
   'broker comments' => 'Broker comments',
+  'ramesh store order Inserted Successfully!' => 'Ramesh store order Inserted Successfully!',
 );

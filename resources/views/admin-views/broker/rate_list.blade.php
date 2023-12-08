@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', translate('Add new banner'))
+@section('title', translate('brokers rate list'))
 
 @push('css_or_js')
 <style>

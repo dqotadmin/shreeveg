@@ -27,10 +27,10 @@ class Helpers
             $authUser = auth('admin')->user();
             if (in_array($authUser->admin_role_id, [6, 7])) {
                 $warehouseId = $authUser->Store->warehouse_id;
-            } elseif (in_array($authUser->admin_role_id, [3, 4])) {
+            } elseif (in_array($authUser->admin_role_id, [3, 4,5])) {
                 $warehouseId = $authUser->warehouse_id;
             }
-        }
+        }//dd($product_id, $warehouseId);
         return WarehouseProduct::where(['warehouse_id' => $warehouseId, 'product_id' => $product_id])->first();
     }
 

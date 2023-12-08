@@ -90,6 +90,7 @@
 
                 <tbody>
                     @foreach($admins as $key=>$admin)
+                    @if(auth('admin')->user()->admin_role_id != '6')
                     <tr>
                         <td class="text-center">{{$admins->firstItem()+$key}}</td>
                         <td>
@@ -172,6 +173,93 @@
                             <!-- End Dropdown -->
                         </td>
                     </tr>
+                    @elseif(auth('admin')->user()->admin_role_id == '6' && $admin->store_id == auth('admin')->user()->store_id)
+                    <tr>
+                        <td class="text-center">{{$admins->firstItem()+$key}}</td>
+                        <td>
+                            
+                        <img src="{{asset('storage/app/public/admin/warehouse')}}/{{$admin['image']}}"
+                                            onerror="this.src='{{asset('public/assets/admin/img/400x400/img2.jpg')}}'" class="img--50 ml-3" alt="">
+                        </td>
+                        <td>
+                            <span class="d-block font-size-sm text-body text-trim-50" style="text-transform: capitalize ;">
+                                {{$admin['f_name'] }} {{ $admin['l_name']}}
+                            </span>
+                        </td>
+
+                    
+                        @if($role->id == '6' || $role->id == '7' )
+
+                        <td>
+                            <span class="d-block font-size-sm text-body text-trim-50" style="text-transform: capitalize ;">
+                            {{ @$admin->Store->warehouse->name}}
+                          
+
+                            </span>
+                        </td>
+                        @endif
+                        @if($role->id == '3'   || $role->id == '5' || $role->id == '4')
+                        <td>
+                            <span class="d-block font-size-sm text-body text-trim-50" style="text-transform: capitalize ;">
+                                @if($admin->warehouse_id > 0 && !empty($admin->warehouse_id))
+                                    {{$admin->Warehouse->name }}
+                                @endif 
+                           
+                            </span>
+                        </td>
+                        @elseif($role->id == '6' || $role->id == '7' )
+                        <td>
+                            <span class="d-block font-size-sm text-body text-trim-50" style="text-transform: capitalize ;">
+                            
+                            @if($admin->store_id > 0 && $admin->store_id)
+                            {{$admin->Store->name }} 
+                            @endif
+                            </span>
+                        </td>
+                            @endif
+                        <td>
+                            <h5 class="m-0">
+                                <a href="mailto:{{$admin['email']}}">{{$admin['email']}}</a>
+                            </h5>
+                            <div>
+                                <a href="Tel:{{$admin['phone']}}">{{$admin['phone']}}</a>
+                            </div>
+                        </td>
+                       
+                        <td>
+                        <label class="toggle-switch">
+                            <input type="checkbox"
+                                onclick="status_change_alert('{{ route('admin.admin-status', [$admin->id, $admin->status ? 0 : 1]) }}', '{{ $admin->status? translate('you_want_to_disable_this_admin'): translate('you_want_to_active_this_admin') }}', event)"
+                                class="toggle-switch-input" id="stocksCheckbox{{ $admin->id }}"
+                                {{ $admin->status ? 'checked' : '' }}>
+                            <span class="toggle-switch-label text">
+                                <span class="toggle-switch-indicator"></span>
+                            </span>
+                        </label>
+                         
+
+                        </td>
+                        <td>
+                            <!-- Dropdown -->
+                            <div class="btn--container justify-content-center">
+                                            <a class="action-btn"
+                                                href="{{route('admin.admin-edit',[$admin['id'],'role_id'=>$role->id])}}">
+                                            <i class="tio-edit"></i></a>
+                                        @if( auth('admin')->user()->admin_role_id == 1)
+                                            <a class="action-btn btn--danger btn-outline-danger" href="javascript:"
+                                                onclick="form_alert('admin-{{$admin['id']}}','{{ translate("Want to delete this") }}')">
+                                                <i class="tio-delete-outlined"></i>
+                                            </a>
+                                        </div>
+                                        <form action="{{route('admin.admin-delete',[$admin['id']])}}"
+                                                method="post" id="admin-{{$admin['id']}}">
+                                            @csrf @method('delete')
+                                        </form>
+                                        @endif
+                            <!-- End Dropdown -->
+                        </td>
+                    </tr>
+                    @endif
                     @endforeach
                 </tbody>
             </table>

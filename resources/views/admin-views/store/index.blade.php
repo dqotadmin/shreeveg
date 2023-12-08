@@ -66,7 +66,7 @@
                         <th>{{translate('Store Name')}}</th>
                         <th>{{translate('Store Code')}}</th>
                         <th>{{translate('Warehouse Name')}}</th>
-                        <th>{{translate('Address')}}</th>
+                        <!-- <th>{{translate('Address')}}</th> -->
                         <th>{{translate('Area')}}</th>
                         <th>{{translate('status')}}</th>
                         <th class="text-center">{{translate('action')}}</th>
@@ -93,11 +93,11 @@
                                 {{@$store->warehouse->name}}
                             </span>
                         </td>
-                        <td>
+                        <!-- <td>
                             <span class="d-block font-size-sm text-body text-trim-50">
                                 {{$store['address']}}
                             </span>
-                        </td>
+                        </td> -->
                         <td>
                             <span class="d-block font-size-sm text-body text-trim-50">
                                 {{@$store->area->area}}

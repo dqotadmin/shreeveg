@@ -112,9 +112,9 @@ class POSController extends Controller
     public function variant_price(Request $request): array
     {
         $product =  \App\Model\WarehouseProduct::find($request->id);
-       
+
         $price = 0;
-       
+
         $price = $product->customer_price;
         // $discount = self::discount_calculation($product, $price);
         // $price = $price - $discount;
@@ -366,6 +366,15 @@ class POSController extends Controller
         $search = $request['search'];
         $query = $this->order;
         $authUser = auth('admin')->user();
+
+        $storeId = $warehouse_id = null;
+        if (in_array($authUser->admin_role_id, [6, 7])) {
+            $warehouse_id = $authUser->Store->warehouse_id;
+            $storeId = $authUser->store_id;
+        } elseif (in_array($authUser->admin_role_id, [3, 4])) {
+            $warehouse_id = $authUser->warehouse_id;
+        }
+
         if ($authUser->admin_role_id == 6) {
             $query = $query->whereType('Store')->where('store_id', $authUser->store_id);
         } elseif ($authUser->admin_role_id == 3) {
@@ -375,6 +384,11 @@ class POSController extends Controller
         $start_date = $request['start_date'];
         $end_date = $request['end_date'];
 
+        $query = $query->when((!is_null($start_date) && !is_null($end_date)), function ($query) use ($start_date, $end_date) {
+            return $query->whereDate('created_at', '>=', $start_date)
+                ->whereDate('created_at', '<=', $end_date);
+        });
+        // $query_param = ['branch_id' => 0, 'start_date' => $start_date, 'end_date' => $end_date];
         //$this->order->where(['checked' => 0])->update(['checked' => 1]);
 
         // $query =  $query->pos()->with(['customer', 'branch', 'details'])
@@ -471,6 +485,9 @@ class POSController extends Controller
             $order->warehouse_id = $authUser->warehouse_id;
         }
 
+        if ($authUser->admin_role_id == 7) {
+            $order->store_sales_person_id = $authUser->id;
+        }
         $order->coupon_code = $request->coupon_code ?? null;
         $order->payment_method = $request->type;
         $order->transaction_reference = $request->transaction_reference ?? null;
@@ -556,9 +573,15 @@ class POSController extends Controller
                     $order_details[] = $or_d;
                 }
 
-                \App\Model\WarehouseProduct::where(['id' => $product['id']])->update([
-                    'total_stock' => $product['total_stock'] - $c['quantity'],
-                ]);
+                if (in_array($authUser->admin_role_id, [6, 7])) {
+                    \App\Model\WarehouseProduct::where(['id' => $product['id']])->update([
+                        'total_stock' => $product['total_stock'] - $c['quantity'],
+                    ]);
+                } else {
+                    \App\Model\WarehouseProduct::where(['id' => $product['id']])->update([
+                        'total_stock' => $product['total_stock'] - $c['quantity'],
+                    ]);
+                }
             }
         }
         $total_price = $product_price;
@@ -670,21 +693,41 @@ class POSController extends Controller
     public function export_orders(Request $request)
     {
         $query_param = [];
+        $storeId = $warehouse_id = null;
+        $authUser = auth('admin')->user();
+        if (in_array($authUser->admin_role_id, [6, 7])) {
+            $warehouse_id = $authUser->Store->warehouse_id;
+            $storeId = $authUser->store_id;
+        } elseif (in_array($authUser->admin_role_id, [3, 4])) {
+            $warehouse_id = $authUser->warehouse_id;
+        }
+
         $search = $request['search'];
 
         $branch_id = $request['branch_id'];
         $start_date = $request['start_date'];
         $end_date = $request['end_date'];
 
-        $query = $this->order->pos()->with(['customer', 'branch'])
-            ->when((!is_null($branch_id) && $branch_id != 'all'), function ($query) use ($branch_id) {
-                return $query->where('branch_id', $branch_id);
-            })
-            ->when((!is_null($start_date) && !is_null($end_date)), function ($query) use ($start_date, $end_date) {
-                return $query->whereDate('created_at', '>=', $start_date)
-                    ->whereDate('created_at', '<=', $end_date);
-            });
+        // $query = $this->order->pos()->with(['customer', 'branch'])
+        //     ->when((!is_null($branch_id) && $branch_id != 'all'), function ($query) use ($branch_id) {
+        //         return $query->where('branch_id', $branch_id);
+        //     })
+        //     ->when((!is_null($start_date) && !is_null($end_date)), function ($query) use ($start_date, $end_date) {
+        //         return $query->whereDate('created_at', '>=', $start_date)
+        //             ->whereDate('created_at', '<=', $end_date);
+        //     });
+        $query = $this->order->pos();
+        if (!empty($warehouse_id)) {
+            $query = $query->where('warehouse_id', $warehouse_id);
+        }
 
+        if (!empty($storeId)) {
+            $query = $query->where('store_id', $storeId);
+        }
+        $query = $query->when((!is_null($start_date) && !is_null($end_date)), function ($query) use ($start_date, $end_date) {
+            return $query->whereDate('created_at', '>=', $start_date)
+                ->whereDate('created_at', '<=', $end_date);
+        });
         if ($request->has('search')) {
             $key = explode(' ', $request['search']);
             $query = $query->where(function ($q) use ($key) {
@@ -698,7 +741,7 @@ class POSController extends Controller
         }
 
         $orders = $query->with('details')->orderBy('id', 'DESC')->get();
-
+        // dd($orders);
         $storage = [];
         foreach ($orders as $order) {
             $vat_status = $order->details[0] ? $order->details[0]->vat_status : '';
@@ -708,13 +751,15 @@ class POSController extends Controller
                 $order_amount = $order['order_amount'];
             }
 
-            $branch = $order->branch ? $order->branch->name : '';
+            $store = $order->store_id ? $order->store->name : '';
+            $warehouse = $order->warehouse_id ? $order->warehouse->name : '';
             $customer = $order->customer ? $order->customer->f_name . ' ' . $order->customer->l_name : 'Walking Customer';
             $storage[] = [
                 'Order Id' => $order['id'],
                 'Order Date' => date('d M Y', strtotime($order['created_at'])),
                 'Customer' => $customer,
-                'Branch' => $branch,
+                'Store' => $store,
+                'Warehouse' => $warehouse,
                 'Order Amount' => $order_amount,
                 'Order Status' => $order['order_status'],
                 'Order Type' => $order['order_type'],

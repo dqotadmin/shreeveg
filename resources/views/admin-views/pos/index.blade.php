@@ -283,18 +283,16 @@
             console.log('old value'+$(this).data('oldValue', $(this).val()));
         });
 
-        $('.input-number').change(function () {
+        //$('.input-number').change(function () {
+        $('.input-number').on('keyup', function () {
            
             minValue = parseFloat($(this).attr('min'));
             maxValue = ($(this).attr('max'));
             valueCurrent = parseFloat($(this).val());
-            console.log(minValue,maxValue,valueCurrent);
+            
             var input_qty_max_val = parseInt($('#check_max_qty').val());
-            //var input_qty_max_val = input_qty_max_val + 1;
+            var input_qty_max_val = input_qty_max_val + 1;
           
-
-
-
             var name = $(this).attr('name');
       
             if (valueCurrent >= minValue) { console.log('right');
@@ -310,7 +308,7 @@
                 });
                 $(this).val($(this).data('oldValue'));
             }
-            //console.log(valueCurrent, input_qty_max_val);die;
+           
             if(valueCurrent >= input_qty_max_val){
                 console.log('input_qty_max_val'+input_qty_max_val);
                Swal.fire({
@@ -332,7 +330,7 @@
                 $(this).val(1)
             }
         });
-        $(".input-number").keydown(function (e) {
+        //$(".input-number").keydown(function (e) {
             // Allow: backspace, delete, tab, escape, enter and .
             // if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
             //     // Allow: Ctrl+A
@@ -346,7 +344,7 @@
             // if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
             //     e.preventDefault();
             // }
-        });
+        //});
     }
 
     function getVariantPrice() {
@@ -503,10 +501,10 @@
 
     function updateQuantity(e) {
         var element = $(e.target);
-        var minValue = parseInt(element.attr('min'));
+        var minValue = parseFloat(element.attr('min'));
         var maxValue = parseInt(element.attr('max'));
         // maxValue = parseInt(element.attr('max'));
-        var valueCurrent = parseInt(element.val());
+        var valueCurrent = parseFloat(element.val());
 
         var key = element.data('key');
         var product_id = element.attr("id");
@@ -539,20 +537,20 @@
 
 
         // Allow: backspace, delete, tab, escape, enter and .
-        if (e.type == 'keydown') {
-            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
-                // Allow: Ctrl+A
-                (e.keyCode == 65 && e.ctrlKey === true) ||
-                // Allow: home, end, left, right
-                (e.keyCode >= 35 && e.keyCode <= 39)) {
-                // let it happen, don't do anything
-                return;
-            }
-            // Ensure that it is a number and stop the keypress
-            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-                e.preventDefault();
-            }
-        }
+        // if (e.type == 'keydown') {
+        //     if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+        //         // Allow: Ctrl+A
+        //         (e.keyCode == 65 && e.ctrlKey === true) ||
+        //         // Allow: home, end, left, right
+        //         (e.keyCode >= 35 && e.keyCode <= 39)) {
+        //         // let it happen, don't do anything
+        //         return;
+        //     }
+        //     // Ensure that it is a number and stop the keypress
+        //     if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+        //         e.preventDefault();
+        //     }
+        // }
 
     };
 

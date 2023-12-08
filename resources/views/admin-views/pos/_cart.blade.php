@@ -60,7 +60,9 @@
                             </td>
                             <td class="align-items-center text-center">
                                 <input type="number" data-key="{{$key}}" id="{{ $cartItem['id'] }}" class="amount--input form-control text-center"
-                                    value="{{$cartItem['quantity']}}" min="1" max="{{ $product['total_stock'] }}" onkeyup="updateQuantity(event)">
+                                    value="{{$cartItem['quantity']}}" min="1" max="{{ $product['total_stock'] }}" onkeyup="updateQuantity(event)" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');">
+                                    
+                                    
                             </td>
                             <td class="text-center px-0 py-1">
                                 <div class="btn text-left">

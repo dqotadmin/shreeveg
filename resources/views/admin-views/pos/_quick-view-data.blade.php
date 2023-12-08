@@ -18,12 +18,13 @@
         </div>
         <!-- Product details-->
         <div class="details">
+            <span class="product-name" style="color: green">{{ Str::limit(ucwords($product->category->name), 20) }}</span><br>
             <span class="product-name"><a href="#" class="h3 mb-2 product-title">{{ Str::limit($product->name, 100) }}</a></span>
 
             <div class="mb-3 text-dark">
                 <span class="h3 font-weight-normal text-accent mr-1">
           
-                    {{ Helpers::set_symbol(($whProduct['customer_price']- $discount)) }}
+                    {{ Helpers::set_symbol(($whProduct['customer_price']- $discount)) }} / {{ @$whProduct->unit->title }}
                 </span>
                 @if($discount > 0)
                     <strike style="font-size: 12px!important;">

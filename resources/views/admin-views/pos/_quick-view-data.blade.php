@@ -2,6 +2,7 @@
     <button class="close call-when-done" type="button" data-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
+    @php($whProduct =  Helpers::warehouseProductData($product['id']))
     <div class="modal--media">
         <!-- Product gallery-->
         <div class="modal--media-avatar">
@@ -21,13 +22,12 @@
 
             <div class="mb-3 text-dark">
                 <span class="h3 font-weight-normal text-accent mr-1">
-            {{ (@$product->warehouseProducts->customer_price) }}
-
-                    <!-- {{ Helpers::set_symbol(($product['price']- $discount)) }} -->
+          
+                    {{ Helpers::set_symbol(($whProduct['customer_price']- $discount)) }}
                 </span>
                 @if($discount > 0)
                     <strike style="font-size: 12px!important;">
-                        {{ Helpers::set_symbol($product['price']) }}
+                        {{ Helpers::set_symbol($whProduct['customer_price']) }}
                     </strike>
                 @endif
             </div>
@@ -39,8 +39,8 @@
                         id="set-discount-amount">{{ $discount }}</strong>
                 </div>
             @endif
-        <!-- Product panels-->
-            {{--<div style="margin-left: -1%" class="sharethis-inline-share-buttons"></div>--}}
+        
+            <div style="margin-left: -1%" class="sharethis-inline-share-buttons"></div>
         </div>
     </div>
     <div class="row pt-2">
@@ -69,26 +69,7 @@
             </div>
             <form id="add-to-cart-form" class="mb-2">
                 @csrf
-                <input type="hidden" name="id" value="{{ @$product->warehouseProducts->id }}">
-
-                {{--
-                @foreach (json_decode($product->choice_options) as $key => $choice)
-
-                    <div class="h3 p-0 pt-2 text-break">{{ $choice->title }}
-                    </div>
-
-                    <div class="d-flex justify-content-left flex-wrap">
-                        @foreach ($choice->options as $key => $option)
-                            <input class="btn-check" type="radio"
-                                   id="{{ $choice->name }}-{{ $option }}"
-                                   name="{{ $choice->name }}" value="{{ $option }}"
-                                   @if($key == 0) checked @endif autocomplete="off">
-                            <label class="btn btn-sm check-label mx-1 choice-input"
-                                   for="{{ $choice->name }}-{{ $option }}">{{ $option }}</label>
-                        @endforeach
-                    </div>
-                @endforeach
-                --}}
+                <input type="hidden" name="id" value="{{ @$whProduct->id }}">
 
             <!-- Quantity + Add to cart -->
                 <div class="d-flex justify-content-between">
@@ -103,10 +84,10 @@
                                         <i class="tio-remove  font-weight-bold"></i>
                                 </button>
                             </span>
-                            <input type="hidden" id="check_max_qty" value="{{ $product->warehouseProducts->total_stock }}">
+                            <input type="hidden" id="check_max_qty" value="{{ $whProduct->total_stock }}">
                             <input type="text" name="quantity"
                                    class="form-control input-number text-center cart-qty-field"
-                                   placeholder="1" value="1" min="1" max="100">
+                                   placeholder="1" value="1" min="0.1" max="100" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');">
                             <span class="input-group-btn">
                                 <button class="btn btn-number text-dark" type="button" data-type="plus"
                                         data-field="quantity" style="padding: 10px">

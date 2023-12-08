@@ -58,33 +58,34 @@ class POSController extends Controller
         //session()->forget('cart');
         //session()->forget('last_order');
         $authUser = auth('admin')->user();
+        if (in_array($authUser->admin_role_id, [6, 7])) {
+            $warehouse_id = $authUser->Store->warehouse_id;
+        } elseif (in_array($authUser->admin_role_id, [3, 4])) {
+            $warehouse_id = $authUser->warehouse_id;
+        }
 
-        $assign_categories = $this->warehouse_categories->where('warehouse_id', $authUser->Store->warehouse_id)->get('category_id');
-        $categorie = $this->category->whereIn('id', $assign_categories)->get();
-        $options = Helpers::getCategoryDropDown($categorie);
-        // dd($options);
+        $assign_categories = $this->warehouse_categories->where('warehouse_id', $warehouse_id)->pluck('category_id');
         $categories = $this->category->whereIn('id', $assign_categories)->get();
 
-        $get_warehouse_id = $this->store->where('id', auth('admin')->user()->store_id)->pluck('warehouse_id')->toArray();
-        $category_ids = $this->warehouse_categories->where('warehouse_id', $get_warehouse_id)->pluck('category_id');
         $category = $request->query('category_id', 0);
-        $categories = $this->category->whereIn('id', $category_ids)->get();
+
         $keyword = $request->keyword;
         $key = explode(' ', $keyword);
 
-        $products = $this->product->whereIn('category_id', $category_ids)->when($request->has('category_id') && $request['category_id'] != 0, function ($query) use ($request) {
-            $query->whereJsonContains('category_id', [['id' => (string)$request['category_id']]]);
-        })->when($keyword, function ($query) use ($key) {
-            return $query->where(function ($q) use ($key) {
-                foreach ($key as $value) {
-                    $q->orWhere('name', 'like', "%{$value}%");
-                }
-            });
-        })->active()->latest()->paginate(Helpers::getPagination());
+        $products = $this->product->whereIn('category_id', $assign_categories)->when($request->has('category_id') && $request['category_id'] != 0, function ($query) use ($request) {
+            $query->where('category_id', $request['category_id']);
+        })
+            ->when($keyword, function ($query) use ($key) {
+                return $query->where(function ($q) use ($key) {
+                    foreach ($key as $value) {
+                        $q->orWhere('name', 'like', "%{$value}%");
+                    }
+                });
+            })
+            ->active()->latest()->paginate(Helpers::getPagination());
 
         $branches = $this->branch->all();
         $users = $this->user->all();
-        $authUser = auth('admin')->user();
         //dd($products);
         return view('admin-views.pos.index', compact('categories', 'products', 'category', 'keyword', 'branches', 'users', 'authUser'));
     }
@@ -110,33 +111,11 @@ class POSController extends Controller
      */
     public function variant_price(Request $request): array
     {
-        $product = $this->product->find($request->id);
-        $str = '';
+        $product =  \App\Model\WarehouseProduct::find($request->id);
+       
         $price = 0;
-        if ($product->choice_options) {
-            foreach (json_decode($product->choice_options) as $key => $choice) {
-                if ($str != null) {
-                    $str .= '-' . str_replace(' ', '', $request[$choice->name]);
-                } else {
-                    $str .= str_replace(' ', '', $request[$choice->name]);
-                }
-            }
-        }
-        // if ($str != null) {
-        //     $count = count(json_decode($product->variations));
-        //     for ($i = 0; $i < $count; $i++) {
-        //         if (json_decode($product->variations)[$i]->type == $str) {
-        //             $price = json_decode($product->variations)[$i]->price;
-        //             $discount = self::discount_calculation($product, $price);
-        //             $price = $price - $discount;
-        //         }
-        //     }
-        // } else {
-        //     $price = $product->price;
-        //     $discount = self::discount_calculation($product, $price);
-        //     $price = $price - $discount;
-        // }
-        $price = $product->warehouseProducts->customer_price;
+       
+        $price = $product->customer_price;
         // $discount = self::discount_calculation($product, $price);
         // $price = $price - $discount;
 

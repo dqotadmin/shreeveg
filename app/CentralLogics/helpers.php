@@ -8,6 +8,7 @@ use App\Model\Currency;
 use App\Model\DMReview;
 use App\Model\Order;
 use App\Model\Review;
+use App\Model\WarehouseProduct;
 use App\User;
 use Exception;
 use Illuminate\Support\Carbon;
@@ -19,7 +20,19 @@ use Illuminate\Support\Facades\DB;
 
 class Helpers
 {
+    public static function warehouseProductData($product_id, $warehouseId = false)
+    {
 
+        if (!$warehouseId) {
+            $authUser = auth('admin')->user();
+            if (in_array($authUser->admin_role_id, [6, 7])) {
+                $warehouseId = $authUser->Store->warehouse_id;
+            } elseif (in_array($authUser->admin_role_id, [3, 4])) {
+                $warehouseId = $authUser->warehouse_id;
+            }
+        }
+        return WarehouseProduct::where(['warehouse_id' => $warehouseId, 'product_id' => $product_id])->first();
+    }
 
 
     public static function error_processor($validator)

@@ -153,33 +153,7 @@
 @endsection
 @push('script_2')
 <script>
-  $(document).ready(function () {
-        // Add a class to the order_qty input for easier selection
-        $('input[name="qty[]"]').on('input', function () {
-            // Get the current row
-            var row = $(this).closest('div');
-            console.log('row'+row);
-            // Get the values of available_qty and order_qty
-            var availableQty = parseFloat(row.find('#total_stock').text());
-            var orderQty = parseFloat($(this).val());
-            console.log('availableQty'+availableQty);
-            console.log('orderQty'+orderQty);
-
-            // Check if available_qty is less than order_qty
-            if (orderQty > availableQty) {
-                // Show an alert or any other notification
-                alert('Order quantity cannot be greater than available quantity!');
-                $(this).val('');
-                
-                // You can also highlight the row or take any other action here
-                row.addClass('error'); // Add a class to highlight the row
-            } else {
-                // If order_qty is valid, remove any error class
-                row.removeClass('error');
-            }
-        });
-        
-    });
+       
 
   </script>
 @endpush

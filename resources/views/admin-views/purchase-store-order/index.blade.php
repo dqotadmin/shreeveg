@@ -1,5 +1,5 @@
 @extends('layouts.admin.app')
-@section('title', translate('Add new banner'))
+@section('title', translate('store orders'))
 @push('css_or_js')
 @endpush
 @section('content')

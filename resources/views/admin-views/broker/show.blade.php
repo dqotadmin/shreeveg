@@ -1,5 +1,5 @@
 @extends('layouts.admin.app')
-@section('title', translate('create rate list'))
+@section('title', translate('rate list'))
 @push('css_or_js')
 @endpush
 @section('content')

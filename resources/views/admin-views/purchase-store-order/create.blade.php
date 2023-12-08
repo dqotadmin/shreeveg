@@ -103,7 +103,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group mb-0">
-                                        <input type="text" value="{{$product->total_stock}}" class="form-control"
+                                        <input type="text" value="{{$product->total_stock}}" id="total_stock" class="form-control"
                                             disabled>
                                     </div>
                                 </div>
@@ -119,7 +119,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group mb-0">
-                                        <input type="text" name="qty[]" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
+                                        <input type="text" name="qty[]" id="qty" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
                                             placeholder="Qty" >
                                     </div>
                                 </div>
@@ -152,4 +152,8 @@
 </div>
 @endsection
 @push('script_2')
+<script>
+       
+
+  </script>
 @endpush

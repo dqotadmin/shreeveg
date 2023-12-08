@@ -1,5 +1,5 @@
 @extends('layouts.admin.app')
-@section('title', translate('create rate list'))
+@section('title', translate('order detail'))
 @push('css_or_js')
 @endpush
 @section('content')
@@ -78,35 +78,45 @@
                     @endforeach
                 </tbody>
             </table>
-
+            @if((auth('admin')->user()->admin_role_id == 5) && ($row->status == 'Rejected'))
+            <div class="row align-items-center">
+                <div class="col-12 mb-2 mb-sm-0" style="text-align: center;">
+                    <h4> Reason for Reject</h4>
+                    <span>{{$row->broker_comments}}</span>
+                </div> 
+            </div>
+            @endif
 
             <form action="{{route('admin.wh_receiver_update_status',$row->id)}}" method="post">
             @csrf
+            @if((auth('admin')->user()->admin_role_id == 8 &&  $row->status != 'Received' &&  $row->status != 'Rejected')  || (auth('admin')->user()->admin_role_id == 5 && $row->status != 'Pending' && $row->status != 'Accepted' && $row->status != 'Rejected' && $row->status != 'Received' )  )
             <div class="col-md-6">
                 <label class="input-label" for="exampleFormControlInput1">{{translate('update status')}}</label>
                 <select name="status" class="form-control">
-                    @if(auth('admin')->user()->admin_role_id == 8)
+                    @if(auth('admin')->user()->admin_role_id == 8  &&  $row->status != 'Received')
                         <option value="Pending" {{$row->status == 'Pending'?'selected':''}}>Pending</option>
                         <option value="Accepted" {{$row->status == 'Accepted'?'selected':''}}>Accepted</option>
                         <option value="Delivered" {{$row->status == 'Delivered'?'selected':''}}>Delivered</option>
                         <option value="Rejected" {{$row->status == 'Rejected'?'selected':''}}>Rejected</option>
-                    @else
-                        <option>Select Status</option>
+                    @elseif(auth('admin')->user()->admin_role_id == 5 ||  $row->status == 'Pending' )
+                        <option disabled selected>Select Status</option>
                         <option value="Received" {{$row->status == 'Received'?'selected':''}}>Received</option>
                     @endif
                 </select>
             </div>
-            @if(auth('admin')->user()->admin_role_id == 8)
-                <div class="col-md-6">
-                    <label class="input-label" for="exampleFormControlInput1">{{translate('comments')}}</label>
+                @if(auth('admin')->user()->admin_role_id == 8 || $row->status == 'Pending' || $row->status == 'Accepted')
+                <div class="col-md-6 mt-3">
+                    <label class="input-label" for="exampleFormControlInput1">{{translate('broker comments')}}</label>
                     <textarea name="broker_comments" class="form-control" rows="6" placeholder="{{ translate('enter comments if any') }}" required>{{$row->broker_comments}}</textarea>
                 </div>
-                @if($row->status == 'Pending' || $row->status == 'Accepted')
                 <div class="text-right">
                     <button type="submit" class="btn btn-primary px-5">{{translate('save')}}</button>
                 </div>
+
                 @endif
-            @else
+                @endif
+                @if((auth('admin')->user()->admin_role_id == 5) && ($row->status != 'Pending' && $row->status != 'Accepted' && $row->status != 'Received' && $row->status != 'Rejected'))
+
                 <div class="col-md-6">
                     <label class="input-label" for="exampleFormControlInput1">{{translate('comments')}}</label>
                     <textarea name="warehouse_comments" class="form-control" rows="6" placeholder="{{ translate('enter comments if any') }}" required>{{$row->warehouse_comments}}</textarea>
@@ -114,7 +124,9 @@
                 <div class="text-right">
                     <button type="submit" class="btn btn-primary px-5">{{translate('save')}}</button>
                 </div>
-            @endif
+                @endif
+
+            </form>
         </div>
     </div>
 </div>

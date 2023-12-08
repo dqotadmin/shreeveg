@@ -102,6 +102,7 @@
                                     </select>
                                 </div>
                             </div>
+                            {{auth('admin')->user()->warehouse_id}}
                             @elseif($role->id == '6' || $role->id == '7' )
                             <div class="row form-group">
                                 <label for="phoneLabel"
@@ -114,7 +115,7 @@
                                         <option value="{{$user->Store->id}}">{{$user->Store->name}}</option>
                                         @else
                                         <option value="" disabled selected>Select Store </option>
-                                        @foreach(\App\Model\Store::where('status', 1)->where('warehouse_id', auth('admin')->user()->warehouse_id)->where('deleted_at', null)->get()
+                                        @foreach(\App\Model\Store::where('status', 1)->where('deleted_at', null)->get()
                                         as $store)
                                         <option value="{{$store['id']}}"
                                             {{$store->id == $admins->store_id ? 'selected' : '';}}>{{$store['name']}}

@@ -212,7 +212,7 @@
                                             for="exampleFormControlInput1">{{translate('store_price')}}</label>
                                         <input type="number" min="0" max="100000"
                                             value="{{@$warehouse_products->store_price}}" name="store_price" step="any"
-                                            id="discount" class="form-control"
+                                            id="discount" class="form-control"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
                                             placeholder="{{ translate('store price') }}" required>
                                     </div>
                                 </div>
@@ -228,7 +228,7 @@
                                             for="exampleFormControlInput1">{{translate('customer_price')}}</label>
                                         <input type="number" min="0" max="100000"
                                             value="{{@$warehouse_products->customer_price}}" name="customer_price"
-                                            step="any" id="discount" class="form-control"
+                                            step="any" id="discount" class="form-control"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
                                             placeholder="{{ translate(' customer price') }}" required>
                                     </div>
                                 </div>
@@ -271,7 +271,7 @@
                                         for="exampleFormControlInput1">{{translate('Quantity')}}</label>
                                     <input type="number" min="0" max="10000000000" step="any"
                                         value="{{@$product_details_array[0]['quantity']}}" name="quantity[]"
-                                        class="form-control" placeholder="{{ translate('Ex : 1') }}" required>
+                                        class="form-control" placeholder="{{ translate('Ex : 1') }}"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" required>
                                 </div>
                             </div>
 
@@ -292,7 +292,7 @@
                                 <label class="input-label"
                                     for="exampleFormControlInput1">{{translate('default_price')}}/{{translate('offer_price')}}</label>
                                 <input name="offer_price[]" min="0" max="100000000" step="any"
-                                    value="{{@$product_details_array[0]['offer_price']}}" class="form-control"
+                                    value="{{@$product_details_array[0]['offer_price']}}" class="form-control"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
                                     placeholder="{{ translate('Ex : 10') }}" required>
                             </div>
 

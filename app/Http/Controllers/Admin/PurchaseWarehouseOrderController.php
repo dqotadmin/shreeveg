@@ -21,6 +21,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
+use PHPUnit\TextUI\Help;
+use Symfony\Component\Console\Helper\Helper;
 
 class PurchaseWarehouseOrderController extends Controller
 {
@@ -91,6 +93,8 @@ class PurchaseWarehouseOrderController extends Controller
     {
 
         try {
+            
+            
             DB::beginTransaction();
             $role = auth('admin')->user()->admin_role_id;
             $row = $this->mTable::find($id);
@@ -100,9 +104,20 @@ class PurchaseWarehouseOrderController extends Controller
             } else {
                 $row->warehouse_comments = $request->warehouse_comments;
             }
+      
 
             $row->save();
-
+            if ($role == 5) {
+                $wh_orders = $row->purchaseWarehouseOrderDetail;
+            foreach($wh_orders as $wh_order){
+                $product_id = $wh_order->product_id;
+                $qty = $wh_order->qty;
+                //dd($wh_order,$product_id);
+                $warehouseProduct = Helpers::warehouseProductData($product_id);
+                $warehouseProduct->increment('total_stock',$qty);
+           
+            }
+        }
             DB::commit();
             Toastr::success(translate('status updated Successfully!'));
             return redirect()->route('admin.purchase-warehouse-order.index');

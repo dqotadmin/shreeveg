@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', translate('Add new banner'))
+@section('title', translate('rate list setup'))
 
 @push('css_or_js')
 

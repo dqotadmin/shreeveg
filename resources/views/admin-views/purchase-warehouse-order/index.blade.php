@@ -1,5 +1,5 @@
 @extends('layouts.admin.app')
-@section('title', translate('Add new banner'))
+@section('title', translate('warehouse orders'))
 @push('css_or_js')
 @endpush
 @section('content')
@@ -85,7 +85,13 @@
                             {{ date('d-m-Y',strtotime($row->purchase_date))}}
                         </td>
                         <td>
-                            <span class="d-block font-size-sm text-body text-trim-25">
+                             @if($row->status == 'Pending')
+                        <span class="d-block font-size-sm text-trim-25 text-danger">
+                        @elseif($row->status == 'Rejected')
+                        <span class="d-block font-size-sm text-trim-25  " style="tex">
+                            @else
+                            <span class="d-block font-size-sm text-body text-trim-25 text-dark">
+                        @endif
                             {{$row->status }}
                             </span>
                         </td>

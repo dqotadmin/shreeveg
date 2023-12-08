@@ -28,7 +28,7 @@
                             <div class="col-12">
                                 <div class="form-group mb-0">
                                     <label class="input-label" for="exampleFormControlInput1">{{translate('title')}}</label>
-                                    <input type="text" name="title" class="form-control"
+                                    <input type="text" name="title" class="form-control" style="text-transform: capitalize;"
                                         placeholder="{{ translate('title') }}" required>
                                 </div>
                             </div>
@@ -94,23 +94,23 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group mb-0">
-                                        <select name="unit[]" class="form-control js-select2-custom" required>
-                                        <option disabled selected>Select Unit</option>
-                                        @foreach(\App\Model\Unit::get() as $unit)
-                                            <option value="{{$unit->id}}">{{$unit->title}}</option>
-                                        @endforeach
-                                        </select>
+                                    <select name="unit[]" class="form-control js-select2-custom">
+                                        <option value="kg">{{translate('kg')}}</option>
+                                        <option value="gm">{{translate('gm')}}</option>
+                                        <option value="ltr">{{translate('ltr')}}</option>
+                                        <option value="pc" >{{translate('pc')}}</option>
+                                    </select>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group mb-0">
-                                        <input type="text" name="available_qty[]" class="form-control" required oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
+                                        <input type="text" name="available_qty[]" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
                                             placeholder="Available Qty" >
                                     </div>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group mb-0">
-                                        <input type="text" name="rate[]"  class="form-control" required     oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
+                                        <input type="text" name="rate[]"  class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
                                             placeholder="Rate" >
                                     </div>
                                 </div>

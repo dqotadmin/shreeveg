@@ -2517,4 +2517,9 @@
   'nimrah Inserted Successfully!' => 'Nimrah Inserted Successfully!',
   'kapil broker Inserted Successfully!' => 'Kapil broker Inserted Successfully!',
   'pradip broker Inserted Successfully!' => 'Pradip broker Inserted Successfully!',
+  'dsdas Inserted Successfully!' => 'Dsdas Inserted Successfully!',
+  'kunal broker Inserted Successfully!' => 'Kunal broker Inserted Successfully!',
+  'hemant broker Inserted Successfully!' => 'Hemant broker Inserted Successfully!',
+  'update status BY RECEIVER' => 'Update status BY RECEIVER',
+  'broker comments' => 'Broker comments',
 );

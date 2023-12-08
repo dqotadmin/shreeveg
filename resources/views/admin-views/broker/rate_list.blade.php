@@ -3,7 +3,11 @@
 @section('title', translate('Add new banner'))
 
 @push('css_or_js')
-
+<style>
+    .error{
+        color:red;
+    }
+</style>
 @endpush
 
 @section('content')
@@ -60,10 +64,10 @@
                                                     <input type="hidden" name="products[]" value="{{($value->product_id)}}">
                                                 <td>{{ $key+1}}</td>
                                                 <td>{{ @$value->productDetail->name }}</td>
-                                                <td>{{ $value->available_qty }}</td>
+                                                <td id="available_quantity">{{ $value->available_qty }}</td>
                                                 <td>{{ $value->unit }}</td>
                                                 <td>{{ $value->rate }}</td>
-                                                <td><input type="text" name="order_qty[]"></td>
+                                                <td><input type="text" name="order_qty[]" id="order_qty" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"></td>
                                                 </tr>
                                           @endforeach
                                           
@@ -87,6 +91,35 @@
 @endsection
 
 @push('script_2')
-  
+  <script>
+  $(document).ready(function () {
+        // Add a class to the order_qty input for easier selection
+        $('input[name="order_qty[]"]').on('input', function () {
+            // Get the current row
+            var row = $(this).closest('tr');
+            console.log('row'+row);
+            // Get the values of available_qty and order_qty
+            var availableQty = parseFloat(row.find('#available_quantity').text());
+            var orderQty = parseFloat($(this).val());
+            console.log('availableQty'+availableQty);
+            console.log('orderQty'+orderQty);
+
+            // Check if available_qty is less than order_qty
+            if (orderQty > availableQty) {
+                // Show an alert or any other notification
+                alert('Order quantity cannot be greater than available quantity!');
+                $(this).val('');
+                
+                // You can also highlight the row or take any other action here
+                row.addClass('error'); // Add a class to highlight the row
+            } else {
+                // If order_qty is valid, remove any error class
+                row.removeClass('error');
+            }
+        });
+        
+    });
+
+  </script>
 
 @endpush

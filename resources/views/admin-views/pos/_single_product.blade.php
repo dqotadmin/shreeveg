@@ -33,7 +33,7 @@
             <div class="product-price text-center">
                 @php($whProduct =  Helpers::warehouseProductData($product['id']))
                
-                {{ Helpers::set_symbol($whProduct->customer_price - $discount) }} 
+                {{ Helpers::set_symbol($whProduct->customer_price - $discount) }} / {{ @$whProduct->unit->title }}
             </div>
         </div>
     </div>

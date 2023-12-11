@@ -27,13 +27,13 @@
 
     <div class="card-body inline_product text-center p-1 clickable">
         <div class="product-title1 text-dark font-weight-bold">
-            {{ Str::limit($product['name'], 12) }}
+            {{ Str::limit(@$product['name'], 12) }}
         </div>
         <div class="justify-content-between text-center">
             <div class="product-price text-center">
                 @php($whProduct =  Helpers::warehouseProductData($product['id']))
                
-                {{ Helpers::set_symbol($whProduct->customer_price - $discount) }} / {{ @$whProduct->unit->title }}
+                {{ Helpers::set_symbol(@$whProduct->customer_price - $discount) }} / {{ @$whProduct->unit->title }}
             </div>
         </div>
     </div>

@@ -67,7 +67,6 @@
                 </thead>
                 <tbody>
                     @foreach($row->purchaseStoreOrderDetail as $key => $value)
-                    {{ @$value->productDetail->name }}
                     <tr class="">
                         <td>{{ $key+1}}</td>
                         <td>{{ @$value->productDetail->name }}</td>

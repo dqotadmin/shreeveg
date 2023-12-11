@@ -2531,4 +2531,6 @@
   'Stock update' => 'Stock update',
   'Stock updated Successfully!' => 'Stock updated Successfully!',
   'stock_updated' => 'Stock updated',
+  'total_stock' => 'Total stock',
+  'available_stock' => 'Available stock',
 );

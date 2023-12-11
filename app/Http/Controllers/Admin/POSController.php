@@ -244,19 +244,28 @@ class POSController extends Controller
      */
     public function addToCart(Request $request): \Illuminate\Http\JsonResponse
     {
-        //dd($request->id, $this->product);
+        // dd($request->all());
+        // dd($request->id, $this->product);
+        $authUser = auth('admin')->user();
         $product = \App\Model\WarehouseProduct::find($request->id);
+        $store_stock = \App\Model\StoreProduct::where('product_id',$request->product_id)->where('store_id',$authUser->store_id)->first();
+     
         $data = array();
         $data['id'] = $product->id;
         $str = '';
         $variations = [];
         $price = 0;
 
-        if ($product->total_stock < $request['quantity']) {
+        if ($request->store_total_stock < $request['quantity']) {
             return response()->json([
                 'data' => 0
             ]);
         }
+        // if ($product->total_stock < $request['quantity']) {
+        //     return response()->json([
+        //         'data' => 0
+        //     ]);
+        // }
 
         //Gets all the choice values of customer choice option and generate a string like Black-S-Cotton
         /* foreach (json_decode($product->choice_options) as $key => $choice) {
@@ -316,7 +325,7 @@ class POSController extends Controller
 
         return response()->json([
             'data' => $data,
-            'quantity' => $product->total_stock
+            'quantity' => $store_stock->total_stock
         ]);
     }
 
@@ -371,15 +380,17 @@ class POSController extends Controller
         if (in_array($authUser->admin_role_id, [6, 7])) {
             $warehouse_id = $authUser->Store->warehouse_id;
             $storeId = $authUser->store_id;
+            $query = $query->whereType('Store')->where('store_id', $authUser->store_id);
         } elseif (in_array($authUser->admin_role_id, [3, 4])) {
             $warehouse_id = $authUser->warehouse_id;
+            $query = $query->where('warehouse_id', $authUser->warehouse_id);
         }
 
-        if ($authUser->admin_role_id == 6) {
-            $query = $query->whereType('Store')->where('store_id', $authUser->store_id);
-        } elseif ($authUser->admin_role_id == 3) {
-            $query = $query->whereType('Warehouse')->where('warehouse_id', $authUser->warehouse_id);
-        }
+        // if ($authUser->admin_role_id == 6 ) {
+        //     $query = $query->whereType('Store')->where('store_id', $authUser->store_id);
+        // } elseif ($authUser->admin_role_id == 3) {
+           
+        // }
 
         $start_date = $request['start_date'];
         $end_date = $request['end_date'];
@@ -388,6 +399,8 @@ class POSController extends Controller
             return $query->whereDate('created_at', '>=', $start_date)
                 ->whereDate('created_at', '<=', $end_date);
         });
+        //dd($query->get());
+
         // $query_param = ['branch_id' => 0, 'start_date' => $start_date, 'end_date' => $end_date];
         //$this->order->where(['checked' => 0])->update(['checked' => 1]);
 
@@ -416,6 +429,7 @@ class POSController extends Controller
 
         $orders = $query->orderBy('id', 'desc')->paginate(Helpers::getPagination())->appends($query_param);
         //return $orders;
+        //dd($orders);
         return view('admin-views.pos.order.list', compact('orders', 'search', 'branches', 'start_date', 'end_date'));
     }
 
@@ -447,7 +461,7 @@ class POSController extends Controller
      */
     public function place_order(Request $request): \Illuminate\Http\RedirectResponse
     {
-
+        // dd($request->all());
         $authUser = auth('admin')->user();
         if ($request->session()->has('cart')) {
             if (count($request->session()->get('cart')) < 1) {
@@ -499,20 +513,24 @@ class POSController extends Controller
         $order->created_at = now();
         $order->updated_at = now();
 
+        $store_product = \App\Model\StoreProduct::where('store_id',$authUser->store_id);
+
         foreach ($cart as $c) {
             if (is_array($c)) {
                 $product = \App\Model\WarehouseProduct::find($c['id']);
+                $store_product_stock = $store_product->where('product_id',$product->product_id)->first();
                 if (!empty($product['variations'])) {
                     $type = $c['variant'];
                     foreach (json_decode($product['variations'], true) as $var) {
-                        if ($type == $var['type'] && $var['stock'] < $c['quantity']) {
+                        if ($type == $var['type'] && $store_product_stock['total_stock'] < $c['quantity']) {
                             Toastr::error($var['type'] . ' ' . translate('is out of stock'));
 
                             return back();
                         }
                     }
                 } else {
-                    if (($product->total_stock - $c['quantity']) < 0) {
+
+                    if (($store_product_stock->total_stock - $c['quantity']) < 0) {
                         Toastr::error($product->productDetail->name . ' ' . translate('is out of stock'));
                         return back();
                     }
@@ -553,7 +571,7 @@ class POSController extends Controller
                         $discount = max($category_discount, $product_discount);
                         $discount_type = $product_discount > $category_discount ? 'discount_on_product' : 'discount_on_category';
                     }
-                    //dump($product);
+                    // dump($product);
                     $product = Helpers::product_data_formatting($product);
                     //dd(1, $product);
                     $or_d = [
@@ -573,19 +591,17 @@ class POSController extends Controller
                     $order_details[] = $or_d;
                 }
 
-                // if (in_array($authUser->admin_role_id, [6, 7])) {
-                //     \App\Model\WarehouseProduct::where(['id' => $product['id']])->update([
-                //         'total_stock' => $product['total_stock'] - $c['quantity'],
-                //     ]);
-                // } else {
-                //     \App\Model\WarehouseProduct::where(['id' => $product['id']])->update([
-                //         'total_stock' => $product['total_stock'] - $c['quantity'],
-                //     ]);
-                // }
+                if (in_array($authUser->admin_role_id, [6, 7])) {
+                    $storeupdate =   \App\Model\StoreProduct::where(['product_id' => $product['product_id']])->where(['store_id' => $authUser->store_id])->first();
+                     $storeupdate->update([
+                        'total_stock' => $storeupdate->total_stock - $c['quantity'],
+                    ]);
+                } elseif($authUser->admin_role_id == 3) {
+                    \App\Model\WarehouseProduct::where(['id' => $product['id']])->update([
+                        'total_stock' => $product['total_stock'] - $c['quantity'],
+                    ]);
+                }
 
-                \App\Model\WarehouseProduct::where(['id' => $product['id']])->update([
-                    'total_stock' => $product['total_stock'] - $c['quantity'],
-                ]);
             }
         }
         $total_price = $product_price;

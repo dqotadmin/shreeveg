@@ -266,7 +266,7 @@ $(function() {
         groupClassName: '',
         maxFileSize: '',
         placeholderImage: {
-            image: '{{asset(' / public / assets / admin / img / upload - en.png ')}}',
+            image: '{{asset('/public/assets/admin/img/upload-en.png')}}',
             width: '100%'
         },
         dropFileLabel: "Drop Here",
@@ -301,8 +301,7 @@ $(function() {
         groupClassName: '',
         maxFileSize: '',
         placeholderImage: {
-            image: '{{asset('
-            public / assets / admin / img / upload - en.png ')}}',
+            image: '{{asset('public/assets/admin/img/upload-en.png')}}',
             width: '100%'
         },
         dropFileLabel: "Drop Here",
@@ -426,8 +425,7 @@ $('#product_form').on('submit', function() {
                     });
                 }
             } else {
-                toastr.success('{{translate('
-                    product updated successfully!')}}', {
+                toastr.success('{{translate('product updated successfully!')}}', {
                         CloseButton: true,
                         ProgressBar: true
                     });

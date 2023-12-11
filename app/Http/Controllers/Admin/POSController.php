@@ -573,15 +573,19 @@ class POSController extends Controller
                     $order_details[] = $or_d;
                 }
 
-                if (in_array($authUser->admin_role_id, [6, 7])) {
-                    \App\Model\WarehouseProduct::where(['id' => $product['id']])->update([
-                        'total_stock' => $product['total_stock'] - $c['quantity'],
-                    ]);
-                } else {
-                    \App\Model\WarehouseProduct::where(['id' => $product['id']])->update([
-                        'total_stock' => $product['total_stock'] - $c['quantity'],
-                    ]);
-                }
+                // if (in_array($authUser->admin_role_id, [6, 7])) {
+                //     \App\Model\WarehouseProduct::where(['id' => $product['id']])->update([
+                //         'total_stock' => $product['total_stock'] - $c['quantity'],
+                //     ]);
+                // } else {
+                //     \App\Model\WarehouseProduct::where(['id' => $product['id']])->update([
+                //         'total_stock' => $product['total_stock'] - $c['quantity'],
+                //     ]);
+                // }
+
+                \App\Model\WarehouseProduct::where(['id' => $product['id']])->update([
+                    'total_stock' => $product['total_stock'] - $c['quantity'],
+                ]);
             }
         }
         $total_price = $product_price;

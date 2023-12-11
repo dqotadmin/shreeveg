@@ -86,7 +86,7 @@
                                 </button>
                             </span>
                             <input type="hidden" id="check_max_qty" value="{{ $whProduct->total_stock }}">
-                            <input type="text" name="quantity"
+                            <input type="text" name="quantity"  
                                    class="form-control input-number text-center cart-qty-field"
                                    placeholder="1" value="1" min="0.1" max="100" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');">
                             <span class="input-group-btn">

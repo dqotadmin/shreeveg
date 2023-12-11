@@ -19,7 +19,7 @@
     <div class="row g-2">
         <div class="col-sm-12 col-lg-12">
             <div class="btn--container justify-content-end m-2">
-                @if(in_array($user->admin_role_id,[3,6]))
+                @if(in_array($user->admin_role_id,[6]))
                 <a type="button"  href="{{route('admin.store.purchase-store-orders.create')}}" class="btn btn--primary">{{translate('Add new')}}</a>
                 @endif
             </div>
@@ -57,12 +57,14 @@
                         @if(in_array($user->admin_role_id ,[3,1]))
                         <th class="border-0">{{translate('store')}}</th>
                         @endif
-                        <th class="border-0">{{translate('title')}}</th>
+                        <!-- <th class="border-0">{{translate('title')}}</th> -->
                         <th class="border-0">{{translate('invoice no')}}</th>
                         <th class="border-0">{{translate('item')}}</th>
                         <th class="border-0">{{translate('amount')}}</th>
                         <th class="border-0">{{translate('order_date')}}</th>
-                        <th class="border-0">{{translate('order_status')}}</th>
+                        @if(in_array($user->admin_role_id ,[6]))
+                        <th class="border-0">{{translate('stock_updated')}}</th>
+                        @endif<th class="border-0">{{translate('order_status')}}</th>
                         <th class="text-center border-0">{{translate('action')}}</th>
                     </tr>
                 </thead>
@@ -84,11 +86,11 @@
                             </span>
                         </td>
                         @endif
-                        <td>
+                        <!-- <td>
                             <span class="d-block font-size-sm text-body text-trim-25">
                             {{$row->title }}
                             </span>
-                        </td>
+                        </td> -->
                         <td>
                             <span class="d-block font-size-sm text-body text-trim-25">
                             {{$row->invoice_number }}
@@ -108,13 +110,37 @@
                             {{ date('d-m-Y',strtotime($row->purchase_date))}}
                         </td>
                         <td>
-                            <span class="d-block font-size-sm text-body text-trim-25">
-                            {{$row->status }}
-                            </span>
+                        @if($row->status == 'Pending')
+                        <span class="d-block font-size-sm text-trim-25 text-danger">
+                        @elseif($row->status == 'Rejected')
+                        <span class="d-block font-size-sm text-trim-25  text-muted" >
+                        @elseif($row->status == 'Delivered')
+                        <span class="d-block font-size-sm text-trim-25  text-success" >
+                        @elseif($row->status == 'Accepted')
+                        <span class="d-block font-size-sm text-trim-25  text-info" >
+                        @elseif($row->status == 'Received')
+                        <span class="d-block font-size-sm text-trim-25  text-primary" >
+                        @else
+                        <span class="d-block font-size-sm text-body text-trim-25 text-dark">
+                        @endif
+                         <strong>   {{$row->status }}</strong>
                         </td>
-                        <td>
                             <!-- Dropdown -->
+                            @if( $user->admin_role_id == '6')
+                        <td>
                             <div class="btn--container justify-content-center">
+                                @if($row->status == 'Received' && $user->admin_role_id == '6' && $row->stock_update == 'Pending')
+                                    <a type="button"  href="{{route('admin.store.stock-update',[$row->id])}}" class="btn btn--primary">
+                                    {{'Stock update'}}
+                                @elseif($row->status == 'Received' && $user->admin_role_id == '6' && $row->stock_update == 'Stock Update')
+                                    <span class="d-block font-size-sm text-trim-25  text-primary" >
+                                        {{$row->stock_update }}
+                                    </span>
+                                 @endif
+                            </a>
+                        </td>
+                        @endif
+                        <td>
                                 <a class="action-btn" href="{{route('admin.store.purchase-store-orders.show',[$row->id])}}">
                                 <i class="tio-invisible"></i>
                                 </a>
@@ -149,5 +175,5 @@
     </div>
 </div>
 @endsection
-@push('script_2')
+@push('script_2')   
 @endpush

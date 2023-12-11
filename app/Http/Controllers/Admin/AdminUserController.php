@@ -104,7 +104,6 @@ class AdminUserController extends Controller
 
     public function store(Request $request): \Illuminate\Http\RedirectResponse
     {
-        dd($request->all());
         $request->validate([
             'f_name' => 'required',
             'l_name' => 'required',

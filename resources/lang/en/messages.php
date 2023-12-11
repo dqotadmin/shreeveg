@@ -2523,4 +2523,12 @@
   'update status BY RECEIVER' => 'Update status BY RECEIVER',
   'broker comments' => 'Broker comments',
   'ramesh store order Inserted Successfully!' => 'Ramesh store order Inserted Successfully!',
+  'Data Inserted Successfully!' => 'Data Inserted Successfully!',
+  'data Inserted Successfully!' => 'Data Inserted Successfully!',
+  'mannu Inserted Successfully!' => 'Mannu Inserted Successfully!',
+  'Warehouse comments' => 'Warehouse comments',
+  'stock_update' => 'Stock update',
+  'Stock update' => 'Stock update',
+  'Stock updated Successfully!' => 'Stock updated Successfully!',
+  'stock_updated' => 'Stock updated',
 );

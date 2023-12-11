@@ -287,6 +287,7 @@
         $('.input-number').on('keyup', function () {
            
             minValue = parseFloat($(this).attr('min'));
+            console.log('minValue'+minValue);
             maxValue = ($(this).attr('max'));
             valueCurrent = parseFloat($(this).val());
             

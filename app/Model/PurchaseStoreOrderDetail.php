@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class PurchaseStoreOrderDetail extends Model
 {
-
+    protected $fillable=[
+        'status'
+    ];
     public function purchaseStoreOrderList()
     {
         return $this->belongsTo(PurchaseStoreOrder::class, 'purchase_store_order_id ');

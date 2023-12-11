@@ -117,7 +117,7 @@ class PurchaseWarehouseOrderController extends Controller
                 $qty = $wh_order->qty;
                 $warehouseProduct = Helpers::warehouseProductData($product_id);
                 
-                if ($warehouseProduct && $warehouseProduct->total_stock > 0) {
+                if ($warehouseProduct && $warehouseProduct->total_stock >= 0) {
                     $warehouseProduct->increment('total_stock', $qty);
                 } 
             }

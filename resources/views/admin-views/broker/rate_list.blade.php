@@ -58,8 +58,17 @@
                                          <th>Order Qty</th>
                                         </thead>
                                         <tbody>
-                                            
+                                        <?php  
+                                                $warehouse_categories = App\Model\WarehouseCategory::where('warehouse_id',auth('admin')->user()->warehouse_id)->pluck('category_id')->toArray();
+                                            ?> 
+                                       
                                             @foreach($row->rateListDetail as $key => $value)
+      <?php 
+   
+      if (in_array($value->product_id, $warehouse_categories)) { ?>
+      
+    
+      
                                                 <tr class="">
                                                     <input type="hidden" name="products[]" value="{{($value->product_id)}}">
                                                 <td>{{ $key+1}}</td>
@@ -69,6 +78,8 @@
                                                 <td>{{ $value->rate }}</td>
                                                 <td><input type="text" name="order_qty[]" id="order_qty" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"></td>
                                                 </tr>
+                                          <?php  }
+                                            ?>
                                           @endforeach
                                           
                                         </tbody>

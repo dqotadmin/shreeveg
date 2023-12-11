@@ -2533,4 +2533,5 @@
   'stock_updated' => 'Stock updated',
   'total_stock' => 'Total stock',
   'available_stock' => 'Available stock',
+  'testing Inserted Successfully!' => 'Testing Inserted Successfully!',
 );

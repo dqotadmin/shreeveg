@@ -42,8 +42,9 @@
                 <thead class="thead-light">
                     <tr>
                         <th class="border-0">{{translate('#')}}</th>
-                        @if($role == 8)
+                        @if($role == 8 || $role == 1 )
                         <th class="border-0">{{translate('warehouse')}}</th>
+                        <th class="border-0">{{translate('Receiver')}}</th>
                         @else
                         <th class="border-0">{{translate('broker')}}</th>
                         @endif
@@ -59,13 +60,30 @@
                     @foreach($rows as $key=>$row)
                     <tr>
                         <td>{{$key+1}}</td>
-                      
+                        <!-- <td>
+                            <span class="d-block font-size-sm text-body text-trim-25"> -->
+                                <!-- {{ ($role == 8 || $role == 1)
+                                    ?$row->warehouseDetail->name:$row->brokerDetail->f_name.' '.$row->brokerDetail->l_name  }}  -->
+                            <!-- </span>
+                        </td> -->
+                        
+                        @if($role == 8 || $role == 1 )
                         <td>
-                            <span class="d-block font-size-sm text-body text-trim-25">
-                                {{ ($role == 8)?$row->warehouseDetail->name:$row->brokerDetail->f_name.' '.$row->brokerDetail->l_name  }} 
+                            <span class="d-block font-size-sm text-body text-trim-25">{{@$row->warehouseDetail->name}}
                             </span>
                         </td>
-                       
+                        <td>
+                            <span class="d-block font-size-sm text-body text-trim-25">
+                                {{$row->receiverName->f_name.' '.$row->receiverName->l_name }}
+                            </span>
+                        </td>
+                        @else
+                        <td>
+                            <span class="d-block font-size-sm text-body text-trim-25">
+                                {{$row->brokerDetail->f_name.' '.$row->brokerDetail->l_name }}
+                            </span>
+                        </td>
+                        @endif
                         <td>
                             <span class="d-block font-size-sm text-body text-trim-25">
                             {{$row->invoice_number }}
@@ -85,14 +103,21 @@
                             {{ date('d-m-Y',strtotime($row->purchase_date))}}
                         </td>
                         <td>
-                             @if($row->status == 'Pending')
+                        @if($row->status == 'Pending')
                         <span class="d-block font-size-sm text-trim-25 text-danger">
                         @elseif($row->status == 'Rejected')
-                        <span class="d-block font-size-sm text-trim-25  " style="tex">
-                            @else
-                            <span class="d-block font-size-sm text-body text-trim-25 text-dark">
-                        @endif
-                            {{$row->status }}
+                        <span class="d-block font-size-sm text-trim-25  text-muted" >
+                        @elseif($row->status == 'Delivered')
+                        <span class="d-block font-size-sm text-trim-25  text-success" >
+                        @elseif($row->status == 'Accepted')
+                        <span class="d-block font-size-sm text-trim-25  text-info" >
+                        @elseif($row->status == 'Received')
+                        <span class="d-block font-size-sm text-trim-25  text-primary" >
+                        @else
+                        <span class="d-block font-size-sm text-body text-trim-25 text-dark">
+                        @endif                  
+                               <strong>   {{$row->status }}</strong>
+
                             </span>
                         </td>
                         <td>

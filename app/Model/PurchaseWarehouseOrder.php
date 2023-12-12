@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\Http\Controllers\Admin\AdminUserController;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,5 +21,9 @@ class PurchaseWarehouseOrder extends Model
     public function purchaseWarehouseOrderDetail()
     {
         return $this->hasMany(PurchaseWarehouseOrderDetail::class, 'purchase_warehouse_order_id');
+    }
+    public function receiverName()
+    {
+        return $this->belongsTo(Admin::class, 'created_by_id');
     }
 }

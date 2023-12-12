@@ -73,42 +73,37 @@
                         </div>
                     </div>
                 </div>
+
+
                 <div class="row g-3">
-                    
                     <div class="col-md-8">
                         @foreach($categories as $category)
-                        <?php 
-                            $productsIds = \App\Model\Product::where('category_id',$category->category_id)->pluck('id')->toArray();
-                            $products = \App\Model\WarehouseProduct::where('warehouse_id',$wahrehouseId)->whereIn('product_id',$productsIds)->get();
-                             ?>  
-                        <div class="row g-3 mt-5">
+                        <div class="row g-3">
                             <div class="col-md-2">
                                 <div class="form-group mb-0">
-                               @if((count($products) >0))
                                     <h5>{{@$category->getCategory->name }}</h5>
-                                    @endif
                                 </div>
                             </div>
-                         
+                            <?php //dump($category->category_id);
+                            $productsIds = \App\Model\Product::where('category_id',$category->category_id)->pluck('id')->toArray();
+                            $products = \App\Model\WarehouseProduct::where('warehouse_id',$wahrehouseId)->whereIn('product_id',$productsIds)->get();
+                            ?>
                             @if(count($products) >0)
                             @foreach($products as $key =>$product)
-                            <?php
-                            $stock = \App\Model\StoreProduct::where('store_id',$user->store_id)->where('product_id',$product->product_id)->first();
-                               ?>
                                 @if($key > 0)
                                     <div class="col-md-2"></div>
                                 @endif
 
                                 <div class="col-md-2">
                                     <div class="form-group mb-0">
-                                        <input type="hidden" name="product_id[]" value="{{$product->product_id}}">
-                                        <input type="text"  value="{{$product->productDetail->name}} " class=" dddd form-control"
+                                        <input type="hidden" name="product_id[]" value="{{$product->id}}">
+                                        <input type="text"  value="{{$product->productDetail->name}} " class="form-control"
                                             disabled>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group mb-0">
-                                        <input type="text" value="{{$stock ?$stock->total_stock:0}}" name="stock" id="total_stock" class="form-control"
+                                        <input type="text" value="{{$product->total_stock}}" id="total_stock" class="form-control"
                                             disabled>
                                     </div>
                                 </div>
@@ -137,7 +132,6 @@
                             @endif
 
                         </div>
-
                         @endforeach
                     </div>
                     <div class="col-md-6">

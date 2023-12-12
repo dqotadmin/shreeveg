@@ -119,7 +119,6 @@
                             <th class="text-center">{{translate('actions')}}</th>
                         </tr>
                         </thead>
-
                         <tbody id="set-rows">
                         @foreach($orders as $key=>$order)
                         <tr class="status-{{$order['order_status']}} class-all">

@@ -21,4 +21,9 @@ class PurchaseStoreOrder extends Model
     {
         return $this->hasMany(PurchaseStoreOrderDetail::class, 'purchase_store_order_id');
     }
+    // public function totalStoreStock()
+    // {
+    //     return $this->hasOne(StoreProduct::class, 'purchase_store_order_id');
+    // }
+    
 }

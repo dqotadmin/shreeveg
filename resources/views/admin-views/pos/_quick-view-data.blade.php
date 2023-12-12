@@ -3,6 +3,7 @@
         <span aria-hidden="true">&times;</span>
     </button>
     @php($whProduct =  Helpers::warehouseProductData($product['id']))
+
     <div class="modal--media">
         <!-- Product gallery-->
         <div class="modal--media-avatar">
@@ -68,9 +69,19 @@
                     </span>
                 </div>
             </div>
+            <?php $store_id =  auth('admin')->user()->store_id; $product_id = $whProduct->product_id;   
+                            $stock = \App\Model\StoreProduct::where('store_id',$store_id)->where('product_id',$product_id)->first();
+                               ?>
+            <h2>{{translate('available_stock')}}:</h2>
+            
+                <span >
+              <strong> {{ @$stock->total_stock }}/ {{ @$whProduct->unit->title }}</strong> 
+
+                </span>
             <form id="add-to-cart-form" class="mb-2">
                 @csrf
                 <input type="hidden" name="id" value="{{ @$whProduct->id }}">
+                <input type="hidden" name="product_id" value="{{ @$whProduct->product_id }}">
 
             <!-- Quantity + Add to cart -->
                 <div class="d-flex justify-content-between">
@@ -85,8 +96,9 @@
                                         <i class="tio-remove  font-weight-bold"></i>
                                 </button>
                             </span>
-                            <input type="hidden" id="check_max_qty" value="{{ $whProduct->total_stock }}">
-                            <input type="text" name="quantity"
+                           
+                            <input type="hidden" id="check_max_qty" name="store_total_stock" value="{{ @$stock->total_stock }}">
+                            <input type="text" name="quantity"  
                                    class="form-control input-number text-center cart-qty-field"
                                    placeholder="1" value="1" min="0.1" max="100" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');">
                             <span class="input-group-btn">
@@ -111,7 +123,7 @@
                 </div>
 
                 <div class="d-flex justify-content-center mt-2">
-                    <button class="btn btn-primary"
+                    <button class="btn btn-primary addToCart"
                             onclick="addToCart()"
                             type="button"
                             style="width:37%; height: 45px">

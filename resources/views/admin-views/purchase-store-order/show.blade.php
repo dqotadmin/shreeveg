@@ -44,7 +44,7 @@
                 <img class="resturant-icon" src="{{asset('/public/assets/admin/img/dashboard/3.png')}}" alt="dashboard"> 
                 <div class="for-card-text font-weight-bold  text-uppercase mb-1">{{translate('total amount')}} </div>
                 <div class="for-card-count">{{ $row->total_purchase_amt}}</div>
-            </div>
+            </div> 
         </div>
         <div class="col-lg-6 col-md-6 col-sm-6">
             <div class="resturant-card bg--3">
@@ -65,23 +65,27 @@
                     <th>Rate</th>
                     <th>Total</th>
                 </thead>
-                <tbody>
+                <form action="{{route('admin.store.updateStatus',$row->id)}}" method="post">
+                @csrf
+              <tbody>
                     @foreach($row->purchaseStoreOrderDetail as $key => $value)
                     <tr class="">
                         <td>{{ $key+1}}</td>
-                        <td>{{ @$value->productDetail->name }}</td>
+                        <input name="product_id[]" type="hidden" value="{{@$value->product_id}}">
+                        <td name="product_id">{{ @$value->productDetail->name }}</td>
+                        <input name="qty[]" type="hidden" value="{{@$value->qty}}">
                         <td>{{ $value->qty }}</td>
                         <td>{{ $value->unit_name }}</td>
                         <td>{{ $value->price_per_unit }}</td>
                         <td>{{ $value->total_price }}</td>
                     </tr>
-                    @endforeach
+                    @endforeach 
                 </tbody>
             </table>
+            @if((auth('admin')->user()->admin_role_id == 3 && $row->status == 'Delivered'))
+            @elseif(auth('admin')->user()->admin_role_id == 6  || $row->status != 'Received')
 
-            @if(in_array($user->admin_role_id ,[3,6]))
-            <form action="{{route('admin.store.updateStatus',$row->id)}}" method="post">
-            @csrf
+          
             <div class="col-md-6">
                 <label class="input-label" for="exampleFormControlInput1">{{translate('update status')}}</label>
                 <select name="status" class="form-control">
@@ -96,20 +100,21 @@
                     @endif
                 </select>
             </div>
-            
-            @if($user->admin_role_id == 6)
-                <div class="col-md-6">
+       
+            @if((auth('admin')->user()->admin_role_id == 3 && $row->status == 'Delivered'))
+            @elseif(auth('admin')->user()->admin_role_id == 6)
+                <div class="col-md-6 mt-3">
                     <label class="input-label" for="exampleFormControlInput1">{{translate('comments')}}</label>
                     <textarea name="store_comments" class="form-control" rows="6" placeholder="{{ translate('enter comments if any') }}" required>{{$row->store_comments}}</textarea>
                 </div>
-                @if($row->status == 'Pending' || $row->status == 'Accepted')
+                @if( $row->status == 'Delivered')
                 <div class="text-right">
                     <button type="submit" class="btn btn-primary px-5">{{translate('save')}}</button>
                 </div>
                 @endif
             @else
-                <div class="col-md-6">
-                    <label class="input-label" for="exampleFormControlInput1">{{translate('comments')}}</label>
+                <div class="col-md-6 mt-3">
+                    <label class="input-label" for="exampleFormControlInput1">{{translate('Warehouse comments')}}</label>
                     <textarea name="warehouse_comments" class="form-control" rows="6" placeholder="{{ translate('enter comments if any') }}" required>{{$row->warehouse_comments}}</textarea>
                 </div>
                 <div class="text-right">

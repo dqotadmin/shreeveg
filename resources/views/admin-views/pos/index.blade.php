@@ -279,34 +279,43 @@
         });
 
         $('.input-number').focusin(function () {
-            $(this).data('oldValue', $(this).val());
-            console.log('old value'+$(this).data('oldValue', $(this).val()));
+            // $(this).data('oldValue', $(this).val());
+            // console.log('old value'+$(this).data('oldValue', $(this).val()));
         });
 
         //$('.input-number').change(function () {
         $('.input-number').on('keyup', function () {
            
             minValue = parseFloat($(this).attr('min'));
+            console.log('minValue'+minValue);
             maxValue = ($(this).attr('max'));
             valueCurrent = parseFloat($(this).val());
-            
+            console.log(valueCurrent);
+            if(valueCurrent <= 0 || isNaN(valueCurrent)){
+                console.log(minValue);
+                $('.addToCart').attr('disabled', true);
+            }else{
+                $('.addToCart').removeAttr('disabled');
+            }
             var input_qty_max_val = parseInt($('#check_max_qty').val());
             var input_qty_max_val = input_qty_max_val + 1;
           
             var name = $(this).attr('name');
       
-            if (valueCurrent >= minValue) { console.log('right');
+            if (valueCurrent >= 0.0   ) { console.log('right');
                 console.log('name'+name);
 
                 $(".btn-number[data-type='minus'][data-field='" + name + "']").removeAttr('disabled');
             } else {console.log('wrong');
-                Swal.fire({
-                    icon: 'error',
-                    title: '{{translate("Cart")}}',
-                    text: '{{translate('Sorry, the minimum value was reached')}}',
-                    confirmButtonText: '{{translate("Yes")}}',
-                });
-                $(this).val($(this).data('oldValue'));
+                // Swal.fire({
+                //     icon: 'error',
+                //     title: '{{translate("Cart")}}',
+                //     text: '{{translate('Sorry, the minimum value was reached')}}',
+                //     confirmButtonText: '{{translate("Yes")}}',
+                // });
+                // $(this).val($(this).data('oldValue'));.............................................
+            console.log('old value'+$(this).val($(this).data('oldValue')));
+
             }
            
             if(valueCurrent >= input_qty_max_val){
@@ -317,7 +326,7 @@
                     text: '{{translate('the maximum value was reached')}}',
                     confirmButtonText: '{{translate("Yes")}}',
                 });
-                $(this).val(input_qty_max_val-1)
+                // $(this).val(input_qty_max_val-1)...................................
             } else if (valueCurrent <= maxValue) {
                 $(".btn-number[data-type='plus'][data-field='" + name + "']").removeAttr('disabled')
             } else {
@@ -327,7 +336,7 @@
                 //     text: '{{translate('Sorry, stock limit exceeded')}}.',
                 //     confirmButtonText: '{{translate("Yes")}}',
                 // });
-                $(this).val(1)
+                // $(this).val(0)......................................
             }
         });
         //$(".input-number").keydown(function (e) {

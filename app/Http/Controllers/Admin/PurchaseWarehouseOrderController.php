@@ -50,10 +50,12 @@ class PurchaseWarehouseOrderController extends Controller
         $rows = $this->mTable::query();
         if ($role == 8) {
             $rows->where('broker_id', auth('admin')->user()->id);
-        } else {
+        } elseif($role == 1) {
+            $rows->get();
+        }else
+        {
             $rows->where('warehouse_id', auth('admin')->user()->warehouse_id);
         }
-
         if ($request->has('search')) {
             $key = explode(' ', $request['search']);
             $rows->where(function ($q) use ($key) {
@@ -109,13 +111,15 @@ class PurchaseWarehouseOrderController extends Controller
             $row->save();
             if ($role == 5) {
                 $wh_orders = $row->purchaseWarehouseOrderDetail;
+                // dd($wh_orders);
             foreach($wh_orders as $wh_order){
                 $product_id = $wh_order->product_id;
                 $qty = $wh_order->qty;
-                //dd($wh_order,$product_id);
                 $warehouseProduct = Helpers::warehouseProductData($product_id);
-                $warehouseProduct->increment('total_stock',$qty);
-           
+                
+                if ($warehouseProduct && $warehouseProduct->total_stock >= 0) {
+                    $warehouseProduct->increment('total_stock', $qty);
+                } 
             }
         }
             DB::commit();
@@ -124,6 +128,7 @@ class PurchaseWarehouseOrderController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             $msg = $e->getMessage();
+            dd($msg);
             \Session::flash('warning', $msg);
             return redirect()->back()->withInput();
         }

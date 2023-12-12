@@ -104,13 +104,14 @@ class AdminUserController extends Controller
 
     public function store(Request $request): \Illuminate\Http\RedirectResponse
     {
+        // dd($request->all());
         $request->validate([
             'f_name' => 'required',
             'l_name' => 'required',
             'email' => 'required|max:255|unique:admins',
             'password' => 'required|same:confirm_password|min:8',
             'phone' => 'required|unique:admins',
-            'warehouse_id'=>'nullable|unique:admins',
+            'warehouse_id'=>'nullable',
         ], [
             'f_name.required' => 'First name is required!',
             'l_name.required' => 'Last name is required!',

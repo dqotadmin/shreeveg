@@ -30,12 +30,14 @@ class PurchaseStoreOrderController extends Controller
     protected $pmodule;
     protected $user;
     protected  $store_product;
+    protected  $warehouse_product;
 
     public function __construct()
     {
         $this->view_folder = 'admin-views.purchase-store-order';
         $this->mTable = '\App\Model\PurchaseStoreOrder';
         $this->store_product = '\App\Model\StoreProduct';
+        $this->warehouse_product = '\App\Model\WarehouseProduct';
         $this->user = auth('admin')->user();
 
     }
@@ -218,19 +220,11 @@ class PurchaseStoreOrderController extends Controller
     }
     public function updateStatus(Request $request, $id)
     {
-
-        if($request->status == 'Received'){
-            $new_status = $request->status;
-            // $storeProduct = \App\Model\PurchaseStoreOrderDetail::where('purchase_store_order_id', $id)->get();
-             
-            // $storeProduct->each(function ($purchaseStoreOrderDetail) use ($new_status) {
-            //     $purchaseStoreOrderDetail->update(['status' =>'Stock Update']);
-            // });
-
-        }
+       
         try {
-       DB::beginTransaction();
+            DB::beginTransaction();
             $role = auth('admin')->user()->admin_role_id;
+            $user = auth('admin')->user();
             $row = $this->mTable::find($id);
             if ($request->status == 'Received' && $row->status != 'Delivered') {
                 Toastr::error(translate('order not delivered till now!'));
@@ -244,33 +238,26 @@ class PurchaseStoreOrderController extends Controller
                 $row->warehouse_comments = $request->warehouse_comments;
             }
            
-            $row->save();
-            // if ($row->save() && $row->stock_update = 'Stock Update' && $request->status == 'Received') {
-            //     $storeProducts = \App\Model\PurchaseStoreOrderDetail::where('purchase_store_order_id', $row->id)->get();
-            //     $store_id = $row->store_id;
-            
-            //     if ($storeProducts->isNotEmpty()) {
-            //         foreach ($storeProducts as $storeProduct) {
-            //             $total_stock = $storeProduct->qty;
-            //             $product_id = $storeProduct->product_id;
-                        
-            //             $purchaseStoreOrderDetail = \App\Model\StoreProduct::firstOrNew([
-            //                 'store_id' => $store_id,
-            //                 'product_id' => $product_id,
-            //             ]);
-            
-            //             // Set or update the properties
-            //             $purchaseStoreOrderDetail->total_stock = ($purchaseStoreOrderDetail->total_stock ?? 0) + $total_stock;
-            //             $purchaseStoreOrderDetail->status = '1'; // Set the status if needed
-            
-            //             // Save the record (insert if it's a new record, update if it already exists)
-            //             $purchaseStoreOrderDetail->save();
-            //         }
-            //     }
-            // }
+            if($request->status == 'Delivered'){
+                foreach($request->product_id as $key => $productId){
+                    if(isset($request->qty[$key])){
+                    
+                        $whProductRow =   \App\Model\WarehouseProduct::where('warehouse_id',$user->warehouse_id)->where('product_id',$productId)->first();
+                        if($whProductRow->total_stock > $request->qty[$key]){
+                            $whProductRow->decrement('total_stock', $request->qty[$key]);
+                        }else{
+                            //dd($whProductRow->productDetail->name);
+                            Toastr::error(translate('stock not availale for '.$whProductRow->productDetail->name));
+                            return redirect()->back();
+                        }
+                    }
         
- 
-        DB::commit();
+                }
+         
+            }
+           
+            $row->save();
+            DB::commit();
             Toastr::success(translate('status updated Successfully!'));
             return redirect()->route('admin.store.purchase-store-orders.index');
         } catch (\Exception $e) {

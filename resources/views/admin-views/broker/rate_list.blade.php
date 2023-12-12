@@ -59,29 +59,27 @@
                                         </thead>
                                         <tbody>
                                         <?php  
-                                                $warehouse_categories = App\Model\WarehouseCategory::where('warehouse_id',auth('admin')->user()->warehouse_id)->pluck('category_id')->toArray();
-                                            ?> 
-                                       
+                                            $assign_categories = App\Model\WarehouseCategory::where('warehouse_id',auth('admin')->user()->warehouse_id)->pluck('category_id')->toArray();
+                                            $wh_products = \App\Model\Product::whereIn('category_id',$assign_categories)->pluck('id')->toArray();
+                                            $i=1; 
+                                          ?>
                                             @foreach($row->rateListDetail as $key => $value)
-      <?php 
-   
-      if (in_array($value->product_id, $warehouse_categories)) { ?>
-      
     
+                                            <?php   if (in_array($value->product_id, $wh_products)) {  ?>
       
+                                               
                                                 <tr class="">
                                                     <input type="hidden" name="products[]" value="{{($value->product_id)}}">
-                                                <td>{{ $key+1}}</td>
+                                                <td>{{$i++; }}</td>
                                                 <td>{{ @$value->productDetail->name }}</td>
                                                 <td id="available_quantity">{{ $value->available_qty }}</td>
                                                 <td>{{ $value->unit }}</td>
                                                 <td>{{ $value->rate }}</td>
                                                 <td><input type="text" name="order_qty[]" id="order_qty" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"></td>
                                                 </tr>
-                                          <?php  }
+                                          <?php }
                                             ?>
                                           @endforeach
-                                          
                                         </tbody>
                                     </table>
                                 </div>
@@ -97,6 +95,7 @@
             </div>
             @endforeach
             </div>
+            
     </div>
 
 @endsection

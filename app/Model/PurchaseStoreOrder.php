@@ -25,4 +25,5 @@ class PurchaseStoreOrder extends Model
     // {
     //     return $this->hasOne(StoreProduct::class, 'purchase_store_order_id');
     // }
+    
 }

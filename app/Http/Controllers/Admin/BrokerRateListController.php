@@ -140,7 +140,7 @@ class BrokerRateListController extends Controller
         $rows = $this->mTable::query()->get();
 
         //$rows = $rows->orderBy('id', 'desc')->get();
-
+       
         return view($this->view_folder . '.rate_list', compact('rows'));
     }
 

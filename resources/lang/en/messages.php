@@ -2534,4 +2534,9 @@
   'total_stock' => 'Total stock',
   'available_stock' => 'Available stock',
   'testing Inserted Successfully!' => 'Testing Inserted Successfully!',
+  'Receiver' => 'Receiver',
+  'Stock not available!' => 'Stock not available!',
+  'stock not availale for palak' => 'Stock not availale for palak',
+  'jotwara Inserted Successfully!' => 'Jotwara Inserted Successfully!',
+  'Warehouse Worker Inserted Successfully!' => 'Warehouse Worker Inserted Successfully!',
 );

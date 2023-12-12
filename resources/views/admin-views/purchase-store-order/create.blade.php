@@ -73,7 +73,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row g-3">
                     
                     <div class="col-md-8">
@@ -94,7 +93,7 @@
                             @if(count($products) >0)
                             @foreach($products as $key =>$product)
                             <?php
-                            $stock = \App\Model\StoreProduct::where('store_id',$user->store_id)->where('product_id',$product->id)->first();
+                            $stock = \App\Model\StoreProduct::where('store_id',$user->store_id)->where('product_id',$product->product_id)->first();
                                ?>
                                 @if($key > 0)
                                     <div class="col-md-2"></div>
@@ -109,7 +108,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group mb-0">
-                                        <input type="text" value="{{$stock ?$stock->total_stock:0}}" id="total_stock" class="form-control"
+                                        <input type="text" value="{{$stock ?$stock->total_stock:0}}" name="stock" id="total_stock" class="form-control"
                                             disabled>
                                     </div>
                                 </div>

@@ -13,4 +13,5 @@ class StoreProduct extends Model
         'product_id',
         'total_stock',
      ];
+     
 }

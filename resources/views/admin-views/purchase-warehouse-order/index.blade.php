@@ -44,7 +44,7 @@
                         <th class="border-0">{{translate('#')}}</th>
                         @if($role == 8 || $role == 1 )
                         <th class="border-0">{{translate('warehouse')}}</th>
-                        <th class="border-0">{{translate('broker')}}</th>
+                        <th class="border-0">{{translate('Receiver')}}</th>
                         @else
                         <th class="border-0">{{translate('broker')}}</th>
                         @endif
@@ -66,11 +66,18 @@
                                     ?$row->warehouseDetail->name:$row->brokerDetail->f_name.' '.$row->brokerDetail->l_name  }}  -->
                             <!-- </span>
                         </td> -->
+                        
                         @if($role == 8 || $role == 1 )
                         <td>
                             <span class="d-block font-size-sm text-body text-trim-25">{{@$row->warehouseDetail->name}}
                             </span>
                         </td>
+                        <td>
+                            <span class="d-block font-size-sm text-body text-trim-25">
+                                {{$row->receiverName->f_name.' '.$row->receiverName->l_name }}
+                            </span>
+                        </td>
+                        @else
                         <td>
                             <span class="d-block font-size-sm text-body text-trim-25">
                                 {{$row->brokerDetail->f_name.' '.$row->brokerDetail->l_name }}

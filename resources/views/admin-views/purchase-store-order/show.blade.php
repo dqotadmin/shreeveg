@@ -65,11 +65,15 @@
                     <th>Rate</th>
                     <th>Total</th>
                 </thead>
-                <tbody>
+                <form action="{{route('admin.store.updateStatus',$row->id)}}" method="post">
+                @csrf
+              <tbody>
                     @foreach($row->purchaseStoreOrderDetail as $key => $value)
                     <tr class="">
                         <td>{{ $key+1}}</td>
-                        <td>{{ @$value->productDetail->name }}</td>
+                        <input name="product_id[]" type="hidden" value="{{@$value->product_id}}">
+                        <td name="product_id">{{ @$value->productDetail->name }}</td>
+                        <input name="qty[]" type="hidden" value="{{@$value->qty}}">
                         <td>{{ $value->qty }}</td>
                         <td>{{ $value->unit_name }}</td>
                         <td>{{ $value->price_per_unit }}</td>
@@ -81,8 +85,7 @@
             @if((auth('admin')->user()->admin_role_id == 3 && $row->status == 'Delivered'))
             @elseif(auth('admin')->user()->admin_role_id == 6  || $row->status != 'Received')
 
-            <form action="{{route('admin.store.updateStatus',$row->id)}}" method="post">
-            @csrf
+          
             <div class="col-md-6">
                 <label class="input-label" for="exampleFormControlInput1">{{translate('update status')}}</label>
                 <select name="status" class="form-control">

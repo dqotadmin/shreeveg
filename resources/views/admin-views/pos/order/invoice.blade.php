@@ -77,15 +77,16 @@
         @php($updated_total_tax=0)
         @php($vat_status = '')
         @foreach($order->details as $detail)
-
+            
             @if($detail->product_details !=null)
                 @php($product = json_decode($detail->product_details, true))
+               
                 <tr>
                     <td class="">
                         {{$detail['quantity']}}
                     </td>
                     <td class="">
-                        {{@$product['name']}} <br>
+                        {{@$product['product_detail']['name']}} <br>
                         @if(isset($detail['variation']) && count(json_decode($detail['variation'],true))>0)
                             <strong><u>Variation : </u></strong>
                             @foreach(json_decode($detail['variation'],true)[0] ?? json_decode($detail['variation'],true) as $key1 =>$variation)

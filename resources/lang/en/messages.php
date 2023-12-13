@@ -2539,4 +2539,9 @@
   'stock not availale for palak' => 'Stock not availale for palak',
   'jotwara Inserted Successfully!' => 'Jotwara Inserted Successfully!',
   'Warehouse Worker Inserted Successfully!' => 'Warehouse Worker Inserted Successfully!',
+  'broker nagore Inserted Successfully!' => 'Broker nagore Inserted Successfully!',
+  'stock not availale for Lady finger' => 'Stock not availale for Lady finger',
+  'Admin list' => 'Admin list',
+  'market_price' => 'Market price',
+  'Ex : 1%' => 'Ex : 1%',
 );

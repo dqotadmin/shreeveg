@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', translate('Add New Admin'))
+@section('title', translate('Admin list'))
 
 @push('css_or_js')
 
@@ -94,9 +94,7 @@
                     <tr>
                         <td class="text-center">{{$admins->firstItem()+$key}}</td>
                         <td>
-                            
-                        <img src="{{asset('storage/app/public/admin/warehouse')}}/{{$admin['image']}}"
-                                            onerror="this.src='{{asset('public/assets/admin/img/400x400/img2.jpg')}}'" class="img--50 ml-3" alt="">
+                            <img src="{{asset('storage/app/public/admin/warehouse')}}/{{$admin['image']}}"    onerror="this.src='{{asset('public/assets/admin/img/400x400/img2.jpg')}}'" class="img--50 ml-3" alt="">
                         </td>
                         <td>
                             <span class="d-block font-size-sm text-body text-trim-50" style="text-transform: capitalize ;">

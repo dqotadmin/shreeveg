@@ -111,8 +111,37 @@ class POSController extends Controller
      */
     public function variant_price(Request $request): array
     {
+        // dd($product_details);
+        $reqQty = $request->quantity; //1 //2 //3
         $product =  \App\Model\WarehouseProduct::find($request->id);
+        $product_details =   json_decode($product->product_details, true);
+        //dd(count($product_details),$product_details[0]['quantity']);
+        $count = count($product_details); //3
+        $price = $product->customer_price;
+    //    for($i=0; $i<=$count-1; $i++){
 
+    //             if($reqQty == $product_details[$i]['quantity']){
+    //                 $priceSlab = $product_details[$i]['offer_price'];//20
+    //                 // dump($priceSlab,$i);
+    //                 break;
+
+    //             }elseif($reqQty < $product_details[$i]['quantity']){
+    //                 $priceSlab = $product_details[$i]['offer_price'];//20
+    //                 // dump($priceSlab,$i);
+    //                 break;
+
+    //             }elseif($reqQty > $product_details[$i]['quantity']){
+    //                 $priceSlab = $product_details[$i]['offer_price'];//20
+    //                 // dump($priceSlab,$i);
+    //                 break;
+
+    //             // }
+    //    }
+    // }
+       
+             
+
+       
         $price = 0;
 
         $price = $product->customer_price;

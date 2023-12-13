@@ -19,7 +19,7 @@
         </div>
         <!-- Product details-->
         <div class="details">
-            <span class="product-name" style="color: green">{{ Str::limit(ucwords($product->category->name), 20) }}</span><br>
+            <span class="product-name" style="color: green">{{ $product->category->name }}</span><br>
             <span class="product-name"><a href="#" class="h3 mb-2 product-title">{{ Str::limit($product->name, 100) }}</a></span>
 
             <div class="mb-3 text-dark">
@@ -69,15 +69,47 @@
                     </span>
                 </div>
             </div>
+            <p>
+
             <?php $store_id =  auth('admin')->user()->store_id; $product_id = $whProduct->product_id;   
                             $stock = \App\Model\StoreProduct::where('store_id',$store_id)->where('product_id',$product_id)->first();
                                ?>
-            <h2>{{translate('available_stock')}}:</h2>
-            
-                <span >
-              <strong> {{ @$stock->total_stock }}/ {{ @$whProduct->unit->title }}</strong> 
 
+                    <div class="d-flex justify-content-between">
+                        <h2>{{translate('available_stock')}}: </h2>
+                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseWidthExample" aria-expanded="false" aria-controls="collapseWidthExample">
+                            Price List
+                        </button>
+                    </div>
+            
+                <span  class="font-20px font-weight-bold text-dark">
+                     {{ @$stock->total_stock }}/ {{ @$whProduct->unit->title }} 
                 </span>
+                
+</p>
+<div  >
+  <div class="collapse width" id="collapseWidthExample">
+    
+  <?php    $product_details_array = @json_decode($whProduct->product_details, true); 
+  $i=0;
+  ?>
+  
+
+     @if( $product_details_array)
+      @foreach($product_details_array as $key => $warehouse)
+      <div class="discountpricing card card-body p-2 d-block mb-2 w-75"> 
+      {{@$product_details_array[$i]['quantity']}}{{ @$whProduct->unit->title }}
+            
+          <strong class="text-dark mx-2 d-inline-block">₹{{@$product_details_array[$i]['offer_price']}} <strike>₹{{@$product_details_array[$i]['market_price']}}</strike></strong>  
+          <span class="bg-danger discountbox px-2 py-1 rounded-sm text-white "> {{@$product_details_array[$i]['discount']}}%</span>
+        </div>
+      <?php $i++ ?>
+         @endforeach
+      @endif                            
+      
+    
+  </div>
+</div>
             <form id="add-to-cart-form" class="mb-2">
                 @csrf
                 <input type="hidden" name="id" value="{{ @$whProduct->id }}">

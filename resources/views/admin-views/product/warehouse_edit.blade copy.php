@@ -202,7 +202,6 @@
 
                                     </div>
                                 </div>
-                                <input type="hidden" name="default_unit" value="{{@$product->unit_id}}" id="">
                                 <div class="col-sm-2 mt-2">
                                     <div class="form-group mt-5"> /{{@$product->unit->title}}
                                         ({{@$product->unit->description}})</div>
@@ -221,6 +220,7 @@
                                     <div class="form-group mt-5"> /{{@$product->unit->title}}
                                         ({{@$product->unit->description}})</div>
                                 </div>
+
 
                                 <div class="col-sm-2">
                                     <div class="form-group mb-0">
@@ -262,73 +262,8 @@
                     </div>
                     <div class="card-body">
                         <?php    $product_details_array = @json_decode($warehouse_products->product_details, true); 
-                        $i=0;
-                       ?>
-                        <table class="table table-bordered" id="box-delivery-pair">
-                                        <tr>
-                                            <th>{{translate('Quantity')}}</th>
-                                            <th> {{translate('default_price')}}/{{translate('market_price')}}</th>
-                                            <th> {{translate('discount')}}({{translate('%')}})</th>
-                                            <th> {{translate('default_price')}}({{translate('offer_price')}})</th>
-                                            <th>{{translate('Approx Piece/Weight')}}</th>
-                                            <th>{{translate('Short Title')}}</th>
-                                            <th> <button type="button" id="add-delivery-pair"
-                                                    class="remove-delivery-pair btn btn-outline-success">Add
-                                                    More</button> </th>
+                    ?>
 
-                                        </tr>
-                                        @if( $product_details_array)
-                                        @foreach($product_details_array as $key => $warehouse)
-                                            <tr class="row-delivery-pair">
-                                                <td> <input type="number" min="0" max="10000000000" step="any"  value="{{@$product_details_array[$i]['quantity']}}" name="quantity[]"   class="form-control input-delivery-pair" placeholder="{{ translate('Ex : 1') }}"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" required> </td> 
-                                    
-                                                <td>
-                                                    <input name="market_price[]" min="0" max="100000000" step="any" value="{{@$product_details_array[$i]['market_price']}}" class="form-control input-delivery-pair market_price"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"   placeholder="{{ translate('Ex : 10') }}" required>
-                                                </td>
-                                                <td>
-                                                <input name="discount[]" function min="0" max="100000000" step="any"  value="{{@$product_details_array[$i]['discount']}}" class="form-control input-delivery-pai discount" placeholder="{{ translate('Ex : 1%') }}" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" required>
-                                                </td>
-                                                <td>
-                                                <input name="offer_price[]" min="0" max="100000000" step="any" value="{{@$product_details_array[$i]['offer_price']}}"  class="form-control input-delivery-pair" id="offer_price" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
-                                                           required>
-                                                </td>
-                                                <td> <input name="approx_piece[]" min="0" max="100000000" step="any" class="form-control input-delivery-pair" value="{{@$product_details_array[$i]['approx_piece']}}"
-                                                        placeholder="{{ translate('Ex : 1 pieces') }}" required>
-                                                </td>
-                                                <td>  <input type="text" min="0" max="100000000" step="any" name="title[]"     class="form-control input-delivery-pair " value="{{@$product_details_array[$i]['title']}}"
-                                                        placeholder="{{ translate('Ex : This product is pure organic') }}" required>
-                                                </td> 
-                                                <td><button type="button"  class="remove-delivery-pair btn btn-outline-danger">Remove</button>  </td>
-                                            </tr><?php $i++ ?>
-                                       @endforeach
-                                       @else
-                                       <tr class="row-delivery-pair">
-                                                <td> <input type="number" min="0" max="10000000000" step="any"   name="quantity[]"   class="form-control input-delivery-pair" placeholder="{{ translate('Ex : 1') }}"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" required> </td> 
-                                    
-                                                <td>
-                                                <input name="market_price[]" min="0" max="100000000" step="any" value="{{@$product_details_array[$i]['market_price']}}" class="form-control input-delivery-pair market_price"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"   placeholder="{{ translate('Ex : 10') }}" required>
-
-                                                </td>
-                                                <td>
-                                                <input name="discount[]" function min="0" max="100000000" step="any"  value="{{@$product_details_array[$i]['discount']}}" class="form-control input-delivery-pai discount" placeholder="{{ translate('Ex : 1%') }}" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" required>
-
-                                                </td>
-                                                <td> 
-                                                <input name="offer_price[]" min="0" max="100000000" step="any" value="{{@$product_details_array[$i]['offer_price']}}"  class="form-control input-delivery-pair" id="offer_price" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
-                                                           required>
-                                                           </td>
-                                                <td> 
-                                                <input name="approx_piece[]" min="0" max="100000000" step="any" class="form-control input-delivery-pair" value="{{@$product_details_array[$i]['approx_piece']}}"
-                                                        placeholder="{{ translate('Ex : 1 pieces') }}" required>
-                                                </td>
-                                                <td> <input type="text" min="0" max="100000000" step="any" name="title[]"     class="form-control input-delivery-pair "     placeholder="{{ translate('Ex : This product is pure organic') }}" required>
-                                                </td> 
-                                                <td><button type="button"  class="remove-delivery-pair btn btn-outline-danger">Remove</button>  </td>
-                                            </tr> 
-                                       @endif
-                                    </table>
-
-<!-- 
                         <div class="row g-3">
                             <div class="col-sm-2">
                                 <div class="form-group mb-0">
@@ -376,9 +311,9 @@
                                     placeholder="{{ translate('Ex : This product is pure organic') }}" required>
                             </div>
 
-                        </div> -->
+                        </div>
                         <!-- <h4 class="mt-3 mb-3"> {{translate('Second_product_rate')}}</h4> -->
-                        <!-- <div class="row g-3">
+                        <div class="row g-3">
                             <div class="col-sm-2">
                                 <div class="form-group mb-0">
                                     <label class="input-label"
@@ -424,9 +359,9 @@
                                     placeholder="{{ translate('Ex : This product is pure organic') }}" required>
                             </div>
 
-                        </div> -->
+                        </div>
                         <!-- <h4 class="mt-3 mb-3">{{translate('third_product_rate')}}</h4> -->
-                        <!-- <div class="row g-3">
+                        <div class="row g-3">
                             <div class="col-sm-2">
                                 <div class="form-group mb-0">
                                     <label class="input-label"
@@ -473,7 +408,7 @@
                                     placeholder="{{ translate('Ex : This product is pure organic') }}" required>
                             </div>
 
-                        </div> -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -495,57 +430,8 @@
 @endpush
 
 @push('script_2')
-
 <script src="{{asset('public/assets/admin/js/spartan-multi-image-picker.js')}}"></script>
 <script>
-    
-// Add more functionality
-$('#add-delivery-pair').on('click', function() {
-        var newPair = $('.row-delivery-pair:first').clone();
-        newPair.find('input').val('');
-        newPair.appendTo('#box-delivery-pair');
-});
-
-// Remove functionality
-$(document).on('click', '.remove-delivery-pair', function() {
-    $(this).closest('.row-delivery-pair').remove();
-});
-
-//function for fill discount then get offer price
-$(document).on("input", ".discount", function () {
-    var discount = $(this).val();
-    var row = $(this).closest('tr');
-
-    // Find the market price input within the same row
-    var marketPriceInput = row.find('input[name="market_price[]"]');
-
-    // Get the market price value
-    var marketPrice = parseFloat(marketPriceInput.val());
-
-    // Check if marketPrice is a valid number
-    if (!isNaN(marketPrice)) {
-        // Calculate offer price
-        var offerPrice = marketPrice - (marketPrice * discount / 100);
-
-        // Find the offer price input within the same row
-        var offerPriceInput = row.find('input[name="offer_price[]"]');
-
-        // Set the offer price value
-        offerPriceInput.val(offerPrice.toFixed(2));
-
-        console.log(offerPriceInput.val());
-        console.log(discount);
-    }
-});
-    // var $discount = $('#discount'),
-    //     $price = $('#offer_price'),
-    //     $newPrice = $('#new-price');
-    // $discount.on('keypress', function(e) {
-    //     alert(5);
-    //     $("#offer_price").css("background-color", "pink");
-
-    //     });
-//function end
 $(".lang_link").click(function(e) {
     e.preventDefault();
     $(".lang_link").removeClass('active');
@@ -554,7 +440,7 @@ $(".lang_link").click(function(e) {
 
     let form_id = this.id;
     let lang = form_id.split("-")[0];
-    // console.log(lang);
+    console.log(lang);
     $("#" + lang + "-form").removeClass('d-none');
     if (lang == 'en') {
         $("#from_part_2").removeClass('d-none');

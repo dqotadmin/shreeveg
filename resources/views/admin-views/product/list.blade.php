@@ -153,10 +153,15 @@
                                     @if(auth('admin')->user()->admin_role_id == 3)
                                     <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
                                         <?php
+                                            $current_stock =  0;
+
                                         foreach(\App\Model\WarehouseProduct::where('warehouse_id',auth('admin')->user()->warehouse_id)->where('product_id',$product->id)->get() as $stock){
-                                            echo $stock->total_stock;
+                                           if($stock->total_stock > 0){
+                                            $current_stock =  $stock->total_stock;
+                                           }
                                         }
-                                        ?>
+                                        echo $current_stock;
+                                        ?>    /({{@$product->unit['title'] }})
                                        </td>
                                        @endif
                                     <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">

@@ -446,8 +446,8 @@ class ProductController extends Controller
                     $product_details[$key]['quantity']  = $qty;
                     $product_details[$key]['offer_price'] = $request->offer_price[$key];
                 }
-                if(isset($request->actual_price[$key])){
-                    $product_details[$key]['actual_price'] = $request->actual_price[$key];
+                if(isset($request->market_price[$key])){
+                    $product_details[$key]['market_price'] = $request->market_price[$key];
                 }
                 if(isset($request->approx_piece[$key])){
                     $product_details[$key]['approx_piece'] = $request->approx_piece[$key];
@@ -455,10 +455,13 @@ class ProductController extends Controller
                 if(isset($request->title[$key])){
                     $product_details[$key]['title'] = $request->title[$key];
                 }
-                
-                if(isset($request->unit_id[$key])){
-                    $product_details[$key]['unit_id'] = $request->unit_id[$key];
+                if(isset($request->discount[$key])){
+                    $product_details[$key]['discount'] = $request->discount[$key];
                 }
+                // if(isset($request->unit_id[$key])){
+                //     $product_details[$key]['unit_id'] = $request->unit_id[$key];
+                // }
+               
             
                 $productData = json_encode($product_details,true); 
             }
@@ -469,6 +472,7 @@ class ProductController extends Controller
             $row = $this->warehouse_products;
         }
        
+        $row->default_unit = $request->default_unit;
         $row->warehouse_id = $authUser->warehouse_id;
         $row->product_id = $id;
         $row->avg_price = $request->avg_price;

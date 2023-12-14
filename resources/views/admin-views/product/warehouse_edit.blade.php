@@ -511,6 +511,27 @@ $(document).on('click', '.remove-delivery-pair', function() {
     $(this).closest('.row-delivery-pair').remove();
 });
 
+$(document).on('input','.market_price', function(){
+    var market_price = $(this).val();
+    console.log(market_price);
+    if((market_price)){
+        var row = $(this).closest('tr');
+        // Find the discount input within the same row
+        var marketPriceInput = row.find('input[name="discount[]"]');
+        var offerPriceInput = row.find('input[name="offer_price[]"]');
+        marketPriceInput.val('');
+        offerPriceInput.val('');
+    }else{
+        var row = $(this).closest('tr');
+        // Find the discount input within the same row
+        var marketPriceInput = row.find('input[name="discount[]"]');
+        var offerPriceInput = row.find('input[name="offer_price[]"]');
+        marketPriceInput.val('');
+        offerPriceInput.val('');
+
+        console.log('else');
+    }
+});
 //function for fill discount then get offer price
 $(document).on("input", ".discount", function () {
     var discount = $(this).val();
@@ -521,7 +542,7 @@ $(document).on("input", ".discount", function () {
 
     // Get the market price value
     var marketPrice = parseFloat(marketPriceInput.val());
-
+console.log(marketPrice);
     // Check if marketPrice is a valid number
     if (!isNaN(marketPrice)) {
         // Calculate offer price

@@ -109,48 +109,46 @@ class POSController extends Controller
      * @param Request $request
      * @return array
      */
-    public function variant_price(Request $request): array
-    {
-        // dd($product_details);
-        $reqQty = $request->quantity; //1 //2 //3
-        $product =  \App\Model\WarehouseProduct::find($request->id);
+    public static function calculateDynamicPrice($whProductId,$reqQty){
+        
+        $product =  \App\Model\WarehouseProduct::find($whProductId);
         $product_details =   json_decode($product->product_details, true);
-        //dd(count($product_details),$product_details[0]['quantity']);
+        
         $count = count($product_details); //3
         $price = $product->customer_price;
-    //    for($i=0; $i<=$count-1; $i++){
+    
+        foreach ($product_details as $key=>$detail) {
+            $quantity[] = $detail['quantity'];
+        }
+        $allQuantity =  $quantity;
+        $count = count($quantity);
+        for ($i = 0; $i < $count - 1; $i++) {
+            if (isset($allQuantity[$i + 1]) && $reqQty >= $allQuantity[$i] && $reqQty < $allQuantity[$i + 1]) {
+                // Get the actual price when $reqQty falls within the range
+                $actualPrice = $product_details[$i]['offer_price'] / $allQuantity[$i];
+                // Calculate the price based on the range
+                $price = $actualPrice;
+                break; // Stop the loop once we find the matching range
+            }
+        }
 
-    //             if($reqQty == $product_details[$i]['quantity']){
-    //                 $priceSlab = $product_details[$i]['offer_price'];//20
-    //                 // dump($priceSlab,$i);
-    //                 break;
+        if($reqQty >=  max($allQuantity)){
+            $lastPrice = ($product_details[count($product_details)-1]['offer_price']);
+            $lastQty = ($product_details[count($product_details)-1]['quantity']);
+            $avgPrice = $lastPrice/ $lastQty;
+            $price = $avgPrice ;
 
-    //             }elseif($reqQty < $product_details[$i]['quantity']){
-    //                 $priceSlab = $product_details[$i]['offer_price'];//20
-    //                 // dump($priceSlab,$i);
-    //                 break;
-
-    //             }elseif($reqQty > $product_details[$i]['quantity']){
-    //                 $priceSlab = $product_details[$i]['offer_price'];//20
-    //                 // dump($priceSlab,$i);
-    //                 break;
-
-    //             // }
-    //    }
-    // }
-       
-             
-
-       
-        $price = 0;
-
-        $price = $product->customer_price;
-        // $discount = self::discount_calculation($product, $price);
-        // $price = $price - $discount;
-
-        return array('price' => Helpers::set_symbol(($price * $request->quantity)));
+        }
+        return $price;
     }
-
+    public function variant_price(Request $request): array
+    {
+        $price = $this->calculateDynamicPrice($request->id,$request->quantity);
+        return array('price' => Helpers::set_symbol($price  * $request->quantity));
+        
+        //return array('price' => Helpers::set_symbol(number_format($price * $request->quantity,2,'.','')));
+        
+    }
     /**
      * @param $product
      * @param $price
@@ -323,17 +321,19 @@ class POSController extends Controller
         }
 
         //Check the string and decreases quantity for the stock
-        if ($str != null) {
-            $count = count(json_decode($product->variations));
-            for ($i = 0; $i < $count; $i++) {
-                if (json_decode($product->variations)[$i]->type == $str) {
-                    // $price = json_decode($product->variations)[$i]->price;
-                    $price = $product->customer_price;
-                }
-            }
-        } else {
-            $price = $product->customer_price;
-        }
+        // if ($str != null) {
+        //     $count = count(json_decode($product->variations));
+        //     for ($i = 0; $i < $count; $i++) {
+        //         if (json_decode($product->variations)[$i]->type == $str) {
+        //             // $price = json_decode($product->variations)[$i]->price;
+        //             $price = $product->customer_price;
+        //         }
+        //     }
+        // } else {
+        //     $price = $product->customer_price;
+        // }
+
+        $price = $this->calculateDynamicPrice($request->id,$request['quantity']);
 
         $tax_on_product = Helpers::tax_calculate($product, $price);
 

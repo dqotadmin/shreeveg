@@ -111,7 +111,7 @@ class ProductController extends Controller
     {
         $query = $this->product;
         $authUser = auth('admin')->user();
-        if($authUser->admin_role_id == 3){
+        if($authUser->admin_role_id == 3 || $authUser->admin_role_id == 5){
             $assign_categories =  $this->warehouse_categories->where('warehouse_id',$authUser->warehouse_id)->pluck('category_id')->toArray();
             $query = $query->whereIn('category_id',$assign_categories);
         }
@@ -128,7 +128,6 @@ class ProductController extends Controller
             });
             $query_param = ['search' => $request['search']];
         }
-
         $products = $query->latest()->with('category')->paginate(Helpers::getPagination())->appends($query_param);
 
         return view('admin-views.product.list', compact('products','search'));

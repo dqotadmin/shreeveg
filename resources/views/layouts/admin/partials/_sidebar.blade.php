@@ -512,9 +512,8 @@
                             
                         @endif
 
-
                         <!-- Product management start here -->
-                        @if( auth('admin')->user()->admin_role_id == 1 || auth('admin')->user()->admin_role_id == 3 )
+                        @if( in_array(auth('admin')->user()->admin_role_id, [1,3,5]) )
                         <li class="nav-item">
                             <small class="nav-subtitle">{{translate('product_management')}} </small>
                             <small class="tio-more-horizontal nav-subtitle-replacer"></small>
@@ -540,8 +539,7 @@
                             </li>
                         @endif
                         
-                        <li
-                            class="navbar-vertical-aside-has-menu {{Request::is('admin/product*') || Request::is('admin/attribute*')?'active':''}}">
+                        <!-- <li    class="navbar-vertical-aside-has-menu {{Request::is('admin/product*') || Request::is('admin/attribute*')?'active':''}}">
                             <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle" href="javascript:"
                                 title="{{translate('product setup')}}">
                                 <i class="tio-premium-outlined nav-icon"></i>
@@ -549,7 +547,7 @@
                                     class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('product setup')}}</span>
                             </a>
                             <ul class="js-navbar-vertical-aside-submenu nav nav-sub"
-                                style="display: {{Request::is('admin/product*') || Request::is('admin/attribute*') ? 'block' : 'none'}}">
+                                style="display: {{Request::is('admin/product*') || Request::is('admin/attribute*') ? 'block' : 'none'}}"> -->
 
                                 <!-- <li class="nav-item {{Request::is('admin/attribute*')?'active':''}}">
                                     <a class="nav-link" href="{{route('admin.attribute.add-new')}}"
@@ -576,7 +574,11 @@
                                     <a class="nav-link " href="{{route('admin.product.list')}}"
                                         title="{{translate('list')}}">
                                         <span class="tio-circle nav-indicator-icon"></span>
+                                         @if( auth('admin')->user()->admin_role_id == 5 ) 
+                                        <span class="text-truncate">{{translate('available_stock')}}</span>
+                                        @else
                                         <span class="text-truncate">{{translate('product list')}}</span>
+                                        @endif
                                     </a>
                                 </li>
 
@@ -602,8 +604,8 @@
                                     </a>
                                 </li> -->
 
-                            </ul>
-                        </li>
+                            <!-- </ul>
+                        </li> -->
                         @endif
                         
 

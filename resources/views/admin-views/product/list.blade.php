@@ -112,11 +112,13 @@
                                 <th>{{translate('product_name')}}</th>
                                 <th>{{translate('product_code')}}</th>
                                 <th>{{translate('product_category')}}</th>
-                                @if(auth('admin')->user()->admin_role_id == 3)
+                                @if(in_array(auth('admin')->user()->admin_role_id ,[3,5]))
                                 <th class="">{{translate('stock')}}</th>
                                 @endif
+                                @if(auth('admin')->user()->admin_role_id != 5)
                                 <th class="text-center">{{translate('status')}}</th>
                                 <th class="text-center">{{translate('action')}}</th>
+                                @endif
                             </tr>
                             </thead>
 
@@ -150,7 +152,7 @@
                                             @endif
                                         </div>
                                     </td>
-                                    @if(auth('admin')->user()->admin_role_id == 3)
+                                    @if(in_array(auth('admin')->user()->admin_role_id, [3,5]))
                                     <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
                                         <?php
                                             $current_stock =  0;
@@ -162,8 +164,19 @@
                                         }
                                         echo $current_stock;
                                         ?>    /({{@$product->unit['title'] }})
+                                           <?php $warehouse_id = auth('admin')->user()->warehouse_id; $product_id = $product['id'];
+                                   if(\App\Model\WarehouseProduct ::where('warehouse_id',$warehouse_id)->where('product_id',$product_id)->exists()){
+
+                                   }else{ ?>
+                                 <h5 class="m-0">
+                                    <small  class="text-hover">Please Upload Prices</small>
+                                </h5>
+                                    <?php  }
+                                   ?>
                                        </td>
                                        @endif
+                                    @if(auth('admin')->user()->admin_role_id != 5)
+
                                     <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
                                         <label class="toggle-switch my-0">
                                             <input type="checkbox"
@@ -175,6 +188,7 @@
                                             </span>
                                         </label>
                                     </td>
+                                    @endif
                                     <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
                                         @if( auth('admin')->user()->admin_role_id == 1 )
                                             <!-- Dropdown -->
@@ -200,6 +214,7 @@
                                              
                                             </div>
                                         @endif
+                                
                                     </td>
                                 </tr>
                             @endforeach

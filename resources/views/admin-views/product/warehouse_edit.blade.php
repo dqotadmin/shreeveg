@@ -517,7 +517,7 @@ $(document).on('input','.market_price', function(){
     if((market_price)){
         var row = $(this).closest('tr');
         // Find the discount input within the same row
-        var marketPriceInput = row.find('input[name="discount[]"]');
+        var marketPriceInput = row.find('input[name="discount[]"]'); //assign value empty
         var offerPriceInput = row.find('input[name="offer_price[]"]');
         marketPriceInput.val('');
         offerPriceInput.val('');

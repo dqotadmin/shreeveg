@@ -51,15 +51,18 @@
                                  $condition =  \App\Model\Store::where('status','1')->where('deleted_at',null)->get();
                             elseif(auth('admin')->user()->admin_role_id == 3)
                                 $condition =  \App\Model\Store::where('status','1')->where('deleted_at',null)->where('warehouse_id',auth('admin')->user()->warehouse_id)->get();
-                            
+                                elseif(auth('admin')->user()->admin_role_id == 6)
+                                $condition =  \App\Model\Store::where('status','1')->where('deleted_at',null)->where('id',auth('admin')->user()->store_id)->get();
+                            $selected = 'selected';
                            ?>
                              <div class="col-md-3 m-2">
                             <select name="" id="fetch_store_stock" class="form-control">
-                                <option value="" disabled selected>{{translate('Select Store')}}</option>
-                          
+                                <option value=""  disabled selected>{{translate('Select Store')}}</option>
+                            @if($condition)  
                             @foreach($condition as $store)
-                                <option value="{{$store->id}}" id="store_id">{{$store->name}}</option>
+                                <option value="{{$store->id}}" {{$selected}} id="store_id">{{$store->name}}</option>
                             @endforeach
+                            @endif
                             </select>
                         </div>
                       
@@ -162,9 +165,73 @@
 @endsection
 
 @push('script_2')
-
 <script>
-        $('#fetch_store_stock').on('change',function(){
+    // Function to handle AJAX request
+    function fetchStoreStock(storeId) {
+        var tbody = $('#set-rows');
+        tbody.empty(); // Clear the existing rows
+
+        $.ajax({
+            url: '{{url('/')}}/admin/pos/fetch-store-stock/' + storeId,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                var tbody = $('#set-rows');
+        tbody.empty(); // Clear the existing rows
+        if (data.data.length === 0) {
+            // Display "No data to show" message
+            var noDataHtml = '<div class="row">';
+            noDataHtml += '<div class="col-md-12 text-center p-4">';
+            noDataHtml += '</div>';
+            noDataHtml += '<div class="col-md-12 text-center p-4">';
+            noDataHtml += '<img class="w-120px mb-3" src="{{asset('/public/assets/admin/svg/illustrations/sorry.svg')}}" alt="Image Description">';
+            noDataHtml += '<p class="mb-0">{{translate('No_data_to_show')}}</p>';
+            noDataHtml += '</div>';
+            noDataHtml += '</div>';
+            tbody.append(noDataHtml);
+        }else{
+        $.each(data.data, function (index, item) {
+            var rowHtml = '<tr>';
+            rowHtml += '<td class="pt-1 pb-3  pt-4">' + (index + 1) + '</td>';
+            rowHtml += '<td class="pt-1 pb-3  pt-4">' + item.product.name + '</td>'; // Replace with actual property names
+            rowHtml += '<td class="pt-1 pb-3  pt-4">' + item.total_stock + '</td>'; // Replace with actual property names
+            rowHtml += '</tr>';
+            console.log(item)
+            tbody.append(rowHtml); });
+              
+            }// ... Your existing logic for displaying data ...
+            }
+        });
+    }
+
+    // Trigger the AJAX request on page load with the default selected value
+    $(document).ready(function () {
+        var defaultStoreId = $('#fetch_store_stock').val();
+        if (defaultStoreId) {
+            // Trigger the AJAX request with the default selected value
+            fetchStoreStock(defaultStoreId);
+            
+            // Additional logic if needed...
+            $('#stock').removeClass('d-none');
+            $('#store_id').removeClass('d-none');
+            $('.page-area').addClass('d-none');
+        }
+    });
+
+    // Handle the change event for the select element
+    $('#fetch_store_stock').on('change', function () {
+        var storeId = $(this).val();
+        fetchStoreStock(storeId);
+
+        // Additional logic if needed...
+        $('#stock').removeClass('d-none');
+        $('#store_id').removeClass('d-none');
+        $('.page-area').addClass('d-none');
+    });
+</script>
+<!-- 
+<script>
+        $('#fetch_store_stock').on('selected',function(){
             $('#stock').removeClass('d-none');
             $('#store_id').removeClass('d-none');
             $('.page-area').addClass('d-none');
@@ -201,7 +268,7 @@
             }
         });
         });
-    </script>
+    </script> -->
     
 <script>
         $('#fetch_warehouse_stock').on('change',function(){

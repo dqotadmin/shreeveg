@@ -116,6 +116,12 @@
                             <th>{{translate('total amount')}}</th>
                             <th class="text-center">{{translate('order')}} {{translate('status')}}</th>
                             <th class="text-center">{{translate('order')}} {{translate('type')}}</th>
+                            @if(auth('admin')->user()->admin_role_id !=[7,5])
+                            <th class="text-center">{{translate('Warehouse')}}/{{translate('Store')}}</th>
+                            @endif @if(auth('admin')->user()->admin_role_id != 7)
+                            <th class="text-center">{{translate('Store Sales Person')}}</th>
+                            @endif
+                     
                             <th class="text-center">{{translate('actions')}}</th>
                         </tr>
                         </thead>
@@ -216,6 +222,15 @@
                                         </span>
                                     @endif
                                 </td>
+                                @if(auth('admin')->user()->admin_role_id != [5,7])
+                                <td>  
+                              <small class="text-success"> ({{@$order->warehouse->name}})</small> 
+                                <br>{{@$order->store->name}}
+                                </td>
+                                @endif @if(auth('admin')->user()->admin_role_id != 7)
+                                <td> {{@$order->storePerson->f_name }} {{@$order->storePerson->l_name}}
+                                </td>
+                                @endif
                                 <td>
                                     <div class="btn--container justify-content-center">
                                         <a class="action-btn btn--primary btn-outline-primary"

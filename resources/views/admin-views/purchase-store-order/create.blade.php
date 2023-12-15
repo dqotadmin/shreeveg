@@ -52,7 +52,7 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group mb-0">
-                                    <h5>Stock</h5>
+                                    <h5>Available Stock</h5>
                                 </div>
                             </div>
                             <div class="col-md-2">

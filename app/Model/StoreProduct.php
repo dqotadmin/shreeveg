@@ -13,5 +13,8 @@ class StoreProduct extends Model
         'product_id',
         'total_stock',
      ];
-     
+     public function product() 
+     {
+         return $this->hasOne(Product::class, 'id','product_id');
+     }
 }

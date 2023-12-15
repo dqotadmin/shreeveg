@@ -86,11 +86,27 @@
                                             <span class="text-truncate sidebar--badge-container">
                                                 <span>{{translate('orders')}}</span>
                                                 <span class="badge badge-soft-info badge-pill ml-1">
+                                                    @if(auth('admin')->user()->admin_role_id != 7)
                                                     {{\App\Model\Order::Pos()->count()}}
+                                                    @endif
                                                 </span>
                                             </span>
                                         </a>
                                     </li>
+                                    @if(auth('admin')->user()->admin_role_id != 7)
+                                    <li class="nav-item {{Request::is('admin/pos/stocks')?'active':''}}">
+                                        <a class="nav-link " href="{{route('admin.pos.stocks')}}"
+                                           title="{{translate('stocks')}}">
+                                            <span class="tio-circle nav-indicator-icon"></span>
+                                            <span class="text-truncate sidebar--badge-container">
+                                                <span>{{translate('available_stocks')}}</span>
+                                                <span class="badge badge-soft-info badge-pill ml-1">
+                                                </span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                    @endif
+
                                 </ul>
                             </li>
                             <!-- End POS -->

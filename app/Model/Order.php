@@ -77,5 +77,14 @@ class Order extends Model
     {
         return $this->belongsTo(Store::class, 'store_id');
     }
+    public function storePerson(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Admin::class, 'store_sales_person_id');
+    }
+    public function product() 
+    {
+        return $this->hasOne(Product::class, 'product_id');
+    }
+   
 
 }

@@ -92,6 +92,9 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::any('store-keys', 'POSController@store_keys')->name('store-keys');
             Route::get('orders/export', 'POSController@export_orders')->name('orders.export');
             Route::post('customer.store', 'POSController@new_customer_store')->name('customer.store');
+            Route::get('stocks', 'POSController@available_stock')->name('stocks');
+            Route::get('fetch-store-stock/{store_id}', 'POSController@fetch_store_stock')->name('fetch-store-stock');
+            Route::get('fetch-warehouse-stock/{warehouse_id}', 'POSController@prices_wareohuse_stock')->name('fetch-warehouse-stock');
         });
 
         Route::group(['prefix' => 'banner', 'as' => 'banner.', 'middleware' => ['module:promotion_management']], function () {
@@ -169,7 +172,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::get('edit/{id}', 'ProductController@edit')->name('edit');
             Route::get('warehouse-edit/{id}', 'ProductController@warehouse_edit')->name('warehouse-edit');
             Route::get('get-prices-by-warehouse/{warehouse_id}/{product_id}', 'ProductController@prices_by_wareohuse')->name('get-prices-by-warehouse');
-           
+            
             Route::post('update/{id}', 'ProductController@update')->name('update');
             Route::post('warehouse-rate-insertupdate/{id}', 'ProductController@warehouse_rate_insertupdate')->name('warehouse-rate-insertupdate');
 

@@ -11,7 +11,9 @@ use App\Model\DeliveryMan;
 use App\Model\Order;
 use App\Model\OrderDetail;
 use App\Model\Product;
+use App\Model\WarehouseProduct;
 use App\Model\WarehouseCategory;
+use App\Model\StoreProduct;
 use App\User;
 use Box\Spout\Common\Exception\InvalidArgumentException;
 use Box\Spout\Common\Exception\IOException;
@@ -45,7 +47,10 @@ class POSController extends Controller
         private Product $product,
         private User $user,
         private WarehouseCategory $warehouse_categories,
-        private Store $store
+        private Store $store,
+        private StoreProduct $store_products,
+        private WarehouseProduct $warehouse_products,
+        
     ) {
     }
 
@@ -86,7 +91,6 @@ class POSController extends Controller
 
         $branches = $this->branch->all();
         $users = $this->user->all();
-        //dd($products);
         return view('admin-views.pos.index', compact('categories', 'products', 'category', 'keyword', 'branches', 'users', 'authUser'));
     }
 
@@ -406,13 +410,17 @@ class POSController extends Controller
         $authUser = auth('admin')->user();
 
         $storeId = $warehouse_id = null;
-        if (in_array($authUser->admin_role_id, [6, 7])) {
+        if (in_array($authUser->admin_role_id, [6])) {
             $warehouse_id = $authUser->Store->warehouse_id;
             $storeId = $authUser->store_id;
             $query = $query->whereType('Store')->where('store_id', $authUser->store_id);
         } elseif (in_array($authUser->admin_role_id, [3, 4])) {
             $warehouse_id = $authUser->warehouse_id;
             $query = $query->where('warehouse_id', $authUser->warehouse_id);
+            
+        }elseif (in_array($authUser->admin_role_id, [7])) {
+            $store_sales_person_id = $authUser->id;
+            $query = $query->where('store_sales_person_id', $authUser->id);
         }
 
         // if ($authUser->admin_role_id == 6 ) {
@@ -459,6 +467,7 @@ class POSController extends Controller
         $orders = $query->orderBy('id', 'desc')->paginate(Helpers::getPagination())->appends($query_param);
         //return $orders;
         //dd($orders);
+
         return view('admin-views.pos.order.list', compact('orders', 'search', 'branches', 'start_date', 'end_date'));
     }
 
@@ -527,10 +536,14 @@ class POSController extends Controller
         if ($authUser->admin_role_id == 3) {
             $order->warehouse_id = $authUser->warehouse_id;
         }
-
         if ($authUser->admin_role_id == 7) {
+            $order->type = 'Store';
+            $order->store_id = $authUser->store_id;
             $order->store_sales_person_id = $authUser->id;
+            $order->warehouse_id = @$authUser->store->warehouse_id;
+
         }
+
         $order->coupon_code = $request->coupon_code ?? null;
         $order->payment_method = $request->type;
         $order->transaction_reference = $request->transaction_reference ?? null;
@@ -819,4 +832,48 @@ class POSController extends Controller
 
         return (new FastExcel($storage))->download('pos-orders.xlsx');
     }
+    public function available_stock(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    {
+        $query = $this->product;
+        $authUser = auth('admin')->user();
+        if($authUser->admin_role_id == 3){
+            $assign_categories =  $this->warehouse_categories->where('warehouse_id',$authUser->warehouse_id)->pluck('category_id')->toArray();
+            $query = $query->whereIn('category_id',$assign_categories);
+        }
+      
+        $query_param = [];
+        $search = $request['search'];
+        if ($request->has('search') && $search) {
+            $key = explode(' ', $request['search']);
+            $query = $query->where(function ($q) use ($key) {
+                foreach ($key as $value) {
+                    $q->orWhere('id', 'like', "%{$value}%")
+                        ->orWhere('name', 'like', "%{$value}%");
+                }
+            });
+            $query_param = ['search' => $request['search']];
+        }
+
+        $products = $query->latest()->with('category')->paginate(Helpers::getPagination())->appends($query_param);
+
+        return view('admin-views.pos.stocks.stock', compact('products','search'));
+    }
+
+
+    public function fetch_store_stock($store_id)  {
+         $data =  $this->store_products->where('store_id',$store_id)->with('product')->get();
+                // Decode JSON data to an associative array
+                return response()->json([
+                    'data'=>$data
+                ]); 
+    }
+
+    public function prices_wareohuse_stock($warehouse_id)  {
+        $data =  $this->warehouse_products->where('warehouse_id',$warehouse_id)->with('productDetail')->get();
+               // Decode JSON data to an associative array
+               return response()->json([
+                   'data'=>$data
+               ]); 
+   }
+    
 }

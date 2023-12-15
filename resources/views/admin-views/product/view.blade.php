@@ -41,10 +41,9 @@
                                     >
                                 @endif
 
-                                    <div class="d-block">
+                                    <!-- <div class="d-block">
                                         <div class="rating--review">
                                             <h4 class="title">{{count($product->all_rating)>0?number_format($product->all_rating[0]->average, 2, '.', ' '):0}}</h4>
-                                            <!-- Static -->
                                             <div class="rating">
                                                 @php
                                                     $avg_rating = count($product->all_rating)>0?number_format($product->all_rating[0]->average, 2, '.', ' '):0;
@@ -57,20 +56,69 @@
                                                     @endif
                                                 @endfor
                                             </div>
-                                            <!-- Static -->
                                             <p> {{translate('of')}} {{$product->reviews->count()}} {{translate('reviews')}}
                                                 <span class="badge badge-soft-dark badge-pill ml-1"></span>
                                             </p>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                             <div class="col-lg-8 col-md-6 mx-auto">
-                                <ul class="list-unstyled list-unstyled-py-2 mb-0 rating--review-right py-3">
+                                <table class="table table-borderless table-thead-bordered product--desc-table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th class="px-4 border-0"><h4 class="m-0 text-capitalize">{{translate('short_description')}}</h4></th>
+                                            <th class="px-4 border-0"><h4 class="m-0 text-capitalize">{{translate('Product Details')}}</h4></th>
+                                            <!--  <th class="px-4 border-0"><h4 class="m-0 text-capitalize">{{translate('Unit')}}</h4></th>
+                                            <th class="px-4 border-0"><h4 class="m-0 text-capitalize">{{translate('Maximum Order Quantity')}}</h4></th> -->
+                                            <!-- <th class="px-4 border-0"><h4 class="m-0 text-capitalize">{{translate('variations')}}</h4></th> -->
+                                            <!-- <th class="px-4 border-0"><h4 class="m-0 text-capitalize">{{translate('Tags')}}</h4></th> -->
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="max-300">
+                                                    {!! $product['description'] !!}
+                                                </div>
+                                            </td>
+                                            <td>
+                                            
+                                            <div>
+                                                    <span><strong class="text--title">{{translate('Category')}} :</strong>
+                                                    <span>{!! @$product->Category->name !!}</span></span>
+                                            </div>
+                                            <div>
+                                                    <strong class="text--title">{{translate('Product Code')}} :</strong>
+                                                    <span>{!! $product['product_code'] !!}</span>
+                                            </div>
+                                            <div>
+                                                    <strong class="text--title">{{translate('Unit')}} :</strong>
+                                                    <span>{!! @$product->unit->title !!}({!! @$product->unit->description !!})</span>
+                                            </div>
+                                            <div>
+                                                    <strong class="text--title">{{translate('Maximum Order Quantity')}} :</strong>
+                                                    <span>{!! @$product->maximum_order_quantity!!}</span>
+
+                                            </div>
+                                            </td>
+                                            <td>
+                                            </td>
+                                            <td>
+                                                @foreach($product->tags as $tag)
+                                                    <span class="badge-soft-success mb-1 mr-1 d-inline-block px-2 py-1 rounded" >{{$tag->tag}} </span> <br>
+                                                @endforeach
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- <div class="col-lg-8 col-md-6 mx-auto">
+                                <ul class="list-unstyled list-unstyled-py-2 mb-0 rating--review-right py-3"> -->
 
                                 @php($total=$product->reviews->count())
                                 <!-- Review Ratings -->
-                                    <li class="d-flex align-items-center font-size-sm">
+                                    <!-- <li class="d-flex align-items-center font-size-sm">
                                         @php($five=\App\CentralLogics\Helpers::rating_count($product['id'],5))
                                         <span class="progress-name mr-3">{{translate('excellent')}}</span>
                                         <div class="progress flex-grow-1">
@@ -80,11 +128,11 @@
                                                     aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                         <span class="ml-3">{{$five}}</span>
-                                    </li>
+                                    </li> -->
                                     <!-- End Review Ratings -->
 
                                     <!-- Review Ratings -->
-                                    <li class="d-flex align-items-center font-size-sm">
+                                    <!-- <li class="d-flex align-items-center font-size-sm">
                                         @php($four=\App\CentralLogics\Helpers::rating_count($product['id'],4))
                                         <span class="progress-name mr-3">{{translate('good')}}</span>
                                         <div class="progress flex-grow-1">
@@ -94,11 +142,11 @@
                                                     aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                         <span class="ml-3">{{$four}}</span>
-                                    </li>
+                                    </li> -->
                                     <!-- End Review Ratings -->
 
                                     <!-- Review Ratings -->
-                                    <li class="d-flex align-items-center font-size-sm">
+                                    <!-- <li class="d-flex align-items-center font-size-sm">
                                         @php($three=\App\CentralLogics\Helpers::rating_count($product['id'],3))
                                         <span class="progress-name mr-3">{{translate('average')}}</span>
                                         <div class="progress flex-grow-1">
@@ -109,11 +157,11 @@
                                             </div>
                                         </div>
                                         <span class="ml-3">{{$three}}</span>
-                                    </li>
+                                    </li> -->
                                     <!-- End Review Ratings -->
 
                                     <!-- Review Ratings -->
-                                    <li class="d-flex align-items-center font-size-sm">
+                                    <!-- <li class="d-flex align-items-center font-size-sm">
                                         @php($two=\App\CentralLogics\Helpers::rating_count($product['id'],2))
                                         <span class="progress-name mr-3">{{translate('below_average')}}</span>
                                         <div class="progress flex-grow-1">
@@ -123,11 +171,11 @@
                                                     aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                         <span class="ml-3">{{$two}}</span>
-                                    </li>
+                                    </li> -->
                                     <!-- End Review Ratings -->
 
                                     <!-- Review Ratings -->
-                                    <li class="d-flex align-items-center font-size-sm">
+                                    <!-- <li class="d-flex align-items-center font-size-sm">
                                         @php($one=\App\CentralLogics\Helpers::rating_count($product['id'],1))
                                         <span class="progress-name mr-3">{{translate('poor')}}</span>
                                         <div class="progress flex-grow-1">
@@ -137,10 +185,10 @@
                                                     aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                         <span class="ml-3">{{$one}}</span>
-                                    </li>
+                                    </li> -->
                                     <!-- End Review Ratings -->
-                                </ul>
-                            </div>
+                                <!-- </ul>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -168,7 +216,7 @@
                 </div>
             </div>-->
         </div>
-        <div class="card mb-3 text-sm">
+        <!-- <div class="card mb-3 text-sm">
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <table class="table table-borderless table-thead-bordered product--desc-table">
@@ -176,10 +224,6 @@
                             <tr>
                                 <th class="px-4 border-0"><h4 class="m-0 text-capitalize">{{translate('short_description')}}</h4></th>
                                 <th class="px-4 border-0"><h4 class="m-0 text-capitalize">{{translate('Product Details')}}</h4></th>
-                                   <!--  <th class="px-4 border-0"><h4 class="m-0 text-capitalize">{{translate('Unit')}}</h4></th>
-                                <th class="px-4 border-0"><h4 class="m-0 text-capitalize">{{translate('Maximum Order Quantity')}}</h4></th> -->
-                                <!-- <th class="px-4 border-0"><h4 class="m-0 text-capitalize">{{translate('variations')}}</h4></th> -->
-                                <!-- <th class="px-4 border-0"><h4 class="m-0 text-capitalize">{{translate('Tags')}}</h4></th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -221,7 +265,7 @@
                     </table>
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="card mb-3 text-sm">
         <div class="card-header border-0">
                 <h5 class="card-title">{{translate('Prices by Warehouse')}}</h5>
@@ -241,7 +285,7 @@
             
         </div>
         <!-- Card -->
-        <div class="card">
+        <!-- <div class="card">
             <div class="card-header border-0">
                 <h5 class="card-title">{{translate('product reviews')}}</h5>
             </div>
@@ -340,9 +384,7 @@
                 </div>
             </div>
             <div class="card-footer border-0">
-                <!-- Pagination -->
                 {!! $reviews->links() !!}
-                <!-- End Pagination -->
             </div>
             @if(count($reviews)==0)
                 <div class="text-center p-4">
@@ -350,7 +392,7 @@
                     <p class="mb-0">{{translate('No_data_to_show')}}</p>
                 </div>
             @endif
-        </div>
+        </div> -->
         <!-- End Card -->
         
     </div>

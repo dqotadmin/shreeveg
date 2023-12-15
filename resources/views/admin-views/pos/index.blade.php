@@ -78,7 +78,6 @@
                                 <div class="w-100">
                                     <div class="d-flex flex-wrap flex-row py-2 add--customer-btn">
                                         @php
-                                            //$user = \App\User::all();
                                         @endphp
                                         <select id='customer' name="customer_id" onchange="store_key('customer_id',this.value)"
                                                 data-placeholder="{{translate('Walk In Customer')}}"

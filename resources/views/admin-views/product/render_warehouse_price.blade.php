@@ -6,8 +6,14 @@
                     <th class="px-4 border-0">
                         <h4 class="m-0 text-capitalize">{{translate('Quantity')}}</h4>
                     </th>
-                    <th class="px-4 border-0">
+                    <!-- <th class="px-4 border-0">
                         <h4 class="m-0 text-capitalize">{{translate('Unit')}}</h4>
+                    </th> -->
+                    <th class="px-4 border-0">
+                        <h4 class="m-0 text-capitalize">{{translate('Market Price')}}</h4>
+                    </th>
+                    <th class="px-4 border-0">
+                        <h4 class="m-0 text-capitalize">{{translate('Discount')}}(%)</h4>
                     </th>
                     <th class="px-4 border-0">
                         <h4 class="m-0 text-capitalize">{{translate('Default Price/Offer Price')}}</h4>
@@ -30,11 +36,15 @@
                 @foreach($productDetailsArray as $entry)
                 <tr>
                     <td>{{ $entry['quantity'] }}</td>
-                    <?php $unitRow = \App\Model\Unit::find($entry['unit_id'])->title ?>
-                    <td>{{ @$unitRow }}</td>
-                    <td>{{ $entry['offer_price'] }}</td>
-                    <td>{{ $entry['approx_piece'] }}</td>
-                    <td>{{ $entry['title'] }}</td>
+                    <?php
+                    //  $unitRow = \App\Model\Unit::find($entry['unit_id'])->title 
+                     ?>
+                    <!-- <td>{{ @$unitRow }}</td> -->
+                    <td>{{ @$entry['market_price'] }}</td>
+                    <td>{{ @$entry['discount'] }}</td>
+                    <td>{{ @$entry['offer_price'] }}</td>
+                    <td>{{ @$entry['approx_piece'] }}</td>
+                    <td>{{ @$entry['title'] }}</td>
                 </tr>
                 @endforeach
                 @else

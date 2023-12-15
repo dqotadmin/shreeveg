@@ -2544,4 +2544,13 @@
   'Admin list' => 'Admin list',
   'market_price' => 'Market price',
   'Ex : 1%' => 'Ex : 1%',
+  'stock not availale for test' => 'Stock not availale for test',
+  'stock not availale for Cherry' => 'Stock not availale for Cherry',
+  'Market Price' => 'Market Price',
+  'stocks' => 'Stocks',
+  'available_stocks' => 'Available stocks',
+  'stock Store' => 'Stock Store',
+  'stock Warehouse' => 'Stock Warehouse',
+  'Select Store' => 'Select Store',
+  'store_id' => 'Store id',
 );

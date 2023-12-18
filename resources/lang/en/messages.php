@@ -2555,4 +2555,5 @@
   'store_id' => 'Store id',
   'Order Id' => 'Order Id',
   'total discount' => 'Total discount',
+  'Want to delete this coupon ?' => 'Want to delete this coupon  ',
 );

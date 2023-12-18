@@ -50,7 +50,7 @@ class UnitController extends Controller
 
     function create(Request $request): View|Factory|Application
     {
-       return view('admin-views.unit.list');
+       return view('admin-views.unit.add');
 
     }
 

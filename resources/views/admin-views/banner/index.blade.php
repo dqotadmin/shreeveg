@@ -43,7 +43,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-12">
+                                <div class="col-12"> 
                                     <div class="form-group mb-0" id="type-product">
                                         <label class="input-label" for="exampleFormControlSelect1">{{translate('product')}} <span
                                                 class="input-label-secondary">*</span></label>
@@ -52,8 +52,17 @@
                                                 <option value="{{$product['id']}}">{{$product['name']}}</option>
                                             @endforeach
                                         </select>
+                                   
                                     </div>
-                                    <div class="form-group mb-0" id="type-category" style="display: none">
+                                <div class="form-group mb-0" id="type-category" style="display: none">
+                                        <label class="input-label" for="exampleFormControlSelect1">{{translate('category')}} <span
+                                                class="input-label-secondary">*</span></label>
+                                                <select name="category_id" id="category_id"    class="form-control"  >
+                                                    <option value="" disabled>---{{translate('Select Category')}}---</option>
+                                                    <?php echo $options; ?>
+                                                </select>
+                                    </div>
+                                <!-- <div class="form-group mb-0" id="type-category" style="display: none">
                                         <label class="input-label" for="exampleFormControlSelect1">{{translate('category')}} <span
                                                 class="input-label-secondary">*</span></label>
                                         <select name="category_id" class="form-control js-select2-custom">
@@ -61,7 +70,7 @@
                                                 <option value="{{$category['id']}}">{{$category['name']}}</option>
                                             @endforeach
                                         </select>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>

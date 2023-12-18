@@ -50,7 +50,9 @@ class BannerController extends Controller
 
         $products = $this->product->orderBy('name')->get();
         $categories = $this->category->where(['parent_id'=>0])->orderBy('name')->get();
-        return view('admin-views.banner.index', compact('products', 'categories', 'banners','search'));
+        $categories = $this->category->get();
+        $options = Helpers::getCategoryDropDown($categories);
+          return view('admin-views.banner.index', compact('products', 'categories', 'banners','search','options'));
     }
 
     /**

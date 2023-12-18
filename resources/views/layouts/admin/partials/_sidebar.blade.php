@@ -774,8 +774,8 @@
                         </li>
                         @endif
                         @endif
-                        @if(Helpers::module_permission_check(MANAGEMENT_SECTION['promotion_management']))
-                        <!-- Promotion Manegement 
+                        <!-- @if(Helpers::module_permission_check(MANAGEMENT_SECTION['promotion_management']))
+                           
                             <li class="nav-item">
                                 <small
                                     class="nav-subtitle">{{translate('promotion_management')}} </small>
@@ -835,8 +835,8 @@
                                     <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('category_discount')}}</span>
                                 </a>
                             </li>
-                            End Pages -->
-                        @endif
+                      
+                        @endif -->
 
                         @if(Helpers::module_permission_check(MANAGEMENT_SECTION['support_management']))
                             <!-- Help & Support Manegement 

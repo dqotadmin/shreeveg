@@ -38,7 +38,7 @@ ini_set('memory_limit', '-1');
 
                                         <!-- Flatpickr -->
                                         <div class="text--primary-2">
-                                            {{session('from_date')}} - {{session('to_date')}}
+                                            {{session('from_date')}} - {{session('to_date')}} 
                                         </div>
                                         <!-- End Flatpickr -->
                                     </div>
@@ -98,9 +98,15 @@ ini_set('memory_limit', '-1');
                         }
                     @endphp
                     <div class="col-sm-6 col-lg-3">
-                    @php
-                        $delivered=\App\Model\Order::where(['order_status'=>'delivered'])->whereBetween('created_at', [$from, $to])->count()
-                    @endphp
+                    <?php
+                        $admin = auth('admin')->user();
+                        if($admin->admin_role_id == 3){
+
+                        $delivered=\App\Model\Order::where(['order_status'=>'delivered'])->where(['warehouse_id'=>$admin->warehouse_id])->whereBetween('created_at', [$from, $to])->count();
+                        }else{
+                            $delivered=\App\Model\Order::where(['order_status'=>'delivered'])->whereBetween('created_at', [$from, $to])->count();
+                        }
+                        ?>
                     <!-- Card -->
                         <div class="card card-sm bg--2 border-0 shadow-none">
                             <div class="card-body py-5 px-xxl-5">

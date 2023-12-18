@@ -167,6 +167,7 @@
                                         }
                                                 ?>
                                             {{ Helpers::set_symbol($order_amount) }}
+                                            
                                         </div>
                                         @if(@$order->payment_status=='paid')
                                             <span class="text-success">

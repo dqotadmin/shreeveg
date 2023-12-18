@@ -29,15 +29,21 @@
                         <form class="w-100">
                             <div class="row g-3 g-sm-4 g-md-3 g-lg-4">
                                 <div class="col-sm-6 col-md-4 col-lg-2">
-                                    <select class="custom-select custom-select-sm text-capitalize min-h-45px" name="branch_id">
-                                        <option disabled selected>--- {{translate('select')}} {{translate('branch')}} ---</option>
-                                        <option value="all" {{ $branch_id == 'all' ? 'selected': ''}}>{{translate('all')}} {{translate('branch')}}</option>
-                                        @foreach($branches as $branch)
-                                            <option value="{{$branch['id']}}" {{ $branch['id'] == $branch_id ? 'selected' : ''}}>{{$branch['name']}}</option>
+                                    <select class="custom-select custom-select-sm text-capitalize min-h-45px" name="branch_id" id="warehouse_id" {{$disabled}}>
+                                        <option disabled selected>--- {{translate('select')}} {{translate('Warehouse')}} ---</option>
+                                        <option value="all" {{ $warehouse_id == 'all' ? 'selected': ''}}>{{translate('all')}} {{translate('Warehouse')}}</option>
+                                        @foreach($warehouses as $branch)
+                                            <option value="{{$branch['id']}}" {{ $branch['id'] == $warehouse_id ? 'selected' : ''}} >{{$branch['name']}}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-sm-6 col-md-4 col-lg-3">
+                                <div class="col-sm-6 col-md-4 col-lg-2">
+                                    <select class="custom-select custom-select-sm text-capitalize min-h-45px" name="store_id" id="store_name">
+                                        <option disabled selected>--- {{translate('select')}} {{translate('Store')}} ---</option>
+                                    
+                                    </select>
+                                </div>
+                                <div class="col-sm-6 col-md-4 col-lg-2">
                                     <div class="input-date-group">
                                         <label class="input-label" for="start_date">{{ translate('Start Date') }}</label>
                                         <label class="input-date">
@@ -45,7 +51,7 @@
                                         </label>
                                     </div>
                                 </div>
-                                <div class="col-sm-6 col-md-4 col-lg-3">
+                                <div class="col-sm-6 col-md-4 col-lg-2">
                                     <div class="input-date-group">
                                         <label class="input-label" for="end_date">{{ translate('End Date') }}</label>
                                         <label class="input-date">
@@ -63,7 +69,7 @@
                         <div class="col-md-12 pt-4">
                             <div class="report--data">
                                 <div class="row g-3">
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <div class="order--card h-100">
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
@@ -73,7 +79,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <div class="order--card h-100">
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
@@ -83,13 +89,23 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <div class="order--card h-100">
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
                                                     <span>{{translate('total amount')}}</span>
                                                 </h6>
-                                                <span class="card-title text-success" id="order_amount">{{ $total_sold }}</span>
+                                                <span class="card-title text-success" id="order_amount">{{ \App\CentralLogics\Helpers::set_symbol($total_sold) }} </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="order--card h-100">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
+                                                    <span>{{translate('total discount')}}</span>
+                                                </h6>
+                                                <span class="card-title text-success" id="extra_discount">{{ \App\CentralLogics\Helpers::set_symbol($total_discount) }} </span>
                                             </div>
                                         </div>
                                     </div>
@@ -104,6 +120,7 @@
                         <thead class="thead-light">
                         <tr>
                             <th>{{translate('#')}} </th>
+                            <!-- <th>{{translate('Order Id')}}</th> -->
                             <th>{{translate('product info')}}</th>
                             <th>{{translate('qty')}}</th>
                             <th>{{translate('date')}}</th>
@@ -120,19 +137,19 @@
                                 $product = json_decode($detail->product_details, true);
                                 $images = $product['image'] != null ? (gettype($product['image'])!='array'?json_decode($product['image'],true):$product['image']) : [];
                                 $product_image = count($images) > 0 ? $images[0] : null;
-
-                            ?>
+                           ?>
                             <tr>
                                 <td>
                                     {{$order_details->firstItem()+$key}}
                                 </td>
+                                <!-- <td> {{$detail->user_warehouse_order_id}} </td> -->
                                 <td>
                                     <a href="{{route('admin.product.view',[$product['id']])}}" target="_blank" class="product-list-media">
                                         <img src="{{asset('storage/app/public/product')}}/{{$product_image}}"
                                              onerror="this.src='{{asset('/public/assets/admin/img/160x160/2.png')}}'"
                                         />
                                         <h6 class="name line--limit-2">
-                                            {{$product['name']}}
+                                            {{$product['product_detail']['name']}}
                                         </h6>
                                     </a>
                                 </td>
@@ -177,6 +194,7 @@
             <!-- End Row -->
         </div>
     </div>
+    
 @endsection
 
 @push('script_2')
@@ -226,4 +244,33 @@
             });
         });
     </script>
-@endpush
+    <script>
+        var warehouse_id = "{{$warehouse_id}}";
+        getStore(warehouse_id);
+        $('select[name="branch_id"]').on('change',function(){
+            var warehouse_id = $(this).val();
+            getStore(warehouse_id);
+           
+        });
+        function getStore(warehouse_id){
+        //    alert(warehouse_id);
+            if(warehouse_id){
+                $.ajax({
+            url: '{{url('/')}}/admin/report/stores/' + warehouse_id,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+            console.log(data);  
+            $('#store_name').empty();
+            $('#store_name').append('<option value="" disabled selected>--- Select Store ---</option>');
+            $.each(data.stores, function (key, value) {
+                    var selected = (value.id == '{{$store_id}}') ? 'selected' : '';
+                    $('#store_name').append('<option value="' + value.id + '" ' + selected + '>' + value.name + '</option>');
+                });
+               
+            }
+        });
+            }
+        }
+    </script>
+@endpush 

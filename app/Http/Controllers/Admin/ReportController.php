@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Model\Branch;
 use App\Model\BusinessSetting;
 use App\Model\Order;
+use App\Model\Warehouse;
+use App\Model\Store;
 use App\Model\OrderDetail;
 use Barryvdh\DomPDF\Facade as PDF;
 use Box\Spout\Common\Exception\InvalidArgumentException;
@@ -29,6 +31,8 @@ class ReportController extends Controller
 {
     public function __construct(
         private Branch $branch,
+        private Warehouse $warehouse,
+        private Store $store,
         private BusinessSetting $business_setting,
         private Order $order,
         private OrderDetail $order_detail
@@ -39,6 +43,7 @@ class ReportController extends Controller
      */
     public function order_index(): \Illuminate\Contracts\View\View|Factory|Application
     {
+       
         if (session()->has('from_date') == false) {
             session()->put('from_date', date('Y-m-01'));
             session()->put('to_date', date('Y-m-30'));
@@ -160,36 +165,72 @@ class ReportController extends Controller
      * @param Request $request
      * @return Factory|\Illuminate\Contracts\View\View|Application
      */
+
+     public function stores(Request $request, $warehouse_id)
+     {
+       $stores = $this->store->where('warehouse_id',$warehouse_id)->get();
+       return response()->json([
+        'stores' => $stores
+       ]);
+    }
     public function new_sale_report(Request $request): \Illuminate\Contracts\View\View|Factory|Application
-    {
+    {   
+        $disabled= '';
+           $admin = auth('admin')->user();
+        if($admin->admin_role_id == 3){
+            $warehouse_id = $admin->warehouse_id;
+            $warehouses = $this->warehouse->where('id',$warehouse_id)->get();
+            $disabled = 'disabled';
+        }else{
+            $warehouse_id = $request['branch_id'];
+            $warehouses = $this->warehouse->all();
+        }
         $query_param = [];
-        $branches = $this->branch->all();
-        $branch_id = $request['branch_id'];
+        $order = $this->order->all();
+        $store_id = $request['store_id'];
         $start_date = $request['start_date'];
         $end_date = $request['end_date'];
-
-        if ($branch_id == 'all') {
+        // dd($request->all());
+        if ($warehouse_id == 'all') {
             $orders = $this->order->
             when((!is_null($start_date) && !is_null($end_date)), function ($query) use ($start_date, $end_date) {
                 return $query->whereDate('created_at', '>=', $start_date)
                     ->whereDate('created_at', '<=', $end_date);
             })->pluck('id')->toArray();
 
+            $extra_discount =   $this->order->
+            when((!is_null($start_date) && !is_null($end_date)), function ($query) use ($start_date, $end_date) {
+                return $query->whereDate('created_at', '>=', $start_date)
+                    ->whereDate('created_at', '<=', $end_date);
+            })->get();
+        
         } else {
-            $orders = $this->order->where(['branch_id' => $branch_id])
+            $orders = $this->order->where(['warehouse_id' => $warehouse_id])->where(['store_id' => $store_id])
                 ->when((!is_null($start_date) && !is_null($end_date)), function ($query) use ($start_date, $end_date) {
                     return $query->whereDate('created_at', '>=', $start_date)
                         ->whereDate('created_at', '<=', $end_date);
                 })->pluck('id')->toArray();
-        }
-        $query_param = ['branch_id' => $branch_id, 'start_date' => $start_date,'end_date' => $end_date ];
 
-        $order_details = $this->order_detail->withCount(['order'])->whereIn('order_id', $orders)->paginate(Helpers::getPagination())->appends($query_param);
+                $extra_discount =   $this->order->where(['warehouse_id' => $warehouse_id])->where(['store_id' => $store_id])
+                ->when((!is_null($start_date) && !is_null($end_date)), function ($query) use ($start_date, $end_date) {
+                    return $query->whereDate('created_at', '>=', $start_date)
+                        ->whereDate('created_at', '<=', $end_date);
+                })->get();
+        }
+    
+        $query_param = ['branch_id' => $warehouse_id,'store_id' => $store_id, 'start_date' => $start_date,'end_date' => $end_date ];
+            // dd($extra_discount);
+        $order_details = $this->order_detail->withCount(['order'])->whereIn('user_warehouse_order_id', $orders)->paginate(Helpers::getPagination())->appends($query_param);
 
         $data = [];
         $total_sold = 0;
+        $total_discount = 0;
         $total_qty = 0;
-        foreach ($this->order_detail->whereIn('order_id', $orders)->get() as $detail) {
+        $discount= 0;
+        foreach ($extra_discount as $discount) {
+            $total_discount += $discount['extra_discount'];
+        }
+            foreach ($this->order_detail->whereIn('user_warehouse_order_id', $orders)->get() as $detail) {
             $price = $detail['price'] - $detail['discount_on_product'];
             $ord_total = $price * $detail['quantity'];
 
@@ -201,10 +242,9 @@ class ReportController extends Controller
             $total_sold += $ord_total;
             $total_qty += $detail['quantity'];
         }
-
         $total_order = count($data);
-
-        return view('admin-views.report.new-sale-report', compact( 'orders', 'total_order', 'total_sold', 'total_qty', 'order_details', 'branches', 'branch_id', 'start_date', 'end_date'));
+        
+        return view('admin-views.report.new-sale-report', compact( 'orders','store_id','disabled', 'discount', 'total_order','total_discount', 'total_sold', 'total_qty', 'order_details', 'warehouses', 'warehouse_id', 'start_date', 'end_date'));
     }
 
     /**
@@ -401,6 +441,7 @@ class ReportController extends Controller
      */
     public function expense_transaction_same_month($request, $start_date, $end_date, $month_date, $number, $default_inc): array
     {
+       
         $month = date("F", strtotime("2023-$month_date-01"));
         $orders = self::expense_chart_common_query($request)
             ->selectRaw('sum(coupon_discount_amount) as discount_amount, sum(extra_discount) as extra_discount, sum(free_delivery_amount) as free_delivery_amount,

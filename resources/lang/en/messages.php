@@ -2553,4 +2553,6 @@
   'stock Warehouse' => 'Stock Warehouse',
   'Select Store' => 'Select Store',
   'store_id' => 'Store id',
+  'Order Id' => 'Order Id',
+  'total discount' => 'Total discount',
 );

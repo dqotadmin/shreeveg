@@ -17,4 +17,8 @@ class StoreProduct extends Model
      {
          return $this->hasOne(Product::class, 'id','product_id');
      }
+     public function unit() 
+     {
+         return $this->belongsTo(Unit::class, 'unit_id');
+     }
 }

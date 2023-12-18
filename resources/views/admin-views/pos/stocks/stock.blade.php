@@ -194,7 +194,12 @@
             var rowHtml = '<tr>';
             rowHtml += '<td class="pt-1 pb-3  pt-4">' + (index + 1) + '</td>';
             rowHtml += '<td class="pt-1 pb-3  pt-4">' + item.product.name + '</td>'; // Replace with actual property names
-            rowHtml += '<td class="pt-1 pb-3  pt-4">' + item.total_stock + '</td>'; // Replace with actual property names
+            rowHtml += '<td class="pt-1 pb-3  pt-4">' + item.total_stock;
+                    if ((item.product.unit)) {
+                        rowHtml += ' ' + item.product.unit.title;
+                    }
+
+                    rowHtml += '</td>'; // Replace with actual property names'
             rowHtml += '</tr>';
             console.log(item)
             tbody.append(rowHtml); });

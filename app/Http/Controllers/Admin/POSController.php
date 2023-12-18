@@ -90,7 +90,7 @@ class POSController extends Controller
             ->active()->latest()->paginate(Helpers::getPagination());
 
         $branches = $this->branch->all();
-        $users = $this->user->all();
+        $users = $this->user->orderBy('f_name')->get();
         return view('admin-views.pos.index', compact('categories', 'products', 'category', 'keyword', 'branches', 'users', 'authUser'));
     }
 
@@ -194,6 +194,8 @@ class POSController extends Controller
             })
             ->whereNotNull(['f_name', 'l_name', 'phone'])
             ->limit(8)
+            ->orderBy('f_name')
+
             ->get([DB::raw('id, CONCAT(f_name, " ", l_name, " (", phone ,")") as text')]);
 
         $data[] = (object)['id' => false, 'text' => translate('walk_in_customer')];
@@ -861,7 +863,7 @@ class POSController extends Controller
 
 
     public function fetch_store_stock($store_id)  {
-         $data =  $this->store_products->where('store_id',$store_id)->with('product')->get();
+         $data =  $this->store_products->where('store_id',$store_id)->with(['product','product.unit'])->get();
                 // Decode JSON data to an associative array
                 return response()->json([
                     'data'=>$data
@@ -869,7 +871,7 @@ class POSController extends Controller
     }
 
     public function prices_wareohuse_stock($warehouse_id)  {
-        $data =  $this->warehouse_products->where('warehouse_id',$warehouse_id)->with('productDetail')->get();
+        $data =  $this->warehouse_products->where('warehouse_id',$warehouse_id)->with('productDetail$user')->get();
                // Decode JSON data to an associative array
                return response()->json([
                    'data'=>$data

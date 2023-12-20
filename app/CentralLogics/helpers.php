@@ -33,6 +33,12 @@ class Helpers
         }//dd($product_id, $warehouseId);
         return WarehouseProduct::where(['warehouse_id' => $warehouseId, 'product_id' => $product_id])->first();
     }
+    public static function avgprice($product_id, $orderId)
+    {
+        $data =  \App\Model\PurchaseWarehouseOrderDetail::whereIn('purchase_warehouse_order_id',$orderId)->where('product_id' , $product_id)->get();
+      
+        return $data;
+    }
 
 
     public static function error_processor($validator)

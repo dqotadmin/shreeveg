@@ -2556,4 +2556,9 @@
   'Order Id' => 'Order Id',
   'total discount' => 'Total discount',
   'Want to delete this coupon ?' => 'Want to delete this coupon  ',
+  'jp road Inserted Successfully!' => 'Jp road Inserted Successfully!',
+  '45 Inserted Successfully!' => '45 Inserted Successfully!',
+  'Management' => 'Management',
+  'Managementqqq' => 'Managementqqq',
+  'brokerjpr Inserted Successfully!' => 'Brokerjpr Inserted Successfully!',
 );

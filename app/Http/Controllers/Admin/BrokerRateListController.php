@@ -136,9 +136,12 @@ class BrokerRateListController extends Controller
         $query_param = [];
         $search = $request['search'];
         $user_id = auth('admin')->user()->id;
-
-        $rows = $this->mTable::query()->get();
-
+      
+        $rows_old = $this->mTable::query()->get();
+        $latestIds = $this->mTable:: query()->selectRaw('MAX(id) as id ,admin_id')->groupBy('admin_id')->pluck('id')->toArray();
+       
+        $rows = $this->mTable::whereIn('id',$latestIds)->get();
+        // dd($rows_old, $rows);
         //$rows = $rows->orderBy('id', 'desc')->get();
        
         return view($this->view_folder . '.rate_list', compact('rows'));

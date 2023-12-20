@@ -106,12 +106,22 @@
                                         </a>
                                     </li>
                                     @endif
-
+                                    
                                 </ul>
                             </li>
                             <!-- End POS -->
                         @endif
-
+                                    <li
+                                        class="navbar-vertical-aside-has-menu {{Request::is('admin/purchase-warehouse-order/stock-update') || Request::is('admin/purchase-warehouse-order/stock-update*')?'active':''}}">
+                                        <a class="js-navbar-vertical-aside-menu-link nav-link"
+                                            href="{{route('admin.price-update')}}"
+                                            title="{{translate('customer')}} {{translate('list')}}">
+                                            <i class="tio-money"></i>
+                                            <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                                {{translate('Price')}} {{translate('Management')}}
+                                            </span>
+                                        </a>
+                                    </li>
 
                         <!-- User management start from here -->
                         @if(Helpers::module_permission_check(MANAGEMENT_SECTION['user_management']))

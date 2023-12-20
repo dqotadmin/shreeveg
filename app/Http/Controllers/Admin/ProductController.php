@@ -460,7 +460,7 @@ class ProductController extends Controller
                 // if(isset($request->unit_id[$key])){
                 //     $product_details[$key]['unit_id'] = $request->unit_id[$key];
                 // }
-               
+                
             
                 $productData = json_encode($product_details,true); 
             }

@@ -13,9 +13,15 @@
             <span>
             {{translate('warehouse orders')}}
             </span>
+            
         </h1>
+        <?php $currentDate = date('d-M-y', strtotime('today')); ?>
+    <a  class="btn btn-info " href="{{route('admin.stock-update')}}">Price Management <strong class="text-dark">{{$currentDate}}</strong> </a>
+    
+ </div>
     </div>
- 
+ <div class="">
+
     <div class="card">
         <!-- Header -->
         <div class="card-header border-0">

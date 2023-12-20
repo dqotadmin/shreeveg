@@ -280,7 +280,7 @@
                                         @if( $product_details_array)
                                         @foreach($product_details_array as $key => $warehouse)
                                             <tr class="row-delivery-pair">
-                                                <td> <input type="number" min="0" max="10000000000" step="any"  value="{{@$product_details_array[$i]['quantity']}}" name="quantity[]"   class="form-control input-delivery-pair" placeholder="{{ translate('Ex : 1') }}"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" required> </td> 
+                                                <td> <input type="number" min="0" max="10000000000" step="any"  value="{{@$product_details_array[$i]['quantity']}}" name="quantity[]"   class="form-control input-delivery-pair quantity" placeholder="{{ translate('Ex : 1') }}"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" required> </td> 
                                     
                                                 <td>
                                                     <input name="market_price[]" min="0" max="100000000" step="any" value="{{@$product_details_array[$i]['market_price']}}" class="form-control input-delivery-pair market_price"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"   placeholder="{{ translate('Ex : 10') }}" required>
@@ -511,7 +511,8 @@ $(document).on('click', '.remove-delivery-pair', function() {
     $(this).closest('.row-delivery-pair').remove();
 });
 
-$(document).on('input','.market_price', function(){
+
+$(document).on('input','.quantity', function(){
     var market_price = $(this).val();
     console.log(market_price);
     if((market_price)){
@@ -519,6 +520,8 @@ $(document).on('input','.market_price', function(){
         // Find the discount input within the same row
         var marketPriceInput = row.find('input[name="discount[]"]'); //assign value empty
         var offerPriceInput = row.find('input[name="offer_price[]"]');
+        var market_price = row.find('input[name="market_price[]"]');
+        console.log(market_price);
         marketPriceInput.val('');
         offerPriceInput.val('');
     }else{

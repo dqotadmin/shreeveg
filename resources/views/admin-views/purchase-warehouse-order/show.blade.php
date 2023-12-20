@@ -97,7 +97,9 @@
                         <option value="Pending" {{$row->status == 'Pending'?'selected':''}}>Pending</option>
                         <option value="Accepted" {{$row->status == 'Accepted'?'selected':''}}>Accepted</option>
                         <option value="Delivered" {{$row->status == 'Delivered'?'selected':''}}>Delivered</option>
-                        <option value="Rejected" {{$row->status == 'Rejected'?'selected':''}}>Rejected</option>
+                       @if($row->status == 'Accepted')
+                       @else <option value="Rejected" {{$row->status == 'Rejected'?'selected':''}}>Rejected</option>
+                       @endif
                     @elseif(auth('admin')->user()->admin_role_id == 5 ||  $row->status == 'Pending' )
                         <option disabled selected>Select Status</option>
                         <option value="Received" {{$row->status == 'Received'?'selected':''}}>Received</option>

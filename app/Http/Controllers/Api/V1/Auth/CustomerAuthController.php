@@ -377,8 +377,7 @@ class CustomerAuthController extends Controller
      */
     public function registration(Request $request): JsonResponse
     {
-        return response()->json(['errors' => "sdhgkj"], 403);
-        dd(1);
+
         $validator = Validator::make($request->all(), [
             'f_name' => 'required',
             'l_name' => 'required',

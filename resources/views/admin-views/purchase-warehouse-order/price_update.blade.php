@@ -82,7 +82,7 @@ use App\Model\PurchaseWarehouseOrder;
                 @foreach($WarehouseProducts as $products)            
                     <tr class="">
                         <td><?php echo $i++; ?></td>
-                        <td>{{$products->productDetail->name}} {{$products->product_id}}
+                        <td>{{$products->productDetail->name}}  
                         <input type="hidden" value="{{$products->product_id}}" name="product_id[]" class="">
                         </td>
                         <td>

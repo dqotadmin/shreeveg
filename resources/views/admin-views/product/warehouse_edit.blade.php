@@ -228,7 +228,7 @@
                                             for="exampleFormControlInput1">{{translate('customer_price')}}</label>
                                         <input type="number" min="0" max="100000"
                                             value="{{@$warehouse_products->customer_price}}" name="customer_price"
-                                            step="any" id="discount" class="form-control"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
+                                            step="any" id="discount" class="form-control customer_price"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
                                             placeholder="{{ translate(' customer price') }}" required>
                                     </div>
                                 </div>
@@ -267,9 +267,9 @@
                         <table class="table table-bordered" id="box-delivery-pair">
                                         <tr>
                                             <th>{{translate('Quantity')}}</th>
-                                            <th> {{translate('default_price')}}/{{translate('market_price')}}</th>
+                                            <th> {{translate('market_price')}} <span  class="price">{{@$warehouse_products->customer_price}}</span> </th>
                                             <th> {{translate('discount')}}({{translate('%')}})</th>
-                                            <th> {{translate('default_price')}}({{translate('offer_price')}})</th>
+                                            <th> {{translate('offer_price')}}</th>
                                             <th>{{translate('Approx Piece/Weight')}}</th>
                                             <th>{{translate('Short Title')}}</th>
                                             <th> <button type="button" id="add-delivery-pair"
@@ -283,7 +283,7 @@
                                                 <td> <input type="number" min="0" max="10000000000" step="any"  value="{{@$product_details_array[$i]['quantity']}}" name="quantity[]"   class="form-control input-delivery-pair quantity" placeholder="{{ translate('Ex : 1') }}"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" required> </td> 
                                     
                                                 <td>
-                                                    <input name="market_price[]" min="0" max="100000000" step="any" value="{{@$product_details_array[$i]['market_price']}}" class="form-control input-delivery-pair market_price"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"   placeholder="{{ translate('Ex : 10') }}" required>
+                                                    <input name="market_price[]" readonly min="0" max="100000000" step="any" value="{{@$product_details_array[$i]['market_price']}}" class="form-control input-delivery-pair market_price"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"   placeholder="{{ translate('Ex : 10') }}" required>
                                                 </td>
                                                 <td>
                                                 <input name="discount[]" function min="0" max="100000000" step="any"  value="{{@$product_details_array[$i]['discount']}}" class="form-control input-delivery-pai discount" placeholder="{{ translate('Ex : 1%') }}" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" required>
@@ -511,28 +511,35 @@ $(document).on('click', '.remove-delivery-pair', function() {
     $(this).closest('.row-delivery-pair').remove();
 });
 
-
-$(document).on('input','.quantity', function(){
-    var market_price = $(this).val();
-    console.log(market_price);
-    if((market_price)){
+$(document).on('input','.quantity, .customer_price', function(){
+    var quantity = $(this).val();
+    var customer_price = $('.customer_price').val();
+    var marketPrice = quantity * customer_price;
+    $('.price').text(customer_price);
+    console.log('quantity'+quantity);
+    console.log('customer_price'+customer_price);
+    if((quantity)){
         var row = $(this).closest('tr');
         // Find the discount input within the same row
         var marketPriceInput = row.find('input[name="discount[]"]'); //assign value empty
         var offerPriceInput = row.find('input[name="offer_price[]"]');
-        var market_price = row.find('input[name="market_price[]"]');
-        console.log(market_price);
+        var quantity = row.find('input[name="quantity[]"]');
+        var marketPriceInput = row.find('input[name="market_price[]"]');
+        console.log(quantity);
         marketPriceInput.val('');
         offerPriceInput.val('');
+        marketPriceInput.val(marketPrice.toFixed(2));
     }else{
         var row = $(this).closest('tr');
         // Find the discount input within the same row
-        var marketPriceInput = row.find('input[name="discount[]"]');
+        var marketPriceInput = row.find('input[name="discount[]"]'); //assign value empty
         var offerPriceInput = row.find('input[name="offer_price[]"]');
+        var quantity = row.find('input[name="quantity[]"]');
+        var marketPriceInput = row.find('input[name="market_price[]"]');
+        console.log(quantity);
         marketPriceInput.val('');
         offerPriceInput.val('');
-
-        console.log('else');
+        marketPriceInput.val(marketPrice.toFixed(2));
     }
 });
 //function for fill discount then get offer price
@@ -545,7 +552,7 @@ $(document).on("input", ".discount", function () {
 
     // Get the market price value
     var marketPrice = parseFloat(marketPriceInput.val());
-console.log(marketPrice);
+    console.log(marketPrice);
     // Check if marketPrice is a valid number
     if (!isNaN(marketPrice)) {
         // Calculate offer price
@@ -569,98 +576,7 @@ console.log(marketPrice);
     //     $("#offer_price").css("background-color", "pink");
 
     //     });
-//function end
-$(".lang_link").click(function(e) {
-    e.preventDefault();
-    $(".lang_link").removeClass('active');
-    $(".lang_form").addClass('d-none');
-    $(this).addClass('active');
-
-    let form_id = this.id;
-    let lang = form_id.split("-")[0];
-    // console.log(lang);
-    $("#" + lang + "-form").removeClass('d-none');
-    if (lang == 'en') {
-        $("#from_part_2").removeClass('d-none');
-    } else {
-        $("#from_part_2").addClass('d-none');
-    }
-
-
-})
-</script>
-<script type="text/javascript">
-$(function() {
-    $("#coba").spartanMultiImagePicker({
-        fieldName: 'images[]',
-        maxCount: 4,
-        rowHeight: '150px',
-        groupClassName: '',
-        maxFileSize: '',
-        placeholderImage: {
-            image: '{{asset('/public/assets/admin/img/upload-en.png')}}',
-            width: '100%'
-        },
-        dropFileLabel: "Drop Here",
-        onAddRow: function(index, file) {
-
-        },
-        onRenderedPreview: function(index) {
-
-        },
-        onRemoveRow: function(index) {
-
-        },
-        onExtensionErr: function(index, file) {
-            toastr.error('Please only input png or jpg type file', {
-                CloseButton: true,
-                ProgressBar: true
-            });
-        },
-        onSizeErr: function(index, file) {
-            toastr.error('File size too big', {
-                CloseButton: true,
-                ProgressBar: true
-            });
-        }
-    });
-});
-$(function() {
-    $("#single").spartanMultiImagePicker({
-        fieldName: 'single_image[]',
-        maxCount: 1,
-        rowHeight: '150px',
-        groupClassName: '',
-        maxFileSize: '',
-        placeholderImage: {
-            image: '{{asset('public/assets/admin/img/upload-en.png')}}',
-            width: '100%'
-        },
-        dropFileLabel: "Drop Here",
-        onAddRow: function(index, file) {
-
-            $(document).ready(function() {
-
-            });
-
-        },
-        onRemoveRow: function(index) {
-
-        },
-        onExtensionErr: function(index, file) {
-            toastr.error('{{ translate("Please only input png or jpg type file") }}', {
-                CloseButton: true,
-                ProgressBar: true
-            });
-        },
-        onSizeErr: function(index, file) {
-            toastr.error('{{ translate("File size too big") }}', {
-                CloseButton: true,
-                ProgressBar: true
-            });
-        }
-    });
-});
+//function end 
 </script>
 
 <script>
@@ -675,35 +591,7 @@ function getRequest(route, id) {
 }
 </script>
 
-<script>
-$(document).on('ready', function() {
-    $('.js-select2-custom').each(function() {
-        var select2 = $.HSCore.components.HSSelect2.init($(this));
-    });
-});
-</script>
-
-<script src="{{asset('public/assets/admin')}}/js/tags-input.min.js"></script>
-
-<script>
-$('#choice_attributes').on('change', function() {
-    $('#customer_choice_options').html(null);
-    $.each($("#choice_attributes option:selected"), function() {
-        add_more_customer_choice_option($(this).val(), $(this).text());
-    });
-});
-
-function add_more_customer_choice_option(i, name) {
-    let n = name.split(' ').join('');
-    $('#customer_choice_options').append(
-        '<div class="row"><div class="col-md-3"><input type="hidden" name="choice_no[]" value="' + i +
-        '"><input type="text" class="form-control" name="choice[]" value="' + n +
-        '" placeholder="Choice Title" readonly></div><div class="col-lg-9"><input type="text" class="form-control" name="choice_options_' +
-        i +
-        '[]" placeholder="Enter choice values" data-role="tagsinput" onchange="combination_update()"></div></div>'
-    );
-    $("input[data-role=tagsinput], select[multiple][data-role=tagsinput]").tagsinput();
-}
+<script> 
 
 function combination_update() {
     $.ajaxSetup({
@@ -770,24 +658,7 @@ $('#product_form').on('submit', function() {
     });
 });
 </script>
-
-<script>
-$('#discount_type').change(function() {
-    if ($('#discount_type').val() == 'percent') {
-        $("#discount_symbol").html('(%)')
-    } else {
-        $("#discount_symbol").html('')
-    }
-});
-
-$('#tax_type').change(function() {
-    if ($('#tax_type').val() == 'percent') {
-        $("#tax_symbol").html('(%)')
-    } else {
-        $("#tax_symbol").html('')
-    }
-});
-</script>
+ 
 
 <script>
 function update_qty() {

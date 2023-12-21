@@ -184,18 +184,20 @@ class PurchaseWarehouseOrderController extends Controller
         return view($this->view_folder.'.price_update');
     }
     public function product_price_update(Request $request){
-    
-       // dump($request->all());
+        
       $authUser = auth('admin')->user();
         foreach($request->product_id as $key => $product_id){   
             $existRow = WarehouseProduct::where('product_id',$product_id)->where('warehouse_id',$authUser->warehouse_id)->first(); 
+       
+          
+
             if(!$existRow){
                 $existRow = new WarehouseProduct;
                 $existRow->product_id = $product_id;
                 $existRow->warehouse_id = $authUser->warehouse_id;
                 $existRow->save();
             }
-          // dd( $existRow);
+
             if(isset($request->product_id[$key])){
                 $existRow['product_id']  = $product_id;
             }
@@ -208,11 +210,28 @@ class PurchaseWarehouseOrderController extends Controller
             if(isset($request->avg_price[$key])){
                 $existRow['avg_price'] = $request->avg_price[$key];
             }
+            if($existRow->product_details){
+                $product_details = json_decode(@$existRow->product_details,true); 
+                foreach($product_details as $product_detail){
+                    $product_detail['quantity'] = $product_detail['quantity'];
+                    $product_detail['discount'] = @$product_detail['discount'];
+                    $product_detail['offer_price'] =  $request->customer_price[$key] - ($request->customer_price[$key] * $product_detail['discount']/100);
+                    $product_detail['market_price'] = $product_detail['quantity'] * $request->customer_price[$key];
+                    $product_detail['approx_piece'] = $product_detail['approx_piece'];
+                    $product_detail['title'] = $product_detail['title'];
+               }
+              $existRow['product_details'] = json_encode($product_detail);
+                // $sddd= json_encode($product_detail);
+            }
+            //$existRow['product_details'] = json_encode($product_detail);
+            
+            
+                //  dump($existRow); 
             $existRow->save();
                 
              
         }
-        return redirect()->back();
+        dd('stop'); return redirect()->back();
     }
         // dd($request->all());
  

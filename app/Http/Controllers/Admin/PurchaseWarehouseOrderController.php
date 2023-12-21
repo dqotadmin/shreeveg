@@ -188,7 +188,7 @@ class PurchaseWarehouseOrderController extends Controller
       $authUser = auth('admin')->user();
         foreach($request->product_id as $key => $product_id){   
             $existRow = WarehouseProduct::where('product_id',$product_id)->where('warehouse_id',$authUser->warehouse_id)->first(); 
-       
+            dump($existRow->productDetail->name);
           
 
             if(!$existRow){
@@ -211,58 +211,27 @@ class PurchaseWarehouseOrderController extends Controller
                 $existRow['avg_price'] = $request->avg_price[$key];
             }
             if($existRow->product_details){
-                $product_details = json_decode(@$existRow->product_details,true); 
-                foreach($product_details as $product_detail){
-                    $product_detail['quantity'] = $product_detail['quantity'];
-                    $product_detail['discount'] = @$product_detail['discount'];
-                    $product_detail['offer_price'] =  $request->customer_price[$key] - ($request->customer_price[$key] * $product_detail['discount']/100);
-                    $product_detail['market_price'] = $product_detail['quantity'] * $request->customer_price[$key];
-                    $product_detail['approx_piece'] = $product_detail['approx_piece'];
-                    $product_detail['title'] = $product_detail['title'];
+
+                $product_details = json_decode($existRow->product_details,true); 
+                foreach($product_details as $skey => $product_detail){
+                    $qty = $product_detail['quantity'];
+                    $discount = $product_detail['discount'];
+                    $newArr[$skey]['quantity'] =  $qty;
+                    $newArr[$skey]['discount'] =$discount;
+                    $newArr[$skey]['approx_piece'] = $product_detail['approx_piece'];
+                    $newArr[$skey]['title'] = $product_detail['title'];
+                    $newArr[$skey]['offer_price'] =  $qty*($request->customer_price[$key] - ($request->customer_price[$key] * $discount/100));
+                    $newArr[$skey]['market_price'] = $qty * $request->customer_price[$key];
                }
-              $existRow['product_details'] = json_encode($product_detail);
-                // $sddd= json_encode($product_detail);
+             
+              $existRow['product_details'] = json_encode($newArr,true); 
+               
             }
-            //$existRow['product_details'] = json_encode($product_detail);
-            
-            
-                //  dump($existRow); 
-            $existRow->save();
-                
+             $existRow->save();
+             dd('final',$existRow);   
              
         }
-        dd('stop'); return redirect()->back();
+         return redirect()->back();
     }
-        // dd($request->all());
- 
-        // $row = WarehouseProduct::whereIn('product_id',$request->product_id)->where('warehouse_id',$authUser->warehouse_id)->get(); 
- 
-        //     foreach($row as  $key => $update_row){
-        //          if(isset($request->product_id[$key])){
-        //             $update_row[$key]['product_id']  = $request->product_id[$key];
-        //         }
-        //         dump($request->product_id);
-        //         if(isset($request->customer_price[$key])){
-        //             $update_row[$key]['customer_price'] = $request->customer_price[$key];
-        //         }
-        //         if(isset($request->store_price[$key])){
-        //             $update_row[$key]['store_price'] = $request->store_price[$key];
-        //         }
-        //         if(isset($request->avg_price[$key])){
-        //             $update_row[$key]['avg_price'] = $request->avg_price[$key];
-        //         }
-        //         $update_row->product_id = $product_id;
-        //         $update_row->avg_price = $request->avg_price[$key];
-        //         $update_row->customer_price = $request->customer_price[$key];
-        //         $update_row->store_price = $request->store_price[$key];
-        //         dump($update_row);
-                // $update_row->save();
-            // }
-            // dd($update_row);
-     
-             
-            //     return redirect()->back();
-    
        
-          
         }

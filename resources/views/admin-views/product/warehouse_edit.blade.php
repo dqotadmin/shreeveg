@@ -277,7 +277,7 @@
                                                     More</button> </th>
 
                                         </tr>
-                                        @if( $product_details_array)
+                                        @if($product_details_array)
                                         @foreach($product_details_array as $key => $warehouse)
                                             <tr class="row-delivery-pair">
                                                 <td> <input type="number" min="0" max="10000000000" step="any"  value="{{@$product_details_array[$i]['quantity']}}" name="quantity[]"   class="form-control input-delivery-pair quantity" placeholder="{{ translate('Ex : 1') }}"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" required> </td> 

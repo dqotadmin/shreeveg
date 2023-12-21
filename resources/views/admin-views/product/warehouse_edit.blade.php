@@ -196,7 +196,7 @@
                                     <div class="form-group mb-0">
                                         <label class="input-label" style="font-weight:bold;"
                                             for="exampleFormControlInput1">{{translate('average_price')}}</label>
-                                        <input type="number" min="0" max="100000" value="20" name="avg_price" step="any"
+                                        <input type="number" min="0" max="100000" value="{{@$warehouse_products->avg_price}}" name="avg_price" step="any"
                                             style="font-weight:bold;" id="discount" class="form-control"
                                             placeholder="{{ translate('5%') }}" readonly required>
 

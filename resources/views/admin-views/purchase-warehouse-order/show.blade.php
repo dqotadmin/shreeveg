@@ -89,22 +89,22 @@
 
             <form action="{{route('admin.wh_receiver_update_status',$row->id)}}" method="post">
             @csrf
-            @if((auth('admin')->user()->admin_role_id == 8 &&  $row->status != 'Received' &&  $row->status != 'Rejected')  || (auth('admin')->user()->admin_role_id == 5 && $row->status != 'Pending' && $row->status != 'Accepted' && $row->status != 'Rejected' && $row->status != 'Received' )  )
-            <div class="col-md-6">
+            @if((auth('admin')->user()->admin_role_id == 8 && $row->status != 'Rejected' && $row->status != 'Delivered' && $row->status != 'Received'))
+                <div class="col-md-6">
                 <label class="input-label" for="exampleFormControlInput1">{{translate('update status')}}</label>
                 <select name="status" class="form-control">
-                    @if(auth('admin')->user()->admin_role_id == 8  &&  $row->status != 'Received')
-                        <option value="Pending" {{$row->status == 'Pending'?'selected':''}}>Pending</option>
-                        <option value="Accepted" {{$row->status == 'Accepted'?'selected':''}}>Accepted</option>
-                        <option value="Delivered" {{$row->status == 'Delivered'?'selected':''}}>Delivered</option>
-                       @if($row->status == 'Accepted')
-                       @else <option value="Rejected" {{$row->status == 'Rejected'?'selected':''}}>Rejected</option>
-                       @endif
-                    @elseif(auth('admin')->user()->admin_role_id == 5 ||  $row->status == 'Pending' )
-                        <option disabled selected>Select Status</option>
-                        <option value="Received" {{$row->status == 'Received'?'selected':''}}>Received</option>
+                    @if(auth('admin')->user()->admin_role_id == 8  &&  $row->status != 'Pending' &&  $row->status != 'Accepted' &&  $row->status != 'Delivered' )
+                        <option value="Pending" disabled {{$row->status == 'Pending'?'selected':''}}>Pending</option>
                     @endif
-                </select>
+                    @if(auth('admin')->user()->admin_role_id == 8  &&  $row->status != 'Accepted' )
+                        <option value="Accepted" {{$row->status == 'Accepted'?'selected':''}}>Accepted</option>
+                    @endif
+                        <option value="Delivered" {{$row->status == 'Delivered'?'selected':''}}>Delivered</option>
+                       @if($row->status != 'Accepted')
+                        <option value="Rejected" {{$row->status == 'Rejected'?'selected':''}}>Rejected</option>
+                       @endif
+                      
+                    </select>
             </div>
                 @if(auth('admin')->user()->admin_role_id == 8 || $row->status == 'Pending' || $row->status == 'Accepted')
                 @if(auth('admin')->user()->admin_role_id == 8 &&  $row->status != 'Delivered')
@@ -120,7 +120,13 @@
                 @endif
                 @endif
                 @if((auth('admin')->user()->admin_role_id == 5) && ($row->status != 'Pending' && $row->status != 'Accepted' && $row->status != 'Received' && $row->status != 'Rejected'))
-
+                <div class="col-md-6">
+                <label class="input-label" for="exampleFormControlInput1">{{translate('update status')}}</label>
+                    <select name="status" class="form-control">
+                    
+                            <option value="Received" {{$row->status == 'Received'?'selected':''}}>Received</option>
+                        </select>
+                </div>
                 <div class="col-md-6">
                     <label class="input-label" for="exampleFormControlInput1">{{translate('comments')}}</label>
                     <textarea name="warehouse_comments" class="form-control" rows="6" placeholder="{{ translate('enter comments if any') }}" required>{{$row->warehouse_comments}}</textarea>

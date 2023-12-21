@@ -111,6 +111,7 @@
                             </li>
                             <!-- End POS -->
                         @endif
+                        @if(in_array(auth('admin')->user()->admin_role_id,[3]))
                                     <li
                                         class="navbar-vertical-aside-has-menu {{Request::is('admin/purchase-warehouse-order/stock-update') || Request::is('admin/purchase-warehouse-order/stock-update*')?'active':''}}">
                                         <a class="js-navbar-vertical-aside-menu-link nav-link"
@@ -122,6 +123,7 @@
                                             </span>
                                         </a>
                                     </li>
+                                    @endif
 
                         <!-- User management start from here -->
                         @if(Helpers::module_permission_check(MANAGEMENT_SECTION['user_management']))

@@ -174,7 +174,6 @@ class PurchaseWarehouseOrderController extends Controller
 
 
         $rows = $rows->orderBy('id', 'desc')->whereDate('created_at', $today)->paginate(Helpers::getPagination())->appends($query_param);
-
         return view($this->view_folder . '.stock_update', compact('rows', 'search', 'role'));
    
         // $row = $this->mTable::find($id);

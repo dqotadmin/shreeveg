@@ -48,12 +48,8 @@
                 <thead class="thead-light">
                     <tr>
                         <th class="border-0">{{translate('#')}}</th>
-                        @if($role == 8 || $role == 1 )
-                        <th class="border-0">{{translate('warehouse')}}</th>
-                        <th class="border-0">{{translate('Receiver')}}</th>
-                        @else
+                   
                         <th class="border-0">{{translate('broker')}}</th>
-                        @endif
                         <th class="border-0">{{translate('invoice no')}}</th>
                         <th class="border-0">{{translate('item')}}</th>
                         <th class="border-0">{{translate('amount')}}</th>
@@ -63,6 +59,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {{$rows}}
                     @foreach($rows as $key=>$row)
                     <tr>
                         <td>{{$key+1}}</td>

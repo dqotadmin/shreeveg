@@ -121,7 +121,7 @@
                             </span>
 
                         </td>
-                        <td>
+                        <td  id="dynamic-content">
                             <!-- Dropdown -->
                             <div class="btn--container justify-content-center">
                                 <a class="action-btn" href="{{route('admin.purchase-warehouse-order.show',[$row->id])}}">
@@ -138,6 +138,7 @@
                                method="post" id="order-{{$row->id}}">
                              @csrf @method('delete')
                          </form>
+                         </td>
                     </tr>
                     @endforeach
                 </tbody>

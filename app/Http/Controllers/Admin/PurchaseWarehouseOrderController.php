@@ -83,9 +83,16 @@ class PurchaseWarehouseOrderController extends Controller
 
     public function destroy($id)
     {
-        $this->mTable::find($id)->delete();
-        Toastr::success(translate('order remved'));
-        return back();
+       $status =  $this->mTable::find($id);
+          if($status == 'Pending'){
+            $this->mTable::find($id)->delete();
+            Toastr::success(translate('order remved'));
+            return back();
+          }else{
+            Toastr::error(translate('order not remved'));
+            return back();
+          }
+       
     }
 
 
@@ -100,7 +107,6 @@ class PurchaseWarehouseOrderController extends Controller
 
     public function wh_receiver_update_status(Request $request, $id)
     {
-
         try {
             
             

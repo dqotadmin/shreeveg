@@ -2563,4 +2563,5 @@
   'brokerjpr Inserted Successfully!' => 'Brokerjpr Inserted Successfully!',
   'nimit sharma Inserted Successfully!' => 'Nimit sharma Inserted Successfully!',
   'nimit sharma second list Inserted Successfully!' => 'Nimit sharma second list Inserted Successfully!',
+  'order not remved' => 'Order not remved',
 );

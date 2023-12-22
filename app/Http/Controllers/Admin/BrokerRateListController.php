@@ -9,7 +9,7 @@ use App\Model\AdminRole;
 use App\Model\City;
 use App\Model\BankDetail;
 use App\Model\Category;
-
+use App\Model\WarehouseProduct;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -132,7 +132,7 @@ class BrokerRateListController extends Controller
 
     public function wh_receiver_rate_list(Request $request)
     {
-
+// dd($request->all());
         $query_param = [];
         $search = $request['search'];
         $user_id = auth('admin')->user()->id;
@@ -149,7 +149,8 @@ class BrokerRateListController extends Controller
 
     public function wh_receiver_post_order(Request $request)
     {
-        //dd($request->all());
+        $user = auth('admin')->user();
+        // dd( $user, $request->all());
         try {
             DB::beginTransaction();
             $user = auth('admin')->user();
@@ -162,12 +163,22 @@ class BrokerRateListController extends Controller
             $table->gstin_number = rand(1000, 9999);
             $table->purchase_date = date('Y-m-d');
             $table->save();
-
+          
+           
             $finalPrice = 0;
             if ($request->products) {
                 foreach ($request->products as $key => $product) {
                     if (isset($request->order_qty[$key])) {
                         $brokerProduct = \App\Model\BrokerRateListDetail::where('broker_rate_list_id', $broker_rate_list->id)->where('product_id', $product)->first();
+                       
+                        $whProduct = WarehouseProduct::where('warehouse_id',$user->warehouse_id)->where('product_id',$product)->exists();
+                        if(!$whProduct){
+                            $whProductRow = new \App\Model\WarehouseProduct();
+                            $whProductRow->warehouse_id = $user->warehouse_id;
+                            $whProductRow->product_id = $product;
+                            $whProductRow->save();
+                        }
+
                         $tableDetail = new \App\Model\PurchaseWarehouseOrderDetail();
                         $tableDetail->purchase_warehouse_order_id = $table->id;
                         $tableDetail->product_id = $product;

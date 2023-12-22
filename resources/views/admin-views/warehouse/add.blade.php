@@ -72,7 +72,7 @@
                                     <div class="col-sm-4">
                                         <label class="form-label"
                                             for="exampleFormControlInput1">{{ translate('Warehouse Address') }} </label>
-                                        <textarea type="text" name="address" class="form-control"
+                                        <textarea type="text" name="address" class="form-control" required
                                             maxlength="255"></textarea>
 
                                     </div>

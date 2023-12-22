@@ -355,7 +355,6 @@
         if(oldCustPrice > 0 && parseFloat(oldCustPrice) != newCustPrice){
             alert('Please re-verify your offer prices!');
 
-            
             var errorMessage = '<div class="">Invalid market & offer prices</div>';
             errorContainer.html(errorMessage);
            
@@ -402,7 +401,7 @@
     
         // Get the market price value
         var marketPrice = parseFloat(marketPriceInput.val());
-        console.log(marketPrice);
+        
         // Check if marketPrice is a valid number
         if (!isNaN(marketPrice)) {
             // Calculate offer price
@@ -414,8 +413,7 @@
             // Set the offer price value
             offerPriceInput.val(offerPrice.toFixed(2));
     
-            console.log(offerPriceInput.val());
-            console.log(discount);
+            
         }
     });
         
@@ -489,7 +487,7 @@
                         });
                     setTimeout(function() {
                         location.href = '{{route('admin.product.list')}}';
-                    }, 2000);
+                    }, 1000);
                 }
             }
         });

@@ -466,7 +466,10 @@ class ProductController extends Controller
             }
 
             $discounts = array_column($product_details, 'discount');
-            $maxDiscount = max($discounts);
+            if($discounts){
+                $maxDiscount = max($discounts);
+
+            }
             $productData = json_encode($product_details, true);
         }
 
@@ -484,8 +487,8 @@ class ProductController extends Controller
         $row->avg_price = $request->avg_price;
         $row->customer_price = $request->customer_price;
         $row->store_price = $request->store_price;
-        $row->product_details = $productData;
-        $row->discount_upto = $maxDiscount;
+        $row->product_details = @$productData? @$productData : null;
+        $row->discount_upto = @$maxDiscount;
 
         $row->save();
 

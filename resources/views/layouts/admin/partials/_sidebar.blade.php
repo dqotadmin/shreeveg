@@ -86,7 +86,7 @@
                                             <span class="text-truncate sidebar--badge-container">
                                                 <span>{{translate('orders')}}</span>
                                                 <span class="badge badge-soft-info badge-pill ml-1">
-                                                    @if(auth('admin')->user()->admin_role_id != 7)
+                                                    @if(auth('admin')->user()->admin_role_id == 1)
                                                     {{\App\Model\Order::Pos()->count()}}
                                                     @endif
                                                 </span>

@@ -871,7 +871,7 @@ class POSController extends Controller
     }
 
     public function prices_wareohuse_stock($warehouse_id)  {
-        $data =  $this->warehouse_products->where('warehouse_id',$warehouse_id)->with('productDetail$user')->get();
+        $data =  $this->warehouse_products->where('warehouse_id',$warehouse_id)->with('productDetail')->get();
                // Decode JSON data to an associative array
                return response()->json([
                    'data'=>$data

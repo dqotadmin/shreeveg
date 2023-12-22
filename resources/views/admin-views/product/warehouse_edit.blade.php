@@ -303,25 +303,25 @@
                                        @endforeach
                                        @else
                                        <tr class="row-delivery-pair">
-                                                <td> <input type="number" min="0" max="10000000000" step="any"   name="quantity[]"   class="form-control input-delivery-pair quantity" placeholder="{{ translate('Ex : 1') }}"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" required> </td> 
+                                                <td> <input type="number" min="0" max="10000000000" step="any"   name="quantity[]"   class="form-control input-delivery-pair quantity" placeholder="{{ translate('Ex : 1') }}"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" > </td> 
                                     
                                                 <td>
-                                                <input name="market_price[]" min="0" max="100000000" step="any" value="{{@$product_details_array[$i]['market_price']}}" class="form-control input-delivery-pair market_price"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"   placeholder="{{ translate('Ex : 10') }}" required>
+                                                <input name="market_price[]" min="0" max="100000000" step="any" value="{{@$product_details_array[$i]['market_price']}}" class="form-control input-delivery-pair market_price"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"   placeholder="{{ translate('Ex : 10') }}" >
 
                                                 </td>
                                                 <td>
-                                                <input name="discount[]" function min="0" max="100000000" step="any"  value="{{@$product_details_array[$i]['discount']}}" class="form-control input-delivery-pai discount" placeholder="{{ translate('Ex : 1%') }}" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" required>
+                                                <input name="discount[]" function min="0" max="100000000" step="any"  value="{{@$product_details_array[$i]['discount']}}" class="form-control input-delivery-pai discount" placeholder="{{ translate('Ex : 1%') }}" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" >
 
                                                 </td>
                                                 <td> 
                                                 <input name="offer_price[]" min="0" max="100000000" step="any" value="{{@$product_details_array[$i]['offer_price']}}"  class="form-control input-delivery-pair" id="offer_price" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
-                                                           required>
+                                                           >
                                                            </td>
                                                 <td> 
                                                 <input name="approx_piece[]" min="0" max="100000000" step="any" class="form-control input-delivery-pair" value="{{@$product_details_array[$i]['approx_piece']}}"
-                                                        placeholder="{{ translate('Ex : 1 pieces') }}" required>
+                                                        placeholder="{{ translate('Ex : 1 pieces') }}" >
                                                 </td>
-                                                <td> <input type="text" min="0" max="100000000" step="any" name="title[]"     class="form-control input-delivery-pair "     placeholder="{{ translate('Ex : This product is pure organic') }}" required>
+                                                <td> <input type="text" min="0" max="100000000" step="any" name="title[]"     class="form-control input-delivery-pair "     placeholder="{{ translate('Ex : This product is pure organic') }}" >
                                                 </td> 
                                                 <td><button type="button"  class="remove-delivery-pair btn btn-outline-danger">Remove</button>  </td>
                                             </tr> 

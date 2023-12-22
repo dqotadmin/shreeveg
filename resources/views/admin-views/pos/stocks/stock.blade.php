@@ -46,7 +46,9 @@
                                 @endforeach
                             </select>
                         </div>
-                        @endif      <?php $condition = ''; 
+                        @endif    
+                        @if(in_array(auth('admin')->user()->admin_role_id , [3,1]))
+                        <?php $condition = ''; 
                             if(auth('admin')->user()->admin_role_id == '1')
                                  $condition =  \App\Model\Store::where('status','1')->where('deleted_at',null)->get();
                             elseif(auth('admin')->user()->admin_role_id == 3)
@@ -57,12 +59,33 @@
                            ?>
                              <div class="col-md-3 m-2">
                             <select name="" id="fetch_store_stock" class="form-control">
-                                <option value=""  disabled selected>{{translate('Select Store')}}</option>
+                                <option value=""   >{{translate('Select Store')}}</option>
                             @if($condition)  
                             @foreach($condition as $store)
-                                <option value="{{$store->id}}" {{$selected}} id="store_id">{{$store->name}}</option>
+                                <option value="{{$store->id}}"   id="store_id">{{$store->name}}</option>
                             @endforeach
                             @endif
+                            @endif
+
+                        @if(auth('admin')->user()->admin_role_id == 6)
+                          <?php $condition = ''; 
+                            if(auth('admin')->user()->admin_role_id == '1')
+                                 $condition =  \App\Model\Store::where('status','1')->where('deleted_at',null)->get();
+                            elseif(auth('admin')->user()->admin_role_id == 3)
+                                $condition =  \App\Model\Store::where('status','1')->where('deleted_at',null)->where('warehouse_id',auth('admin')->user()->warehouse_id)->get();
+                                elseif(auth('admin')->user()->admin_role_id == 6)
+                                $condition =  \App\Model\Store::where('status','1')->where('deleted_at',null)->where('id',auth('admin')->user()->store_id)->get();
+                            $selected = 'selected';
+                           ?>
+                             <div class="col-md-3 m-2">
+                            <select name="" id="fetch_store_stock" class="form-control">
+                                <option value=""   >{{translate('Select Store')}}</option>
+                            @if($condition)  
+                            @foreach($condition as $store)
+                                <option value="{{$store->id}}" {{$selected}}  id="store_id">{{$store->name}}</option>
+                            @endforeach
+                            @endif
+                        @endif
                             </select>
                         </div>
                       

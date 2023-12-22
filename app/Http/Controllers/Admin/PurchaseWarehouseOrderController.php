@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
 use PHPUnit\TextUI\Help;
 use Symfony\Component\Console\Helper\Helper;
+
 class PurchaseWarehouseOrderController extends Controller
 {
 
@@ -52,10 +53,9 @@ class PurchaseWarehouseOrderController extends Controller
         $rows = $this->mTable::query();
         if ($role == 8) {
             $rows->where('broker_id', auth('admin')->user()->id);
-        } elseif($role == 1) {
+        } elseif ($role == 1) {
             $rows->get();
-        }else
-        {
+        } else {
             $rows->where('warehouse_id', auth('admin')->user()->warehouse_id);
         }
         if ($request->has('search')) {
@@ -71,7 +71,7 @@ class PurchaseWarehouseOrderController extends Controller
             });
             $query_param = ['search' => $request['search']];
         }
-    
+
         $today = Carbon::today()->toDateString();
 
         $rows = $rows->whereDate('created_at', $today)
@@ -83,16 +83,15 @@ class PurchaseWarehouseOrderController extends Controller
 
     public function destroy($id)
     {
-       $status =  $this->mTable::find($id);
-          if($status == 'Pending'){
+        $status =  $this->mTable::find($id);
+        if ($status == 'Pending') {
             $this->mTable::find($id)->delete();
             Toastr::success(translate('order remved'));
             return back();
-          }else{
+        } else {
             Toastr::error(translate('order not remved'));
             return back();
-          }
-       
+        }
     }
 
 
@@ -108,8 +107,8 @@ class PurchaseWarehouseOrderController extends Controller
     public function wh_receiver_update_status(Request $request, $id)
     {
         try {
-            
-            
+
+
             DB::beginTransaction();
             $role = auth('admin')->user()->admin_role_id;
             $row = $this->mTable::find($id);
@@ -119,22 +118,22 @@ class PurchaseWarehouseOrderController extends Controller
             } else {
                 $row->warehouse_comments = $request->warehouse_comments;
             }
-      
+
 
             $row->save();
             if ($role == 5) {
                 $wh_orders = $row->purchaseWarehouseOrderDetail;
                 // dd($wh_orders);
-            foreach($wh_orders as $wh_order){
-                $product_id = $wh_order->product_id;
-                $qty = $wh_order->qty;
-                $warehouseProduct = Helpers::warehouseProductData($product_id);
-                
-                if ($warehouseProduct && $warehouseProduct->total_stock >= 0) {
-                    $warehouseProduct->increment('total_stock', $qty);
-                } 
+                foreach ($wh_orders as $wh_order) {
+                    $product_id = $wh_order->product_id;
+                    $qty = $wh_order->qty;
+                    $warehouseProduct = Helpers::warehouseProductData($product_id);
+
+                    if ($warehouseProduct && $warehouseProduct->total_stock >= 0) {
+                        $warehouseProduct->increment('total_stock', $qty);
+                    }
+                }
             }
-        }
             DB::commit();
             Toastr::success(translate('status updated Successfully!'));
             return redirect()->route('admin.purchase-warehouse-order.index');
@@ -147,9 +146,10 @@ class PurchaseWarehouseOrderController extends Controller
         }
     }
 
-    public function price_update(Request $request){
+    public function price_update(Request $request)
+    {
 
-     
+
         $query_param = [];
         $search = $request['search'];
         $role = auth('admin')->user()->admin_role_id;
@@ -157,10 +157,9 @@ class PurchaseWarehouseOrderController extends Controller
         $today = Carbon::today();
         if ($role == 8) {
             $rows->where('broker_id', auth('admin')->user()->id);
-        } elseif($role == 1) {
+        } elseif ($role == 1) {
             $rows->get();
-        }else
-        {
+        } else {
             $rows->where('warehouse_id', auth('admin')->user()->warehouse_id);
         }
         if ($request->has('search')) {
@@ -181,63 +180,68 @@ class PurchaseWarehouseOrderController extends Controller
 
         $rows = $rows->orderBy('id', 'desc')->whereDate('created_at', $today)->paginate(Helpers::getPagination())->appends($query_param);
         return view($this->view_folder . '.stock_update', compact('rows', 'search', 'role'));
-   
-        // $row = $this->mTable::find($id);
-     
-    }
-    
-    public function stock_update(Request $request){
-        return view($this->view_folder.'.price_update');
-    }
-    public function product_price_update(Request $request){
-        
-      $authUser = auth('admin')->user();
-        foreach($request->product_id as $key => $product_id){   
-            $existRow = WarehouseProduct::where('product_id',$product_id)->where('warehouse_id',$authUser->warehouse_id)->first(); 
-            // dump($existRow->productDetail->name);
-          
 
-            if(!$existRow){
+        // $row = $this->mTable::find($id);
+
+    }
+
+    public function stock_update(Request $request)
+    {
+        return view($this->view_folder . '.price_update');
+    }
+    public function product_price_update(Request $request)
+    {
+
+        $authUser = auth('admin')->user();
+        foreach ($request->product_id as $key => $product_id) {
+            $existRow = WarehouseProduct::where('product_id', $product_id)->where('warehouse_id', $authUser->warehouse_id)->first();
+            // dump($existRow->productDetail->name);
+
+
+            if (!$existRow) {
                 $existRow = new WarehouseProduct;
                 $existRow->product_id = $product_id;
                 $existRow->warehouse_id = $authUser->warehouse_id;
                 $existRow->save();
             }
 
-            if(isset($request->product_id[$key])){
+            if (isset($request->product_id[$key])) {
                 $existRow['product_id']  = $product_id;
             }
-            if(isset($request->customer_price[$key])){
+            if (isset($request->customer_price[$key])) {
                 $existRow['customer_price'] = $request->customer_price[$key];
             }
-            if(isset($request->store_price[$key])){
+            if (isset($request->store_price[$key])) {
                 $existRow['store_price'] = $request->store_price[$key];
             }
-            if(isset($request->avg_price[$key])){
+            if (isset($request->avg_price[$key])) {
                 $existRow['avg_price'] = $request->avg_price[$key];
             }
-            if($existRow->product_details){
+            if ($existRow->product_details) {
 
-                $product_details = json_decode($existRow->product_details,true); 
-                foreach($product_details as $skey => $product_detail){
-                    $qty = $product_detail['quantity'];
-                    $discount = $product_detail['discount'];
-                    $newArr[$skey]['quantity'] =  $qty;
-                    $newArr[$skey]['discount'] =$discount;
-                    $newArr[$skey]['approx_piece'] = $product_detail['approx_piece'];
-                    $newArr[$skey]['title'] = $product_detail['title'];
-                    $newArr[$skey]['offer_price'] =  $qty*($request->customer_price[$key] - ($request->customer_price[$key] * $discount/100));
-                    $newArr[$skey]['market_price'] = $qty * $request->customer_price[$key];
-               }
-             
-              $existRow['product_details'] = json_encode($newArr,true); 
-               
+                $product_details = json_decode($existRow->product_details, true);
+                // dd($product_details);
+                if (count($product_details) > 0) {
+                    foreach ($product_details as $skey => $product_detail) {
+                        // dd($product_detail);
+                        $qty = $product_detail['quantity'];
+                        $discount = $product_detail['discount'];
+                        $newArr[$skey]['quantity'] =  $qty;
+                        $newArr[$skey]['discount'] = $discount;
+                        $newArr[$skey]['approx_piece'] = $product_detail['approx_piece'];
+                        $newArr[$skey]['title'] = $product_detail['title'];
+                        $newArr[$skey]['offer_price'] =  $qty * ($request->customer_price[$key] - ($request->customer_price[$key] * $discount / 100));
+                        $newArr[$skey]['market_price'] = $qty * $request->customer_price[$key];
+                    }
+
+
+                    $existRow['product_details'] = json_encode($newArr, true);
+                }
             }
-             $existRow->save();
-            
-             
+            $existRow->save();
+            //  dd('final',$existRow);   
+
         }
-         return redirect()->back();
+        return redirect()->back();
     }
-       
-        }
+}

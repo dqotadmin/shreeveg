@@ -87,8 +87,9 @@ use App\Model\PurchaseWarehouseOrder;
                         </td>
                         <td>
                         <?php  $data = Helpers::avgprice($products->product_id, $order_id);
-                        $avgPrice = 0; ?>
-                           
+                        $avgPrice = 0;
+                     ?>
+                          
                             @if(isset($data) && count($data) > 0)
                             @php($avgPrice = $data->avg('price_per_unit'))
                                 @foreach($data as $val)
@@ -97,17 +98,17 @@ use App\Model\PurchaseWarehouseOrder;
                                     
                                 @endforeach
                                 @endif
-                       
+                               <?php  $price = (round($avgPrice,2)); ?>
                        
                         </td>
-                        <td>{{$avgPrice}}
+                        <td>{{$price}}
                         <input type="hidden" value="{{$avgPrice}}" name="" class="product_rate"> </td>
                        
                         <!-- <td class="" style="width: 180px;">
                             <input type="text"  class="form-control w-50 margin_price" value="40" > 
                         </td> -->
                         <td class="" style="width: 180px;">
-                        @if($avgPrice)  
+                        @if($price)  
                             
                             <input type="number"  class="form-control w-50 avg_price" value="" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');">  
                                 <input type="number"  class="form-control w-50 customer_price" value="" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"> 
@@ -117,11 +118,11 @@ use App\Model\PurchaseWarehouseOrder;
                         </td>
                         <td class="" style="width: 198px;" > 
                             <div class="" style="display: flex;align-items: center;">  <label for="">avg rate:</label>
-                            <input type="text" value="{{$avgPrice? $avgPrice:$products->avg_price}}" name="avg_price[]" class="form-control w-50" required > </div>  
+                            <input type="text" value="{{$price? $price:$products->avg_price}}" name="avg_price[]" class="form-control w-50" required > </div>  
                             <div class="" style="display: flex;align-items: center;">  <label for="">customer rate:</label>
-                            <input type="text" value="{{$avgPrice? '':$products->customer_price}}" name="customer_price[]"  class="form-control w-50" required> </div>  
+                            <input type="text" value="{{$price? '':$products->customer_price}}" name="customer_price[]"  class="form-control w-50" required> </div>  
                             <div class="" style="display: flex;align-items: center;">  <label for="">store rate:</label>
-                            <input type="text" value="{{$avgPrice? '':$products->store_price}}" name="store_price[]"  class="form-control w-50" required> </div>  
+                            <input type="text" value="{{$price? '':$products->store_price}}" name="store_price[]"  class="form-control w-50" required> </div>  
                         </td>
                         <td class="" > 
                        

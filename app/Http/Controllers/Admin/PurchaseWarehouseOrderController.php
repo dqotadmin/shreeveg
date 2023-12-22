@@ -194,7 +194,7 @@ class PurchaseWarehouseOrderController extends Controller
       $authUser = auth('admin')->user();
         foreach($request->product_id as $key => $product_id){   
             $existRow = WarehouseProduct::where('product_id',$product_id)->where('warehouse_id',$authUser->warehouse_id)->first(); 
-            dump($existRow->productDetail->name);
+            // dump($existRow->productDetail->name);
           
 
             if(!$existRow){
@@ -234,7 +234,7 @@ class PurchaseWarehouseOrderController extends Controller
                
             }
              $existRow->save();
-             dd('final',$existRow);   
+            
              
         }
          return redirect()->back();

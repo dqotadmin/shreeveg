@@ -165,8 +165,7 @@
                                         echo $current_stock;
                                         ?>    /({{@$product->unit['title'] }})
                                            <?php $warehouse_id = auth('admin')->user()->warehouse_id; $product_id = $product['id'];
-                                   if(\App\Model\WarehouseProduct ::where('warehouse_id',$warehouse_id)->where('product_id',$product_id)->exists()){
-
+                                   if(\App\Model\WarehouseProduct::where('warehouse_id',$warehouse_id)->where('product_id',$product_id)->exists('product_details')){
                                    }else{ ?>
                                  <h5 class="m-0">
                                     <small  class="text-hover">Please Upload Prices</small>

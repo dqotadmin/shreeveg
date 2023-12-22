@@ -27,7 +27,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage; 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
 use Rap2hpoutre\FastExcel\FastExcel;
@@ -45,7 +45,8 @@ class ProductController extends Controller
         private Translation $translation,
         private WarehouseCategory $warehouse_categories,
         private WarehouseProduct $warehouse_products
-    ){}
+    ) {
+    }
 
     /**
      * @param Request $request
@@ -87,7 +88,7 @@ class ProductController extends Controller
      */
     public function get_categories(Request $request): \Illuminate\Http\JsonResponse
     {
-        $cat = $this->category->where('deleted_at',null)->where(['parent_id' => $request->parent_id])->get();
+        $cat = $this->category->where('deleted_at', null)->where(['parent_id' => $request->parent_id])->get();
         $res = '<option value="' . 0 . '" disabled selected>---Select---</option>';
         foreach ($cat as $row) {
             if ($row->id == $request->sub_category) {
@@ -101,7 +102,7 @@ class ProductController extends Controller
         ]);
     }
 
-    
+
 
     /**
      * @param Request $request
@@ -111,11 +112,11 @@ class ProductController extends Controller
     {
         $query = $this->product;
         $authUser = auth('admin')->user();
-        if($authUser->admin_role_id == 3 || $authUser->admin_role_id == 5){
-            $assign_categories =  $this->warehouse_categories->where('warehouse_id',$authUser->warehouse_id)->pluck('category_id')->toArray();
-            $query = $query->whereIn('category_id',$assign_categories);
+        if ($authUser->admin_role_id == 3 || $authUser->admin_role_id == 5) {
+            $assign_categories =  $this->warehouse_categories->where('warehouse_id', $authUser->warehouse_id)->pluck('category_id')->toArray();
+            $query = $query->whereIn('category_id', $assign_categories);
         }
-      
+
         $query_param = [];
         $search = $request['search'];
         if ($request->has('search') && $search) {
@@ -130,7 +131,7 @@ class ProductController extends Controller
         }
         $products = $query->latest()->with('category')->paginate(Helpers::getPagination())->appends($query_param);
 
-        return view('admin-views.product.list', compact('products','search'));
+        return view('admin-views.product.list', compact('products', 'search'));
     }
 
     /**
@@ -142,9 +143,9 @@ class ProductController extends Controller
         $categories = $this->category->get();
         $options = Helpers::getCategoryDropDown($categories);
         $units =  $this->unit->get();
-        return view('admin-views.product.add', compact('options','units'));
+        return view('admin-views.product.add', compact('options', 'units'));
     }
- 
+
     /**
      * @param Request $request
      * @return JsonResponse
@@ -171,16 +172,17 @@ class ProductController extends Controller
         $product = $this->product->where(['id' => $id])->first();
         $reviews = $this->review->where(['product_id' => $id])->latest()->paginate(20);
         $product_id = isset($id) ? $id : 0;
-        return view('admin-views.product.view', compact('product', 'reviews','product_id'));
+        return view('admin-views.product.view', compact('product', 'reviews', 'product_id'));
     }
 
-    public function prices_by_wareohuse($warehouse_id, $product_id){
-        $data =  $this->warehouse_products->where('warehouse_id',$warehouse_id)->where('product_id',$product_id)->pluck('product_details');
-                // Decode JSON data to an associative array
+    public function prices_by_wareohuse($warehouse_id, $product_id)
+    {
+        $data =  $this->warehouse_products->where('warehouse_id', $warehouse_id)->where('product_id', $product_id)->pluck('product_details');
+        // Decode JSON data to an associative array
 
-                return response()->json([
-                    'view'=>view('admin-views.product.render_warehouse_price',compact('data'))->render()
-                ]);
+        return response()->json([
+            'view' => view('admin-views.product.render_warehouse_price', compact('data'))->render()
+        ]);
     }
     /**
      * @param Request $request
@@ -203,8 +205,8 @@ class ProductController extends Controller
             'product_code.required' => translate('Product code is required!'),
             'product_code.unique' => translate('Product code must be unique!'),
         ]);
-       
-        
+
+
         $img_names = [];
         if (!empty($request->file('images'))) {
             foreach ($request->images as $img) {
@@ -227,27 +229,25 @@ class ProductController extends Controller
         } else {
             $single_img_names = json_encode([]);
         }
- 
+
         $p = $this->product;
         $p->name = $request->name[array_search('en', $request->lang)];
         $p->description = $request->description[array_search('en', $request->lang)];
-     
+
         $p->category_id = $request->category_id;
         $p->product_code = $request->product_code;
-        
+
         $p->unit_id = $request->unit_id;
         $p->image = $image_data;
         $p->single_image = $single_img_names;
         $p->maximum_order_quantity = $request->maximum_order_quantity;
-        $p->status = $request->status? $request->status:0;
+        $p->status = $request->status ? $request->status : 0;
         //dd($p);
         $p->save();
 
         $data = [];
-        foreach($request->lang as $index=>$key)
-        {
-            if($request->name[$index] && $key != 'en')
-            {
+        foreach ($request->lang as $index => $key) {
+            if ($request->name[$index] && $key != 'en') {
                 $data[] = array(
                     'translationable_type' => 'App\Model\Product',
                     'translationable_id' => $p->id,
@@ -256,8 +256,7 @@ class ProductController extends Controller
                     'value' => $request->name[$index],
                 );
             }
-            if($request->description[$index] && $key != 'en')
-            {
+            if ($request->description[$index] && $key != 'en') {
                 $data[] = array(
                     'translationable_type' => 'App\Model\Product',
                     'translationable_id' => $p->id,
@@ -283,25 +282,25 @@ class ProductController extends Controller
         $product = $this->product->withoutGlobalScopes()->with('translations')->find($id);
         $product_category = $product->category_id;
         $categories = $this->category->get();
-        $options = Helpers::getCategoryDropDown($categories,0,0,$product->category_id);
+        $options = Helpers::getCategoryDropDown($categories, 0, 0, $product->category_id);
         $units =  $this->unit->get();
         // dd($product_category);
-        return view('admin-views.product.edit', compact('product', 'product_category', 'options','units'));
+        return view('admin-views.product.edit', compact('product', 'product_category', 'options', 'units'));
     }
-    
+
     public function warehouse_edit($id): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         $warehouse_id = auth('admin')->user()->warehouse_id;
-        $assign_categories =  $this->warehouse_categories->where('warehouse_id',$warehouse_id)->pluck('category_id'); //    0 => 1 // 1 => 4  // 2 => 22
-        $warehouse_products =  $this->warehouse_products->where('warehouse_id',$warehouse_id)->where('product_id',$id)->first(); //    0 => 1 // 1 => 4  // 2 => 22
+        $assign_categories =  $this->warehouse_categories->where('warehouse_id', $warehouse_id)->pluck('category_id'); //    0 => 1 // 1 => 4  // 2 => 22
+        $warehouse_products =  $this->warehouse_products->where('warehouse_id', $warehouse_id)->where('product_id', $id)->first(); //    0 => 1 // 1 => 4  // 2 => 22
         $product = $this->product->withoutGlobalScopes()->with('translations')->find($id);
         $product_category = $product->category_id;
         $categories = $this->category->get();
-        $options = Helpers::getCategoryDropDown($categories,0,0,$product->category_id);
+        $options = Helpers::getCategoryDropDown($categories, 0, 0, $product->category_id);
         $units =  $this->unit->get();
-        return view('admin-views.product.warehouse_edit', compact('product', 'product_category', 'options','units','warehouse_products'));
+        return view('admin-views.product.warehouse_edit', compact('product', 'product_category', 'options', 'units', 'warehouse_products'));
     }
-    
+
 
     /**
      * @param Request $request
@@ -348,7 +347,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id): \Illuminate\Http\JsonResponse
     {
-        
+
         Validator::make($request->all(), [
             'name' => 'required|unique:products',
             'description' => 'required',
@@ -363,10 +362,10 @@ class ProductController extends Controller
             'product_code.required' => translate('Product code is required!'),
             'product_code.unique' => translate('Product code must be unique!'),
         ]);
-       
+
         $p = $this->product->find($id);
 
-       
+
 
         $img_names = json_decode($p->image);
         if (!empty($request->file('images'))) {
@@ -388,40 +387,41 @@ class ProductController extends Controller
             $single_img_names = json_encode($single_img_names);
             $p->single_image = $single_img_names;
         }
- 
-        
+
+
         $p->name = $request->name[array_search('en', $request->lang)];
         $p->description = $request->description[array_search('en', $request->lang)];
-     
+
         $p->category_id = $request->category_id;
         $p->product_code = $request->product_code;
-        
+
         $p->unit_id = $request->unit_id;
-       
+
         $p->maximum_order_quantity = $request->maximum_order_quantity;
-        $p->status = $request->status? $request->status:0;
+        $p->status = $request->status ? $request->status : 0;
         //dd($p);
         $p->save();
 
-        foreach($request->lang as $index=>$key)
-        {
-            if($request->name[$index] && $key != 'en')
-            {
+        foreach ($request->lang as $index => $key) {
+            if ($request->name[$index] && $key != 'en') {
                 $this->translation->updateOrInsert(
-                    ['translationable_type'  => 'App\Model\Product',
+                    [
+                        'translationable_type'  => 'App\Model\Product',
                         'translationable_id'    => $p->id,
                         'locale'                => $key,
-                        'key'                   => 'name'],
+                        'key'                   => 'name'
+                    ],
                     ['value'                 => $request->name[$index]]
                 );
             }
-            if($request->description[$index] && $key != 'en')
-            {
+            if ($request->description[$index] && $key != 'en') {
                 $this->translation->updateOrInsert(
-                    ['translationable_type'  => 'App\Model\Product',
+                    [
+                        'translationable_type'  => 'App\Model\Product',
                         'translationable_id'    => $p->id,
                         'locale'                => $key,
-                        'key'                   => 'description'],
+                        'key'                   => 'description'
+                    ],
                     ['value'                 => $request->description[$index]]
                 );
             }
@@ -432,6 +432,7 @@ class ProductController extends Controller
 
     public function warehouse_rate_insertupdate(Request $request, $id): \Illuminate\Http\JsonResponse
     {
+
         Validator::make($request->all(), [
             'quantity' => 'required',
             'store_price' => 'required',
@@ -439,38 +440,44 @@ class ProductController extends Controller
             'unit_id' => 'required',
             'offer_price' => 'required',
         ]);
+        $maxDiscount = NULL;
         $product_details = [];
-            foreach($request->quantity as $key => $qty){    
-                if(isset($request->offer_price[$key])){
+        if ($request->quantity) {
+            foreach ($request->quantity as $key => $qty) {
+                if (isset($request->offer_price[$key])) {
                     $product_details[$key]['quantity']  = $qty;
                     $product_details[$key]['offer_price'] = $request->offer_price[$key];
                 }
-                if(isset($request->market_price[$key])){
+                if (isset($request->market_price[$key])) {
                     $product_details[$key]['market_price'] = $request->market_price[$key];
                 }
-                if(isset($request->approx_piece[$key])){
+                if (isset($request->approx_piece[$key])) {
                     $product_details[$key]['approx_piece'] = $request->approx_piece[$key];
                 }
-                if(isset($request->title[$key])){
+                if (isset($request->title[$key])) {
                     $product_details[$key]['title'] = $request->title[$key];
                 }
-                if(isset($request->discount[$key])){
+                if (isset($request->discount[$key])) {
                     $product_details[$key]['discount'] = $request->discount[$key];
                 }
                 // if(isset($request->unit_id[$key])){
                 //     $product_details[$key]['unit_id'] = $request->unit_id[$key];
                 // }
-                
-            
-                $productData = json_encode($product_details,true); 
             }
+
+            $discounts = array_column($product_details, 'discount');
+            $maxDiscount = max($discounts);
+            $productData = json_encode($product_details, true);
+        }
+
+        
         $authUser = auth('admin')->user();
-        $row = $this->warehouse_products->where('product_id',$id)->where('warehouse_id',$authUser->warehouse_id)->first();
+        $row = $this->warehouse_products->where('product_id', $id)->where('warehouse_id', $authUser->warehouse_id)->first();
         // $row = $this->warehouse_products->find($id);
-        if(!$row){
+        if (!$row) {
             $row = $this->warehouse_products;
         }
-       
+
         $row->default_unit = $request->default_unit;
         $row->warehouse_id = $authUser->warehouse_id;
         $row->product_id = $id;
@@ -478,12 +485,13 @@ class ProductController extends Controller
         $row->customer_price = $request->customer_price;
         $row->store_price = $request->store_price;
         $row->product_details = $productData;
+        $row->discount_upto = $maxDiscount;
 
         $row->save();
 
-      
+
         return response()->json([], 200);
-}
+    }
 
     /**
      * @param Request $request
@@ -517,7 +525,7 @@ class ProductController extends Controller
         if (Storage::disk('public')->exists('product/' . $name)) {
             Storage::disk('public')->delete('product/' . $name);
         }
-        
+
 
         $product = $this->product->find($id);
         $img_arr = [];
@@ -540,11 +548,11 @@ class ProductController extends Controller
     }
     public function remove_single_image($id, $name): \Illuminate\Http\RedirectResponse
     {
-       
+
         if (Storage::disk('public')->exists('product/single/' . $name)) {
             Storage::disk('public')->delete('product/single/' . $name);
         }
-        
+
 
         $product = $this->product->find($id);
         $img_arr = [];
@@ -552,14 +560,14 @@ class ProductController extends Controller
         //     Toastr::warning('You cannot delete all images!');
         //     return back();
         // }
-        
+
         foreach (json_decode($product['single_image'], true) as $img) {
             if (strcmp($img, $name) != 0) {
                 $img_arr[] = $img;
             }
         }
 
-             $this->product->where(['id' => $id])->update([
+        $this->product->where(['id' => $id])->update([
             'single_image' => json_encode($img_arr),
         ]);
         Toastr::success(translate('Image removed successfully!'));
@@ -586,11 +594,11 @@ class ProductController extends Controller
             Toastr::error(translate('You have uploaded a wrong format file, please upload the right file.'));
             return back();
         }
-        $col_key = ['name','description','price','tax','category_id','sub_category_id','discount','discount_type','tax_type','unit','total_stock','capacity','daily_needs'];
+        $col_key = ['name', 'description', 'price', 'tax', 'category_id', 'sub_category_id', 'discount', 'discount_type', 'tax_type', 'unit', 'total_stock', 'capacity', 'daily_needs'];
         foreach ($collections as $key => $collection) {
 
             foreach ($collection as $key => $value) {
-                if ($key!="" && !in_array($key, $col_key)) {
+                if ($key != "" && !in_array($key, $col_key)) {
                     Toastr::error('Please upload the correct format file.');
                     return back();
                 }
@@ -653,22 +661,18 @@ class ProductController extends Controller
         $products = $this->product->when((!is_null($start_date) && !is_null($end_date)), function ($query) use ($start_date, $end_date) {
             return $query->whereDate('created_at', '>=', $start_date)
                 ->whereDate('created_at', '<=', $end_date);
-            })
+        })
             ->get();
 
         $storage = [];
-        foreach($products as $item){
+        foreach ($products as $item) {
             $category_id = 0;
             $sub_category_id = 0;
 
-            foreach(json_decode($item->category_ids, true) as $category)
-            {
-                if($category['position']==1)
-                {
+            foreach (json_decode($item->category_ids, true) as $category) {
+                if ($category['position'] == 1) {
                     $category_id = $category['id'];
-                }
-                else if($category['position']==2)
-                {
+                } else if ($category['position'] == 2) {
                     $sub_category_id = $category['id'];
                 }
             }
@@ -686,17 +690,16 @@ class ProductController extends Controller
                 'description' => $item['description'],
                 'price' => $item['price'],
                 'tax' => $item['tax'],
-                'category_id'=>$category_id,
-                'sub_category_id'=>$sub_category_id,
-                'discount'=>$item['discount'],
-                'discount_type'=>$item['discount_type'],
-                'tax_type'=>$item['tax_type'],
-                'unit'=>$item['unit'],
-                'total_stock'=>$item['total_stock'],
-                'capacity'=>$item['capacity'],
-                'daily_needs'=>$item['daily_needs'],
+                'category_id' => $category_id,
+                'sub_category_id' => $sub_category_id,
+                'discount' => $item['discount'],
+                'discount_type' => $item['discount_type'],
+                'tax_type' => $item['tax_type'],
+                'unit' => $item['unit'],
+                'total_stock' => $item['total_stock'],
+                'capacity' => $item['capacity'],
+                'daily_needs' => $item['daily_needs'],
             ];
-
         }
         return (new FastExcel($storage))->download('products.xlsx');
     }
@@ -707,7 +710,7 @@ class ProductController extends Controller
      */
     public function limited_stock(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        $stock_limit = $this->business_setting->where('key','minimum_stock_limit')->first()->value;
+        $stock_limit = $this->business_setting->where('key', 'minimum_stock_limit')->first()->value;
         $query_param = [];
         $search = $request['search'];
         if ($request->has('search')) {
@@ -719,7 +722,7 @@ class ProductController extends Controller
                 }
             })->where('total_stock', '<', $stock_limit)->latest();
             $query_param = ['search' => $request['search']];
-        }else{
+        } else {
             $query = $this->product->where('total_stock', '<', $stock_limit)->latest();
         }
 
@@ -771,5 +774,4 @@ class ProductController extends Controller
         }
         return back();
     }
-
 }

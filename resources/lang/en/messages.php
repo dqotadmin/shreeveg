@@ -2565,4 +2565,10 @@
   'nimit sharma second list Inserted Successfully!' => 'Nimit sharma second list Inserted Successfully!',
   'order not remved' => 'Order not remved',
   'stock not availale for lamon' => 'Stock not availale for lamon',
+  'Store Purchase orders' => 'Store Purchase orders',
+  'not_found' => 'Not found',
+  'Store Purchaseash orders' => 'Store Purchaseash orders',
+  'offer_management' => 'Offer management',
+  'offers' => 'Offers',
+  'enter description' => 'Enter description',
 );

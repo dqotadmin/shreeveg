@@ -171,8 +171,8 @@ class OrderController extends Controller
         $order = $this->order->with('details')->where(['id' => $id])->first();
         $delivery_man = $this->delivery_man->where(['is_active'=>1])
             ->where(function($query) use ($order) {
-                $query->where('branch_id', $order->branch_id)
-                    ->orWhere('branch_id', 0);
+                $query->where('warehouse_id', $order->warehouse_id)
+                    ->orWhere('warehouse_id', 0);
             })
             ->get();
 

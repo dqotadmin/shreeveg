@@ -21,6 +21,7 @@ class FlashDeal extends Model
 
     protected $casts = [
         'status' => 'integer',
+        'warehouse_id' => 'array',
         'featured' => 'integer',
     ];
 

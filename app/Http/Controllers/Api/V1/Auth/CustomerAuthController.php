@@ -381,6 +381,7 @@ class CustomerAuthController extends Controller
         $validator = Validator::make($request->all(), [
             'f_name' => 'required',
             'l_name' => 'required',
+            'gender' => 'required',
             'email' => '',
             'phone' => 'required|unique:users',
             'password' => 'required|min:6',
@@ -415,6 +416,7 @@ class CustomerAuthController extends Controller
             'l_name' => $request->l_name,
             'email' => $request->email ?? '',
             'phone' => $request->phone,
+            'gender' => $request->gender,
             'password' => bcrypt($request->password),
             'temporary_token' => $temporary_token,
             'referral_code' => Helpers::generate_referer_code(),

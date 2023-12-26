@@ -124,7 +124,8 @@ class ProductController extends Controller
             $query = $query->where(function ($q) use ($key) {
                 foreach ($key as $value) {
                     $q->orWhere('id', 'like', "%{$value}%")
-                        ->orWhere('name', 'like', "%{$value}%");
+                        ->orWhere('name', 'like', "%{$value}%")
+                        ->orWhere('product_code', 'like', "%{$value}%");
                 }
             });
             $query_param = ['search' => $request['search']];

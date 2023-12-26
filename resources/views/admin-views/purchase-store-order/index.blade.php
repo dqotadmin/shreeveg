@@ -57,7 +57,6 @@
                         @if(in_array($user->admin_role_id ,[3,1]))
                         <th class="border-0">{{translate('store')}}</th>
                         @endif
-                        <!-- <th class="border-0">{{translate('title')}}</th> -->
                         <th class="border-0">{{translate('invoice no')}}</th>
                         <th class="border-0">{{translate('item')}}</th>
                         <th class="border-0">{{translate('amount')}}</th>
@@ -86,11 +85,7 @@
                             </span>
                         </td>
                         @endif
-                        <!-- <td>
-                            <span class="d-block font-size-sm text-body text-trim-25">
-                            {{$row->title }}
-                            </span>
-                        </td> -->
+                        
                         <td>
                             <span class="d-block font-size-sm text-body text-trim-25">
                             {{$row->invoice_number }}

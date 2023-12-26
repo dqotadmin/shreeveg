@@ -52,9 +52,9 @@ class AdminUserController extends Controller
     }
     function index(Request $request)
     {
-       // dd(auth('admin')->user()->admin_role_id);
        $baseQuery = $this->admin;
-          $query_param = [];
+       $role_id = isset($_GET['role_id']) ? $_GET['role_id'] : null;
+       $query_param = [];
         $search = $request['search'];
         if ($request->has('search')) {
             $key = explode(' ', $request['search']);
@@ -68,32 +68,32 @@ class AdminUserController extends Controller
             })->orderBy('id', 'desc');
             $query_param = ['search' => $request['search']];
         }else{
-            $admins = $this->admin->orderBy('id', 'desc')->where('admin_role_id', $request->role_id);
+            $admins = $this->admin->orderBy('id', 'desc')->where('admin_role_id', $role_id);
         }
         if(auth('admin')->user()->admin_role_id == 3){
-            if( $request->role_id == 8){
-                $admins = $this->admin->orderBy('id', 'desc')->where('admin_role_id', $request->role_id)->paginate(Helpers::getPagination())->appends($query_param);
-            }elseif( $request->role_id == 6){
+            if( $role_id == 8){
+                $admins = $this->admin->orderBy('id', 'desc')->where('admin_role_id', $role_id)->paginate(Helpers::getPagination())->appends($query_param);
+            }elseif( $role_id == 6){
                 $stores = $this->store->where('warehouse_id', auth('admin')->user()->warehouse_id)->pluck('id');
                  $admins = $baseQuery->whereIn('store_id', $stores)->paginate(Helpers::getPagination())->appends($query_param);
-                //    $admins = $this->admin->orderBy('id', 'desc')->where('admin_role_id', $request->role_id)->paginate(Helpers::getPagination())->appends($query_param);
+                //    $admins = $this->admin->orderBy('id', 'desc')->where('admin_role_id', $role_id)->paginate(Helpers::getPagination())->appends($query_param);
                 // $warehouse_id = '';
                 // foreach($admins as $admin){
                 //     $warehouse_id =   $admin->Store->warehouse_id;
                 // }
                 // $stores = $this->store->orderBy('id', 'desc')->where('warehouse_id', $warehouse_id)->pluck('id');
                 
-                // $admins = $this->admin->orderBy('id', 'desc')->whereIn('store_id', $stores)->where('admin_role_id', $request->role_id)->paginate(Helpers::getPagination())->appends($query_param);
+                // $admins = $this->admin->orderBy('id', 'desc')->whereIn('store_id', $stores)->where('admin_role_id', $role_id)->paginate(Helpers::getPagination())->appends($query_param);
 
             }else{
-                $admins = $this->admin->orderBy('id', 'desc')->where('warehouse_id',auth('admin')->user()->warehouse_id)->where('admin_role_id', $request->role_id)->paginate(Helpers::getPagination())->appends($query_param);
+                $admins = $this->admin->orderBy('id', 'desc')->where('warehouse_id',auth('admin')->user()->warehouse_id)->where('admin_role_id', $role_id)->paginate(Helpers::getPagination())->appends($query_param);
             }
-                $role = $this->admin_role->where('id', $request->role_id)->first();
-        }else{
+                $role = $this->admin_role->where('id', $role_id)->first();
+            }else{
             $admins = $admins->paginate(Helpers::getPagination())->appends($query_param);
-            $role = $this->admin_role->where('id', $request->role_id)->first();
+            $role = $this->admin_role->where('id', $role_id)->first();
         }
-        
+        $role = $this->admin_role->where('id', $role_id)->first();
         return view('admin-views.warehouse-admin.index', compact('admins', 'role'));
     }
 

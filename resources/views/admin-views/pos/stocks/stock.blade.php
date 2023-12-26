@@ -3,6 +3,7 @@
 @section('title', translate('Product List'))
 
 @section('content')
+<?php       $admin_role_id = auth('admin')->user()->admin_role_id; ?>
 <div class="content container-fluid product-list-page">
     <!-- Page Header -->
     <div class="page-header">
@@ -36,7 +37,7 @@
                                 </div>
                             </div>
                         </form> -->
-                        @if(auth('admin')->user()->admin_role_id == 1)
+                        @if($admin_role_id == 1)
                         <div class="col-md-3 m-2">
                             <select name="" id="fetch_warehouse_stock" class="form-control">
                                 <option value="" disabled selected>{{translate('Select Warehouse')}}</option>
@@ -47,14 +48,16 @@
                             </select>
                         </div>
                         @endif    
-                        @if(in_array(auth('admin')->user()->admin_role_id , [3,1]))
+                        @if(in_array($admin_role_id , [3,1]))
                         <?php $condition = ''; 
-                            if(auth('admin')->user()->admin_role_id == '1')
-                                 $condition =  \App\Model\Store::where('status','1')->where('deleted_at',null)->get();
-                            elseif(auth('admin')->user()->admin_role_id == 3)
-                                $condition =  \App\Model\Store::where('status','1')->where('deleted_at',null)->where('warehouse_id',auth('admin')->user()->warehouse_id)->get();
-                                elseif(auth('admin')->user()->admin_role_id == 6)
-                                $condition =  \App\Model\Store::where('status','1')->where('deleted_at',null)->where('id',auth('admin')->user()->store_id)->get();
+                        $admin_role_id = $admin_role_id;
+                        $store =  \App\Model\Store::where('status','1')->where('deleted_at',null);
+                        if($admin_role_id == '1')
+                                 $condition =  $store->get();
+                            elseif($admin_role_id == 3)
+                                $condition =  $store->where('warehouse_id',$warehouse_id)->get();
+                                elseif($admin_role_id == 6)
+                                $condition =  $store->where('id',$store_id)->get();
                             $selected = 'selected';
                            ?>
                              <div class="col-md-3 m-2">
@@ -67,13 +70,13 @@
                             @endif
                             @endif
 
-                        @if(auth('admin')->user()->admin_role_id == 6)
+                        @if($admin_role_id == 6)
                           <?php $condition = ''; 
-                            if(auth('admin')->user()->admin_role_id == '1')
+                            if($admin_role_id == '1')
                                  $condition =  \App\Model\Store::where('status','1')->where('deleted_at',null)->get();
-                            elseif(auth('admin')->user()->admin_role_id == 3)
+                            elseif($admin_role_id == 3)
                                 $condition =  \App\Model\Store::where('status','1')->where('deleted_at',null)->where('warehouse_id',auth('admin')->user()->warehouse_id)->get();
-                                elseif(auth('admin')->user()->admin_role_id == 6)
+                                elseif($admin_role_id == 6)
                                 $condition =  \App\Model\Store::where('status','1')->where('deleted_at',null)->where('id',auth('admin')->user()->store_id)->get();
                             $selected = 'selected';
                            ?>
@@ -106,7 +109,7 @@
                                 <th>{{translate('#')}}</th>
                                 <th>{{translate('product_name')}}</th>
                                 <th id="store_id" class="d-none">{{translate('store_id')}}</th>
-                            <?php if(auth('admin')->user()->admin_role_id == 1)
+                            <?php if($admin_role_id == 1)
                                 $display = "d-none";
                                 else
                                 $display = "d-block"; ?>
@@ -120,7 +123,7 @@
                                 <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">{{$products->firstItem()+$key}}
                                 </td>
                                 <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
-                                    @if(auth('admin')->user()->admin_role_id != 3)
+                                    @if($admin_role_id != 3)
                                     <a href="{{route('admin.product.view',[$product['id']])}}"
                                         class="product-list-media">
                                         @else
@@ -142,7 +145,7 @@
                                         {{ $product['product_code'] }}
                                     </div>
                                 </td> -->
-                                @if(auth('admin')->user()->admin_role_id == 3)
+                                @if($admin_role_id == 3)
                                 <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
                                     <?php
                                             $current_stock =  0;

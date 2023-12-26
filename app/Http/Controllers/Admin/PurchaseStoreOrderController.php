@@ -65,7 +65,6 @@ class PurchaseStoreOrderController extends Controller
             $rows->where(function ($q) use ($key) {
                 foreach ($key as $value) {
                     $q->orWhere('invoice_number', 'like', "%{$value}%");
-                    $q->orWhere('title', 'like', "%{$value}%");
                     $q->orWhere('gstin_number', 'like', "%{$value}%");
                     $q->orWhere('status', 'like', "%{$value}%");
                 }
@@ -77,7 +76,6 @@ class PurchaseStoreOrderController extends Controller
             $query_param = ['search' => $request['search']];
         }
         $rows = $rows->orderBy('id', 'desc')->paginate(Helpers::getPagination())->appends($query_param);
-
         return view($this->view_folder . '.index', compact('rows', 'search', 'user'));
     }
 

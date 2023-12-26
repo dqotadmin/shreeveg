@@ -128,8 +128,8 @@
                                     <label class="input-label"
                                         for="exampleFormControlInput1">{{translate('tax_type')}}</label>
                                     <select name="tax_type" id="tax_type" class="form-control js-select2-custom">
-                                        <option value="percent" {{$config['tax'] == 'percent' ? 'selected' : ''}}>{{translate('percent')}}</option>
-                                        <option value="amount" {{$config['tax_type'] == 'amount' ? 'selected' : ''}}>{{translate('amount')}}</option>
+                                        <option value="percent" {{@$config['tax'] == 'percent' ? 'selected' : ''}}>{{translate('percent')}}</option>
+                                        <option value="amount" {{@$config['tax_type'] == 'amount' ? 'selected' : ''}}>{{translate('amount')}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -137,7 +137,7 @@
                                 <div class="form-group mb-0">
                                     <label class="input-label" for="exampleFormControlInput1">{{translate('tax_rate')}}
                                         <span id="tax_symbol">(%)</span></label>
-                                    <input type="number" min="0"    value="{{$config['tax']}}" step="0.01" max="100000" name="tax"
+                                    <input type="number" min="0"    value="{{@$config['tax']}}" step="0.01" max="100000" name="tax"
                                         class="form-control" placeholder="{{ translate('Ex : $ 100') }}" required>
                                 </div>
                             </div>

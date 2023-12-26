@@ -6,8 +6,10 @@ use App\CentralLogics\Helpers;
 use App\Http\Controllers\Controller;
 use App\Model\FlashDeal;
 use App\Model\FlashDealProduct;
-use App\Model\Product;
+use App\Model\WarehouseCategory;
 use Brian2694\Toastr\Facades\Toastr;
+use App\Model\Product;
+use App\Model\Category;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -22,7 +24,9 @@ class OfferController extends Controller
 {
     public function __construct(
         private FlashDeal $flash_deal,
+        private Category $category,
         private FlashDealProduct $flash_deal_product,
+        private WarehouseCategory $warehouse_categories,
         private Product $product
     ){}
 
@@ -58,6 +62,7 @@ class OfferController extends Controller
      */
     public function flash_store(Request $request): \Illuminate\Http\RedirectResponse
     {
+ 
         $request->validate([
             'title' => 'required|max:255',
             'start_date' => 'required',
@@ -67,16 +72,21 @@ class OfferController extends Controller
             'title.required'=>translate('Title is required'),
         ]);
 
-        if (!empty($request->file('image'))) {
+        if (!empty($request->file('image'))) { 
             $image_name = Helpers::upload('offer/', 'png', $request->file('image'));
         } else {
             $image_name = 'def.png';
         }
-
+        $warehouse = [];
+        $warehouse = $request->warehouse_id;
         $flash_deal = $this->flash_deal;
         $flash_deal->title = $request->title;
+        $flash_deal->warehouse_id = $warehouse;
+        $flash_deal->description = $request->description;
         $flash_deal->start_date = $request->start_date;
         $flash_deal->end_date = $request->end_date;
+        $flash_deal->discount_type = $request->discount_type;
+        $flash_deal->discount_amount = $request->discount_amount;
         $flash_deal->deal_type = 'flash_deal';
         $flash_deal->status = 0;
         $flash_deal->featured = 0;
@@ -106,6 +116,8 @@ class OfferController extends Controller
      */
     public function delete(Request $request): \Illuminate\Http\RedirectResponse
     {
+        //dd($request->all());
+        
         $flash_deal = $this->flash_deal->find($request->id);
         if (Storage::disk('public')->exists('offer/' . $flash_deal['image'])) {
             Storage::disk('public')->delete('offer/' . $flash_deal['image']);
@@ -126,7 +138,10 @@ class OfferController extends Controller
     public function flash_edit($flash_deal_id): View|Factory|Application
     {
         $flash_deal = $this->flash_deal->find($flash_deal_id);
-        return view('admin-views.offer.edit-flash-deal', compact('flash_deal'));
+        $categories = $this->category->get();
+        $wh_assign_categories = $this->warehouse_categories->where('warehouse_id',$flash_deal_id)->pluck('category_id')->toArray();
+        $options = Helpers::getCategoryDropDown($categories, 0, 0, $wh_assign_categories);
+        return view('admin-views.offer.edit-flash-deal', compact('flash_deal','options'));
     }
 
     /**
@@ -164,8 +179,8 @@ class OfferController extends Controller
         $flash_deal_product_ids = $this->flash_deal_product->where('flash_deal_id', $flash_deal_id)->pluck('product_id');
         $flash_deal_products = $this->product->whereIn('id', $flash_deal_product_ids)->paginate(Helpers::getPagination());
         $products = $this->product->active()->orderBy('name', 'asc')->get();
-
-        return view('admin-views.offer.add-product-index', compact('flash_deal', 'flash_deal_products', 'products'));
+        $datas = FlashDealProduct::where('flash_deal_id', $flash_deal_id)->get();
+        return view('admin-views.offer.add-product-index', compact('flash_deal', 'flash_deal_products', 'products','datas'));
     }
 
     /**
@@ -185,6 +200,7 @@ class OfferController extends Controller
         {
             DB::table('flash_deal_products')->insertOrIgnore([
                 'product_id' => $request['product_id'],
+                'quantity' => $request['quantity'],
                 'flash_deal_id' => $flash_deal_id,
                 'discount' => $request['discount'],
                 'discount_type' => $request['discount_type'],
@@ -205,7 +221,8 @@ class OfferController extends Controller
      */
     public function delete_flash_product(Request $request): JsonResponse
     {
-        $this->flash_deal_product->where(['product_id' => $request->id, 'flash_deal_id' => $request->flash_deal_id])->delete();
+        
+        $this->flash_deal_product->where(['id' => $request->id])->delete();
         return response()->json();
     }
 }

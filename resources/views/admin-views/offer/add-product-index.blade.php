@@ -31,16 +31,20 @@
                             @csrf
                             <div class="form-group">
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <label for="name" class="title-color text-capitalize">{{ translate('Add new product')}}</label>
                                         <select class="js-example-basic-multiple js-states js-example-responsive form-control h--45px" name="product_id">
                                             <option disabled selected>{{ translate('Select Product')}}</option>
                                             @foreach ($products as $key => $product)
                                                 <option value="{{ $product->id }}">
-                                                    {{$product['name']}}
+                                                    {{$product['name']}} ({{@$product->unit->title}})
                                                 </option>
                                             @endforeach
                                         </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="name" class="title-color text-capitalize">{{ translate('quantity')}}</label>
+                                        <input type="text" class="form-control" name="quantity">
                                     </div>
                                 </div>
                             </div>
@@ -71,26 +75,27 @@
                             <tr>
                                 <th>{{ translate('SL')}}</th>
                                 <th>{{translate('name')}}</th>
-                                <th>{{ translate('actual_price')}}</th>
-                                <th>{{ translate('discount')}}</th>
-                                <th>{{ translate('discount_price')}}</th>
+                                <th>{{translate('quantity')}}</th>
+                                <!-- <th>{{ translate('actual_price')}}</th> -->
+                                <!-- <th>{{ translate('discount')}}</th> -->
+                                <!-- <th>{{ translate('discount_price')}}</th> -->
                                 <th class="text-center">{{ translate('action')}}</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($flash_deal_products as $k=>$de_p)
-                                @php($discount = Helpers::discount_calculate($de_p, $de_p['price']))
-                                <tr>
-                                    <td>{{$flash_deal_products->firstitem()+$k}}</td>
-                                    <td><a href="{{ route('admin.product.view', [$de_p['id']]) }}" target="_blank" class="font-weight-semibold title-color hover-c1">{{$de_p['name']}}</a></td>
-                                    <td>{{ Helpers::set_symbol($de_p['price']) }}</td>
-                                    <td>{{ Helpers::set_symbol($discount) }}</td>
-                                    <td>{{ Helpers::set_symbol($de_p['price'] - $discount) }}</td>
+                          
+                            @foreach($datas as $key=>$data)
+                           
+                            <tr>
+                                    <td>{{$key+1}}</td>
+                                    <td>{{$data->product['name']}}</td>
+                                      <td>{{ $data['quantity'] }}</td>
+                                   
                                     <td>
                                         <div class="d-flex justify-content-center">
                                             <a  title="{{ trans ('Delete')}}"
                                                 class="btn btn-outline-danger btn-sm delete"
-                                                id="{{$de_p['id']}}">
+                                                id="{{$data['id']}}">
                                                 <i class="tio-delete"></i>
                                             </a>
                                         </div>
@@ -128,7 +133,6 @@
     <script>
         $(document).on('click', '.delete', function () {
             var id = $(this).attr("id");
-            var flash_deal_id = {{ $flash_deal->id }}
             Swal.fire({
                 title: "{{translate('Are_you_sure_remove_this_product')}}?",
                 showCancelButton: true,
@@ -149,11 +153,10 @@
                         method: 'POST',
                         data: {
                                 id: id,
-                                flash_deal_id : flash_deal_id
                             },
                         success: function (data) {
                             toastr.success('{{translate('product_removed_successfully')}}');
-                            location.reload();
+                             location.reload();
                         },
                     });
                 }

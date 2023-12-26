@@ -27,12 +27,30 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <div class="row g-3">
+                            <div class="col-12">
+                                <div class="form-group mb-0">
+                                    <label class="input-label" for="exampleFormControlInput1">{{translate('warehouse')}}</label>
+                                    <select name="warehouse_id[]" id="" class="form-control chosen-select" multiple>
+                                        @foreach(\App\Model\Warehouse::where('deleted_at',null)->get() as $warehouse)
+                                        <option value="{{$warehouse->id}}"  @if(in_array($warehouse->id, $flash_deal['warehouse_id'])) selected @endif>{{$warehouse->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                                 <div class="col-12">
                                     <div class="form-group mb-0">
                                         <label class="input-label" for="exampleFormControlInput1">{{translate('title')}}</label>
                                         <input type="text" name="title" value="{{$flash_deal['title']}}" class="form-control" placeholder="{{ translate('enter title') }}" maxlength="255" required>
                                     </div>
                                 </div>
+                                <div class="col-12">
+                                <div class="form-group mb-0">
+                                    <label class="input-label"
+                                        for="exampleFormControlInput1">{{translate('description')}}</label>
+                                    <input type="text" name="description" value="{{old('description')}}" class="form-control" value="{{$flash_deal['description']}}"
+                                        placeholder="{{ translate('enter description') }}" maxlength="255" required>
+                                </div>
+                            </div>
                                 <div class="col-12">
                                     <div class="form-group mb-0">
                                         <label for="name" class="title-color font-weight-medium text-capitalize">{{ translate('start_date')}}</label>
@@ -47,8 +65,25 @@
                                                class="js-flatpickr form-control flatpickr-custom" placeholder="{{ \App\CentralLogics\translate('dd/mm/yy') }}" data-hs-flatpickr-options='{ "dateFormat": "Y/m/d", "minDate": "today" }'>
                                     </div>
                                 </div>
+                         
+                        <div class="col-6">
+                            <div class="form-group mb-0">
+                                <label class="input-label" for="exampleFormControlSelect1">{{translate('discount')}} {{translate('type')}}<span
+                                        class="input-label-secondary">*</span></label>
+                                <select name="discount_type" class="form-control" onchange="show_item(this.value)">
+                                <option value="percent" {{ $flash_deal['discount_type'] == 'percent'? 'selected' : '' }}>{{translate('percent')}}</option>
+                                    <option value="amount" {{ $flash_deal['discount_type'] == 'amount'? 'selected' : '' }}>{{translate('amount')}}</option>
+                                </select>
                             </div>
                         </div>
+                        <div class="col-6">
+                            <div class="form-group mb-0">
+                                <label class="input-label" for="exampleFormControlInput1">{{translate('discount_amount')}}</label>
+                                <input type="number" step="0.1" name="discount_amount" value="{{$flash_deal['discount_amount']}}" class="form-control" placeholder="{{ translate('discount_amount') }}" required>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
                         <div class="col-md-6">
                             <div class="d-flex flex-column justify-content-center h-100">
                                 <h5 class="text-center mb-3 text--title text-capitalize">

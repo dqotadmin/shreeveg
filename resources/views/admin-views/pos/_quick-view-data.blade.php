@@ -102,7 +102,7 @@
 
                 <div class="collapse width" id="collapseWidthOffers">
                    
-                    @foreach($offers as $offer)
+                    @foreach($offers as $offer) 
                   
                     @php($offerQty =  Helpers::getWhProductOfferQty($product->id,$offer->id))
                     <div class="discountpricing card card-body p-2 d-block mb-2 w-75"> 

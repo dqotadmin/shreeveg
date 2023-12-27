@@ -29,11 +29,9 @@
                 ?>
                 @foreach(session()->get('cart') as $key => $cartItem)
                     @if(is_array($cartItem))
-                        <?php //dump($cartItem);
-                        $product_subtotal_mkk = ($cartItem['price']) * $cartItem['quantity'];
-                        // $discount_on_product += ($cartItem['discount'] * $cartItem['quantity']);
-                        $discount_on_product += ($cartItem['offer_discount']);
-                        $product_subtotal = $cartItem['with_offer_price'] >0?$cartItem['with_offer_price']:$product_subtotal_mkk;
+                        <?php
+                        $product_subtotal = ($cartItem['price']) * $cartItem['quantity'];
+                        $discount_on_product += ($cartItem['discount'] * $cartItem['quantity']);
                         $subtotal += $product_subtotal;
                    
                         //tax calculation
@@ -69,7 +67,7 @@
                             <td class="text-center px-0 py-1">
                                 <div class="btn text-left">
                                     {{ \App\CentralLogics\Helpers::set_symbol($product_subtotal) }}
-                                </div> 
+                                </div> <!-- price-wrap .// -->
                             </td>
                             <td>
                                 <div class="d-flex flex-wrap justify-content-center">
@@ -89,13 +87,12 @@
 
 <?php
 $total = $subtotal;
-//$session_total = $subtotal+$total_tax-$discount_on_product;
-$session_total = $subtotal+$total_tax;
+$session_total = $subtotal+$total_tax-$discount_on_product;
 \Session::put('total', $session_total);
 
 $discount_amount = ($discount_type == 'percent' && $discount > 0) ? (($total * $discount) / 100) : $discount;
 $discount_amount += $discount_on_product;
-//$total -= $discount_amount;
+$total -= $discount_amount;
 
 $extra_discount = session()->get('cart')['extra_discount'] ?? 0;
 $extra_discount_type = session()->get('cart')['extra_discount_type'] ?? 'amount';
@@ -115,7 +112,7 @@ if ($extra_discount) {
 
         <dt class="col-sm-6">{{translate('product')}} {{translate('discount')}}:
         </dt>
-        <dd class="col-sm-6 text-right">  {{ Helpers::set_symbol(round($discount_amount,2)) }}</dd>
+        <dd class="col-sm-6 text-right"> - {{ Helpers::set_symbol(round($discount_amount,2)) }}</dd>
 
 <!--        <dt class="col-sm-6">{{translate('coupon')}} {{translate('discount')}}:
         </dt>

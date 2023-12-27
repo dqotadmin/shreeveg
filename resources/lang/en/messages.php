@@ -2571,4 +2571,5 @@
   'offer_management' => 'Offer management',
   'offers' => 'Offers',
   'enter description' => 'Enter description',
+  'Offer Discount' => 'Offer Discount',
 );

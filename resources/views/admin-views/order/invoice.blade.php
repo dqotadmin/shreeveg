@@ -83,6 +83,7 @@
                     </thead>
 
                     <tbody>
+                    @php($totalSaving=0)
                     @php($sub_total=0)
                     @php($total_tax=0)
                     @php($total_dis_on_pro=0)
@@ -113,7 +114,8 @@
 
                                 </td>
                                 <td class="w-28p">
-                                    @php($amount=($detail['price']-$detail['discount_on_product'])*$detail['quantity'])
+                                    {{-- @php($amount=($detail['price']-$detail['discount_on_product'])*$detail['quantity']) --}}
+                                    @php($amount=($detail['price'])*$detail['quantity']-$detail['discount_on_product'])
                                     {{ Helpers::set_symbol($amount) }}
                                 </td>
                             </tr>
@@ -124,7 +126,7 @@
                             @php($vat_status = $detail['vat_status'])
 
                         @endif
-
+                        @php($totalSaving +=  $detail['discount_on_product'])
                     @endforeach
                     </tbody>
                 </table>
@@ -138,9 +140,9 @@
                         <dt class="col-6">{{ translate('Subtotal') }}:</dt>
                         <dd class="col-6">
                             {{ Helpers::set_symbol($sub_total+$updated_total_tax) }}</dd>
-                        <dt class="col-6">{{ translate('Coupon Discount') }}:</dt>
+                        {{-- <dt class="col-6">{{ translate('Coupon Discount') }}:</dt>
                         <dd class="col-6">
-                            - {{ Helpers::set_symbol($order['coupon_discount_amount']) }}</dd>
+                            - {{ Helpers::set_symbol($order['coupon_discount_amount']) }}</dd> --}}
                         @if($order['order_type'] == 'pos')
                             <dt class="col-6">{{translate('extra Discount')}}:</dt>
                             <dd class="col-6">
@@ -159,6 +161,7 @@
 
                         <dt class="col-6 font-20px">{{ translate('Total') }}:</dt>
                         <dd class="col-6 font-20px">{{ Helpers::set_symbol($sub_total+$del_c+$updated_total_tax-$order['coupon_discount_amount']-$order['extra_discount']) }}</dd>
+                        @if($totalSaving >0)<dt class="col-6 font-16px">Your saving {{Helpers::set_symbol($totalSaving)}}</dt>@endif
                     </dl>
                     <span class="initial-38-5">---------------------------------------------------------------------------------</span>
                     <h5 class="text-center pt-1">

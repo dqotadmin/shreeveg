@@ -50,7 +50,7 @@ class POSController extends Controller
         private Store $store,
         private StoreProduct $store_products,
         private WarehouseProduct $warehouse_products,
-        
+
     ) {
     }
 
@@ -102,10 +102,11 @@ class POSController extends Controller
     {
         $product = $this->product->findOrFail($request->product_id);
         $discount = self::discount_calculation($product, $product['price']);
+        $offers =  Helpers::getWhProductOffers($request->product_id);
 
         return response()->json([
             'success' => 1,
-            'view' => view('admin-views.pos._quick-view-data', compact('product', 'discount'))->render(),
+            'view' => view('admin-views.pos._quick-view-data', compact('product', 'discount', 'offers'))->render(),
         ]);
     }
 
@@ -113,15 +114,16 @@ class POSController extends Controller
      * @param Request $request
      * @return array
      */
-    public static function calculateDynamicPrice($whProductId,$reqQty){
-        
+    public static function calculateDynamicPrice($whProductId, $reqQty)
+    {
+
         $product =  \App\Model\WarehouseProduct::find($whProductId);
         $product_details =   json_decode($product->product_details, true);
-        
+
         $count = count($product_details); //3
         $price = $product->customer_price;
-    
-        foreach ($product_details as $key=>$detail) {
+
+        foreach ($product_details as $key => $detail) {
             $quantity[] = $detail['quantity'];
         }
         $allQuantity =  $quantity;
@@ -136,22 +138,21 @@ class POSController extends Controller
             }
         }
 
-        if($reqQty >=  max($allQuantity)){
-            $lastPrice = ($product_details[count($product_details)-1]['offer_price']);
-            $lastQty = ($product_details[count($product_details)-1]['quantity']);
-            $avgPrice = $lastPrice/ $lastQty;
-            $price = $avgPrice ;
-
+        if ($reqQty >=  max($allQuantity)) {
+            $lastPrice = ($product_details[count($product_details) - 1]['offer_price']);
+            $lastQty = ($product_details[count($product_details) - 1]['quantity']);
+            $avgPrice = $lastPrice / $lastQty;
+            $price = $avgPrice;
         }
         return $price;
     }
     public function variant_price(Request $request): array
     {
-        $price = $this->calculateDynamicPrice($request->id,$request->quantity);
+        $price = $this->calculateDynamicPrice($request->id, $request->quantity);
         return array('price' => Helpers::set_symbol($price  * $request->quantity));
-        
+
         //return array('price' => Helpers::set_symbol(number_format($price * $request->quantity,2,'.','')));
-        
+
     }
     /**
      * @param $product
@@ -339,7 +340,7 @@ class POSController extends Controller
         //     $price = $product->customer_price;
         // }
 
-        $price = $this->calculateDynamicPrice($request->id,$request['quantity']);
+        $price = $this->calculateDynamicPrice($request->id, $request['quantity']);
 
         $tax_on_product = Helpers::tax_calculate($product, $price);
 
@@ -419,8 +420,7 @@ class POSController extends Controller
         } elseif (in_array($authUser->admin_role_id, [3, 4])) {
             $warehouse_id = $authUser->warehouse_id;
             $query = $query->where('warehouse_id', $authUser->warehouse_id);
-            
-        }elseif (in_array($authUser->admin_role_id, [7])) {
+        } elseif (in_array($authUser->admin_role_id, [7])) {
             $store_sales_person_id = $authUser->id;
             $query = $query->where('store_sales_person_id', $authUser->id);
         }
@@ -543,7 +543,6 @@ class POSController extends Controller
             $order->store_id = $authUser->store_id;
             $order->store_sales_person_id = $authUser->id;
             $order->warehouse_id = @$authUser->store->warehouse_id;
-
         }
 
         $order->coupon_code = $request->coupon_code ?? null;
@@ -838,11 +837,11 @@ class POSController extends Controller
     {
         $query = $this->product;
         $authUser = auth('admin')->user();
-        if($authUser->admin_role_id == 3){
-            $assign_categories =  $this->warehouse_categories->where('warehouse_id',$authUser->warehouse_id)->pluck('category_id')->toArray();
-            $query = $query->whereIn('category_id',$assign_categories);
+        if ($authUser->admin_role_id == 3) {
+            $assign_categories =  $this->warehouse_categories->where('warehouse_id', $authUser->warehouse_id)->pluck('category_id')->toArray();
+            $query = $query->whereIn('category_id', $assign_categories);
         }
-      
+
         $query_param = [];
         $search = $request['search'];
         if ($request->has('search') && $search) {
@@ -858,24 +857,25 @@ class POSController extends Controller
 
         $products = $query->latest()->with('category')->paginate(Helpers::getPagination())->appends($query_param);
 
-        return view('admin-views.pos.stocks.stock', compact('products','search'));
+        return view('admin-views.pos.stocks.stock', compact('products', 'search'));
     }
 
 
-    public function fetch_store_stock($store_id)  {
-         $data =  $this->store_products->where('store_id',$store_id)->with(['product','product.unit'])->get();
-                // Decode JSON data to an associative array
-                return response()->json([
-                    'data'=>$data
-                ]); 
+    public function fetch_store_stock($store_id)
+    {
+        $data =  $this->store_products->where('store_id', $store_id)->with(['product', 'product.unit'])->get();
+        // Decode JSON data to an associative array
+        return response()->json([
+            'data' => $data
+        ]);
     }
 
-    public function prices_wareohuse_stock($warehouse_id)  {
-        $data =  $this->warehouse_products->where('warehouse_id',$warehouse_id)->with('productDetail')->get();
-               // Decode JSON data to an associative array
-               return response()->json([
-                   'data'=>$data
-               ]); 
-   }
-    
+    public function prices_wareohuse_stock($warehouse_id)
+    {
+        $data =  $this->warehouse_products->where('warehouse_id', $warehouse_id)->with('productDetail')->get();
+        // Decode JSON data to an associative array
+        return response()->json([
+            'data' => $data
+        ]);
+    }
 }

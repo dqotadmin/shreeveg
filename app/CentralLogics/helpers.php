@@ -8,6 +8,8 @@ use App\Model\Currency;
 use App\Model\DMReview;
 use App\Model\Order;
 use App\Model\Review;
+use App\Model\FlashDeal;
+use App\Model\FlashDealProduct;
 use App\Model\WarehouseProduct;
 use App\User;
 use Exception;
@@ -27,19 +29,46 @@ class Helpers
             $authUser = auth('admin')->user();
             if (in_array($authUser->admin_role_id, [6, 7])) {
                 $warehouseId = $authUser->Store->warehouse_id;
-            } elseif (in_array($authUser->admin_role_id, [3, 4,5])) {
+            } elseif (in_array($authUser->admin_role_id, [3, 4, 5])) {
                 $warehouseId = $authUser->warehouse_id;
             }
-        }//dd($product_id, $warehouseId);
+        } //dd($product_id, $warehouseId);
         return WarehouseProduct::where(['warehouse_id' => $warehouseId, 'product_id' => $product_id])->first();
     }
+
+
     public static function avgprice($product_id, $orderId)
     {
-        $data =  \App\Model\PurchaseWarehouseOrderDetail::whereIn('purchase_warehouse_order_id',$orderId)->where('product_id' , $product_id)->get();
-      
+        $data =  \App\Model\PurchaseWarehouseOrderDetail::whereIn('purchase_warehouse_order_id', $orderId)->where('product_id', $product_id)->get();
+
         return $data;
     }
 
+    public static function getWhProductOffers($product_id, $warehouseId = false)
+    {
+
+        if (!$warehouseId) {
+            $authUser = auth('admin')->user();
+            if (in_array($authUser->admin_role_id, [6, 7])) {
+                $warehouseId = $authUser->Store->warehouse_id;
+            } elseif (in_array($authUser->admin_role_id, [3, 4, 5])) {
+                $warehouseId = $authUser->warehouse_id;
+            }
+        }
+
+        $products = FlashDeal::query()->whereJsonContains('warehouse_id', $warehouseId)->active()->whereHas('products', function ($qu) use ($product_id) {
+            $qu->where('product_id', $product_id);
+        })->orderBy('title', 'asc')->get();
+        //$products = FlashDeal::query()->whereJsonContains('warehouse_id', $warehouseId)->get();
+        //dd(($products), $warehouseId);
+        return  $products;
+    }
+
+    public static function getWhProductOfferQty($product_id, $deal_id)
+    {
+
+        return FlashDealProduct::query()->where('product_id', $product_id)->where('flash_deal_id', $deal_id)->first()->quantity;
+    }
 
     public static function error_processor($validator)
     {

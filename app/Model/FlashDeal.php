@@ -30,9 +30,13 @@ class FlashDeal extends Model
         return $this->hasMany(FlashDealProduct::class, 'flash_deal_id');
     }
 
-    public function scopeActive($query)
+    public function scopeActiveOld($query)
     {
         return $query->where(['status' => 1])->whereDate('start_date', '<=', date('Y-m-d'))->whereDate('end_date', '>=', date('Y-m-d'));
     }
 
+    public function scopeActive($query)
+    {
+        return $query->where(['status' => 1])->where('start_date', '<=', date('Y-m-d h:i:s'))->where('end_date', '>=', date('Y-m-d h:i:s'));
+    }
 }

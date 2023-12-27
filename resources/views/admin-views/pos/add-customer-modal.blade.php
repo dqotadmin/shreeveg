@@ -33,7 +33,7 @@
                         </div>
                         <div class="col-12 col-lg-6">
                             <div class="form-group">
-                                <label class="input-label">{{ translate('Phone (With country code)') }}<span class="input-label-secondary text-danger">*</span></label>
+                                <label class="input-label">{{ translate('Phone') }}<span class="input-label-secondary text-danger">*</span></label>
                                 <input type="text" name="phone" class="form-control" value="" placeholder="{{ translate('Phone') }}" required="">
                             </div>
                         </div>

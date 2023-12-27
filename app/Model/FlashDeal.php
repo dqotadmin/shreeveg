@@ -37,6 +37,6 @@ class FlashDeal extends Model
 
     public function scopeActive($query)
     {
-        return $query->where(['status' => 1])->where('start_date', '<=', date('Y-m-d h:i:s'))->where('end_date', '>=', date('Y-m-d h:i:s'));
+        return $query->where(['status' => 1])->where('start_date', '<=', date('Y-m-d H:i:s'))->where('end_date', '>=', date('Y-m-d H:i:s'));
     }
 }

@@ -102,7 +102,7 @@
                         </div>
                         <div class="col-12">
                             <div class="btn--container justify-content-end">
-                                <button type="reset" class="btn btn--reset">{{translate('reset')}}</button>
+                                <a type="button" href="{{route('admin.offer.flash.index')}}" class="btn btn--reset">{{translate('back')}}</a>
                                 <button type="submit" class="btn btn--primary">{{translate('submit')}}</button>
                             </div>
                         </div>

@@ -55,8 +55,8 @@ class Helpers
                 $warehouseId = $authUser->warehouse_id;
             }
         }
-
-        $products = FlashDeal::query()->whereJsonContains('warehouse_id', $warehouseId)->active()->whereHas('products', function ($qu) use ($product_id) {
+        // product is  FlashDealProduct
+        $products = FlashDeal::query()->whereJsonContains('warehouse_id', $warehouseId)->active()->whereHas('products', function ($qu) use ($product_id) { 
             $qu->where('product_id', $product_id);
         })->orderBy('title', 'asc')->get();
         //$products = FlashDeal::query()->whereJsonContains('warehouse_id', $warehouseId)->get();

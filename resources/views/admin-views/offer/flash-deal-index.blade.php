@@ -180,6 +180,7 @@
                         </td>
                         <td>
                             <label class="toggle-switch my-0">
+                            @if(!(\Carbon\Carbon::parse($flash_deal['end_date'])->endOfDay()->isPast()))
                                 <input type="checkbox"
                                     onclick="status_change_alert('{{ route('admin.offer.flash.status', [$flash_deal->id, $flash_deal->status ? 0 : 1]) }}', '{{ $flash_deal->status? translate('you_want_to_disable_this_deal'): translate('you_want_to_active_this_deal') }}', event)"
                                     class="toggle-switch-input" id="stocksCheckbox{{ $flash_deal->id }}"
@@ -188,6 +189,8 @@
                                     <span class="toggle-switch-indicator"></span>
                                 </span>
                             </label>
+                            @endif
+
                         </td>
                         <td class="text-center">{{ $flash_deal->products_count }}</td>
                         <td>

@@ -50,6 +50,7 @@
                             </div>
                             <div class="d-flex justify-content-end">
                                 <div class="btn--container justify-content-end">
+                                <a type="button" href="{{route('admin.offer.flash.index')}}" class="btn btn--reset">{{translate('back')}}</a>
                                     <button type="submit" class="btn btn--primary">{{translate('submit')}}</button>
                                 </div>
                             </div>

@@ -840,13 +840,13 @@
                                 </a>
                             </li>
 
-                            <li class="navbar-vertical-aside-has-menu {{Request::is('admin/discount*')?'active':''}}">
+                            <!-- <li class="navbar-vertical-aside-has-menu {{Request::is('admin/discount*')?'active':''}}">
                                 <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{route('admin.discount.add-new')}}"
                                    title="{{translate('category_discount')}}">
                                     <i class="tio-layers-outlined nav-icon"></i>
                                     <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('category_discount')}}</span>
                                 </a>
-                            </li>
+                            </li> -->
                       
                         @endif
 

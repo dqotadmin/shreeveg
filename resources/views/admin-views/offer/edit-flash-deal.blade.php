@@ -47,22 +47,25 @@
                                 <div class="form-group mb-0">
                                     <label class="input-label"
                                         for="exampleFormControlInput1">{{translate('description')}}</label>
-                                    <input type="text" name="description" value="{{old('description')}}" class="form-control" value="{{$flash_deal['description']}}"
+                                    <input type="text" name="description"  class="form-control" value="{{$flash_deal['description']}}"
                                         placeholder="{{ translate('enter description') }}" maxlength="255" required>
                                 </div>
                             </div>
                                 <div class="col-12">
                                     <div class="form-group mb-0">
                                         <label for="name" class="title-color font-weight-medium text-capitalize">{{ translate('start_date')}}</label>
-                                        <input type="date" name="start_date" value="{{date('Y-m-d',strtotime($flash_deal['start_date']))}}" required id="start_date"
-                                               class="js-flatpickr form-control flatpickr-custom" placeholder="{{ \App\CentralLogics\translate('dd/mm/yy') }}" data-hs-flatpickr-options='{ "dateFormat": "Y/m/d", "minDate": "today" }'>
+                                        <input type="datetime-local" name="start_date" required id="start_date" 
+                                        class=" form-control flatpickr-custom"  
+                                      value="{{ date('Y-m-d\TH:i', strtotime($flash_deal['start_date'])) }}">
+                                            
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-group mb-0">
                                         <label for="name" class="title-color font-weight-medium text-capitalize">{{ translate('end_date')}}</label>
-                                        <input type="date" name="end_date" value="{{date('Y-m-d', strtotime($flash_deal['end_date']))}}" required id="end_date"
-                                               class="js-flatpickr form-control flatpickr-custom" placeholder="{{ \App\CentralLogics\translate('dd/mm/yy') }}" data-hs-flatpickr-options='{ "dateFormat": "Y/m/d", "minDate": "today" }'>
+                                        <input type="datetime-local" name="end_date"   required id="end_date"  min="<?=date('Y-m-d\Th:i')?>"
+                                               class=" form-control flatpickr-custom"   
+                                               value="{{ date('Y-m-d\TH:i', strtotime($flash_deal['end_date'])) }}">
                                     </div>
                                 </div>
                          
@@ -99,7 +102,7 @@
                         </div>
                         <div class="col-12">
                             <div class="btn--container justify-content-end">
-                                <button type="reset" class="btn btn--reset">{{translate('reset')}}</button>
+                                <a type="button" href="{{route('admin.offer.flash.index')}}" class="btn btn--reset">{{translate('back')}}</a>
                                 <button type="submit" class="btn btn--primary">{{translate('submit')}}</button>
                             </div>
                         </div>
@@ -122,20 +125,20 @@
             });
         });
 
-        $('#start_date,#end_date').change(function () {
-            let fr = $('#start_date').val();
-            let to = $('#end_date').val();
-            if (fr != '' && to != '') {
-                if (fr > to) {
-                    $('#start_date').val('');
-                    $('#end_date').val('');
-                    toastr.error('Invalid date range!', Error, {
-                        CloseButton: true,
-                        ProgressBar: true
-                    });
-                }
-            }
-        });
+        // $('#start_date,#end_date').change(function () {
+        //     let fr = $('#start_date').val();
+        //     let to = $('#end_date').val();
+        //     if (fr != '' && to != '') {
+        //         if (fr > to) {
+        //             $('#start_date').val('');
+        //             $('#end_date').val('');
+        //             toastr.error('Invalid date range!', Error, {
+        //                 CloseButton: true,
+        //                 ProgressBar: true
+        //             });
+        //         }
+        //     }
+        // });
 
         function readURL(input) {
             if (input.files && input.files[0]) {

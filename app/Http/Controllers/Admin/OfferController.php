@@ -102,7 +102,7 @@ class OfferController extends Controller
      */
     public function status(Request $request): \Illuminate\Http\RedirectResponse
     {
-        $this->flash_deal->where(['status' => 1])->update(['status' => 0]);
+        // $this->flash_deal->where(['status' => 1])->update(['status' => 0]);
         $flash_deal = $this->flash_deal->find($request->id);
         $flash_deal->status = $request->status;
         $flash_deal->save();
@@ -160,6 +160,12 @@ class OfferController extends Controller
         ]);
 
         $flash_deal = $this->flash_deal->find($flash_deal_id);
+           $warehouse = [];
+        $warehouse = $request->warehouse_id;
+        $flash_deal->warehouse_id = $warehouse;
+        $flash_deal->description = $request->description;
+        $flash_deal->discount_type = $request->discount_type;
+        $flash_deal->discount_amount = $request->discount_amount;
         $flash_deal->title = $request->title;
         $flash_deal->start_date = $request->start_date;
         $flash_deal->end_date = $request->end_date;

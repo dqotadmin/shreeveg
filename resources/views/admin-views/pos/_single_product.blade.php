@@ -1,4 +1,8 @@
-<div class="product-card card" onclick="quickView('{{$product->id}}')">
+<div class="product-card card wrapper" onclick="quickView('{{$product->id}}')">
+    <?php $offers = Helpers::getWhProductOffers($product->id); ?>
+    @if(count($offers )> 0)
+    <div class="ribbon-wrapper-green"><div class="ribbon-green">{{count($offers )}} Offer</div></div>
+    @endif
     <?php
     //dd( $product);
         $category_id = $product['category_id']; 
@@ -24,15 +28,19 @@
             <img src="{{asset('public/assets/admin/img/160x160/2.png')}}" class="w-100 h-100 object-cover aspect-ratio-80">
         @endif
     </div>
-
+    @php($whProduct =  Helpers::warehouseProductData($product['id']))
     <div class="card-body inline_product text-center p-1 clickable">
         <div class="product-title1 text-dark font-weight-bold">
             {{ Str::limit(@$product['name'], 12) }}
+            @if(@$whProduct->discount_upto > 0)
+            <div class="off_bg">
+                Up to {{$whProduct->discount_upto}}% Off
+            </div>
+            @endif
         </div>
         <div class="justify-content-between text-center">
             <div class="product-price text-center">
-                @php($whProduct =  Helpers::warehouseProductData($product['id']))
-               
+                
                 {{ Helpers::set_symbol(@$whProduct->customer_price - $discount) }} / {{ @$whProduct->unit->title }}
             </div>
         </div>

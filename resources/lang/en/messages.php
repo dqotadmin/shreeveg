@@ -2572,4 +2572,7 @@
   'offers' => 'Offers',
   'enter description' => 'Enter description',
   'Offer Discount' => 'Offer Discount',
+  'Select Offer Type' => 'Select Offer Type',
+  '1 Kg' => '1 Kg',
+  'Other' => 'Other',
 );

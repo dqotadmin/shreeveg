@@ -24,6 +24,22 @@
         <div class="card-body">
             <form action="{{route('admin.offer.flash.store')}}" method="post" enctype="multipart/form-data">
                 @csrf
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="form-label">{{ translate('Select Offer Type') }}</label>
+
+                        <div class="d-flex flex-wrap align-items-center form-control border">
+                            <label class="form-check form--check mr-2 mr-md-4 mb-0">
+                                <input type="radio" class="form-check-input offer_type" name="offer_type"  value="one_kg"  > 
+                                <span class="form-check-label"> {{ translate('1 Kg') }}</span>
+                            </label>
+                            <label class="form-check form--check mb-0">
+                                <input type="radio" class="form-check-input offer_type" name="offer_type"  value="other" checked>
+                                <span class="form-check-label"> {{ translate('Other') }}</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
                 <div class="row g-3">
                     <div class="col-md-6">
                         <div class="row g-3">
@@ -31,7 +47,7 @@
                                 <div class="form-group mb-0">
                                     <label class="input-label" for="exampleFormControlInput1">{{translate('warehouse')}}</label>
                                     <select name="warehouse_id[]" id="" class="form-control chosen-select" multiple>
-                                        <option value="" selected disabled>Please Select Warehouse</option>
+                                       
                                         @foreach(\App\Model\Warehouse::where('deleted_at',null)->get() as $warehouse)
                                         <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
                                         @endforeach
@@ -72,20 +88,21 @@
                                         data-hs-flatpickr-options=' '>
                                 </div>
                             </div>
-                            <div class="col-6">
+                            <div class="col-6 manageType">
                             <div class="form-group mb-0">
                                 <label class="input-label" for="exampleFormControlSelect1">{{translate('discount')}} {{translate('type')}}<span
                                         class="input-label-secondary">*</span></label>
-                                <select name="discount_type" class="form-control" onchange="show_item(this.value)">
+                                        {{-- <select name="discount_type" class="form-control" onchange="show_item(this.value)"> --}}
+                                <select name="discount_type" class="form-control" >
                                     <option value="percent">{{translate('percent')}}</option>
                                     <option value="amount">{{translate('amount')}}</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-6 manageType">
                             <div class="form-group mb-0">
                                 <label class="input-label" for="exampleFormControlInput1">{{translate('discount_amount')}}</label>
-                                <input type="number" step="0.1" name="discount_amount" value="{{old('discount_amount')}}" class="form-control" placeholder="{{ translate('discount_amount') }}" required>
+                                <input type="number"  name="discount_amount" value="{{old('discount_amount')}}" class="form-control" placeholder="{{ translate('discount_amount') }}" required>
                             </div>
                         </div>
                         </div>
@@ -241,12 +258,21 @@
 @push('script_2')
 <script>
 $(document).on('ready', function() {
+    
     // INITIALIZATION OF FLATPICKR
     // =======================================================
     $('.js-flatpickr').each(function() {
         $.HSCore.components.HSFlatpickr.init($(this));
     });
 });
+
+$('input[type=radio][name=offer_type]').change(function() {
+        if (this.value == 'one_kg') {
+            $('.manageType').hide();
+        } else {
+            $('.manageType').show();
+        }
+    });
 
 $('#start_date,#end_date').change(function() {
     let fr = $('#start_date').val();

@@ -234,7 +234,8 @@
                                             <h6>{{ Helpers::set_symbol($detail['price'] * $detail['quantity']) }}</h6>
                                         </td>
                                         <td class="text-right">
-                                            <h6>{{ Helpers::set_symbol($detail['discount_on_product'] * $detail['quantity']) }}</h6>
+                                            {{-- <h6>{{ Helpers::set_symbol($detail['discount_on_product'] * $detail['quantity']) }}</h6> --}}
+                                            <h6>{{ Helpers::set_symbol($detail['discount_on_product'] ) }}</h6>
                                         </td>
                                         <td class="text-right">
                                             {{--@php($amount=($detail['price']-$detail['discount_on_product'])*$detail['quantity'])--}}
@@ -242,10 +243,12 @@
                                             @php($total_tax+=$detail['tax_amount']*$detail['quantity'])
                                             @php($updated_total_tax+= $detail['vat_status'] === 'included' ? 0 : $detail['tax_amount']*$detail['quantity'])
                                             @php($vat_status = $detail['vat_status'])
-                                            @php($total_item_discount += $detail['discount_on_product'] * $detail['quantity'])
+                                            {{-- @php($total_item_discount += $detail['discount_on_product'] * $detail['quantity']) --}}
+                                            @php($total_item_discount += $detail['discount_on_product'])
                                             @php($price_after_discount+=$amount-$total_item_discount)
                                             @php($sub_total+=$price_after_discount)
-                                            <h5>{{ Helpers::set_symbol(($detail['price'] * $detail['quantity']) - ($detail['discount_on_product'] * $detail['quantity'])) }}</h5>
+                                            {{-- <h5>{{ Helpers::set_symbol(($detail['price'] * $detail['quantity']) - ($detail['discount_on_product'] * $detail['quantity'])) }}</h5> --}}
+                                            <h5>{{ Helpers::set_symbol(($detail['price'] * $detail['quantity']) - ($detail['discount_on_product'] )) }}</h5>
                                         </td>
                                     </tr>
                                     @endif
@@ -272,7 +275,7 @@
                                     </dd>
                                     <dt class="col-6 text-left">
                                         <div class="ml-auto max-w-130px">
-                                            {{translate('Item Discount')}} :
+                                            {{translate('Discount')}} :
                                         </div>
                                     </dt>
                                     <dd class="col-6 col-xl-5 pr-5">

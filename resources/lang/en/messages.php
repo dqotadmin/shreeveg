@@ -2571,6 +2571,7 @@
   'offer_management' => 'Offer management',
   'offers' => 'Offers',
   'enter description' => 'Enter description',
+<<<<<<< HEAD
   'price_management' => 'Price management',
   'stock_list' => 'Stock list',
   'warehouse_purchase_orders' => 'Warehouse purchase orders',
@@ -2598,4 +2599,10 @@
   'market_price/unit' => 'Market price/unit',
   'fix(%)' => 'Fix(%)',
   'admin_rate' => 'Admin rate',
+=======
+  'Offer Discount' => 'Offer Discount',
+  'Select Offer Type' => 'Select Offer Type',
+  '1 Kg' => '1 Kg',
+  'Other' => 'Other',
+>>>>>>> 9b40469b57a4f94d7e0202d68acbdcf7f1674b1f
 );

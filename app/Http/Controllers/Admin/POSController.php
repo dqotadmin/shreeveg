@@ -149,7 +149,10 @@ class POSController extends Controller
     public function variant_price(Request $request): array
     {
         $price = $this->calculateDynamicPrice($request->id, $request->quantity);
-        return array('price' => Helpers::set_symbol($price  * $request->quantity));
+        $newPrice = ($price  * $request->quantity);
+        $offerDiscount = $this->offerDiscountCal($request->product_id, $request['quantity'], $newPrice);
+        return array('price' => Helpers::set_symbol($offerDiscount['updatedPrice']), 'offer_discount' => $offerDiscount['offerDiscount']);
+        // return array('price' => Helpers::set_symbol($newPrice), 'offer_discount' => $offerDiscount['offerDiscount']);
 
         //return array('price' => Helpers::set_symbol(number_format($price * $request->quantity,2,'.','')));
 
@@ -178,10 +181,7 @@ class POSController extends Controller
         return $discount;
     }
 
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     */
+
     public function get_customers(Request $request): \Illuminate\Http\JsonResponse
     {
         $key = explode(' ', $request['q']);
@@ -204,10 +204,7 @@ class POSController extends Controller
         return response()->json($data);
     }
 
-    /**
-     * @param Request $request
-     * @return RedirectResponse
-     */
+
     public function update_tax(Request $request): \Illuminate\Http\RedirectResponse
     {
         if ($request->tax < 0) {
@@ -224,12 +221,7 @@ class POSController extends Controller
         return back();
     }
 
-    /**
-     * @param Request $request
-     * @return RedirectResponse
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
+
     public function update_discount(Request $request): \Illuminate\Http\RedirectResponse
     {
         $total = session()->get('total');
@@ -255,10 +247,7 @@ class POSController extends Controller
         return back();
     }
 
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     */
+
     public function updateQuantity(Request $request): \Illuminate\Http\JsonResponse
     {
         $cart = $request->session()->get('cart', collect([]));
@@ -272,10 +261,7 @@ class POSController extends Controller
         return response()->json([], 200);
     }
 
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     */
+
     public function addToCart(Request $request): \Illuminate\Http\JsonResponse
     {
         // dd($request->all());
@@ -341,15 +327,19 @@ class POSController extends Controller
         // }
 
         $price = $this->calculateDynamicPrice($request->id, $request['quantity']);
-
+        $newPrice =  $price * $request['quantity'];
+        $offerDiscount = $this->offerDiscountCal($request->product_id, $request['quantity'], $newPrice);
+        // dd($price, $offerDiscount);
         $tax_on_product = Helpers::tax_calculate($product, $price);
 
         $discount = self::discount_calculation($product, $price);
 
         $data['quantity'] = $request['quantity'];
+        $data['with_offer_price'] =  $offerDiscount['updatedPrice'];
         $data['price'] = $price;
         $data['name'] = $product->productDetail->name;
         $data['discount'] = $discount;
+        $data['offer_discount'] = $offerDiscount['offerDiscount'];
         $data['image'] = $product->productDetail->image;
         if ($request->session()->has('cart')) {
             $cart = $request->session()->get('cart', collect([]));
@@ -365,9 +355,27 @@ class POSController extends Controller
         ]);
     }
 
-    /**
-     * @return Factory|View|Application
-     */
+    public function offerDiscountCal($productId, $qty, $currentPrice)
+    {
+        $offers =  Helpers::getWhProductOffers($productId);
+        $price_discount = 0;
+        if (count($offers) > 0) {
+            foreach ($offers as $key => $offer) {
+                $offerQty =  Helpers::getWhProductOfferQty($productId, $offer->id);
+                if ($qty >= $offerQty) {
+                    if ($offer['discount_type'] == 'percent') {
+                        $price_discount += ($currentPrice / 100) * $offer['discount_amount'];
+                    } else {
+                        $price_discount += $offer['discount_amount'];
+                    }
+                }
+            }
+        }
+        $data['offerDiscount'] = round($price_discount, 2);
+        $data['updatedPrice'] = max(round($currentPrice - $price_discount, 2), 0);
+
+        return $data;
+    }
     public function cart_items(): View|Factory|Application
     {
         return view('admin-views.pos._cart');
@@ -585,7 +593,9 @@ class POSController extends Controller
             if (is_array($c)) {
 
                 $discount_on_product = 0;
-                $product_subtotal = ($c['price']) * $c['quantity'];
+                //$product_subtotal = ($c['price']) * $c['quantity'];
+                $product_subtotal_mkk = ($c['price']) * $c['quantity'];
+                $product_subtotal = $c['with_offer_price'] > 0 ? $c['with_offer_price'] : $product_subtotal_mkk;
                 $discount_on_product += ($c['discount'] * $c['quantity']);
 
                 $product = \App\Model\WarehouseProduct::find($c['id']);
@@ -606,13 +616,17 @@ class POSController extends Controller
 
                     $category_discount = Helpers::category_discount_calculate($category_id, $price);
                     $product_discount = Helpers::discount_calculate($product, $price);
-
-                    if ($category_discount >= $price) {
-                        $discount = $product_discount;
-                        $discount_type = 'discount_on_product';
+                    if ($c['offer_discount'] > 0) {
+                        $discount = $c['offer_discount'];
+                        $discount_type = 'offer_discount_on_product';
                     } else {
-                        $discount = max($category_discount, $product_discount);
-                        $discount_type = $product_discount > $category_discount ? 'discount_on_product' : 'discount_on_category';
+                        if ($category_discount >= $price) {
+                            $discount = $product_discount;
+                            $discount_type = 'discount_on_product';
+                        } else {
+                            $discount = max($category_discount, $product_discount);
+                            $discount_type = $product_discount > $category_discount ? 'discount_on_product' : 'discount_on_category';
+                        }
                     }
                     // dump($product);
                     $product = Helpers::product_data_formatting($product);

@@ -256,6 +256,12 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::post('search', 'UnitController@search')->name('search');
         });
 
+        Route::group(['prefix' => 'rate_list', 'as' => 'rate_list.', 'middleware' => ['module:product_management']], function () {
+            Route::get('index', 'RateListController@index')->name('index');
+            Route::get('get-product-by-cat/{cat_id}', 'RateListController@get_product_by_cat')->name('get-product-by-cat');
+            
+        });
+
         Route::group(['prefix' => 'city', 'as' => 'city.', 'middleware' => ['module:location_management']], function () {
             Route::get('list', 'CityController@index')->name('list');
             Route::get('create', 'CityController@create')->name('create');

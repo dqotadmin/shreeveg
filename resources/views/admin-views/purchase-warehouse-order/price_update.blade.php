@@ -1,5 +1,5 @@
 @extends('layouts.admin.app')
-@section('title', translate('order detail'))
+@section('title', translate('price_management'))
 @push('css_or_js')
 @endpush
 @section('content')
@@ -17,7 +17,7 @@ use App\Model\PurchaseWarehouseOrder;
             <img src="{{asset('public/assets/admin/img/category.png')}}" class="w--24" alt="">
             </span>
             <span>
-            {{translate('order detail')}}
+            {{translate('price_management')}}
 
             </span>
         </h1>

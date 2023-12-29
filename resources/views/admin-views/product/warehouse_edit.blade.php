@@ -1,5 +1,5 @@
 @extends('layouts.admin.app')
-@section('title', translate('Update Price product'))
+@section('title', translate('update_product_price'))
 @push('css_or_js')
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <link href="{{asset('public/assets/admin/css/tags-input.min.css')}}" rel="stylesheet">
@@ -259,6 +259,7 @@
                                 <th> {{translate('market_price')}} <span  class="price">{{@$warehouse_products->customer_price}}</span> </th>
                                 <th> {{translate('discount')}}({{translate('%')}})</th>
                                 <th> {{translate('offer_price')}}</th>
+                                <th> {{translate('avg_price')}}(1 {{@$product->unit->title}})</th>
                                 <th>{{translate('Approx Piece/Weight')}}</th>
                                 <th>{{translate('Short Title')}}</th>
                                 <th> <button type="button" id="add-delivery-pair"  class="btn btn-outline-success">Add  More</button> 
@@ -276,8 +277,10 @@
                                     <input name="discount[]" function value="{{@$product_details_array[$i]['discount']}}" class="form-control input-delivery-pai discount" placeholder="{{ translate('Ex : 1%') }}" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" >
                                 </td>
                                 <td>
-                                    <input name="offer_price[]"   value="{{@$product_details_array[$i]['offer_price']}}"  class="form-control input-delivery-pair" id="offer_price" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
-                                        >
+                                    <input name="offer_price[]"   value="{{@$product_details_array[$i]['offer_price']}}"  class="form-control input-delivery-pair" id="offer_price" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"   >
+                                </td>
+                                <td>
+                                    <input name="avg_price[]"   value="{{@$product_details_array[$i]['avg_price']}}"  class="form-control input-delivery-pair" id="avg_price" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" >
                                 </td>
                                 <td> <input name="approx_piece[]"   class="form-control input-delivery-pair" value="{{@$product_details_array[$i]['approx_piece']}}"
                                     placeholder="{{ translate('Ex : 1 pieces') }}" >
@@ -301,6 +304,9 @@
                                 <td> 
                                     <input name="offer_price[]"   value="{{@$product_details_array[$i]['offer_price']}}"  class="form-control input-delivery-pair" id="offer_price" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
                                         >
+                                </td>
+                                <td>
+                                    <input name="avg_price[]"   value="{{@$product_details_array[$i]['avg_price']}}"  class="form-control input-delivery-pair" id="avg_price" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" >
                                 </td>
                                 <td> 
                                     <input name="approx_piece[]"   class="form-control input-delivery-pair" value="{{@$product_details_array[$i]['approx_piece']}}"
@@ -372,21 +378,25 @@
             // Find the discount input within the same row
             var marketPriceInput = row.find('input[name="discount[]"]'); //assign value empty
             var offerPriceInput = row.find('input[name="offer_price[]"]');
+            var avgrPriceInput = row.find('input[name="avg_price[]"]');
             var quantity = row.find('input[name="quantity[]"]');
             var marketPriceInput = row.find('input[name="market_price[]"]');
          
             marketPriceInput.val('');
             offerPriceInput.val('');
+            avgrPriceInput.val('');
             marketPriceInput.val(marketPrice.toFixed(2));
         }else{
             var row = $(this).closest('tr');
             // Find the discount input within the same row
             var marketPriceInput = row.find('input[name="discount[]"]'); //assign value empty
             var offerPriceInput = row.find('input[name="offer_price[]"]');
+            var offerPriceInput = row.find('input[name="avg_price[]"]');
             var quantity = row.find('input[name="quantity[]"]');
             var marketPriceInput = row.find('input[name="market_price[]"]');
             console.log(quantity);
             marketPriceInput.val('');
+            avgrPriceInput.val('');
             offerPriceInput.val('');
             marketPriceInput.val(marketPrice.toFixed(2));
         }
@@ -398,7 +408,8 @@
     
         // Find the market price input within the same row
         var marketPriceInput = row.find('input[name="market_price[]"]');
-    
+        var quantityInput = row.find('input[name="quantity[]"]');
+        quantity =  quantityInput.val();
         // Get the market price value
         var marketPrice = parseFloat(marketPriceInput.val());
         
@@ -406,12 +417,15 @@
         if (!isNaN(marketPrice)) {
             // Calculate offer price
             var offerPrice = marketPrice - (marketPrice * discount / 100);
+            var avgPrice = offerPrice/quantity;
     
             // Find the offer price input within the same row
             var offerPriceInput = row.find('input[name="offer_price[]"]');
+            var avgrPriceInput = row.find('input[name="avg_price[]"]');
     
             // Set the offer price value
             offerPriceInput.val(offerPrice.toFixed(2));
+            avgrPriceInput.val(avgPrice.toFixed(2));
     
             
         }

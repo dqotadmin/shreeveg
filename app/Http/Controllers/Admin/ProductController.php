@@ -433,7 +433,6 @@ class ProductController extends Controller
 
     public function warehouse_rate_insertupdate(Request $request, $id): \Illuminate\Http\JsonResponse
     {
-
         Validator::make($request->all(), [
             'quantity' => 'required',
             'store_price' => 'required',
@@ -460,6 +459,9 @@ class ProductController extends Controller
                 }
                 if (isset($request->discount[$key])) {
                     $product_details[$key]['discount'] = $request->discount[$key];
+                }
+                if (isset($request->avg_price[$key])) {
+                    $product_details[$key]['avg_price'] = $request->avg_price[$key];
                 }
                 // if(isset($request->unit_id[$key])){
                 //     $product_details[$key]['unit_id'] = $request->unit_id[$key];

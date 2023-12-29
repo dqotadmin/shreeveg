@@ -44,7 +44,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label for="name" class="title-color text-capitalize">{{ translate('quantity')}}</label>
-                                        <input type="text" class="form-control" name="quantity">
+                                        <input type="text" class="form-control" name="quantity" required>
                                     </div>
                                 </div>
                             </div>

@@ -363,10 +363,15 @@ class POSController extends Controller
             foreach ($offers as $key => $offer) {
                 $offerQty =  Helpers::getWhProductOfferQty($productId, $offer->id);
                 if ($qty >= $offerQty) {
-                    if ($offer['discount_type'] == 'percent') {
-                        $price_discount += ($currentPrice / 100) * $offer['discount_amount'];
+                    if ($offer['offer_type'] == 'one_rupee') {
+                        $getPrice = round(($currentPrice / $qty), 2);
+                        $price_discount += $getPrice - 1;
                     } else {
-                        $price_discount += $offer['discount_amount'];
+                        if ($offer['discount_type'] == 'percent') {
+                            $price_discount += ($currentPrice / 100) * $offer['discount_amount'];
+                        } else {
+                            $price_discount += $offer['discount_amount'];
+                        }
                     }
                 }
             }
@@ -871,7 +876,7 @@ class POSController extends Controller
         $warehouse_id =  $authUser->warehouse_id;
         $products = $query->latest()->with('category')->paginate(Helpers::getPagination())->appends($query_param);
 
-        return view('admin-views.pos.stocks.stock', compact('products', 'search','warehouse_id'));
+        return view('admin-views.pos.stocks.stock', compact('products', 'search', 'warehouse_id'));
     }
 
 

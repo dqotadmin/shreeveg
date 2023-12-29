@@ -26,8 +26,8 @@
                     @csrf
                     <div class="d-flex flex-wrap align-items-center form-control border">
                         <label class="form-check form--check mr-2 mr-md-4 mb-0">
-                            <input type="radio" class="form-check-input offer_type" name="offer_type"  value="one_kg" {{$flash_deal['offer_type'] == 'one_kg'?'checked':''}} > 
-                            <span class="form-check-label"> {{ translate('1 Kg') }}</span>
+                            <input type="radio" class="form-check-input offer_type" name="offer_type"  value="one_rupee" {{$flash_deal['offer_type'] == 'one_rupee'?'checked':''}} > 
+                            <span class="form-check-label"> {{ Helpers::set_symbol(1) }}</span>
                         </label>
                         <label class="form-check form--check mb-0">
                             <input type="radio" class="form-check-input offer_type" name="offer_type"  value="other" {{$flash_deal['offer_type'] == 'other'?'checked':''}} >
@@ -129,7 +129,7 @@
 
         $(document).on('ready', function () {
             var offerType = "{{$flash_deal['offer_type']}}";
-            if (offerType == 'one_kg') {
+            if (offerType == 'one_rupee') {
                 $('.manageType').hide();
             } else {
                 $('.manageType').show();
@@ -142,7 +142,7 @@
         });
 
         $('input[type=radio][name=offer_type]').change(function() {
-        if (this.value == 'one_kg') {
+        if (this.value == 'one_rupee') {
             $('.manageType').hide();
         } else {
             $('.manageType').show();

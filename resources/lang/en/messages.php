@@ -1,4 +1,4 @@
-<?php return array(
+<?php return array (
   'attribute' => 'Attribute',
   'update' => 'Update',
   'name' => 'Name',
@@ -2575,4 +2575,6 @@
   'Select Offer Type' => 'Select Offer Type',
   '1 Kg' => '1 Kg',
   'Other' => 'Other',
+  'warehouse_purchase_orders' => 'Warehouse purchase orders',
+  '1 Rupee' => '1 Rupee',
 );

@@ -103,13 +103,18 @@
                 <div class="collapse width" id="collapseWidthOffers">
                    
                     @foreach($offers as $offer) 
-                  
+                    
                     @php($offerQty =  Helpers::getWhProductOfferQty($product->id,$offer->id))
                     <div class="discountpricing card card-body p-2 d-block mb-2 w-75"> 
                        {{ @$offer->title }} 
-                       <?php
-                        $disType = ($offer->discount_type == 'amount')?'₹':'%';
-                       $msg =  $offer->discount_amount.$disType. ' off on purchase minimun '.$offerQty .' '.$whProduct->unit->title; ?>
+                       <?php 
+                       if($offer->offer_type == 'one_rupee'){
+                            $msg =  '1 Kg in only 1₹ on purchase minimun '.$offerQty .' '.$whProduct->unit->title;
+                       }else{
+
+                            $disType = ($offer->discount_type == 'amount')?'₹':'%';
+                            $msg =  $offer->discount_amount.$disType. ' off on purchase minimun '.$offerQty .' '.$whProduct->unit->title;
+                        } ?>
                         <strong class="text-dark mx-2 d-inline-block"> {{$msg }}</strong>  
                         {{-- <span class="bg-danger discountbox px-2 py-1 rounded-sm text-white "> </span> 
                          --}}

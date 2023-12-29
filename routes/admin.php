@@ -175,7 +175,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::get('edit/{id}', 'ProductController@edit')->name('edit');
             Route::get('warehouse-edit/{id}', 'ProductController@warehouse_edit')->name('warehouse-edit');
             Route::get('get-prices-by-warehouse/{warehouse_id}/{product_id}', 'ProductController@prices_by_wareohuse')->name('get-prices-by-warehouse');
-            
+
             Route::post('update/{id}', 'ProductController@update')->name('update');
             Route::post('warehouse-rate-insertupdate/{id}', 'ProductController@warehouse_rate_insertupdate')->name('warehouse-rate-insertupdate');
 
@@ -328,7 +328,6 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::resource('purchase-store-orders', 'PurchaseStoreOrderController');
             Route::post('purchase-store-orders-update-status/{id}', 'PurchaseStoreOrderController@updateStatus')->name('updateStatus');
             Route::get('stock-update/{id}', 'PurchaseStoreOrderController@stockUpdate')->name('stock-update');
-            
         });
 
         Route::group(['prefix' => 'message', 'as' => 'message.', 'middleware' => ['module:support_management']], function () {
@@ -549,6 +548,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::post('flash/update/{id}', 'OfferController@flash_update')->name('flash.update');
             Route::get('flash/status/{id}/{status}', 'OfferController@status')->name('flash.status');
             Route::delete('flash/delete/{id}', 'OfferController@delete')->name('flash.delete');
+            Route::get('flash/product-price/{id}/{productId}', 'OfferController@getProductPrice')->name('flash.getProductPrice');
 
             Route::get('flash/add-product/{flash_deal_id}', 'OfferController@flash_add_product')->name('flash.add-product');
             Route::post('flash/add-product/{flash_deal_id}', 'OfferController@flash_product_store')->name('flash.add-product.store');

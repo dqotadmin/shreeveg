@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', translate('Product List'))
+@section('title', translate('stock_list'))
 
 @section('content')
 <?php       $admin_role_id = auth('admin')->user()->admin_role_id; ?>
@@ -12,7 +12,7 @@
                 <img src="{{asset('public/assets/admin/img/products.png')}}" class="w--24" alt="">
             </span>
             <span>
-                {{ translate('product List') }}
+                {{ translate('stock_list') }}
                 <span class="badge badge-soft-secondary">{{ $products->total() }}</span>
             </span>
         </h1>
@@ -48,8 +48,9 @@
                             </select>
                         </div>
                         @endif    
-                        @if(in_array($admin_role_id , [3,1]))
-                        <?php $condition = ''; 
+                        @if(in_array(@$admin_role_id, [3,1]))
+
+                      <?php $condition = ''; 
                         $admin_role_id = $admin_role_id;
                         $store =  \App\Model\Store::where('status','1')->where('deleted_at',null);
                         if($admin_role_id == '1')
@@ -60,6 +61,7 @@
                                 $condition =  $store->where('id',$store_id)->get();
                             $selected = 'selected';
                            ?>
+
                              <div class="col-md-3 m-2">
                             <select name="" id="fetch_store_stock" class="form-control">
                                 <option value=""   >{{translate('Select Store')}}</option>

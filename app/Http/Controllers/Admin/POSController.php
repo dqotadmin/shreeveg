@@ -868,10 +868,10 @@ class POSController extends Controller
             });
             $query_param = ['search' => $request['search']];
         }
-
+        $warehouse_id =  $authUser->warehouse_id;
         $products = $query->latest()->with('category')->paginate(Helpers::getPagination())->appends($query_param);
 
-        return view('admin-views.pos.stocks.stock', compact('products', 'search'));
+        return view('admin-views.pos.stocks.stock', compact('products', 'search','warehouse_id'));
     }
 
 

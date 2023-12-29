@@ -1,5 +1,5 @@
 @extends('layouts.admin.app')
-@section('title', translate('warehouse orders'))
+@section('title', translate('warehouse_purchase_orders'))
 @push('css_or_js')
 @endpush
 @section('content')
@@ -11,7 +11,7 @@
             <img src="{{asset('public/assets/admin/img/banner.png')}}" class="w--20" alt="">
             </span>
             <span>
-            {{translate('warehouse orders')}}
+            {{translate('warehouse_purchase_orders')}}
             </span>
         </h1>
     </div>
@@ -20,7 +20,7 @@
         <!-- Header -->
         <div class="card-header border-0">
             <div class="card--header justify-content-between max--sm-grow">
-                <h5 class="card-title">{{translate('warehouse orders')}} <span class="badge badge-soft-secondary">{{ $rows->total() }}</span></h5>
+                <h5 class="card-title">{{translate('warehouse_purchase_orders')}} <span class="badge badge-soft-secondary">{{ $rows->total() }}</span></h5>
                 <form action="{{url()->current()}}" method="GET">
                     <div class="input-group">
                         <input type="search" name="search" class="form-control"

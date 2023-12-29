@@ -64,9 +64,13 @@ class AdminUserController extends Controller
                     $q->orWhere('phone', 'like', "%{$value}%");
                     $q->orWhere('email', 'like', "%{$value}%");
                     $q->orWhere('l_name', 'like', "%{$value}%");
+                    $q->orWhereHas('warehouse', function ($warehouseQuery) use ($value) {
+                        $warehouseQuery->where('warehouse_id', 'like', "%{$value}%");
+                    });    
                 }
             })->orderBy('id', 'desc');
-            $query_param = ['search' => $request['search']];
+        dd($admins->get());
+        $query_param = ['search' => $request['search']];
         }else{
             $admins = $this->admin->orderBy('id', 'desc')->where('admin_role_id', $role_id);
         }
@@ -94,7 +98,7 @@ class AdminUserController extends Controller
             $role = $this->admin_role->where('id', $role_id)->first();
         }
         $role = $this->admin_role->where('id', $role_id)->first();
-        return view('admin-views.warehouse-admin.index', compact('admins', 'role'));
+        return view('admin-views.warehouse-admin.index', compact('admins', 'role','search'));
     }
 
     public function user_management_create(Request $request): View|Factory|Application

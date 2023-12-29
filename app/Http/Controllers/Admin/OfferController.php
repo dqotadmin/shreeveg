@@ -54,8 +54,9 @@ class OfferController extends Controller
             $flash_deal = $this->flash_deal->withCount('products')->where('deal_type', 'flash_deal');
         }
         $flash_deals = $flash_deal->latest()->paginate(Helpers::getPagination())->appends($query_param);
+        $products = $this->product->active()->orderBy('name', 'asc')->get();
 
-        return view('admin-views.offer.flash-deal-index', compact('flash_deals', 'search'));
+        return view('admin-views.offer.flash-deal-index', compact('flash_deals','products', 'search'));
     }
 
     /**

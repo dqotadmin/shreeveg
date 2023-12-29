@@ -117,12 +117,25 @@
                                         <a class="js-navbar-vertical-aside-menu-link nav-link"
                                             href="{{route('admin.price-update')}}"
                                             title="{{translate('customer')}} {{translate('list')}}">
-                                            <i class="tio-money"></i>
+                                            <i class="tio-poi-user tio-money"></i>
                                             <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
-                                                {{translate('Price')}} {{translate('Management')}}
+                                                {{translate('assign_price')}} {{translate('Management')}}
                                             </span>
                                         </a>
                                     </li>
+                                    @endif
+                                    @if(in_array(auth('admin')->user()->admin_role_id,[3]))
+                                    <!-- <li
+                                        class="navbar-vertical-aside-has-menu {{Request::is('admin/rate_list/index') || Request::is('admin/rate_list/index*')?'active':''}}">
+                                        <a class="js-navbar-vertical-aside-menu-link nav-link"
+                                            href="{{route('admin.rate_list.index')}}"
+                                            title="{{translate('customer')}} {{translate('list')}}">
+                                            <i class="tio-money"></i>
+                                            <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                                {{translate('assign_rate_list')}}  
+                                            </span>
+                                        </a>
+                                    </li> -->
                                     @endif
 
                         <!-- User management start from here -->
@@ -265,7 +278,7 @@
                                     title="{{translate('order_list')}}">
                                     <i class="tio-map nav-icon"></i>
                                     <span
-                                        class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('order list')}}</span>
+                                        class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('warehouse_purchase_orders')}}</span>
                                 </a>
                             </li>
                         @endif
@@ -515,7 +528,7 @@
                                     title="{{translate('Store orders')}}">
                                     <i class="tio-map nav-icon"></i>
                                     <span
-                                        class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Store Purchaseash orders')}}</span>
+                                        class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Store Purchase orders')}}</span>
                                 </a>
                             </li>
                             <!-- Warehouse, store, location management end here -->

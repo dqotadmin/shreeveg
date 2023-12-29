@@ -1,5 +1,5 @@
 @extends('layouts.admin.app')
-@section('title', translate('store orders'))
+@section('title', translate('store_purchase_orders'))
 @push('css_or_js')
 @endpush
 @section('content')
@@ -11,7 +11,7 @@
             <img src="{{asset('public/assets/admin/img/banner.png')}}" class="w--20" alt="">
             </span>
             <span>
-            {{translate('store orders')}}
+            {{translate('store_purchase_orders')}}
             </span>
         </h1>
     </div>

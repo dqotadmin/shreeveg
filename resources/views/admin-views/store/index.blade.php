@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', translate('Add New Store'))
+@section('title', translate('Store List'))
 
 @push('css_or_js')
 

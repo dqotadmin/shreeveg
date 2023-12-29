@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', translate('Admin list'))
+@section('title', translate('list'))
 
 @push('css_or_js')
 
@@ -56,7 +56,7 @@
                     <input type="hidden" name="role_id" value="{{ request('role_id') }}">
                         <input id="datatableSearch_" type="search" name="search" maxlength="255"
                             class="form-control pl-5" placeholder="{{translate('Search_by_Name')}}" aria-label="Search"
-                            value="" required autocomplete="off">
+                            value="{{$search}}"  autocomplete="off" >
                         <i class="tio-search tio-input-search"></i>
                         <div class="input-group-append">
                             <button type="submit" class="input-group-text">

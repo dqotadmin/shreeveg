@@ -1,5 +1,5 @@
 @extends('layouts.admin.app')
-@section('title', translate('warehouse orders'))
+@section('title', translate('rate_assign'))
 @push('css_or_js')
 @endpush
 @section('content')
@@ -11,7 +11,7 @@
             <img src="{{asset('public/assets/admin/img/banner.png')}}" class="w--20" alt="">
             </span>
             <span>
-            {{translate('warehouse orders')}}
+            {{translate('rate_assign')}}
             </span>
             
         </h1>

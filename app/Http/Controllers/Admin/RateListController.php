@@ -72,6 +72,7 @@ class RateListController extends Controller
         $products= $this->product->where('category_id',$cat_id)->get();
         return response()->json([
             'success' => 1,
+            'd_none_class' => 'd-none',
             'view' => view('admin-views.rate_list.product_details', compact('products'))->render(),
         ]);   
 

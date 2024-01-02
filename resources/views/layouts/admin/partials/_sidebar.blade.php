@@ -125,7 +125,7 @@
                                     </li>
                                     @endif
                                     @if(in_array(auth('admin')->user()->admin_role_id,[3]))
-                                    <!-- <li
+                                    <li
                                         class="navbar-vertical-aside-has-menu {{Request::is('admin/rate_list/index') || Request::is('admin/rate_list/index*')?'active':''}}">
                                         <a class="js-navbar-vertical-aside-menu-link nav-link"
                                             href="{{route('admin.rate_list.index')}}"
@@ -135,7 +135,7 @@
                                                 {{translate('assign_rate_list')}}  
                                             </span>
                                         </a>
-                                    </li> -->
+                                    </li>
                                     @endif
 
                         <!-- User management start from here -->

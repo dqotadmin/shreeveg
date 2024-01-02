@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', translate('Product List'))
+@section('title', translate('Rate List'))
 
 @section('content')
 <div class="content container-fluid product-list-page">
@@ -11,7 +11,7 @@
                 <img src="{{asset('public/assets/admin/img/products.png')}}" class="w--24" alt="">
             </span>
             <span>
-                {{ translate('product List') }}
+                {{ translate('Rate List') }}
                 <span class="badge badge-soft-secondary">{{ $products->total() }}</span>
             </span>
         </h1>
@@ -41,7 +41,7 @@
                 <div class="card-header border-0">
                     <div class="card--header max--sm-grow">
                         <div class="row">
-                        <div class="col-sm-6" id="category_box">
+                        <div class="col-sm-12" id="category_box">
                             <div class="form-group">
                                 <label class="input-label"
                                     for="exampleFormControlInput1">{{translate('Select Parent Category')}}</label>
@@ -51,12 +51,12 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-6" >
+                        <!-- <div class="col-sm-6" >
                             <div class="form-group">
                                 <label class="input-label" for="exampleFormControlInput1">{{translate('discount')}}</label>
                                  <input type="text" class="form-control">
                             </div>
-                        </div>
+                        </div> -->
                         </div>
                        
 
@@ -209,11 +209,16 @@
 </div>
 
 @endsection
+
+@push('script')
+
+@endpush
 @push('script_2')
 
 
 
 <script>
+
 $('#parent_id').on('change', function() {
     cat_id = $(this).val();
     $.ajax({
@@ -221,7 +226,9 @@ $('#parent_id').on('change', function() {
         method: 'GET',
 
         success: function(data) {
+            console.log(data);
             $('.datatable-custom').html(data.view);
+            $('.footer').addClass(data.d_none_class);
             if (data.length > 1) {
                 $('#quantity').hide();
             } else {
@@ -230,5 +237,6 @@ $('#parent_id').on('change', function() {
         },
     });
 });
+
 </script>
 @endpush

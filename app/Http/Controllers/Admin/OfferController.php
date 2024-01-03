@@ -185,7 +185,7 @@ class OfferController extends Controller
             $flash_deal->min_purchase_amount = null;
         } else {
             // $flash_deal->discount_amount = null;
-            //$flash_deal->min_purchase_amount = $request->min_purchase_amount;
+            $flash_deal->min_purchase_amount = $request->min_purchase_amount;
         }
         $flash_deal->image = $request->has('image') ? Helpers::update('offer/', $flash_deal->image, 'png', $request->file('image')) : $flash_deal->image;
         $flash_deal->save();

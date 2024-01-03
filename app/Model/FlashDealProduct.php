@@ -9,6 +9,7 @@ class FlashDealProduct extends Model
     protected $casts = [
         'product_id'    => 'integer',
         'discount'      => 'float',
+        'amount'      => 'float',
         'quantity'      => 'string',
         'flash_deal_id' => 'integer',
         'created_at'    => 'datetime',

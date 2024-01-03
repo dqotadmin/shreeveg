@@ -106,11 +106,14 @@ if ($extra_discount_type == 'percent' && $extra_discount > 0) {
 if ($extra_discount) {
     $total -= $extra_discount;
 }
+
+
+$finalTotal = round($total+$updated_total_tax, 2);
 ?>
 <div class="box p-3">
     <dl class="row">
-        <dt class="col-sm-6">{{translate('sub_total')}} :</dt>
-        <dd class="col-sm-6 text-right">{{ Helpers::set_symbol($subtotal) }}</dd>
+        {{-- <dt class="col-sm-6">{{translate('sub_total')}} :</dt>
+        <dd class="col-sm-6 text-right">{{ Helpers::set_symbol($subtotal) }}</dd> --}}
 
 
         <dt class="col-sm-6">{{translate('product')}} {{translate('discount')}}:
@@ -131,13 +134,22 @@ if ($extra_discount) {
                     class="tio-edit"></i>
             </button> - {{ Helpers::set_symbol($extra_discount) }}</dd>
 
+            <?php $adminOffers = Helpers::adminWhOffers(); ?>
+            @if(count($adminOffers) >0)
+            <dt class="col-sm-6"> {{translate('Avail Offers')}}:
+            </dt>
+            <dd class="col-sm-6 text-right">
+                <button class="btn btn-sm" type="button" data-toggle="modal" data-target="#offer-discount"><i
+                        class="tio-edit"></i>
+                </button> {{count($adminOffers)}} Offers</dd>
+            @endif
         <dt class="col-sm-6">{{translate('tax')}} {{ \App\CentralLogics\Helpers::get_business_settings('product_vat_tax_status') === 'included'?  '(Included)': ''}} :</dt>
         <dd class="col-sm-6 text-right">{{ Helpers::set_symbol(round($total_tax,2)) }}</dd>
         <dt class="col-12">
             <hr class="mt-0">
         </dt>
         <dt class="col-sm-6">{{translate('total')}} :</dt>
-        <dd class="col-sm-6 text-right h4 b">{{ Helpers::set_symbol(round($total+$updated_total_tax, 2)) }}</dd>
+        <dd class="col-sm-6 text-right h4 b">{{ Helpers::set_symbol($finalTotal) }}</dd>
     </dl>
     <div>
         <form action="{{route('admin.pos.order')}}" id='order_place' method="post">
@@ -165,7 +177,7 @@ if ($extra_discount) {
                             class="fa fa-times-circle "></i> {{translate('Cancel Order')}} </a>
                 </div>
                 <div class="col-sm-6">
-                    <button type="submit" class="btn  btn--primary btn-sm btn-block"><i class="fa fa-shopping-bag"></i>
+                    <button type="submit" class="btn  btn--primary btn-sm btn-block" ><i class="fa fa-shopping-bag"></i>
                         {{translate('Place Order')}}
                     </button>
                 </div>
@@ -201,6 +213,49 @@ if ($extra_discount) {
                             </option>
                         </select>
                     </div>
+                    <div class="col-sm-12">
+                        <div class="btn--container justify-content-end">
+                            <button class="btn btn-sm btn--reset" type="reset">{{translate('reset')}}</button>
+                            <button class="btn btn-sm btn--primary" type="submit">{{translate('submit')}}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="offer-discount" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{translate('Available Offers')}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{{route('admin.pos.offer-discount')}}" method="post" class="row">
+                    @csrf
+                    
+                    @foreach($adminOffers as $offer)
+                    <div class="discountpricing card card-body p-2 d-block mb-2 w-75"> 
+                        
+                        <?php 
+                        if($offer->offer_type == 'one_rupee'){
+                             $msg =  '1 Kg in only 1₹ on minimun order amount ₹'.$offer->min_purchase_amount;
+                        }else{
+ 
+                             $disType = ($offer->discount_type == 'amount')?'₹':'%';
+                             $msg =  $offer->discount_amount.$disType. ' off on purchase minimun ';
+                         } ?>
+                          <input type="radio" class="form-check-input" name="admin_offer_id"  value="{{$offer->id}}"> {{ @$offer->title }}  <strong class="text-dark mx-2 d-inline-block"> {{$msg }}</strong>  
+                         {{-- <span class="bg-danger discountbox px-2 py-1 rounded-sm text-white "> </span> 
+                          --}}
+                         
+                     </div>
+                     @endforeach
+                   
                     <div class="col-sm-12">
                         <div class="btn--container justify-content-end">
                             <button class="btn btn-sm btn--reset" type="reset">{{translate('reset')}}</button>

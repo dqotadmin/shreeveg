@@ -596,11 +596,22 @@
     $('.js-data-example-ajax-2').select2()
 
     $('#order_place').submit(function (eventObj) {
+        //alert(44444);return false;
         if ($('#customer').val()) {
             $(this).append('<input type="hidden" name="user_id" value="' + $('#customer').val() + '" /> ');
         }
         return true;
     });
+
+    function checkOffers(amt) {
+        // $.post('{{ route('admin.pos.emptyCart') }}', {_token: '{{ csrf_token() }}'}, function (data) {
+        //     updateCart();
+        //     toastr.info('{{translate('Item has been removed from cart')}}', {
+        //         CloseButton: true,
+        //         ProgressBar: true
+        //     });
+        // });
+    }
 
 
 </script>

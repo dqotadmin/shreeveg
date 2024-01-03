@@ -35,6 +35,8 @@ use Psy\VersionUpdater\SelfUpdate;
 use Rap2hpoutre\FastExcel\FastExcel;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use function App\CentralLogics\translate;
+use App\Model\FlashDeal;
+use App\Model\FlashDealProduct;
 
 class POSController extends Controller
 {
@@ -91,7 +93,7 @@ class POSController extends Controller
 
         $branches = $this->branch->all();
         $users = $this->user->orderBy('f_name')->get();
-        return view('admin-views.pos.index', compact('categories', 'products', 'category', 'keyword', 'branches', 'users', 'authUser'));
+        return view('admin-views.pos.index', compact('categories', 'products', 'category', 'keyword', 'branches', 'users', 'authUser', 'warehouse_id'));
     }
 
     /**
@@ -262,6 +264,7 @@ class POSController extends Controller
     }
 
 
+
     public function addToCart(Request $request): \Illuminate\Http\JsonResponse
     {
         // dd($request->all());
@@ -329,6 +332,7 @@ class POSController extends Controller
         $price = $this->calculateDynamicPrice($request->id, $request['quantity']);
         $newPrice =  $price * $request['quantity'];
         $offerDiscount = $this->offerDiscountCal($request->product_id, $request['quantity'], $newPrice);
+        //check1RupeeOffer($product);
         // dd($price, $offerDiscount);
         $tax_on_product = Helpers::tax_calculate($product, $price);
 
@@ -355,6 +359,17 @@ class POSController extends Controller
         ]);
     }
 
+    public function check1RupeeOffer($productRow)
+    {
+        $offers = Helpers::getWhProductOffers($productRow->id);
+        if (count($offers) > 0) {
+            foreach ($offers as $offer) {
+                //ALTER TABLE `flash_deals` ADD `min_purchase_amount` DECIMAL(10,2) NULL AFTER `deal_type`;
+            }
+        }
+    }
+
+
     public function offerDiscountCal($productId, $qty, $currentPrice)
     {
         $offers =  Helpers::getWhProductOffers($productId);
@@ -365,7 +380,14 @@ class POSController extends Controller
                 if ($qty >= $offerQty) {
                     if ($offer['offer_type'] == 'one_rupee') {
                         $getPrice = round(($currentPrice / $qty), 2);
-                        $price_discount += $getPrice - 1;
+                        //dd($getPrice, $currentPrice, $offer['min_purchase_amount']);
+                        // if ($currentPrice >= $offer['min_purchase_amount']) {
+                        //     $price_discount += $getPrice - 1;
+                        //     $chkPrice = $price_discount;
+                        //     if ($chkPrice >= $offer['min_purchase_amount']) {
+                        //         $price_discount += $getPrice - 1;
+                        //     }
+                        // }
                     } else {
                         if ($offer['discount_type'] == 'percent') {
                             $price_discount += ($currentPrice / 100) * $offer['discount_amount'];
@@ -381,6 +403,97 @@ class POSController extends Controller
 
         return $data;
     }
+
+    public function adminDiscountCal($productId, $qty, $currentPrice)
+    {
+
+        $price_discount = 0;
+        if ($qty <= 1) {
+            $price_discount += $currentPrice - 1;
+            $quantity = 1;
+            //dd($price_discount);
+
+        } else {
+            $price_discount += $currentPrice - 1;
+            $newQty = $qty - 1;
+            $price = $currentPrice * $newQty;
+            //dump($currentPrice);
+            $currentPrice = $price + 1;
+            //dd($currentPrice);
+            $quantity  = $qty;
+        }
+
+        $data['offerDiscount'] = round($price_discount, 2);
+        $data['updatedPrice'] = round($currentPrice, 2);
+        $data['quantity'] = $quantity;
+
+        return $data;
+    }
+
+    public function offer_discount(Request $request)
+    {
+        $authUser = auth('admin')->user();
+        if (in_array($authUser->admin_role_id, [6, 7])) {
+            $warehouse_id = $authUser->Store->warehouse_id;
+        } elseif (in_array($authUser->admin_role_id, [3, 4])) {
+            $warehouse_id = $authUser->warehouse_id;
+        }
+        $total = session()->get('total');
+
+        //dump($total, $request->all());
+        $adminOffer = FlashDeal::find($request->admin_offer_id);
+        if ($total < $adminOffer->min_purchase_amount) {
+            Toastr::error(translate('min order value ' . $adminOffer->min_purchase_amount . ' to aval this offer'));
+            return back();
+        }
+        $adminOfferProducts = $adminOffer->products->pluck('product_id');
+        //dump($adminOffer, $adminOffer->products->pluck('product_id'));
+        $whProducts = WarehouseProduct::where('warehouse_id', $warehouse_id)->whereIn('product_id', $adminOfferProducts)->get();
+
+        //dd($whProducts);
+        if ($request->session()->has('cart')) {
+            if (count($request->session()->get('cart')) > 0) {
+                foreach ($whProducts as $whProduct) {
+                    foreach ($request->session()->get('cart') as $key => $cartItem) {
+                        if ($cartItem['id'] == $whProduct->id) {
+                            $temp = $cartItem;
+                            // dump($cartItem);
+                            $result = $this->adminDiscountCal($cartItem['id'], $cartItem['quantity'], $cartItem['price']);
+                            // dd($result, $temp);
+                            $cartItem['quantity'] = $result['quantity'];
+                            //$cartItem['with_offer_price'] =  $temp['with_offer_price'];
+                            $cartItem['with_offer_price'] =  $result['updatedPrice'];
+                            $cartItem['price'] = $temp['price'];
+                            $cartItem['name'] = $temp['name'];
+                            $cartItem['discount'] = $temp['discount'];
+                            $cartItem['offer_discount'] = $result['offerDiscount'];
+                            $cartItem['image'] = $temp['image'];
+
+                            $cart = $request->session()->get('cart', collect([]));
+                            $cart[$key] = $cartItem;
+                            $request->session()->put('cart', $cart);
+
+                            // Break out of the inner loop once the item is found and updated
+                            break;
+                            // $cart = $request->session()->get('cart', collect([]));
+                            // $cart[$key] = $cartItem;
+                            // //$mk = $cartItem;
+                            // $cart->push($cartItem);
+                            // $request->session()->put('cart', $cart);
+
+                            //dd($result, $temp, $mk, $cart);
+                        }
+                    }
+                }
+            }
+        }
+        //dd(1111111);
+
+
+        Toastr::success(translate('offer_applied'));
+        return back();
+    }
+
     public function cart_items(): View|Factory|Application
     {
         return view('admin-views.pos._cart');

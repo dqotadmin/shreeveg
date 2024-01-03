@@ -109,7 +109,7 @@
                        {{ @$offer->title }} 
                        <?php 
                        if($offer->offer_type == 'one_rupee'){
-                            $msg =  '1 Kg in only 1₹ on purchase minimun '.$offerQty .' '.$whProduct->unit->title;
+                            $msg =  '1 Kg in only 1₹ on minimun order amount ₹'.$offer->min_purchase_amount;
                        }else{
 
                             $disType = ($offer->discount_type == 'amount')?'₹':'%';

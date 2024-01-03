@@ -2588,5 +2588,12 @@
   'update_product_price' => 'Update product price',
   'avg_price' => 'Avg price',
   '1 Rupee' => '1 Rupee',
+<<<<<<< HEAD
   'price_management' => 'Price management',
+=======
+  'minimum purchase amount' => 'Minimum purchase amount',
+  'Avail Offers' => 'Avail Offers',
+  'Available Offers' => 'Available Offers',
+  'Sell' => 'Sell',
+>>>>>>> 885fcdbd7953687c532f38e9df6a34b2d2169877
 );

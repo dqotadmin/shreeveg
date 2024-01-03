@@ -42,10 +42,16 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="col-md-6">
+                                    @if($flash_deal->offer_type == 'other')
+                                    <div class="col-md-6 manageQty">
                                         <label for="name" class="title-color text-capitalize">{{ translate('quantity')}}</label>
                                         <input type="text" class="form-control" name="quantity" required>
                                     </div>
+                                    <div class="col-md-6 manageQty">
+                                        <label for="name" class="title-color text-capitalize">{{ translate('amount')}}</label>
+                                        <input type="number" class="form-control" name="amount" required>
+                                    </div>
+                                    @endif
                                 </div>
                             </div>
                             <div id="product_detail"></div>
@@ -77,7 +83,10 @@
                             <tr>
                                 <th>{{ translate('SL')}}</th>
                                 <th>{{translate('name')}}</th>
+                                @if($flash_deal->offer_type == 'other')
                                 <th>{{translate('quantity')}}</th>
+                                <th>{{translate('amount')}}</th>
+                                @endif
                                 <!-- <th>{{ translate('actual_price')}}</th> -->
                                 <!-- <th>{{ translate('discount')}}</th> -->
                                 <!-- <th>{{ translate('discount_price')}}</th> -->
@@ -91,8 +100,10 @@
                             <tr>
                                     <td>{{$key+1}}</td>
                                     <td>{{$data->product['name']}}</td>
+                                    @if($flash_deal->offer_type == 'other')
                                       <td>{{ $data['quantity'] }}</td>
-                                   
+                                      <td>{{ $data['amount'] }}</td>
+                                    @endif
                                     <td>
                                         <div class="d-flex justify-content-center">
                                             <a  title="{{ trans ('Delete')}}"

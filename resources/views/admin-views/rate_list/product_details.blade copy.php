@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+ @extends('layouts.admin.app')
  @foreach($products as $product)
  @php($whProduct = Helpers::warehouseProductData($product->id))
  @endforeach
@@ -17,7 +17,7 @@
                  </th>
                  <th>{{translate('fix(%)')}}</th>
                  <th>{{translate('admin_rate')}}</th>
-                 <th width="24%">
+                 <th>
                      <div class="row">
                          <div class="row">
                              <div class="col-md-12">
@@ -25,18 +25,19 @@
                                      {{translate('shreeveg Price')}} (discount):
                                  </div>
                              </div>
-                             <div class="col-md-4">
+                             <div class="col-md-2">
                                  <div class="">
                                      <small for=""> discount:</small>
                                      <input type="text" class="form-control" id="global_1_discount"
-                                         style="width: 90px;">
+                                         style="width: 70px;">
                                  </div>
                              </div>
-                             <div class="col-md-4">
-                                 <div class="" style="margin-left: 0px;">
+
+                             <div class="col-md-2">
+                                 <div class="" style="margin-left: 19px;">
                                      <small for=""> Quantity:</small>
                                      <input type="text" class="form-control" id="global_1_quantity"
-                                         style="width: 90px;">
+                                         style="width: 70px;">
                                      <!-- <select name=""   class="form-control" id="global_1_quantity" style="width: 70px;">
                                 @for($i=1; $i<=100; $i++)
                                     <option value="{{$i}}">{{$i}}</option>
@@ -44,8 +45,8 @@
                                 </select> -->
                                  </div>
                              </div>
-                             <div class="col-md-4">
-                                 <div class="" style="margin: 0 0px;">
+                             <div class="col-md-2">
+                                 <div class="" style="margin: 0 40px;">
                                      <small for=""> Unit:</small>
                                      <select name="" class="form-control" id="global_1_unit"
                                          style="width: 70px;padding: 3px;">
@@ -61,7 +62,7 @@
 
                      </div>
                  </th>
-                 <th width="25%">
+                 <th>
                      <div class="row">
                          <div class="row">
                              <div class="col-md-12">
@@ -69,19 +70,19 @@
                                      {{translate('shreeveg Price')}} (discount):
                                  </div>
                              </div>
-                             <div class="col-md-4">
+                             <div class="col-md-2">
                                  <div class="">
                                      <small for=""> discount:</small>
                                      <input type="text" class="form-control" id="global_2_discount"
-                                         style="width: 90px;">
+                                         style="width: 70px;">
                                  </div>
                              </div>
 
-                             <div class="col-md-4">
-                                 <div class="" style="margin-left: 0px;">
+                             <div class="col-md-2">
+                                 <div class="" style="margin-left: 19px;">
                                      <small for=""> Quantity:</small>
                                      <input type="text" class="form-control" id="global_2_quantity"
-                                         style="width: 90px;">
+                                         style="width: 70px;">
                                      <!-- <select name="" class="form-control" style="width: 70px;" id="global_2_quantity" >
                                  @for($i=1; $i<=100; $i++)
                                     <option value="{{$i}}">{{$i}}</option>
@@ -89,10 +90,10 @@
                                 </select> -->
                                  </div>
                              </div>
-                             <div class="col-md-4">
-                                 <div class="" style="margin: 0 0px;">
+                             <div class="col-md-2">
+                                 <div class="" style="margin: 0 40px;">
                                      <small for=""> Unit:</small>
-                                     <select name="" class="form-control" style="width: 90px;padding: 3px;"
+                                     <select name="" class="form-control" style="width: 70px;padding: 3px;"
                                          id="global_2_unit">
                                          <option value="" disabled selected>Unit</option>
                                          @foreach(\App\Model\Unit::get() as $unit)
@@ -106,7 +107,7 @@
 
                      </div>
                  </th>
-                 <th width="25%">
+                 <th>
                      <div class="row">
                          <div class="row">
                              <div class="col-md-12">
@@ -114,19 +115,19 @@
                                      {{translate('shreeveg Price')}} (discount):
                                  </div>
                              </div>
-                             <div class="col-md-4">
-                                 <div class="" style="margin-left: 10px;">
+                             <div class="col-md-2">
+                                 <div class="">
                                      <small for=""> discount:</small>
                                      <input type="text" class="form-control" id="global_3_discount"
-                                         style="width: 90px;">
+                                         style="width: 70px;">
                                  </div>
                              </div>
 
-                             <div class="col-md-4">
-                                 <div class="" style="margin-left: 0px;">
+                             <div class="col-md-2">
+                                 <div class="" style="margin-left: 19px;">
                                      <small for=""> Quantity:</small>
                                      <input type="text" class="form-control" id="global_3_quantity"
-                                         style="width: 90px;">
+                                         style="width: 70px;">
                                      <!-- <select name="" class="form-control" style="width: 70px;"  id="global_3_quantity" >
                                 @for($i=1; $i<=100; $i++)
                                     <option value="{{$i}}">{{$i}}</option>
@@ -134,10 +135,10 @@
                                 </select> -->
                                  </div>
                              </div>
-                             <div class="col-md-4">
-                                 <div class="" style="margin: 0 0px;">
+                             <div class="col-md-2">
+                                 <div class="" style="margin: 0 40px;">
                                      <small for=""> Unit:</small>
-                                     <select name="" class="form-control" style="width: 90px;padding: 3px;"
+                                     <select name="" class="form-control" style="width: 70px;padding: 3px;"
                                          id="global_3_unit">
                                          <option value="" disabled selected>Unit</option>
                                          @foreach(\App\Model\Unit::get() as $unit)
@@ -151,6 +152,8 @@
 
                      </div>
                  </th>
+
+
              </tr>
          </thead>
          <tbody id="set-rows">
@@ -275,33 +278,42 @@
 
  @push('script_2')
  <script defer>
-$(document).on("input", "#discount", function () {
-    var discount = parseFloat($(this).val());
+$(document).on("input", "#discount", function() {
+    var discount = parseFloat($(this).val()); // Parse discount as a floating-point number
+    console.log(discount);
+
     var row = $(this).closest('tr');
-    var product_rate = parseFloat(row.find('.product_rate').text());
+    var product_rate = parseFloat($('.product_rate')
+        .text()); // Use parseFloat to convert the product_rate to a number
+
     var offerPrice = product_rate + (product_rate * discount / 100);
+
     var quantityInput = row.find('input[name="offer_rate[]"]');
-    quantityInput.val(offerPrice.toFixed(2));
-    dynamicHandler(row, true);
+
+    // Set the offer price value
+    quantityInput.val(offerPrice.toFixed(
+        2)); // Use toFixed to round the result to 2 decimal places and set the value
+    dynamicHandler(true)
+
 });
 $(document).on("input", ".offer_rate", function() {
     var offer_price = parseFloat($(this).val()); // Parse offer_price as a floating-point number
 
     var row = $(this).closest('tr');
-    dynamicHandler(row, true);
+    dynamicHandler(true);
 
 });
 
-var dynamicHandler = (row, update = false) => {
+var dynamicHandler = (update = false) => {
     Array.from({
         length: 3
     }).forEach((item, index) => {
         let sno = index + 1;
 
-        let fixDiscount = parseFloat(row.find("#discount").val() || 0);
-        let adminRate = parseFloat(row.find(".offer_rate").val() || 0);
-        console.log("fixDiscount", row);
-        console.log("adminRate", adminRate);
+        let fixDiscount = parseFloat($("#discount").val() || 0)
+        let adminRate = parseFloat($(".offer_rate").val() || 0)
+        console.log("fixDiscount", fixDiscount)
+        console.log("adminRate", adminRate)
 
         if (update) {
 
@@ -381,7 +393,6 @@ var dynamicHandler = (row, update = false) => {
     })
 }
 
-dynamicHandler($('tr')); // You may need to adjust this based on when and where you call dynamicHandler
-
+dynamicHandler()
  </script>
  @endpush

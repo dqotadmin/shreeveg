@@ -50,7 +50,7 @@ class RateListController extends Controller
             $key = explode(' ', $request['search']);
             $query = $query->where(function ($q) use ($key) {
                 foreach ($key as $value) {
-                    $q->orWhere('id', 'like', "%{$value}%")
+                    $q->orWhere('id', 'like', "%{$value}%") 
                         ->orWhere('name', 'like', "%{$value}%")
                         ->orWhere('product_code', 'like', "%{$value}%");
                 }
@@ -58,9 +58,9 @@ class RateListController extends Controller
             $query_param = ['search' => $request['search']];
         }
         $products = $query->latest()->with('category')->paginate(Helpers::getPagination())->appends($query_param);
-
-        $categories = $this->category->get();
-        $options = Helpers::getCategoryDropDown($categories);
+        $wh_assign_categories = $this->warehouse_categories->where('warehouse_id',$authUser->warehouse_id)->pluck('category_id');
+        $categories = $this->category->whereIn('id',$wh_assign_categories)->get();
+$options = Helpers::getCategoryDropDown($categories);
 
          return view('admin-views.rate_list.index', compact('products','options', 'search'));
     }

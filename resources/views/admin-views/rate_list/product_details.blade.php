@@ -15,37 +15,38 @@
                  <th>{{translate('product_rate')}} <br />
                      <small>(Avg Rate)</small>
                  </th>
-                 <th>{{translate('fix(%)')}}</th>
-                 <th>{{translate('admin_rate')}}</th>
+          
                  <th width="24%">
                      <div class="row">
                          <div class="row">
                              <div class="col-md-12">
                                  <div>
-                                     {{translate('shreeveg Price')}} (discount):
+                                     {{translate('shreeveg Price')}} (first slot):
                                  </div>
                              </div>
-                             <div class="col-md-4">
+                             <div class="col-md-3">
                                  <div class="">
-                                     <small for=""> discount:</small>
-                                     <input type="text" class="form-control" id="global_1_discount"
-                                         style="width: 90px;">
+                                     <small for=""> margin:</small>
+                                     <select name="" class="form-control" id="global_1_discount" style="width: 70px;padding: 3px;">
+                                     @for($i=-100; $i<=100; $i++)
+                                        @if($i !== 0)
+                                            <option value="{{$i}}" @if($i === 1) selected @endif>{{$i}}</option>
+                                        @endif
+                                    @endfor
+                                    </select>
+                                  
                                  </div>
                              </div>
-                             <div class="col-md-4">
-                                 <div class="" style="margin-left: 0px;">
+                             <div class="col-md-2">
+                                 <div class="" style="margin-left: -25px;">
                                      <small for=""> Quantity:</small>
                                      <input type="text" class="form-control" id="global_1_quantity"
-                                         style="width: 90px;">
-                                     <!-- <select name=""   class="form-control" id="global_1_quantity" style="width: 70px;">
-                                @for($i=1; $i<=100; $i++)
-                                    <option value="{{$i}}">{{$i}}</option>
-                                    @endfor
-                                </select> -->
+                                         style="width: 70px;" value="1"  >
+                                      
                                  </div>
                              </div>
-                             <div class="col-md-4">
-                                 <div class="" style="margin: 0 0px;">
+                             <div class="col-md-2">
+                                 <div class="" style="margin: 0 -16px;">
                                      <small for=""> Unit:</small>
                                      <select name="" class="form-control" id="global_1_unit"
                                          style="width: 70px;padding: 3px;">
@@ -69,30 +70,32 @@
                                      {{translate('shreeveg Price')}} (discount):
                                  </div>
                              </div>
-                             <div class="col-md-4">
+                             <div class="col-md-3">
                                  <div class="">
-                                     <small for=""> discount:</small>
-                                     <input type="text" class="form-control" id="global_2_discount"
-                                         style="width: 90px;">
+                                     <small for=""> margin:</small>
+                                     <select name="" class="form-control" id="global_2_discount" style="width: 70px;padding: 3px;">
+                                     @for($i=-100; $i<=100; $i++)
+                                        @if($i !== 0)
+                                            <option value="{{$i}}" @if($i === 1) selected @endif>{{$i}}</option>
+                                        @endif
+                                    @endfor
+                                    </select>
+                                      
                                  </div>
                              </div>
 
-                             <div class="col-md-4">
-                                 <div class="" style="margin-left: 0px;">
+                             <div class="col-md-2">
+                                 <div class="" style="margin-left: -25px;">
                                      <small for=""> Quantity:</small>
                                      <input type="text" class="form-control" id="global_2_quantity"
-                                         style="width: 90px;">
-                                     <!-- <select name="" class="form-control" style="width: 70px;" id="global_2_quantity" >
-                                 @for($i=1; $i<=100; $i++)
-                                    <option value="{{$i}}">{{$i}}</option>
-                                    @endfor
-                                </select> -->
+                                     style="width: 70px;" value="1">
+                                  
                                  </div>
                              </div>
-                             <div class="col-md-4">
-                                 <div class="" style="margin: 0 0px;">
+                             <div class="col-md-2">
+                                 <div class="" style="margin: 0 -16px;">
                                      <small for=""> Unit:</small>
-                                     <select name="" class="form-control" style="width: 90px;padding: 3px;"
+                                     <select name="" class="form-control"  style="width: 70px;padding: 3px;"
                                          id="global_2_unit">
                                          <option value="" disabled selected>Unit</option>
                                          @foreach(\App\Model\Unit::get() as $unit)
@@ -114,30 +117,32 @@
                                      {{translate('shreeveg Price')}} (discount):
                                  </div>
                              </div>
-                             <div class="col-md-4">
-                                 <div class="" style="margin-left: 10px;">
-                                     <small for=""> discount:</small>
-                                     <input type="text" class="form-control" id="global_3_discount"
-                                         style="width: 90px;">
+                             <div class="col-md-3">
+                                 <div class=""  >
+                                     <small for=""> margin:</small>
+                                     <select name="" class="form-control" id="global_3_discount"  style="width: 70px;padding: 3px;">
+                                     @for($i=-100; $i<=100; $i++)
+                                            @if($i !== 0)
+                                                <option value="{{$i}}" @if($i === 1) selected @endif>{{$i}}</option>
+                                            @endif
+                                        @endfor
+                                    </select>
+                                  
                                  </div>
                              </div>
 
-                             <div class="col-md-4">
-                                 <div class="" style="margin-left: 0px;">
+                             <div class="col-md-2">
+                                 <div class="" style="margin-left: -25px;">
                                      <small for=""> Quantity:</small>
                                      <input type="text" class="form-control" id="global_3_quantity"
-                                         style="width: 90px;">
-                                     <!-- <select name="" class="form-control" style="width: 70px;"  id="global_3_quantity" >
-                                @for($i=1; $i<=100; $i++)
-                                    <option value="{{$i}}">{{$i}}</option>
-                                    @endfor
-                                </select> -->
+                                     style="width: 70px;" value="1" >
+                                    
                                  </div>
                              </div>
-                             <div class="col-md-4">
-                                 <div class="" style="margin: 0 0px;">
+                             <div class="col-md-2">
+                                 <div class="" style="margin: 0 -16px;">
                                      <small for=""> Unit:</small>
-                                     <select name="" class="form-control" style="width: 90px;padding: 3px;"
+                                     <select name="" class="form-control" style="width: 70px;padding: 3px;"
                                          id="global_3_unit">
                                          <option value="" disabled selected>Unit</option>
                                          @foreach(\App\Model\Unit::get() as $unit)
@@ -178,22 +183,13 @@
                      </div>
                  </td>
                  <td class="pt-1 pb-3 ">
-                     <span class="product_rate"> {{@$whProduct->avg_price}}</span>{{@$product->unit->title}}
-                 </td>
-
-                 <td class="pt-1 pb-3 ">
-                     <input type="text" class="form-control discount" id="discount" style="width: 70px;">
-                 </td>
-
-                 <td class="pt-1 pb-3 ">
-                     <input type="text" class="form-control offer_rate" name="offer_rate[]" style="width: 70px;">
+                     <span class="product_rate_<?php echo $key + 1; ?>"> {{@$whProduct->avg_price}}</span>{{@$product->unit->title}}
                  </td>
                  <td class="pt-1 pb-3 ">
                      <div class="row">
-                         <input type="text" class="form-control 1_discount discount_<?php echo $key + 1; ?>" name=""
-                             style="width: 70px;">
-                         <input type="text" class="form-control 1_quantity quantity_<?php echo $key + 1; ?>" name=""
-                             style="width: 70px;    margin: 0 2px;">
+                         <input type="text" class="form-control 1_discount discount_<?php echo $key + 1; ?>" name=""   style="width: 70px;" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>)"  >
+                         <input type="text" class="form-control 1_quantity quantity_<?php echo $key + 1; ?>" name="" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>)"
+                             style="width: 70px;    margin: 0 2px;" value="1" >
                          <!-- <select name="" class="form-control 1_quantity" style="width: 70px;    margin: 0 2px;">
                                 @for($i=1; $i<=100; $i++)
                                     <option value="{{$i}}">{{$i}}</option>
@@ -212,13 +208,9 @@
                  </td>
                  <td class="pt-1 pb-3 ">
                      <div class="row">
-                         <input type="text" class="form-control 2_discount" name="" style="width: 70px;">
-                         <!-- <select name="" class="form-control 2_quantity" style="width: 70px;    margin: 0 2px;">
-                                @for($i=1; $i<=100; $i++)
-                                    <option value="{{$i}}">{{$i}}</option>
-                                    @endfor
-                         </select> -->
-                         <input type="text" class="form-control 2_quantity" name="discount[]" value=''
+                         <input type="text" class="form-control 2_discount discount_<?php echo $key + 1; ?>" onkeyup="handleFirstDiscountChange(1)" name="" style="width: 70px;">
+                        
+                         <input type="text" class="form-control 2_quantity quantity_<?php echo $key + 1; ?>"  name="" value="" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>)"
                              style="width: 70px;    margin: 0 2px;">
                          <select name="" class="form-control  2_unit"
                              style="width: 70px;    margin: 0 2px;padding: 3px;">
@@ -227,19 +219,15 @@
                              <option value="{{$unit->id}}">{{$unit->title}}</option>
                              @endforeach
                          </select>
-                         <input type="text" class="form-control 2_offer_rate" name="discount[]" value=""
+                         <input type="text" class="form-control 2_offer_rate offer_rate_<?php echo $key + 1; ?>" name="discount[]" value=""
                              style="width: 70px;">
                      </div>
                  </td>
                  <td class="pt-1 pb-3 ">
                      <div class="row">
-                         <input type="text" class="form-control 3_discount" name="" style="width: 70px;">
-                         <!-- <select name="" class="form-control 3_quantity" style="width: 70px;    margin: 0 2px;">
-                                @for($i=1; $i<=100; $i++)
-                                    <option value="{{$i}}">{{$i}}</option>
-                                    @endfor
-                         </select> -->
-                         <input type="text" class="form-control 3_quantity" name="discount[]" value=''
+                         <input type="text" class="form-control 3_discount discount_<?php echo $key + 1; ?>" name="" style="width: 70px;" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>)">
+                         
+                         <input type="text" class="form-control 3_quantity quantity_<?php echo $key + 1; ?>" name="" value='' onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>)"
                              style="width: 70px;    margin: 0 2px;">
                          <select name="" class="form-control 3_unit"
                              style="width: 70px;    margin: 0 2px;padding: 3px;">
@@ -248,7 +236,7 @@
                              <option value="{{$unit->id}}">{{$unit->title}}</option>
                              @endforeach
                          </select>
-                         <input type="text" class="form-control 3_offer_rate" name="discount[]" value=""
+                         <input type="text" class="form-control 3_offer_rate   offer_rate_<?php echo $key + 1; ?>" name="discount[]" value=""
                              style="width: 70px;">
                      </div>
                  </td>
@@ -275,83 +263,108 @@
 
  @push('script_2')
  <script defer>
-$(document).on("input", "#discount", function () {
-    var discount = parseFloat($(this).val());
-    var row = $(this).closest('tr');
-    var product_rate = parseFloat(row.find('.product_rate').text());
-    var offerPrice = product_rate + (product_rate * discount / 100);
-    var quantityInput = row.find('input[name="offer_rate[]"]');
-    quantityInput.val(offerPrice.toFixed(2));
-    dynamicHandler(row, true);
-});
-$(document).on("input", ".offer_rate", function() {
-    var offer_price = parseFloat($(this).val()); // Parse offer_price as a floating-point number
+// $(document).on("input", "#discount", function() {
+//     var discount = parseFloat($(this).val()); // Parse discount as a floating-point number
+    
 
-    var row = $(this).closest('tr');
-    dynamicHandler(row, true);
+//     var row = $(this).closest('tr');
+//     var product_rate = parseFloat($('.product_rate')
+//         .text()); // Use parseFloat to convert the product_rate to a number
 
-});
+//     var offerPrice = product_rate + (product_rate * discount / 100);
 
-var dynamicHandler = (row, update = false) => {
+//     var quantityInput = row.find('input[name="offer_rate[]"]');
+
+//     // Set the offer price value
+//     quantityInput.val(offerPrice.toFixed(
+//         2)); // Use toFixed to round the result to 2 decimal places and set the value
+//     // dynamicHandler(true)
+
+// });
+// $(document).on("input", ".offer_rate", function() {
+//     var offer_price = parseFloat($(this).val()); // Parse offer_price as a floating-point number
+
+//     var row = $(this).closest('tr');
+//     // dynamicHandler(true);
+
+// });
+
+function handleFirstDiscountChange(id){
+    console.log("on change handleFirstDiscountChange")
+    console.log(id)
+
+// 1_offer_rate
+    let discount = parseFloat($(`.discount_${id}`).val())
+    // console.log("discount: ",discount)
+                const productRate = parseFloat($(`.product_rate_${id}`).text())
+
+                
+                let quantity = parseFloat($(`.quantity_${id}`).val());
+                
+                if (!quantity) {
+                    quantity = 1;
+                }
+                
+                let marginToBeAdd = ((quantity * productRate) * discount / 100)
+                let offerRate = (quantity * productRate) +marginToBeAdd ;
+                $(`.offer_rate_${id}`).val(offerRate.toFixed(2));
+
+
+}
+function globalDynamicHandler(_item,i,value) {
+                let _sno = i + 1;
+                if (!_item.classList.contains("data_changed")) {
+                    _item.value = value;
+                }
+                // console.log("item: ", _item)
+                // 1_offer_rate
+    let discount = parseFloat($(`.discount_${_sno}`).val())
+
+                console.log("globalDynamicHandler discount: ", discount)
+                console.log("globalDynamicHandler discount_by_global: ", discount)
+                
+                
+                const productRate = parseFloat($(`.product_rate_${_sno}`).text())
+                
+                let quantity = parseFloat($(`.quantity_${_sno}`).val());
+                if (!quantity) {
+                    quantity = 1;
+                }
+                
+                let marginToBeAdd = ((quantity * productRate) * discount / 100)
+                let offerRate = (quantity * productRate) +marginToBeAdd ;
+                $(`.offer_rate_${_sno}`).val(offerRate.toFixed(2));
+            }
+var dynamicHandler = (update = false) => {
     Array.from({
         length: 3
     }).forEach((item, index) => {
         let sno = index + 1;
 
-        let fixDiscount = parseFloat(row.find("#discount").val() || 0);
-        let adminRate = parseFloat(row.find(".offer_rate").val() || 0);
-        console.log("fixDiscount", row);
-        console.log("adminRate", adminRate);
+        let fixDiscount = parseFloat($("#discount").val() || 0)
+        let adminRate = parseFloat($(".offer_rate").val() || 0)
 
-        if (update) {
-
-            Array.from($(`.${sno}_discount`)).forEach(function(item, i) {
-                let _sno = i + 1;
-                // console.log("item: ", item)
-                // 1_offer_rate
-                let discount = item.value;
-                // console.log("discount: ", discount)
-
-                let quantity = parseFloat($(`.quantity_${_sno}`).val());
-                if (!quantity) {
-                    quantity = 1;
-                }
-                // console.log("quantity: ", quantity)
-                let offerRate = (quantity * adminRate) /** * discount / 100 */ ;
-                $(`.offer_rate_${_sno}`).val(offerRate)
-
-            });
-
-        }
-
+       
 
         /** @function first column's global discount, quantity & unit handler */
         $(`#global_${sno}_discount`).on('input', function() {
             var global_1_discount = $(this).val();
-            Array.from($(`.${sno}_discount`)).forEach(function(item) {
-                if (!item.classList.contains("data_changed")) {
-                    item.value = global_1_discount;
-                }
-                dynamicHandler(true)
-            });
+            Array.from($(`.${sno}_discount`)).forEach((_item,i)=>globalDynamicHandler(_item,i,global_1_discount));
 
         });
+
         $(`#global_${sno}_quantity`).on('input', function() {
             var global_1_quantity = $(this).val();
             // console.log(global_1_quantity);
-            Array.from($(`.${sno}_quantity`)).forEach(function(item) {
-                if (!item.classList.contains("data_changed")) {
-                    item.value = global_1_quantity;
-                }
-            });
+            Array.from($(`.${sno}_quantity`)).forEach((_item,i)=>globalDynamicHandler(_item,i,global_1_quantity));
 
         });
         $(`#global_${sno}_unit`).on('change', function() {
             var global_1_unit = $(this).val();
             // console.log(global_1_unit);
-            Array.from($(`.${sno}_unit`)).forEach(function(item) {
-                if (!item.classList.contains("data_changed")) {
-                    item.value = global_1_unit;
+            Array.from($(`.${sno}_unit`)).forEach(function(_item) {
+                if (!_item.classList.contains("data_changed")) {
+                    _item.value = global_1_unit;
                 }
             });
 
@@ -359,29 +372,25 @@ var dynamicHandler = (row, update = false) => {
         /** @function first column's global discount, quantity & unit handler */
 
         /** @function first column's discount, quantity & unit handler */
-        Array.from($(`.${sno}_discount`)).forEach(function(item) {
-            item.oninput = function(event) {
+        Array.from($(`.${sno}_discount`)).forEach(function(_item) {
+            _item.oninput = function(event) {
                 event.target.classList.add("data_changed");
-                dynamicHandler()
             }
         });
-        Array.from($(`.${sno}_quantity`)).forEach(function(item) {
-            item.oninput = function(event) {
+        Array.from($(`.${sno}_quantity`)).forEach(function(_item) {
+            _item.oninput = function(event) {
                 event.target.classList.add("data_changed");
-                dynamicHandler()
             }
         });
-        Array.from($(`.${sno}_unit`)).forEach(function(item) {
-            item.oninput = function(event) {
+        Array.from($(`.${sno}_unit`)).forEach(function(_item) {
+            _item.oninput = function(event) {
                 event.target.classList.add("data_changed");
-                dynamicHandler()
             }
         });
         /** @function first column's discount, quantity & unit handler */
     })
 }
 
-dynamicHandler($('tr')); // You may need to adjust this based on when and where you call dynamicHandler
-
+dynamicHandler()
  </script>
  @endpush

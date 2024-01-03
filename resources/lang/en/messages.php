@@ -2588,4 +2588,5 @@
   'update_product_price' => 'Update product price',
   'avg_price' => 'Avg price',
   '1 Rupee' => '1 Rupee',
+  'price_management' => 'Price management',
 );

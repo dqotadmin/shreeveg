@@ -56,7 +56,7 @@ class OfferController extends Controller
         $flash_deals = $flash_deal->latest()->paginate(Helpers::getPagination())->appends($query_param);
         $products = $this->product->active()->orderBy('name', 'asc')->get();
 
-        return view('admin-views.offer.flash-deal-index', compact('flash_deals','products', 'search'));
+        return view('admin-views.offer.flash-deal-index', compact('flash_deals', 'products', 'search'));
     }
 
     /**
@@ -92,6 +92,8 @@ class OfferController extends Controller
         if ($request->offer_type == 'other') {
             $flash_deal->discount_type = $request->discount_type;
             $flash_deal->discount_amount = $request->discount_amount;
+        } else {
+            $flash_deal->min_purchase_amount = $request->min_purchase_amount;
         }
 
         $flash_deal->deal_type = 'flash_deal';
@@ -172,16 +174,18 @@ class OfferController extends Controller
         $flash_deal->warehouse_id = $warehouse;
         $flash_deal->offer_type = $request->offer_type;
         $flash_deal->description = $request->description;
-        $flash_deal->discount_type = $request->discount_type;
-        $flash_deal->discount_amount = $request->discount_amount;
+        //$flash_deal->discount_type = $request->discount_type;
+        //$flash_deal->discount_amount = $request->discount_amount;
         $flash_deal->title = $request->title;
         $flash_deal->start_date = $request->start_date;
         $flash_deal->end_date = $request->end_date;
         if ($request->offer_type == 'other') {
             $flash_deal->discount_type = $request->discount_type;
             $flash_deal->discount_amount = $request->discount_amount;
+            $flash_deal->min_purchase_amount = null;
         } else {
             $flash_deal->discount_amount = null;
+            $flash_deal->min_purchase_amount = $request->min_purchase_amount;
         }
         $flash_deal->image = $request->has('image') ? Helpers::update('offer/', $flash_deal->image, 'png', $request->file('image')) : $flash_deal->image;
         $flash_deal->save();

@@ -78,7 +78,12 @@
                                                value="{{ date('Y-m-d\TH:i', strtotime($flash_deal['end_date'])) }}">
                                     </div>
                                 </div>
-                         
+                                <div class="col-6 manageMinPurchase">
+                                    <div class="form-group mb-0">
+                                        <label class="input-label" for="exampleFormControlInput1">{{translate('minimum purchase amount')}}</label>
+                                        <input type="number"  name="min_purchase_amount" required value="{{$flash_deal['min_purchase_amount']}}" class="form-control" placeholder="{{ translate('minimum purchase amount') }}">
+                                    </div>
+                                </div>
                         <div class="col-6 manageType">
                             <div class="form-group mb-0">
                                 <label class="input-label" for="exampleFormControlSelect1">{{translate('discount')}} {{translate('type')}}<span
@@ -132,6 +137,7 @@
             if (offerType == 'one_rupee') {
                 $('.manageType').hide();
             } else {
+                $('.manageMinPurchase').hide();
                 $('.manageType').show();
             }
             // INITIALIZATION OF FLATPICKR
@@ -144,8 +150,10 @@
         $('input[type=radio][name=offer_type]').change(function() {
         if (this.value == 'one_rupee') {
             $('.manageType').hide();
+            $('.manageMinPurchase').show();
         } else {
             $('.manageType').show();
+            $('.manageMinPurchase').hide();
         }
     });
         // $('#start_date,#end_date').change(function () {

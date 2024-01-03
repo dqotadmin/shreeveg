@@ -42,10 +42,12 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="col-md-6">
+                                    @if($flash_deal->offer_type == 'other')
+                                    <div class="col-md-6 manageQty">
                                         <label for="name" class="title-color text-capitalize">{{ translate('quantity')}}</label>
                                         <input type="text" class="form-control" name="quantity" required>
                                     </div>
+                                    @endif
                                 </div>
                             </div>
                             <div id="product_detail"></div>
@@ -77,7 +79,9 @@
                             <tr>
                                 <th>{{ translate('SL')}}</th>
                                 <th>{{translate('name')}}</th>
+                                @if($flash_deal->offer_type == 'other')
                                 <th>{{translate('quantity')}}</th>
+                                @endif
                                 <!-- <th>{{ translate('actual_price')}}</th> -->
                                 <!-- <th>{{ translate('discount')}}</th> -->
                                 <!-- <th>{{ translate('discount_price')}}</th> -->
@@ -91,8 +95,9 @@
                             <tr>
                                     <td>{{$key+1}}</td>
                                     <td>{{$data->product['name']}}</td>
+                                    @if($flash_deal->offer_type == 'other')
                                       <td>{{ $data['quantity'] }}</td>
-                                   
+                                    @endif
                                     <td>
                                         <div class="d-flex justify-content-center">
                                             <a  title="{{ trans ('Delete')}}"

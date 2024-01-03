@@ -2577,4 +2577,7 @@
   'Other' => 'Other',
   'warehouse_purchase_orders' => 'Warehouse purchase orders',
   '1 Rupee' => '1 Rupee',
+  'minimum purchase amount' => 'Minimum purchase amount',
+  'Avail Offers' => 'Avail Offers',
+  'Available Offers' => 'Available Offers',
 );

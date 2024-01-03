@@ -56,12 +56,29 @@ class Helpers
             }
         }
         // product is  FlashDealProduct
-        $products = FlashDeal::query()->whereJsonContains('warehouse_id', $warehouseId)->active()->whereHas('products', function ($qu) use ($product_id) { 
+        $products = FlashDeal::query()->whereJsonContains('warehouse_id', $warehouseId)->active()->whereHas('products', function ($qu) use ($product_id) {
             $qu->where('product_id', $product_id);
         })->orderBy('title', 'asc')->get();
         //$products = FlashDeal::query()->whereJsonContains('warehouse_id', $warehouseId)->get();
         //dd(($products), $warehouseId);
         return  $products;
+    }
+
+    public static function adminWhOffers($warehouseId = false)
+    {
+
+        if (!$warehouseId) {
+            $authUser = auth('admin')->user();
+            if (in_array($authUser->admin_role_id, [6, 7])) {
+                $warehouseId = $authUser->Store->warehouse_id;
+            } elseif (in_array($authUser->admin_role_id, [3, 4, 5])) {
+                $warehouseId = $authUser->warehouse_id;
+            }
+        }
+
+        $adminOffers = FlashDeal::where('offer_type', 'one_rupee')->whereJsonContains('warehouse_id', $warehouseId)->active()->whereHas('products')->orderBy('title', 'asc')->get();
+        //dd(($adminOffers), $warehouseId);
+        return  $adminOffers;
     }
 
     public static function getWhProductOfferQty($product_id, $deal_id)

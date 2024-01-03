@@ -30,8 +30,8 @@
 
                         <div class="d-flex flex-wrap align-items-center form-control border">
                             <label class="form-check form--check mr-2 mr-md-4 mb-0">
-                                <input type="radio" class="form-check-input offer_type" name="offer_type"  value="one_kg"  > 
-                                <span class="form-check-label"> {{ translate('1 Kg') }}</span>
+                                <input type="radio" class="form-check-input offer_type" name="offer_type"  value="one_rupee"  > 
+                                <span class="form-check-label"> {{ Helpers::set_symbol(1) }}</span>
                             </label>
                             <label class="form-check form--check mb-0">
                                 <input type="radio" class="form-check-input offer_type" name="offer_type"  value="other" checked>
@@ -102,7 +102,7 @@
                         <div class="col-6 manageType">
                             <div class="form-group mb-0">
                                 <label class="input-label" for="exampleFormControlInput1">{{translate('discount_amount')}}</label>
-                                <input type="number"  name="discount_amount" value="{{old('discount_amount')}}" class="form-control" placeholder="{{ translate('discount_amount') }}" >
+                                <input type="number"  name="discount_amount" value="{{old('discount_amount')}}" class="form-control" placeholder="{{ translate('discount_amount') }}">
                             </div>
                         </div>
                         </div>
@@ -187,7 +187,10 @@
                             </span>
                         </td>
                         <td>{{date('d-M-y',strtotime($flash_deal['start_date']))}} -
-                            {{date('d-M-y',strtotime($flash_deal['end_date']))}}</td>
+                            {{date('d-M-y',strtotime($flash_deal['end_date']))}} <br>
+                            {{date('H:i A',strtotime($flash_deal['start_date']))}} &nbsp;&nbsp;
+                            {{date('H:i A',strtotime($flash_deal['end_date']))}}
+                        </td>
                         <td>
                             @if(\Carbon\Carbon::parse($flash_deal['end_date'])->endOfDay()->isPast())
                             <span class="badge badge-soft-danger">{{ translate('expired')}} </span>
@@ -267,7 +270,7 @@ $(document).on('ready', function() {
 });
 
 $('input[type=radio][name=offer_type]').change(function() {
-        if (this.value == 'one_kg') {
+        if (this.value == 'one_rupee') {
             $('.manageType').hide();
         } else {
             $('.manageType').show();

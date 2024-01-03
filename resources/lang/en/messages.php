@@ -2587,4 +2587,5 @@
   'shreeveg Price' => 'Shreeveg Price',
   'update_product_price' => 'Update product price',
   'avg_price' => 'Avg price',
+  '1 Rupee' => '1 Rupee',
 );

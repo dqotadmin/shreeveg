@@ -33,7 +33,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label for="name" class="title-color text-capitalize">{{ translate('Add new product')}}</label>
-                                        <select class="js-example-basic-multiple js-states js-example-responsive form-control h--45px" name="product_id">
+                                        <select class="js-example-basic-multiple js-states js-example-responsive form-control h--45px productSelect"  name="product_id">
                                             <option disabled selected>{{ translate('Select Product')}}</option>
                                             @foreach ($products as $key => $product)
                                                 <option value="{{ $product->id }}">
@@ -44,10 +44,11 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label for="name" class="title-color text-capitalize">{{ translate('quantity')}}</label>
-                                        <input type="text" class="form-control" name="quantity">
+                                        <input type="text" class="form-control" name="quantity" required>
                                     </div>
                                 </div>
                             </div>
+                            <div id="product_detail"></div>
                             <div class="d-flex justify-content-end">
                                 <div class="btn--container justify-content-end">
                                 <a type="button" href="{{route('admin.offer.flash.index')}}" class="btn btn--reset">{{translate('back')}}</a>
@@ -162,6 +163,21 @@
                     });
                 }
             })
+        });
+
+        $('.productSelect').on('change',function(){ 
+        var product_id = $(this).val();
+        var flash_deal_id = "{{$flash_deal->id}}";
+
+        $.ajax({
+            url: '{{url('/')}}/admin/offer/flash/product-price/'+flash_deal_id+'/'+product_id,
+            type:'GET',
+            dataType:'json',
+            success:function(data){
+                $('#product_detail').html(data.view);
+
+            }
+        });
         });
     </script>
 

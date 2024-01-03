@@ -24,6 +24,16 @@
             <div class="card-body">
                 <form action="{{route('admin.offer.flash.update', [$flash_deal['id']])}}" method="post" enctype="multipart/form-data">
                     @csrf
+                    <div class="d-flex flex-wrap align-items-center form-control border">
+                        <label class="form-check form--check mr-2 mr-md-4 mb-0">
+                            <input type="radio" class="form-check-input offer_type" name="offer_type"  value="one_rupee" {{$flash_deal['offer_type'] == 'one_rupee'?'checked':''}} > 
+                            <span class="form-check-label"> {{ Helpers::set_symbol(1) }}</span>
+                        </label>
+                        <label class="form-check form--check mb-0">
+                            <input type="radio" class="form-check-input offer_type" name="offer_type"  value="other" {{$flash_deal['offer_type'] == 'other'?'checked':''}} >
+                            <span class="form-check-label"> {{ translate('Other') }}</span>
+                        </label>
+                    </div>
                     <div class="row g-3">
                         <div class="col-md-6">
                             <div class="row g-3">
@@ -69,7 +79,7 @@
                                     </div>
                                 </div>
                          
-                        <div class="col-6">
+                        <div class="col-6 manageType">
                             <div class="form-group mb-0">
                                 <label class="input-label" for="exampleFormControlSelect1">{{translate('discount')}} {{translate('type')}}<span
                                         class="input-label-secondary">*</span></label>
@@ -79,10 +89,10 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-6 manageType">
                             <div class="form-group mb-0">
                                 <label class="input-label" for="exampleFormControlInput1">{{translate('discount_amount')}}</label>
-                                <input type="number" step="0.1" name="discount_amount" value="{{$flash_deal['discount_amount']}}" class="form-control" placeholder="{{ translate('discount_amount') }}" required>
+                                <input type="number" step="0.1" name="discount_amount" value="{{$flash_deal['discount_amount']}}" class="form-control" placeholder="{{ translate('discount_amount') }}">
                             </div>
                         </div>
                         </div>
@@ -118,6 +128,12 @@
     <script>
 
         $(document).on('ready', function () {
+            var offerType = "{{$flash_deal['offer_type']}}";
+            if (offerType == 'one_rupee') {
+                $('.manageType').hide();
+            } else {
+                $('.manageType').show();
+            }
             // INITIALIZATION OF FLATPICKR
             // =======================================================
             $('.js-flatpickr').each(function () {
@@ -125,6 +141,13 @@
             });
         });
 
+        $('input[type=radio][name=offer_type]').change(function() {
+        if (this.value == 'one_rupee') {
+            $('.manageType').hide();
+        } else {
+            $('.manageType').show();
+        }
+    });
         // $('#start_date,#end_date').change(function () {
         //     let fr = $('#start_date').val();
         //     let to = $('#end_date').val();

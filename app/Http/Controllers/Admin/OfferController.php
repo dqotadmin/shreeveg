@@ -10,6 +10,7 @@ use App\Model\WarehouseCategory;
 use Brian2694\Toastr\Facades\Toastr;
 use App\Model\Product;
 use App\Model\Category;
+use App\Model\WarehouseProduct;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -169,12 +170,19 @@ class OfferController extends Controller
         $warehouse = [];
         $warehouse = $request->warehouse_id;
         $flash_deal->warehouse_id = $warehouse;
+        $flash_deal->offer_type = $request->offer_type;
         $flash_deal->description = $request->description;
         $flash_deal->discount_type = $request->discount_type;
         $flash_deal->discount_amount = $request->discount_amount;
         $flash_deal->title = $request->title;
         $flash_deal->start_date = $request->start_date;
         $flash_deal->end_date = $request->end_date;
+        if ($request->offer_type == 'other') {
+            $flash_deal->discount_type = $request->discount_type;
+            $flash_deal->discount_amount = $request->discount_amount;
+        } else {
+            $flash_deal->discount_amount = null;
+        }
         $flash_deal->image = $request->has('image') ? Helpers::update('offer/', $flash_deal->image, 'png', $request->file('image')) : $flash_deal->image;
         $flash_deal->save();
         Toastr::success(translate('Flash deal updated successfully!'));
@@ -192,12 +200,18 @@ class OfferController extends Controller
         return view('admin-views.offer.add-product-index', compact('flash_deal', 'flash_deal_products', 'products', 'datas'));
     }
 
-    /**
-     * @param Request $request
-     * @param $flash_deal_id
-     * @return RedirectResponse
-     * @throws ValidationException
-     */
+    public function getProductPrice($flash_deal_id, $productId)
+    {
+
+        $warehouseIds = $products = FlashDeal::find($flash_deal_id)->warehouse_id;
+        $products = WarehouseProduct::query()->whereIn('warehouse_id', $warehouseIds)->where('product_id', $productId)->get();
+        // Decode JSON data to an associative array
+        //dd($warehouseIds, $products);
+        return response()->json([
+            'view' => view('admin-views.offer.render_warehouse_products', compact('products'))->render()
+        ]);
+    }
+
     public function flash_product_store(Request $request, $flash_deal_id): RedirectResponse
     {
         $this->validate($request, [

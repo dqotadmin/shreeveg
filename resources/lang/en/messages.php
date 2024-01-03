@@ -2580,4 +2580,5 @@
   'minimum purchase amount' => 'Minimum purchase amount',
   'Avail Offers' => 'Avail Offers',
   'Available Offers' => 'Available Offers',
+  'Sell' => 'Sell',
 );

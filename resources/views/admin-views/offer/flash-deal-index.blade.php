@@ -1,21 +1,17 @@
 @extends('layouts.admin.app')
-
 @section('title', translate('flash_sale'))
-
 @push('css_or_js')
-
 @endpush
-
 @section('content')
 <div class="content container-fluid">
     <!-- Page Header -->
     <div class="page-header">
         <h1 class="page-header-title">
             <span class="page-header-icon">
-                <img src="{{asset('public/assets/admin/img/flash_sale.png')}}" class="w--20" alt="">
+            <img src="{{asset('public/assets/admin/img/flash_sale.png')}}" class="w--20" alt="">
             </span>
             <span>
-                {{translate('flash sale')}}
+            {{translate('flash sale')}}
             </span>
         </h1>
     </div>
@@ -27,15 +23,14 @@
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label class="form-label">{{ translate('Select Offer Type') }}</label>
-
                         <div class="d-flex flex-wrap align-items-center form-control border">
                             <label class="form-check form--check mr-2 mr-md-4 mb-0">
-                                <input type="radio" class="form-check-input offer_type" name="offer_type"  value="one_rupee"  > 
-                                <span class="form-check-label"> {{ Helpers::set_symbol(1) }}</span>
+                            <input type="radio" class="form-check-input offer_type" name="offer_type"  value="one_rupee"  > 
+                            <span class="form-check-label"> {{ Helpers::set_symbol(1) }}</span>
                             </label>
                             <label class="form-check form--check mb-0">
-                                <input type="radio" class="form-check-input offer_type" name="offer_type"  value="other" checked>
-                                <span class="form-check-label"> {{ translate('Other') }}</span>
+                            <input type="radio" class="form-check-input offer_type" name="offer_type"  value="other" checked>
+                            <span class="form-check-label"> {{ translate('Sell') }}</span>
                             </label>
                         </div>
                     </div>
@@ -47,7 +42,6 @@
                                 <div class="form-group mb-0">
                                     <label class="input-label" for="exampleFormControlInput1">{{translate('warehouse')}}</label>
                                     <select name="warehouse_id[]" id="" class="form-control chosen-select" multiple>
-                                       
                                         @foreach(\App\Model\Warehouse::where('deleted_at',null)->get() as $warehouse)
                                         <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
                                         @endforeach
@@ -56,7 +50,7 @@
                             </div>
                             <div class="col-12">
                                 <div class="form-group mb-0">
-                                <label class="input-label" for="exampleFormControlInput1">{{translate('title')}}</label>
+                                    <label class="input-label" for="exampleFormControlInput1">{{translate('title')}}</label>
                                     <input type="text" name="title" value="{{old('title')}}" class="form-control"
                                         placeholder="{{ translate('enter title') }}" maxlength="255" required>
                                 </div>
@@ -91,27 +85,26 @@
                             <div class="col-6 manageMinPurchase">
                                 <div class="form-group mb-0">
                                     <label class="input-label" for="exampleFormControlInput1">{{translate('minimum purchase amount')}}</label>
-                                    <input type="number"  name="min_purchase_amount" required value="{{old('min_purchase_amount')}}" class="form-control" placeholder="{{ translate('minimum purchase amount') }}">
+                                    <input type="number"  name="min_purchase_amount" value="{{old('min_purchase_amount')}}" class="form-control" placeholder="{{ translate('minimum purchase amount') }}">
+                                </div>
+                            </div>
+                            {{-- <div class="col-6 manageType">
+                                <div class="form-group mb-0">
+                                    <label class="input-label" for="exampleFormControlSelect1">{{translate('discount')}} {{translate('type')}}<span
+                                        class="input-label-secondary">*</span></label>
+                                    <-- <select name="discount_type" class="form-control" onchange="show_item(this.value)"> -->
+                                    <select name="discount_type" class="form-control" >
+                                        <option value="percent">{{translate('percent')}}</option>
+                                        <option value="amount">{{translate('amount')}}</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-6 manageType">
-                            <div class="form-group mb-0">
-                                <label class="input-label" for="exampleFormControlSelect1">{{translate('discount')}} {{translate('type')}}<span
-                                        class="input-label-secondary">*</span></label>
-                                        {{-- <select name="discount_type" class="form-control" onchange="show_item(this.value)"> --}}
-                                <select name="discount_type" class="form-control" >
-                                    <option value="percent">{{translate('percent')}}</option>
-                                    <option value="amount">{{translate('amount')}}</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="col-6 manageType">
-                            <div class="form-group mb-0">
-                                <label class="input-label" for="exampleFormControlInput1">{{translate('discount_amount')}}</label>
-                                <input type="number"  name="discount_amount" value="{{old('discount_amount')}}" class="form-control" placeholder="{{ translate('discount_amount') }}">
-                            </div>
-                        </div>
+                                <div class="form-group mb-0">
+                                    <label class="input-label" for="exampleFormControlInput1">{{translate('discount_amount')}}</label>
+                                    <input type="number"  name="discount_amount" value="{{old('discount_amount')}}" class="form-control" placeholder="{{ translate('discount_amount') }}">
+                                </div>
+                            </div> --}}
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -121,10 +114,10 @@
                                 <small class="text-danger">* ( {{translate('ratio')}} 3:1 )</small>
                             </h5>
                             <label class="upload--vertical">
-                                <input type="file" name="image" id="customFileEg1" class=""
-                                    accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" hidden>
-                                <img id="viewer" src="{{asset('public/assets/admin/img/upload-vertical.png')}}"
-                                    alt="banner image" />
+                            <input type="file" name="image" id="customFileEg1" class=""
+                                accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" hidden>
+                            <img id="viewer" src="{{asset('public/assets/admin/img/upload-vertical.png')}}"
+                                alt="banner image" />
                             </label>
                         </div>
                     </div>
@@ -138,13 +131,12 @@
             </form>
         </div>
     </div>
-
     <div class="card">
         <!-- Header -->
         <div class="card-header border-0">
             <div class="card--header justify-content-between max--sm-grow">
                 <h5 class="card-title">{{translate('Flash Sale List')}} <span
-                        class="badge badge-soft-secondary">{{ $flash_deals->total() }}</span></h5>
+                    class="badge badge-soft-secondary">{{ $flash_deals->total() }}</span></h5>
                 <form action="{{url()->current()}}" method="GET">
                     <div class="input-group">
                         <input type="search" name="search" class="form-control"
@@ -152,7 +144,7 @@
                             value="{{$search}}" required autocomplete="off">
                         <div class="input-group-append">
                             <button type="submit" class="input-group-text">
-                                {{translate('search')}}
+                            {{translate('search')}}
                             </button>
                         </div>
                     </div>
@@ -160,7 +152,6 @@
             </div>
         </div>
         <!-- End Header -->
-
         <!-- Table -->
         <div class="table-responsive datatable-custom">
             <table class="table table-borderless table-thead-bordered table-nowrap table-align-middle card-table">
@@ -176,7 +167,6 @@
                         <th class="text-center border-0">{{translate('action')}}</th>
                     </tr>
                 </thead>
-
                 <tbody>
                     @foreach($flash_deals as $key=>$flash_deal)
                     <tr>
@@ -190,7 +180,7 @@
                         </td>
                         <td>
                             <span class="d-block font-size-sm text-body text-trim-25">
-                                {{$flash_deal['title']}}
+                            {{$flash_deal['title']}}
                             </span>
                         </td>
                         <td>{{date('d-M-y',strtotime($flash_deal['start_date']))}} -
@@ -208,16 +198,15 @@
                         <td>
                             <label class="toggle-switch my-0">
                             @if(!(\Carbon\Carbon::parse($flash_deal['end_date'])->endOfDay()->isPast()))
-                                <input type="checkbox"
-                                    onclick="status_change_alert('{{ route('admin.offer.flash.status', [$flash_deal->id, $flash_deal->status ? 0 : 1]) }}', '{{ $flash_deal->status? translate('you_want_to_disable_this_deal'): translate('you_want_to_active_this_deal') }}', event)"
-                                    class="toggle-switch-input" id="stocksCheckbox{{ $flash_deal->id }}"
-                                    {{ $flash_deal->status ? 'checked' : '' }}>
-                                <span class="toggle-switch-label mx-auto text">
-                                    <span class="toggle-switch-indicator"></span>
-                                </span>
+                            <input type="checkbox"
+                            onclick="status_change_alert('{{ route('admin.offer.flash.status', [$flash_deal->id, $flash_deal->status ? 0 : 1]) }}', '{{ $flash_deal->status? translate('you_want_to_disable_this_deal'): translate('you_want_to_active_this_deal') }}', event)"
+                            class="toggle-switch-input" id="stocksCheckbox{{ $flash_deal->id }}"
+                            {{ $flash_deal->status ? 'checked' : '' }}>
+                            <span class="toggle-switch-label mx-auto text">
+                            <span class="toggle-switch-indicator"></span>
+                            </span>
                             </label>
                             @endif
-
                         </td>
                         <td class="text-center">{{ $flash_deal->products_count }}</td>
                         <td>
@@ -225,14 +214,14 @@
                             <div class="btn--container justify-content-center">
                                 <a class="h-30 d-flex gap-2 align-items-center btn btn-soft-info btn-sm border-info"
                                     href="{{route('admin.offer.flash.add-product',[$flash_deal['id']])}}">
-                                    <img src="{{asset('/public/assets/back-end/img/plus.svg')}}" class="svg" alt="">
-                                    {{translate('Add Product')}}
+                                <img src="{{asset('/public/assets/back-end/img/plus.svg')}}" class="svg" alt="">
+                                {{translate('Add Product')}}
                                 </a>
                                 <a class="action-btn" href="{{route('admin.offer.flash.edit',[$flash_deal['id']])}}">
-                                    <i class="tio-edit"></i></a>
+                                <i class="tio-edit"></i></a>
                                 <a class="action-btn btn--danger btn-outline-danger" href="javascript:"
-                                    onclick="form_alert('deal-{{$flash_deal['id']}}','{{ translate("Want to delete this") }}')">
-                                    <i class="tio-delete-outlined"></i>
+                                onclick="form_alert('deal-{{$flash_deal['id']}}','{{ translate("Want to delete this") }}')">
+                                <i class="tio-delete-outlined"></i>
                                 </a>
                             </div>
                             <form action="{{route('admin.offer.flash.delete',[$flash_deal['id']])}}" method="post"
@@ -250,7 +239,6 @@
                     {!! $flash_deals->links() !!}
                 </tfoot>
             </table>
-
         </div>
         @if(count($flash_deals) == 0)
         <div class="text-center p-4">
@@ -262,81 +250,80 @@
         <!-- End Table -->
     </div>
 </div>
-
 @endsection
-
 @push('script_2')
 <script>
-$(document).on('ready', function() {
-    $('.manageMinPurchase').hide();
-    // INITIALIZATION OF FLATPICKR
-    // =======================================================
-    $('.js-flatpickr').each(function() {
-        $.HSCore.components.HSFlatpickr.init($(this));
+    $(document).on('ready', function() {
+        $('.manageMinPurchase').hide();
+        $('input[name="min_purchase_amount"]').removeAttr('required');
+        // INITIALIZATION OF FLATPICKR
+        // =======================================================
+        $('.js-flatpickr').each(function() {
+            $.HSCore.components.HSFlatpickr.init($(this));
+        });
     });
-});
-
-$('input[type=radio][name=offer_type]').change(function() {
-        if (this.value == 'one_rupee') {
-            $('.manageType').hide();
-            $('.manageMinPurchase').show();
-        } else {
-            $('.manageType').show();
-            $('.manageMinPurchase').hide();
+    
+    $('input[type=radio][name=offer_type]').change(function() {
+            if (this.value == 'one_rupee') {
+                $('input[name="min_purchase_amount"]').attr('required');
+                $('.manageType').hide();
+                $('.manageMinPurchase').show();
+            } else {
+                $('input[name="min_purchase_amount"]').removeAttr('required');
+                $('.manageType').show();
+                $('.manageMinPurchase').hide();
+            }
+        });
+    
+    $('#start_date,#end_date').change(function() {
+        let fr = $('#start_date').val();
+        let to = $('#end_date').val();
+        if (fr != '' && to != '') {
+            if (fr > to) {
+                $('#start_date').val('');
+                $('#end_date').val('');
+                toastr.error('Invalid date range!', Error, {
+                    CloseButton: true,
+                    ProgressBar: true
+                });
+            }
         }
     });
-
-$('#start_date,#end_date').change(function() {
-    let fr = $('#start_date').val();
-    let to = $('#end_date').val();
-    if (fr != '' && to != '') {
-        if (fr > to) {
-            $('#start_date').val('');
-            $('#end_date').val('');
-            toastr.error('Invalid date range!', Error, {
-                CloseButton: true,
-                ProgressBar: true
-            });
+    
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+    
+            reader.onload = function(e) {
+                $('#viewer').attr('src', e.target.result);
+            }
+    
+            reader.readAsDataURL(input.files[0]);
         }
     }
-});
-
-function readURL(input) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-
-        reader.onload = function(e) {
-            $('#viewer').attr('src', e.target.result);
-        }
-
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-
-$("#customFileEg1").change(function() {
-    readURL(this);
-});
+    
+    $("#customFileEg1").change(function() {
+        readURL(this);
+    });
 </script>
-
 <script>
-function status_change_alert(url, message, e) {
-    e.preventDefault();
-    Swal.fire({
-        title: 'Are you sure?',
-        text: message,
-        type: 'warning',
-        showCancelButton: true,
-        cancelButtonColor: 'default',
-        confirmButtonColor: '#107980',
-        cancelButtonText: 'No',
-        confirmButtonText: 'Yes',
-        reverseButtons: true
-    }).then((result) => {
-        if (result.value) {
-            location.href = url;
-        }
-    })
-}
+    function status_change_alert(url, message, e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'Are you sure?',
+            text: message,
+            type: 'warning',
+            showCancelButton: true,
+            cancelButtonColor: 'default',
+            confirmButtonColor: '#107980',
+            cancelButtonText: 'No',
+            confirmButtonText: 'Yes',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.value) {
+                location.href = url;
+            }
+        })
+    }
 </script>
-
 @endpush

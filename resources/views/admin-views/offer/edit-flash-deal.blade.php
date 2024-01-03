@@ -81,10 +81,10 @@
                                 <div class="col-6 manageMinPurchase">
                                     <div class="form-group mb-0">
                                         <label class="input-label" for="exampleFormControlInput1">{{translate('minimum purchase amount')}}</label>
-                                        <input type="number"  name="min_purchase_amount" required value="{{$flash_deal['min_purchase_amount']}}" class="form-control" placeholder="{{ translate('minimum purchase amount') }}">
+                                        <input type="number"  name="min_purchase_amount"  value="{{$flash_deal['min_purchase_amount']}}" class="form-control" placeholder="{{ translate('minimum purchase amount') }}">
                                     </div>
                                 </div>
-                        <div class="col-6 manageType">
+                        {{-- <div class="col-6 manageType">
                             <div class="form-group mb-0">
                                 <label class="input-label" for="exampleFormControlSelect1">{{translate('discount')}} {{translate('type')}}<span
                                         class="input-label-secondary">*</span></label>
@@ -99,7 +99,7 @@
                                 <label class="input-label" for="exampleFormControlInput1">{{translate('discount_amount')}}</label>
                                 <input type="number" step="0.1" name="discount_amount" value="{{$flash_deal['discount_amount']}}" class="form-control" placeholder="{{ translate('discount_amount') }}">
                             </div>
-                        </div>
+                        </div> --}}
                         </div>
                     </div>
                         <div class="col-md-6">
@@ -136,9 +136,11 @@
             var offerType = "{{$flash_deal['offer_type']}}";
             if (offerType == 'one_rupee') {
                 $('.manageType').hide();
+                $('input[name="min_purchase_amount"]').attr('required');
             } else {
                 $('.manageMinPurchase').hide();
                 $('.manageType').show();
+                $('input[name="min_purchase_amount"]').removeAttr('required');
             }
             // INITIALIZATION OF FLATPICKR
             // =======================================================
@@ -149,9 +151,11 @@
 
         $('input[type=radio][name=offer_type]').change(function() {
         if (this.value == 'one_rupee') {
+            $('input[name="min_purchase_amount"]').attr('required');
             $('.manageType').hide();
             $('.manageMinPurchase').show();
         } else {
+            $('input[name="min_purchase_amount"]').removeAttr('required');
             $('.manageType').show();
             $('.manageMinPurchase').hide();
         }

@@ -193,15 +193,21 @@ class OfferController extends Controller
         return redirect()->route('admin.offer.flash.index');
     }
 
-
+    public function getProductByCatId($catId)
+    {
+        $products =  $this->product->where('category_id', $catId)->active()->with('unit')->orderBy('name', 'asc')->get();
+        return response()->json(['products' => $products]);
+    }
     public function flash_add_product($flash_deal_id): View|Factory|Application
     {
         $flash_deal = $this->flash_deal->where('id', $flash_deal_id)->first();
         $flash_deal_product_ids = $this->flash_deal_product->where('flash_deal_id', $flash_deal_id)->pluck('product_id');
         $flash_deal_products = $this->product->whereIn('id', $flash_deal_product_ids)->paginate(Helpers::getPagination());
         $products = $this->product->active()->orderBy('name', 'asc')->get();
+        $categories = $this->category->active()->get();
+        $options = Helpers::getCategoryDropDown($categories);
         $datas = FlashDealProduct::where('flash_deal_id', $flash_deal_id)->get();
-        return view('admin-views.offer.add-product-index', compact('flash_deal', 'flash_deal_products', 'products', 'datas'));
+        return view('admin-views.offer.add-product-index', compact('flash_deal', 'flash_deal_products', 'products', 'datas', 'options'));
     }
 
     public function getProductPrice($flash_deal_id, $productId)

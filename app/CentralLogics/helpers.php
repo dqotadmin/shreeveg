@@ -987,16 +987,19 @@ class Helpers
     public static function buildCategoryOptions($categories, $parentId = 0, $level = 0, $selected = 0)
     {
         $html = '';
+        $colors = ['text-primary', 'text-success', 'text-warning', 'text-danger']; // Add more colors as needed
+
         foreach ($categories as $category) {
             if ($category['parent_id'] == $parentId) {
-
                 if (is_array($selected))
                     $sel = (in_array($category['id'], $selected)) ? 'selected' : '';
                 else
                     $sel = ($category['id'] == $selected) ? 'selected' : '';
 
-                $name = str_repeat("&nbsp;", $level * 4) . $category['name']; // Indent based on level
-                $html .= "<option value='{$category['id']}' {$sel} >$name</option>";
+                    $name = str_repeat("&nbsp;", $level * 5) . '<strong>' . $category['name'] . '</strong>'; // Indent based on level and make text bold
+                $colorClass = isset($colors[$level]) ? $colors[$level] : '';
+                $html .= "<option value='{$category['id']}' {$sel} class='{$colorClass}' > $name</option>";
+
                 $html .= self::buildCategoryOptions($categories, $category['id'], $level + 1, $selected);
             }
         }

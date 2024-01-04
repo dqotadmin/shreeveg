@@ -2592,4 +2592,5 @@
   'Avail Offers' => 'Avail Offers',
   'Available Offers' => 'Available Offers',
   'Sell' => 'Sell',
+  'category_name' => 'Category name',
 );

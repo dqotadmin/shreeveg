@@ -2593,4 +2593,7 @@
   'Available Offers' => 'Available Offers',
   'Sell' => 'Sell',
   'category_name' => 'Category name',
+  'price_management' => 'Price management',
+  'average_price_management' => 'Average price management',
+  'store_price_management' => 'Store price management',
 );

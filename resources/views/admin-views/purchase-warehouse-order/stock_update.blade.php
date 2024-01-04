@@ -16,7 +16,8 @@
             
         </h1>
         <?php $currentDate = date('d-M-y', strtotime('today')); ?>
-    <a  class="btn btn-info " href="{{route('admin.stock-update')}}">Price Management <strong class="text-dark">{{$currentDate}}</strong> </a>
+    <a  class="btn btn-info " href="{{route('admin.stock-update',['type'=>'avg_price'])}}">{{translate('average_price_management')}} <strong class="text-dark">{{$currentDate}}</strong> </a>
+    <a  class="btn btn-success " href="{{route('admin.stock-update',['type'=>'store_price'])}}">{{translate('store_price_management')}} <strong class="text-dark">{{$currentDate}}</strong> </a>
     
  </div>
     </div>

@@ -48,9 +48,10 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
         Route::get('warehouse-receiver-rate-list', 'BrokerRateListController@wh_receiver_rate_list')->name('broker-rate-list.wh_receiver_rate_list');
         Route::post('warehouse-receiver-rate-list', 'BrokerRateListController@wh_receiver_post_order')->name('broker-rate-list.wh_receiver_post_order');
         Route::resource('purchase-warehouse-order', 'PurchaseWarehouseOrderController');
-        Route::get('price-update', 'PurchaseWarehouseOrderController@price_update')->name('price-update');
+        //Route::get('price-update', 'PurchaseWarehouseOrderController@price_update')->name('price-update');
         Route::get('stock-update', 'PurchaseWarehouseOrderController@stock_update')->name('stock-update');
-        Route::post('price-update', 'PurchaseWarehouseOrderController@product_price_update')->name('price-update');
+        Route::get('price-update/{type?}', 'PurchaseWarehouseOrderController@getPriceUpdate')->name('price-update');
+        Route::post('price-update/{type?}', 'PurchaseWarehouseOrderController@postPriceUpdate')->name('price-update');
         Route::post('warehouse-receiver-update-status/{id}', 'PurchaseWarehouseOrderController@wh_receiver_update_status')->name('wh_receiver_update_status');
 
         // });

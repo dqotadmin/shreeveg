@@ -40,9 +40,6 @@ class PurchaseWarehouseOrderController extends Controller
         $this->warehouse_products = '\App\Model\WarehouseProduct';
     }
 
-    /**
-     * @return JsonResponse
-     */
 
     function index(Request $request)
     {
@@ -146,50 +143,59 @@ class PurchaseWarehouseOrderController extends Controller
         }
     }
 
-    public function price_update(Request $request)
+    public function getPriceUpdate(Request $request)
     {
-
-
-        $query_param = [];
-        $search = $request['search'];
-        $role = auth('admin')->user()->admin_role_id;
-        $rows = $this->mTable::query();
-        $today = Carbon::today();
-        if ($role == 8) {
-            $rows->where('broker_id', auth('admin')->user()->id);
-        } elseif ($role == 1) {
-            $rows->get();
-        } else {
-            $rows->where('warehouse_id', auth('admin')->user()->warehouse_id);
+        if ($request->type == 'store_price') {
+            return view($this->view_folder . '.store_price_update');
         }
-        if ($request->has('search')) {
-            $key = explode(' ', $request['search']);
-            $rows->where(function ($q) use ($key) {
-                foreach ($key as $value) {
-                    $q->orWhere('invoice_number', 'like', "%{$value}%");
-                    $q->orWhere('gstin_number', 'like', "%{$value}%");
-                    $q->orWhere('status', 'like', "%{$value}%");
+        return view($this->view_folder . '.avg_price_update');
+    }
+
+    // public function stock_update(Request $request)
+    // {
+    //     if ($request->type == 'store_price') {
+    //         return view($this->view_folder . '.store_price_update');
+    //     }
+    //     return view($this->view_folder . '.avg_price_update');
+    // }
+
+    public function postPriceUpdate(Request $request)
+    {
+        //dd($request->all());
+        $authUser = auth('admin')->user();
+        foreach ($request->product_id as $key => $product_id) {
+            $existRow = WarehouseProduct::where('product_id', $product_id)->where('warehouse_id', $authUser->warehouse_id)->first();
+            // dump($existRow->productDetail->name);
+
+
+            if (!$existRow) {
+                $existRow = new WarehouseProduct;
+                $existRow->product_id = $product_id;
+                $existRow->warehouse_id = $authUser->warehouse_id;
+                $existRow->save();
+            }
+
+            if (isset($request->product_id[$key])) {
+                $existRow['product_id']  = $product_id;
+            }
+
+            if (isset($request->avg_price[$key])) {
+                $existRow['avg_price'] = $request->avg_price[$key];
+            }
+
+            if (isset($request->margin[$key]) && !empty($request->margin[$key])) {
+                if ($request->type == 'store_price') {
+                    $existRow['store_price_updated_date'] = date('Y-m-d h:i:s');
+                } else {
+                    $existRow['avg_price_updated_date'] = date('Y-m-d h:i:s');
                 }
-            })->orWhereHas('warehouseDetail', function ($q1) use ($search) {
-                $q1->where('name', 'like', "%{$search}%");
-            });
-            $query_param = ['search' => $request['search']];
+            }
+
+            $existRow->save();
         }
-
-
-
-        $rows = $rows->orderBy('id', 'desc')->whereDate('created_at', $today)->paginate(Helpers::getPagination())->appends($query_param);
-        return view($this->view_folder . '.stock_update', compact('rows', 'search', 'role'));
-
-        // $row = $this->mTable::find($id);
-
+        return redirect()->back();
     }
-
-    public function stock_update(Request $request)
-    {
-        return view($this->view_folder . '.price_update');
-    }
-    public function product_price_update(Request $request)
+    public function product_price_updateOld(Request $request)
     {
 
         $authUser = auth('admin')->user();

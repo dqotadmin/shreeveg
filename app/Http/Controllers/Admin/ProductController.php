@@ -433,6 +433,7 @@ class ProductController extends Controller
 
     public function warehouse_rate_insertupdate(Request $request, $id): \Illuminate\Http\JsonResponse
     {
+        dd($request->all());
         Validator::make($request->all(), [
             'quantity' => 'required',
             'store_price' => 'required',

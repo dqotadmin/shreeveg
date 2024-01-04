@@ -202,58 +202,34 @@
                  </td>
                  <td class="pt-1 pb-3 ">
                      <div class="row">
-                     <input type="text" name="quantity[]" class="form-control 1_quantity quantity_<?php echo $key + 1; ?>" name="" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>)"  style="width: 70px;    margin: 0 2px;" value="" >
+                    <input type="text" name="quantity[]" class="form-control 1_quantity quantity_<?php echo $key + 1; ?>" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>)"  style="width: 70px;    margin: 0 2px;" value="" >
                       
-                     <input type="text" name="discount[]" class="form-control 1_discount discount_<?php echo $key + 1; ?>" name=""   style="width: 70px;" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>)"  >
-                      
-                         <!-- <select name="" class="form-control  1_unit"
-                             style="width: 70px;    margin: 0 2px;    padding: 3px;">
-                             <option value="">Unit</option>
-                             @foreach(\App\Model\Unit::get() as $unit)
-                             <option value="{{$unit->id}}">{{$unit->title}}</option>
-                             @endforeach
-                         </select> -->
-                         <input type="text" class="form-control 1_offer_rate offer_rate_<?php echo $key + 1; ?>" name="discount[]" value="" style="width: 70px;">
-                        <span type="text" name="" id=""style="width: 70px;" class="form-control per_unit_rate_<?php echo $key + 1; ?>">
+                    <input type="text" name="discount[]" class="form-control 1_discount discount_<?php echo $key + 1; ?>"   style="width: 70px;"    onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>)"  >
+                    <input type="text" class="form-control 1_offer_rate offer_rate_<?php echo $key + 1; ?>" name="offer_price[]" value="" style="width: 70px;">
+                        <span type="text"  id=""style="width: 70px;    margin-top: 10px;     padding-left: 8px;" class="per_unit_rate_<?php echo $key + 1; ?>">
                      </div>
                  </td>
                  <td class="pt-1 pb-3 ">
                      <div class="row">
-                        <input type="text" class="form-control 2_quantity 2_quantity_<?php echo $key + 1; ?>"  name="" value="" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>,'2_')"
+                        <input type="text" name="quantity[]" class="form-control 2_quantity 2_quantity_<?php echo $key + 1; ?>"  value="" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>,'2_')"
                                 style="width: 70px;    margin: 0 2px;">
                              
-                        <input type="text" class="form-control 2_discount 2_discount_<?php echo $key + 1; ?>" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>,'2_')" name="" style="width: 70px;">
+                        <input type="text" name="discount[]" class="form-control 2_discount 2_discount_<?php echo $key + 1; ?>" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>,'2_')" style="width: 70px;">
                         
-                      
-                         <!-- <select name="" class="form-control  2_unit"
-                             style="width: 70px;    margin: 0 2px;padding: 3px;">
-                             <option value="">Unit</option>
-                             @foreach(\App\Model\Unit::get() as $unit)
-                             <option value="{{$unit->id}}">{{$unit->title}}</option>
-                             @endforeach
-                         </select> -->
-                         <input type="text" class="form-control 2_offer_rate 2_offer_rate_<?php echo $key + 1; ?>" name="discount[]" value=""
+                         <input type="text" class="form-control 2_offer_rate 2_offer_rate_<?php echo $key + 1; ?>" name="offer_price[]" value=""
                              style="width: 70px;">
-                             <span type="text" name="" id="" style="width: 70px;" class="form-control 2_per_unit_rate_<?php echo $key + 1; ?>">
+                             <span type="text" id="" style="width: 70px; margin-top: 10px; padding-left: 8px;" class="2_per_unit_rate_<?php echo $key + 1; ?>">
                      </div>
                  </td>
                  <td class="pt-1 pb-3 ">
                      <div class="row">
-                     <input type="text" class="form-control 3_quantity 3_quantity_<?php echo $key + 1; ?>" name="" value='' onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>,'3_')"
+                     <input type="text" class="form-control 3_quantity 3_quantity_<?php echo $key + 1; ?>" name="quantity[]" value='' onkeyup="handleFirstDiscountChange(<?php  echo $key + 1; ?>,'3_')"
                              style="width: 70px;    margin: 0 2px;">
-                               <input type="text" class="form-control 3_discount 3_discount_<?php echo $key + 1; ?>" name="" style="width: 70px;" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>,'3_')">
+                    <input type="text" class="form-control 3_discount 3_discount_<?php echo $key + 1; ?>" name="discount[]" style="width: 70px;" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>,'3_')">
                          
-                  
-                         <!-- <select name="" class="form-control 3_unit"
-                             style="width: 70px;    margin: 0 2px;padding: 3px;">
-                             <option value="">Unit</option>
-                             @foreach(\App\Model\Unit::get() as $unit)
-                             <option value="{{$unit->id}}">{{$unit->title}}</option>
-                             @endforeach
-                         </select> -->
-                         <input type="text" class="form-control 3_offer_rate   3_offer_rate_<?php echo $key + 1; ?>" name="discount[]" value=""
+                         <input type="text" class="form-control 3_offer_rate   3_offer_rate_<?php echo $key + 1; ?>" name="offer_price[]" value=""
                              style="width: 70px;">
-                             <span type="text" name="" id="" style="width: 70px;" class="form-control 3_per_unit_rate_<?php echo $key + 1; ?>">
+                             <span type="text" name="" id="" style="width: 70px;    margin-top: 10px; padding-left: 8px;" class="3_per_unit_rate_<?php echo $key + 1; ?>">
                      </div>
                  </td>
              </tr>

@@ -60,7 +60,7 @@ class RateListController extends Controller
         $products = $query->latest()->with('category')->paginate(Helpers::getPagination())->appends($query_param);
         $wh_assign_categories = $this->warehouse_categories->where('warehouse_id',$authUser->warehouse_id)->pluck('category_id');
         $categories = $this->category->whereIn('id',$wh_assign_categories)->get();
-$options = Helpers::getCategoryDropDown($categories);
+        $options = Helpers::getCategoryDropDown($categories);
 
          return view('admin-views.rate_list.index', compact('products','options', 'search'));
     }
@@ -120,6 +120,7 @@ $options = Helpers::getCategoryDropDown($categories);
      */
     function store(Request $request): RedirectResponse
     {
+        dd($request->all());
         $request->validate([
             'title' => 'required|unique:units',
             'description' => 'required',

@@ -259,6 +259,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
 
         Route::group(['prefix' => 'rate_list', 'as' => 'rate_list.', 'middleware' => ['module:product_management']], function () {
             Route::get('index', 'RateListController@index')->name('index');
+            Route::post('store', 'RateListController@store')->name('store');
             Route::get('get-product-by-cat/{cat_id}', 'RateListController@get_product_by_cat')->name('get-product-by-cat');
             
         });

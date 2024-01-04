@@ -30,7 +30,7 @@
                                      <select name="" class="form-control" id="global_1_discount" style="width: 70px;padding: 3px;">
                                      @for($i=-100; $i<=100; $i++)
                                         @if($i !== 0)
-                                            <option value="{{$i}}" @if($i === 1) selected @endif>{{$i}}</option>
+                                            <option value="{{$i}}" >{{$i}}</option>
                                         @endif
                                     @endfor
                                     </select>
@@ -41,7 +41,7 @@
                                  <div class="" style="margin-left: -25px;">
                                      <small for=""> Quantity:</small>
                                      <input type="text" class="form-control" id="global_1_quantity"
-                                         style="width: 70px;" value="1"  >
+                                         style="width: 70px;"    >
                                       
                                  </div>
                              </div>
@@ -74,7 +74,7 @@
                                      <select name="" class="form-control" id="global_2_discount" style="width: 70px;padding: 3px;">
                                      @for($i=-100; $i<=100; $i++)
                                         @if($i !== 0)
-                                            <option value="{{$i}}" @if($i === 1) selected @endif>{{$i}}</option>
+                                            <option value="{{$i}}">{{$i}}</option>
                                         @endif
                                     @endfor
                                     </select>
@@ -86,7 +86,7 @@
                                  <div class="" style="margin-left: -25px;">
                                      <small for=""> Quantity:</small>
                                      <input type="text" class="form-control" id="global_2_quantity"
-                                     style="width: 70px;" value="1">
+                                     style="width: 70px;" >
                                   
                                  </div>
                              </div>
@@ -119,7 +119,7 @@
                                      <select name="" class="form-control" id="global_3_discount"  style="width: 70px;padding: 3px;">
                                      @for($i=-100; $i<=100; $i++)
                                             @if($i !== 0)
-                                                <option value="{{$i}}" @if($i === 1) selected @endif>{{$i}}</option>
+                                                <option value="{{$i}}">{{$i}}</option>
                                             @endif
                                         @endfor
                                     </select>
@@ -130,7 +130,7 @@
                                  <div class="" style="margin-left: -25px;">
                                      <small for=""> Quantity:</small>
                                      <input type="text" class="form-control" id="global_3_quantity"
-                                     style="width: 70px;" value="1" >
+                                     style="width: 70px;">
                                     
                                  </div>
                              </div>
@@ -302,15 +302,19 @@
     }
 /** @function  globalDynamicHandler
  * step 2 
+ * _item = <input type=​"text" class=​"form-control 3_quantity 3_quantity_2" name value onkeyup=​"handleFirstDiscountChange(2,'3_')>
+ * i =​ 1  (0,1)
+ * value=5 quantity value
+ * columnPrefix = '', 2_, 3_
  * @return void
 */
     function globalDynamicHandler(_item,i,value,columnPrefix = "") {
-        console.log('globalDynamicHandler', _item,i,value,columnPrefix);
         let _sno = i + 1;
         if (!_item.classList.contains("data_changed")) {
             _item.value = value;
         }
         let discount = parseFloat($(`.${columnPrefix}discount_${_sno}`).val())
+        console.log('globalDynamicHandler', discount);
 
         if (!discount) {
             discount = 0;
@@ -352,7 +356,7 @@
                 /** @function first column's global discount, quantity & unit handler */
                 $(`#global_${sno}_discount`).on('input', function() {
                     var global_1_discount = $(this).val();
-                    Array.from($(`.${sno}_discount`)).forEach((item,i)=>globalDynamicHandler(item,i,global_1_discount, sno > 1 ? `${sno}_`:""));
+                    Array.from($(`.${sno}_discount`)).forEach((_item,i)=>globalDynamicHandler(_item,i,global_1_discount, sno > 1 ? `${sno}_`:""));
 
                 });
 

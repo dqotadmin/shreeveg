@@ -260,7 +260,6 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
         Route::group(['prefix' => 'rate_list', 'as' => 'rate_list.', 'middleware' => ['module:product_management']], function () {
             Route::get('index', 'RateListController@index')->name('index');
             Route::get('get-product-by-cat/{cat_id}', 'RateListController@get_product_by_cat')->name('get-product-by-cat');
-            
         });
 
         Route::group(['prefix' => 'city', 'as' => 'city.', 'middleware' => ['module:location_management']], function () {
@@ -560,6 +559,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::get('flash/add-product/{flash_deal_id}', 'OfferController@flash_add_product')->name('flash.add-product');
             Route::post('flash/add-product/{flash_deal_id}', 'OfferController@flash_product_store')->name('flash.add-product.store');
             Route::post('flash/delete-product', 'OfferController@delete_flash_product')->name('flash.delete.product');
+            Route::get('get-product-by-category/{catId}', 'OfferController@getProductByCatId')->name('get-products-by-catid');
         });
     });
 });

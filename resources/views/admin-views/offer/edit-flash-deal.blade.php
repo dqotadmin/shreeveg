@@ -136,7 +136,7 @@
             var offerType = "{{$flash_deal['offer_type']}}";
             if (offerType == 'one_rupee') {
                 $('.manageType').hide();
-                $('input[name="min_purchase_amount"]').attr('required');
+                $('input[name="min_purchase_amount"]').prop('required', true)
             } else {
                 $('.manageMinPurchase').hide();
                 $('.manageType').show();
@@ -151,7 +151,7 @@
 
         $('input[type=radio][name=offer_type]').change(function() {
         if (this.value == 'one_rupee') {
-            $('input[name="min_purchase_amount"]').attr('required');
+            $('input[name="min_purchase_amount"]').prop('required', true)
             $('.manageType').hide();
             $('.manageMinPurchase').show();
         } else {

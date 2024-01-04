@@ -30,24 +30,33 @@
                         <form action="{{route('admin.offer.flash.add-product',[$flash_deal['id']])}}" method="post">
                             @csrf
                             <div class="form-group">
+                                <div class="col-sm-5 ">
+                                    <div class="form-group">
+                                        <label class="input-label" for="exampleFormControlInput1">{{translate('Select Category')}}</label>
+                                        <select name="category_id" id="category_id" class="form-control" >
+                                            <option value="">---{{translate('Select Category')}}---</option>
+                                            <?php echo $options; ?>
+                                        </select>
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label for="name" class="title-color text-capitalize">{{ translate('Add new product')}}</label>
-                                        <select class="js-example-basic-multiple js-states js-example-responsive form-control h--45px productSelect"  name="product_id">
-                                            <option disabled selected>{{ translate('Select Product')}}</option>
-                                            @foreach ($products as $key => $product)
+                                        <label for="name" class="title-color text-capitalize">{{ translate('Select product')}}</label>
+                                        <select class="js-example-basic-multiple js-states js-example-responsive form-control h--45px productSelect" id="products" name="product_id" required>
+                                             <option disabled selected>{{ translate('Select Product')}}</option>
+                                            {{--@foreach ($products as $key => $product)
                                                 <option value="{{ $product->id }}">
                                                     {{$product['name']}} ({{@$product->unit->title}})
                                                 </option>
-                                            @endforeach
+                                            @endforeach --}}
                                         </select>
                                     </div>
                                     @if($flash_deal->offer_type == 'other')
-                                    <div class="col-md-6 manageQty">
+                                    <div class="col-md-3 manageQty">
                                         <label for="name" class="title-color text-capitalize">{{ translate('quantity')}}</label>
                                         <input type="text" class="form-control" name="quantity" required>
                                     </div>
-                                    <div class="col-md-6 manageQty">
+                                    <div class="col-md-3 manageQty">
                                         <label for="name" class="title-color text-capitalize">{{ translate('amount')}}</label>
                                         <input type="number" class="form-control" name="amount" required>
                                     </div>
@@ -82,6 +91,7 @@
                             <thead class="thead-light thead-50 text-capitalize">
                             <tr>
                                 <th>{{ translate('SL')}}</th>
+                                <th>{{translate('category')}}</th>
                                 <th>{{translate('name')}}</th>
                                 @if($flash_deal->offer_type == 'other')
                                 <th>{{translate('quantity')}}</th>
@@ -99,9 +109,10 @@
                            
                             <tr>
                                     <td>{{$key+1}}</td>
-                                    <td>{{$data->product['name']}}</td>
+                                    <td>{{$data->product->category['name']}} </td>
+                                    <td>{{$data->product['name']}} (<strong>{{$data->product['product_code']}}</strong>)</td>
                                     @if($flash_deal->offer_type == 'other')
-                                      <td>{{ $data['quantity'] }}</td>
+                                      <td>{{ $data['quantity'] }} {{$data->product->unit['title']}}</td>
                                       <td>{{ $data['amount'] }}</td>
                                     @endif
                                     <td>
@@ -190,6 +201,27 @@
             }
         });
         });
+        $('#category_id').on('change',function(){ 
+                var categoryId = $(this).val();
+               
+                if (categoryId) {
+                    $.ajax({
+                         url: '{{url('/')}}/admin/offer/get-product-by-category/' + categoryId,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(data) {
+                            $('#products').empty();
+                            // $('#products').append('<option value="">Select Product</option>');
+                            $.each(data.products, function(key, value) {
+                                $('#products').append('<option value="' + value.id + '">' + value.name + ' (' + value.product_code + ')'+ ' / ' + value.unit.title + '</option>');
+                            });
+                        }
+                    });
+                } else {
+                    $('#products').empty();
+                    $('#products').append('<option value="">Select Product</option>');
+                }
+            });
     </script>
 
 @endpush

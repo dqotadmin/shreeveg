@@ -35,6 +35,12 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-6 manageMinPurchase">
+                    <div class="form-group mb-0">
+                        <label class="input-label" for="exampleFormControlInput1">{{translate('minimum purchase amount')}}</label>
+                        <input type="number"  name="min_purchase_amount" value="{{old('min_purchase_amount')}}" class="form-control" placeholder="{{ translate('minimum purchase amount') }}">
+                    </div>
+                </div>
                 <div class="row g-3">
                     <div class="col-md-6">
                         <div class="row g-3">
@@ -55,6 +61,7 @@
                                         placeholder="{{ translate('enter title') }}" maxlength="255" required>
                                 </div>
                             </div>
+                            
                             <div class="col-12">
                                 <div class="form-group mb-0">
                                     <label class="input-label"
@@ -82,12 +89,7 @@
                                         data-hs-flatpickr-options=' '>
                                 </div>
                             </div>
-                            <div class="col-6 manageMinPurchase">
-                                <div class="form-group mb-0">
-                                    <label class="input-label" for="exampleFormControlInput1">{{translate('minimum purchase amount')}}</label>
-                                    <input type="number"  name="min_purchase_amount" value="{{old('min_purchase_amount')}}" class="form-control" placeholder="{{ translate('minimum purchase amount') }}">
-                                </div>
-                            </div>
+                            
                             {{-- <div class="col-6 manageType">
                                 <div class="form-group mb-0">
                                     <label class="input-label" for="exampleFormControlSelect1">{{translate('discount')}} {{translate('type')}}<span
@@ -159,6 +161,7 @@
                     <tr>
                         <th class="border-0">{{translate('#')}}</th>
                         <th class="border-0">{{translate('image')}}</th>
+                        <th class="border-0">{{translate('type')}}</th>
                         <th class="border-0">{{translate('title')}}</th>
                         <th class="border-0">{{translate('duration')}}</th>
                         <th class="border-0">{{translate('status')}}</th>
@@ -180,13 +183,19 @@
                         </td>
                         <td>
                             <span class="d-block font-size-sm text-body text-trim-25">
+                            {{($flash_deal['offer_type']=='other')?'Sell':'1.00₹'}}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="d-block font-size-sm text-body text-trim-25">
                             {{$flash_deal['title']}}
                             </span>
                         </td>
+                        
                         <td>{{date('d-M-y',strtotime($flash_deal['start_date']))}} -
                             {{date('d-M-y',strtotime($flash_deal['end_date']))}} <br>
-                            {{date('H:i A',strtotime($flash_deal['start_date']))}} &nbsp;&nbsp;
-                            {{date('H:i A',strtotime($flash_deal['end_date']))}}
+                            {{date('h:i A',strtotime($flash_deal['start_date']))}} &nbsp;&nbsp;
+                            {{date('h:i A',strtotime($flash_deal['end_date']))}}
                         </td>
                         <td>
                             @if(\Carbon\Carbon::parse($flash_deal['end_date'])->endOfDay()->isPast())
@@ -264,16 +273,16 @@
     });
     
     $('input[type=radio][name=offer_type]').change(function() {
-            if (this.value == 'one_rupee') {
-                $('input[name="min_purchase_amount"]').attr('required');
-                $('.manageType').hide();
-                $('.manageMinPurchase').show();
-            } else {
-                $('input[name="min_purchase_amount"]').removeAttr('required');
-                $('.manageType').show();
-                $('.manageMinPurchase').hide();
-            }
-        });
+        if (this.value == 'one_rupee') {
+            $('input[name="min_purchase_amount"]').prop('required', true)
+            $('.manageType').hide();
+            $('.manageMinPurchase').show();
+        } else {
+            $('input[name="min_purchase_amount"]').removeAttr('required');
+            $('.manageType').show();
+            $('.manageMinPurchase').hide();
+        }
+    });
     
     $('#start_date,#end_date').change(function() {
         let fr = $('#start_date').val();

@@ -117,6 +117,7 @@
                                 @endif
                                 @if(auth('admin')->user()->admin_role_id != 5)
                                 <th class="text-center">{{translate('status')}}</th>
+                                <th class="text-center">{{translate('order')}}</th>
                                 <th class="text-center">{{translate('action')}}</th>
                                 @endif
                             </tr>
@@ -187,6 +188,10 @@
                                             </span>
                                         </label>
                                     </td>
+                                    <td>
+                                    <input type="text" class="form-control ordering"  value="{{@$product->ordering}}" style="width: 70px;">
+                                            <input type="hidden" class="form-control" id="product_id" value="{{$product->id}}" style="width: 70px;">
+                                    </td>
                                     @endif
                                     <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
                                         @if( auth('admin')->user()->admin_role_id == 1 )
@@ -244,6 +249,53 @@
 @endsection
 
 @push('script_2')
+<script>
+    $('.ordering').on('input',function(){
+        var ordering = $(this).val();
+        var product_id = $(this).closest('td').find('#product_id').val(); // Adjust the selector accordingly
+        console.log(product_id);
+        $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+             $.ajax({
+                url: '{{route('admin.product.order')}}',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    product_id: product_id,
+                    ordering: ordering
+                },
+                success: function (response) {
+                    if (response.message) {
+                        var message = response.message;
+                        Swal.fire({
+                            title: 'Alert',
+                            html: message,
+                            icon: 'info',
+                            confirmButtonText: 'OK'
+                        });
+                    }else if(response.ordering_exist) {
+                        var message = response.ordering_exist;
+                        Swal.fire({
+                            title: 'Alert',
+                            html: message,
+                            icon: 'info',
+                            confirmButtonText: 'OK'
+                    }).then((result) => {
+                    // Reload the page after the user clicks "OK"
+                        location.reload(true);
+                });
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+
+                },
+            });
+    });
+</script>
 <script>
         function status_change_alert(url, message, e) {
             e.preventDefault();

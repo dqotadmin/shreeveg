@@ -316,6 +316,23 @@ class ProductController extends Controller
         return back();
     }
 
+    public function order(Request $request) 
+    {
+        $product = $this->product->find($request->product_id);
+        $existingProduct = $this->product->where('ordering', $request->ordering)
+        ->where('id', '!=', $request->product_id)
+        ->first();
+        if ($existingProduct) {
+            // Ordering value already exists, choose another value or handle it as needed
+            return response()->json(['ordering_exist' => translate('Ordering value already exists. Choose another value.')]);
+        }
+    
+        // Set the new ordering value
+        $product->ordering = $request->ordering;
+        $product->save();
+    
+        return response()->json(['message' => translate('Product ordering updated!')]);
+    }
     /**
      * @param Request $request
      * @return RedirectResponse
@@ -433,8 +450,7 @@ class ProductController extends Controller
 
     public function warehouse_rate_insertupdate(Request $request, $id): \Illuminate\Http\JsonResponse
     {
-        dd($request->all());
-        Validator::make($request->all(), [
+   Validator::make($request->all(), [
             'quantity' => 'required',
             'store_price' => 'required',
             'customer_price' => 'required',
@@ -452,6 +468,9 @@ class ProductController extends Controller
                 if (isset($request->market_price[$key])) {
                     $product_details[$key]['market_price'] = $request->market_price[$key];
                 }
+                if (isset($request->margin[$key])) {
+                    $product_details[$key]['margin'] = $request->margin[$key];
+                }
                 if (isset($request->approx_piece[$key])) {
                     $product_details[$key]['approx_piece'] = $request->approx_piece[$key];
                 }
@@ -461,8 +480,8 @@ class ProductController extends Controller
                 if (isset($request->discount[$key])) {
                     $product_details[$key]['discount'] = $request->discount[$key];
                 }
-                if (isset($request->avg_price[$key])) {
-                    $product_details[$key]['avg_price'] = $request->avg_price[$key];
+                if (isset($request->per_unit_price[$key])) {
+                    $product_details[$key]['per_unit_price'] = $request->per_unit_price[$key];
                 }
                 // if(isset($request->unit_id[$key])){
                 //     $product_details[$key]['unit_id'] = $request->unit_id[$key];

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class WarehouseProduct extends Model
 {
-
+    protected $fillable =['product_id','product_details'];
     public function warehouseDetail()
     {
         return $this->belongsTo(Warehouse::class, 'warehouse_id');

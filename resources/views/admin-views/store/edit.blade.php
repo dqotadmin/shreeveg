@@ -173,6 +173,34 @@
             </div>
         </div>
         <div class="col-sm-12 col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">
+                            <i class="tio-time"></i>
+                            {{translate('Store Time')}}
+                        </h5>
+                    </div>
+                    <div class="card-body pt-sm-0 pb-sm-4">
+                        <div class="row align-items-end g-4" style="margin-top: 40px;">
+                            <div class="col-sm-6">
+                                <label class="form-label" for="exampleFormControlInput1">
+                                    {{ translate('open_time') }}
+                                </label>
+                                <input type="time" name="open_time" value="{{@$stores->open_time}}"
+                                                    class="form-control" required />
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="form-label" for="exampleFormControlInput1">
+                                    {{ translate('close_time') }}
+                                </label>
+                                <input type="time" name="close_time" value="{{@$stores->close_time}}"
+                                                    class="form-control" required />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <div class="col-sm-12 col-lg-12">
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title">

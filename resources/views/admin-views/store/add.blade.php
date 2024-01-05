@@ -69,7 +69,7 @@
                                 <span class="warehoues_error"></span>
                             </div>
                         </div>
-                      
+                       
                     </div>
                 </div>
             </div>
@@ -169,6 +169,34 @@
                                 </label>
                                 <input type="text" name="msme_number" class="form-control"
                                     placeholder="{{ translate('Ex: MSME No.') }}" maxlength="255">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">
+                            <i class="tio-time"></i>
+                            {{translate('Store Time')}}
+                        </h5>
+                    </div>
+                    <div class="card-body pt-sm-0 pb-sm-4">
+                        <div class="row align-items-end g-4" style="margin-top: 40px;">
+                            <div class="col-sm-6">
+                                <label class="form-label" for="exampleFormControlInput1">
+                                    {{ translate('open_time') }}
+                                </label>
+                                <input type="time" name="open_time"
+                                                    class="form-control" required />
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="form-label" for="exampleFormControlInput1">
+                                    {{ translate('close_time') }}
+                                </label>
+                                <input type="time" name="close_time"
+                                                    class="form-control" required />
                             </div>
                         </div>
                     </div>

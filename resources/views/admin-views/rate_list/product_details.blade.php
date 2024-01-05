@@ -31,7 +31,7 @@
                                  <!-- <div class="" style="margin-left: -25px;"> -->
                                  <div class="">
                                      <small for=""> Quantity:</small>
-                                     <input type="text" class="form-control" id="global_1_quantity"
+                                     <input type="text" class="form-control" id="global_1_quantity" value="1"
                                          style="width: 70px;"    >
                                       
                                  </div>
@@ -41,9 +41,7 @@
                                      <small for=""> margin(%):</small>
                                      <select name="" class="form-control" id="global_1_discount" style="width: 70px;padding: 3px;">
                                      @for($i=-100; $i<=100; $i++)
-                                        @if($i !== 0)
                                             <option value="{{$i}}" >{{$i}}</option>
-                                        @endif
                                     @endfor
                                     </select>
                                   
@@ -83,7 +81,7 @@
                                  <div class=""    >
                                      <small for=""> Quantity:</small>
                                      <input type="text" class="form-control" id="global_2_quantity"
-                                     style="width: 70px;" >
+                                     style="width: 70px;" value="3">
                                   
                                  </div>
                              </div>
@@ -92,9 +90,7 @@
                                      <small for=""> margin(%):</small>
                                      <select name="" class="form-control" id="global_2_discount" style="width: 70px;padding: 3px;">
                                      @for($i=-100; $i<=100; $i++)
-                                        @if($i !== 0)
                                             <option value="{{$i}}">{{$i}}</option>
-                                        @endif
                                     @endfor
                                     </select>
                                       
@@ -132,7 +128,7 @@
                              <div class="col-md-3">
                                  <div class="">
                                      <small for=""> Quantity:</small>
-                                     <input type="text" class="form-control" id="global_3_quantity"
+                                     <input type="text" class="form-control" id="global_3_quantity" value="5"
                                      style="width: 70px;">
                                     
                                  </div>
@@ -142,9 +138,7 @@
                                      <small for=""> margin(%):</small>
                                      <select name="" class="form-control" id="global_3_discount"  style="width: 70px;padding: 3px;">
                                      @for($i=-100; $i<=100; $i++)
-                                            @if($i !== 0)
                                                 <option value="{{$i}}">{{$i}}</option>
-                                            @endif
                                         @endfor
                                     </select>
                                   
@@ -178,6 +172,10 @@
              @foreach($products as $key=>$product)
              <?php $warehouse_id = auth('admin')->user()->warehouse_id;  ?>
              @php($whProduct = Helpers::warehouseProductData($product->id))
+             <?php    $product_details_array = @json_decode($whProduct->product_details, true); 
+                            $i=0;
+                            ?>
+              
              <tr>
                  <td class="pt-1 pb-3 ">
                  <div class="max-85 text-right">
@@ -187,12 +185,15 @@
                  <td class="pt-1 pb-3 ">
                      <div class="max-85 text-right">
                          {{ $product['name'] }}
+                        
                      </div>
                  </td>
                  <td class="pt-1 pb-3 ">
                      <div class="row">
                          <div class="d-flex align-items-center">
-                             <input type="text" class="form-control" style="width: 70px; margin: 0 10px;" name="market_price[]">/{{ @$product->unit->title }}
+                             <input type="text" class="form-control market_price" style="width: 70px; margin: 0 10px;"  value="{{ @$whProduct['market_price'] }}"  name="market_price[]" required>/{{ @$product->unit->title }}
+                             <input type="hidden" class="form-control" value="{{ $product['id'] }}" style="width: 70px; margin: 0 10px;" name="product_id[]">
+                             <input type="hidden" class="form-control" value="{{ $product['unit_id'] }}" style="width: 70px; margin: 0 10px;" name="unit_id[]">
                             
                          </div>
                      </div>
@@ -200,36 +201,44 @@
                  <td class="pt-1 pb-3 ">
                      <span class="product_rate_<?php echo $key + 1; ?>"> {{@$whProduct->avg_price}}</span>{{@$product->unit->title}}
                  </td>
+               
                  <td class="pt-1 pb-3 ">
                      <div class="row">
-                    <input type="text" name="quantity[]" class="form-control 1_quantity quantity_<?php echo $key + 1; ?>" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>)"  style="width: 70px;    margin: 0 2px;" value="" >
+                    <input type="text" name="1_slot[quantity][]" class="form-control 1_quantity quantity_<?php echo $key + 1; ?>" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>)"  style="width: 70px;    margin: 0 2px;" 
+                    value="{{@$product_details_array[0]['quantity']}}" >
                       
-                    <input type="text" name="discount[]" class="form-control 1_discount discount_<?php echo $key + 1; ?>"   style="width: 70px;"    onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>)"  >
-                    <input type="text" class="form-control 1_offer_rate offer_rate_<?php echo $key + 1; ?>" name="offer_price[]" value="" style="width: 70px;">
-                        <span type="text"  id=""style="width: 70px;    margin-top: 10px;     padding-left: 8px;" class="per_unit_rate_<?php echo $key + 1; ?>">
+                    <input type="text" name="1_slot[margin][]" class="form-control 1_discount discount_<?php echo $key + 1; ?>"   style="width: 70px;"   value="{{@$product_details_array[0]['margin']}}" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>)"  >
+                 
+                    <input type="text" class="form-control 1_offer_rate offer_rate_<?php echo $key + 1; ?>" name="1_slot[offer_price][]"  style="width: 70px;"  value="{{@$product_details_array[0]['offer_price']}}">
+
+                        <input type="text"  name="1_slot[per_unit_price][]" id="" style="width: 70px;   padding-left: 8px;border: none;" class="per_unit_rate_<?php echo $key + 1; ?>"  value="{{@$product_details_array[0]['per_unit_price']}}">
                      </div>
                  </td>
                  <td class="pt-1 pb-3 ">
                      <div class="row">
-                        <input type="text" name="quantity[]" class="form-control 2_quantity 2_quantity_<?php echo $key + 1; ?>"  value="" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>,'2_')"
+                        <input type="text" name="2_slot[quantity][]" class="form-control 2_quantity 2_quantity_<?php echo $key + 1; ?>"  value="{{@$product_details_array[1]['quantity']}}" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>,'2_')"
                                 style="width: 70px;    margin: 0 2px;">
                              
-                        <input type="text" name="discount[]" class="form-control 2_discount 2_discount_<?php echo $key + 1; ?>" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>,'2_')" style="width: 70px;">
+                        <input type="text" name="2_slot[margin][]" class="form-control 2_discount 2_discount_<?php echo $key + 1; ?>" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>,'2_')" style="width: 70px;" value="{{@$product_details_array[1]['margin']}}">
                         
-                         <input type="text" class="form-control 2_offer_rate 2_offer_rate_<?php echo $key + 1; ?>" name="offer_price[]" value=""
+                         <input type="text" class="form-control 2_offer_rate 2_offer_rate_<?php echo $key + 1; ?>" name="2_slot[offer_price][]" value="{{@$product_details_array[1]['offer_price']}}"
                              style="width: 70px;">
-                             <span type="text" id="" style="width: 70px; margin-top: 10px; padding-left: 8px;" class="2_per_unit_rate_<?php echo $key + 1; ?>">
+
+                        <input type="text" id="" name="2_slot[per_unit_price][]" style="width: 70px;border: none; padding-left: 8px;" class="2_per_unit_rate_<?php echo $key + 1; ?>" value="{{@$product_details_array[1]['per_unit_price']}}" >
                      </div>
                  </td>
                  <td class="pt-1 pb-3 ">
                      <div class="row">
-                     <input type="text" class="form-control 3_quantity 3_quantity_<?php echo $key + 1; ?>" name="quantity[]" value='' onkeyup="handleFirstDiscountChange(<?php  echo $key + 1; ?>,'3_')"
+                        
+                     <input type="text" class="form-control 3_quantity 3_quantity_<?php echo $key + 1; ?>" name="3_slot[quantity][]" value="{{@$product_details_array[2]['quantity']}}"  onkeyup="handleFirstDiscountChange(<?php  echo $key + 1; ?>,'3_')"
                              style="width: 70px;    margin: 0 2px;">
-                    <input type="text" class="form-control 3_discount 3_discount_<?php echo $key + 1; ?>" name="discount[]" style="width: 70px;" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>,'3_')">
+
+                    <input type="text" class="form-control 3_discount 3_discount_<?php echo $key + 1; ?>" name="3_slot[margin][]" style="width: 70px;" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>,'3_')"  value="{{@$product_details_array[2]['margin']}}">
                          
-                         <input type="text" class="form-control 3_offer_rate   3_offer_rate_<?php echo $key + 1; ?>" name="offer_price[]" value=""
-                             style="width: 70px;">
-                             <span type="text" name="" id="" style="width: 70px;    margin-top: 10px; padding-left: 8px;" class="3_per_unit_rate_<?php echo $key + 1; ?>">
+                    <input type="text" class="form-control 3_offer_rate   3_offer_rate_<?php echo $key + 1; ?>" name="3_slot[offer_price][]"  
+                             style="width: 70px;" value="{{@$product_details_array[2]['offer_price']}}">
+                             
+                    <input type="text"  name="3_slot[per_unit_price][]" id="" style="width: 70px;   border: none; padding-left: 8px;" class="3_per_unit_rate_<?php echo $key + 1; ?>" value="{{@$product_details_array[2]['per_unit_price']}}">
                      </div>
                  </td>
              </tr>
@@ -262,6 +271,10 @@
  @push('script_2')
  <script defer>
 
+$('.market_price').on('input',function(){
+    console.log($(this).val());
+    $('.hidden_market_price').val($(this).val());
+})
     function handleFirstDiscountChange(id,classPrefix = ""){
 
 
@@ -280,7 +293,7 @@
         let offerRate = (quantity * productRate) +marginToBeAdd;
         let perUnitPrice = offerRate/quantity ;
         $(`.${classPrefix}offer_rate_${id}`).val(offerRate.toFixed(2));
-        $(`.${classPrefix}per_unit_rate_${id}`).text(perUnitPrice.toFixed(2)+'/kg');
+        $(`.${classPrefix}per_unit_rate_${id}`).val(perUnitPrice.toFixed(2));
     }
 /** @function  globalDynamicHandler
  * step 2 
@@ -311,7 +324,7 @@
         let offerRate = (quantity * productRate) +marginToBeAdd ;
         let perUnitPrice = offerRate/quantity ;
         $(`.${columnPrefix}offer_rate_${_sno}`).val(offerRate.toFixed(2));
-        $(`.${columnPrefix}per_unit_rate_${_sno}`).text(perUnitPrice.toFixed(2)+'/kg');
+        $(`.${columnPrefix}per_unit_rate_${_sno}`).val(perUnitPrice.toFixed(2));
     }
     /**  @function dynamicHandler()
      * step 1 start from here

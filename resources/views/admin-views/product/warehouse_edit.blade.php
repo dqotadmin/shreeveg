@@ -213,7 +213,7 @@
                                         ({{@$product->unit->description}})
                                     </div>
                                 </div>
-                                <div class="col-sm-2">
+                                <!-- <div class="col-sm-2">
                                     <div class="form-group mb-0">
                                         <label class="input-label"
                                             for="exampleFormControlInput1">{{translate('customer_price')}}</label>
@@ -222,9 +222,19 @@
                                             step="any" id="discount" class="form-control customer_price"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
                                             placeholder="{{ translate(' customer price') }}" required>
                                     </div>
+                                </div> -->
+                                <div class="col-sm-2">
+                                    <div class="form-group mb-0">
+                                        <label class="input-label"
+                                            for="exampleFormControlInput1">{{translate('market_price')}}</label>
+                                        <input type="number" min="0" max="100000"
+                                            value="{{@$warehouse_products->market_price}}" name="market_price"
+                                            step="any" id="discount" class="form-control market_price"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
+                                            placeholder="{{ translate(' customer price') }}" required>
+                                    </div>
                                 </div>
                                 <div class="col-sm-2 mt-2">
-                                    <div class="form-group mt-5"> /{{@$product->unit->title}}
+                                    <div class="form-group mt-5">/{{@$product->unit->title}}
                                         ({{@$product->unit->description}})
                                     </div>
                                 </div>
@@ -255,10 +265,10 @@
                             ?>
                         <table class="table table-bordered" id="box-delivery-pair">
                             <tr>
-                                <th>{{translate('Quantity')}}</th>
-                                <th> {{translate('market_price')}} <span  class="price">{{@$warehouse_products->customer_price}}</span> </th>
-                                <th> {{translate('discount')}}({{translate('%')}})</th>
-                                <th> {{translate('offer_price')}}</th>
+                                <th>{{translate('Quantity')}} /{{@$product->unit->title}}</th>
+                                <th> {{translate('market_price')}} <span  class="price">({{@$warehouse_products->market_price}}</span>/{{@$product->unit->title}}) </th>
+                                <th> {{translate('margin')}}({{translate('%')}})</th>
+                                <th> {{translate('shreeveg_price')}}</th>
                                 <th> {{translate('avg_price')}}(1 {{@$product->unit->title}})</th>
                                 <th>{{translate('Approx Piece/Weight')}}</th>
                                 <th>{{translate('Short Title')}}</th>
@@ -274,13 +284,13 @@
                                     
                                 </td>
                                 <td>
-                                    <input name="discount[]" function value="{{@$product_details_array[$i]['discount']}}" class="form-control input-delivery-pai discount" placeholder="{{ translate('Ex : 1%') }}" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" >
+                                    <input name="margin[]" function value="{{@$product_details_array[$i]['margin']}}" class="form-control input-delivery-pai discount" placeholder="{{ translate('Ex : 1%') }}" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" >
                                 </td>
                                 <td>
                                     <input name="offer_price[]"   value="{{@$product_details_array[$i]['offer_price']}}"  class="form-control input-delivery-pair" id="offer_price" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"   >
                                 </td>
                                 <td>
-                                    <input name="avg_price[]"   value="{{@$product_details_array[$i]['avg_price']}}"  class="form-control input-delivery-pair" id="avg_price" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" >
+                                    <input name="per_unit_price[]"   value="{{@$product_details_array[$i]['per_unit_price']}}"  class="form-control input-delivery-pair" id="avg_price" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" >
                                 </td>
                                 <td> <input name="approx_piece[]"   class="form-control input-delivery-pair" value="{{@$product_details_array[$i]['approx_piece']}}"
                                     placeholder="{{ translate('Ex : 1 pieces') }}" >
@@ -299,14 +309,14 @@
                                     <input name="market_price[]"   value="{{@$product_details_array[$i]['market_price']}}" class="form-control input-delivery-pair market_price"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"   placeholder="{{ translate('Ex : 10') }}" >
                                 </td>
                                 <td>
-                                    <input name="discount[]" function    value="{{@$product_details_array[$i]['discount']}}" class="form-control input-delivery-pai discount" placeholder="{{ translate('Ex : 1%') }}" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" >
+                                    <input name="margin[]" function    value="{{@$product_details_array[$i]['margin']}}" class="form-control input-delivery-pai discount" placeholder="{{ translate('Ex : 1%') }}" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" >
                                 </td>
                                 <td> 
                                     <input name="offer_price[]"   value="{{@$product_details_array[$i]['offer_price']}}"  class="form-control input-delivery-pair" id="offer_price" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
                                         >
                                 </td>
                                 <td>
-                                    <input name="avg_price[]"   value="{{@$product_details_array[$i]['avg_price']}}"  class="form-control input-delivery-pair" id="avg_price" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" >
+                                    <input name="per_unit_price[]"   value="{{@$product_details_array[$i]['per_unit_price']}}"  class="form-control input-delivery-pair" id="avg_price" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" >
                                 </td>
                                 <td> 
                                     <input name="approx_piece[]"   class="form-control input-delivery-pair" value="{{@$product_details_array[$i]['approx_piece']}}"
@@ -353,11 +363,11 @@
         $(this).closest('.row-delivery-pair').remove();
         
     });
-    $(document).on('blur', '.customer_price', function () { 
-        let oldCustPrice = "{{@$warehouse_products->customer_price}}";
+    $(document).on('blur', '.market_price', function () { 
+        let oldCustPrice = "{{@$warehouse_products->market_price}}";
         var errorContainer = $('.error-container');
         errorContainer.text('');
-        let newCustPrice = $('.customer_price').val();
+        let newCustPrice = $('.market_price').val();
         if(oldCustPrice > 0 && parseFloat(oldCustPrice) != newCustPrice){
             alert('Please re-verify your offer prices!');
 
@@ -367,18 +377,18 @@
         }
        
     });
-    $(document).on('input','.quantity, .customer_price', function(){
+    $(document).on('input','.quantity, .market_price', function(){
         var quantity = $(this).val();
-        var customer_price = $('.customer_price').val();
-        var marketPrice = quantity * customer_price;
-        $('.price').text(customer_price);
+        var market_price = $('.market_price').val();
+        var marketPrice = quantity * market_price;
+        $('.price').text(market_price);
        
         if((quantity)){
             var row = $(this).closest('tr');
             // Find the discount input within the same row
             var marketPriceInput = row.find('input[name="discount[]"]'); //assign value empty
             var offerPriceInput = row.find('input[name="offer_price[]"]');
-            var avgrPriceInput = row.find('input[name="avg_price[]"]');
+            var avgrPriceInput = row.find('input[name="per_unit_price[]"]');
             var quantity = row.find('input[name="quantity[]"]');
             var marketPriceInput = row.find('input[name="market_price[]"]');
          
@@ -391,7 +401,7 @@
             // Find the discount input within the same row
             var marketPriceInput = row.find('input[name="discount[]"]'); //assign value empty
             var offerPriceInput = row.find('input[name="offer_price[]"]');
-            var offerPriceInput = row.find('input[name="avg_price[]"]');
+            var offerPriceInput = row.find('input[name="per_unit_price[]"]');
             var quantity = row.find('input[name="quantity[]"]');
             var marketPriceInput = row.find('input[name="market_price[]"]');
             console.log(quantity);
@@ -416,12 +426,12 @@
         // Check if marketPrice is a valid number
         if (!isNaN(marketPrice)) {
             // Calculate offer price
-            var offerPrice = marketPrice - (marketPrice * discount / 100);
+            var offerPrice = marketPrice + (marketPrice * discount / 100);
             var avgPrice = offerPrice/quantity;
     
             // Find the offer price input within the same row
             var offerPriceInput = row.find('input[name="offer_price[]"]');
-            var avgrPriceInput = row.find('input[name="avg_price[]"]');
+            var avgrPriceInput = row.find('input[name="per_unit_price[]"]');
     
             // Set the offer price value
             offerPriceInput.val(offerPrice.toFixed(2));

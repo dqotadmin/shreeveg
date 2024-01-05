@@ -2596,4 +2596,5 @@
   'price_management' => 'Price management',
   'average_price_management' => 'Average price management',
   'store_price_management' => 'Store price management',
+  'assign_rate_for_customer' => 'Assign rate for customer',
 );

@@ -165,8 +165,6 @@ class PurchaseWarehouseOrderController extends Controller
         $authUser = auth('admin')->user();
         foreach ($request->product_id as $key => $product_id) {
             $existRow = WarehouseProduct::where('product_id', $product_id)->where('warehouse_id', $authUser->warehouse_id)->first();
-            // dump($existRow->productDetail->name);
-
 
             if (!$existRow) {
                 $existRow = new WarehouseProduct;
@@ -179,15 +177,20 @@ class PurchaseWarehouseOrderController extends Controller
                 $existRow['product_id']  = $product_id;
             }
 
-            if (isset($request->avg_price[$key])) {
-                $existRow['avg_price'] = $request->avg_price[$key];
-            }
-
             if (isset($request->margin[$key]) && !empty($request->margin[$key])) {
+
                 if ($request->type == 'store_price') {
-                    $existRow['store_price_updated_date'] = date('Y-m-d h:i:s');
+                    if (isset($request->store_price[$key])) {
+
+                        $existRow['store_price'] = $request->store_price[$key];
+                    }
+                    $existRow['store_price_updated_date'] = date('Y-m-d H:i:s');
                 } else {
-                    $existRow['avg_price_updated_date'] = date('Y-m-d h:i:s');
+
+                    if (isset($request->avg_price[$key])) {
+                        $existRow['avg_price'] = $request->avg_price[$key];
+                    }
+                    $existRow['avg_price_updated_date'] = date('Y-m-d H:i:s');
                 }
             }
 

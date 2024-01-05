@@ -2593,6 +2593,7 @@
   'Available Offers' => 'Available Offers',
   'Sell' => 'Sell',
   'category_name' => 'Category name',
+<<<<<<< HEAD
   'margin' => 'Margin',
   'shreeveg_price' => 'Shreeveg price',
   'Price Updated Successfully!' => 'Price Updated Successfully!',
@@ -2603,4 +2604,10 @@
   'product ordering updated!' => 'Product ordering updated!',
   'Ordering value already exists. Choose another value.' => 'Ordering value already exists. Choose another value.',
   'Product ordering updated!' => 'Product ordering updated!',
+=======
+  'price_management' => 'Price management',
+  'average_price_management' => 'Average price management',
+  'store_price_management' => 'Store price management',
+  'assign_rate_for_customer' => 'Assign rate for customer',
+>>>>>>> 051059badb758bb2d2fb8e54ad3263572dbfb549
 );

@@ -131,7 +131,7 @@
                                 title="{{translate('customer')}} {{translate('list')}}">
                                 <i class="tio-money"></i>
                                 <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
-                                    {{translate('assign_rate_list')}}
+                                    {{translate('assign_rate_for_customer')}}
                                 </span>
                             </a>
                         </li> 

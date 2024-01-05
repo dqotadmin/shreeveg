@@ -30,7 +30,7 @@ use App\Model\PurchaseWarehouseOrder;
                    
                 </h1>
                 <span class="d-block">
-                <i class="tio-date-range"></i> {{translate('order_date')}} :<strong>  {{$currentDate}}</strong>
+                <i class="tio-date-range"></i> {{translate('date')}} :<strong>  {{$currentDate}}</strong>
                 </span>
             </div>
         </div>
@@ -59,7 +59,8 @@ use App\Model\PurchaseWarehouseOrder;
            $role = auth('admin')->user(); 
                 $warehouse_id = auth('admin')->user()->warehouse_id; 
                $today = today();
-                  $order_id = \App\Model\PurchaseWarehouseOrder::where('warehouse_id',$role->warehouse_id)->whereDate('created_at', $today)->pluck('id')->toArray(); //11,12
+               $order_id = \App\Model\PurchaseWarehouseOrder::where('warehouse_id',$role->warehouse_id)->pluck('id')->toArray();
+                  //$order_id = \App\Model\PurchaseWarehouseOrder::where('warehouse_id',$role->warehouse_id)->whereDate('created_at', $today)->pluck('id')->toArray(); //11,12
                 //  $order_id_details = \App\Model\PurchaseWarehouseOrderDetail::whereIn('purchase_warehouse_order_id',$order_id)->get();//11, 12 all data
                  $WarehouseProducts = \App\Model\WarehouseProduct::where('warehouse_id',$warehouse_id)->with('productDetail')->get();//11, 12 all data
    ?>

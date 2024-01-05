@@ -43,8 +43,8 @@
                 $role = auth('admin')->user(); 
                      $warehouse_id = auth('admin')->user()->warehouse_id; 
                     $today = today();
-                     $order_id = \App\Model\PurchaseWarehouseOrder::where('warehouse_id',$role->warehouse_id)->pluck('id')->toArray();
-                     //$order_id = \App\Model\PurchaseWarehouseOrder::where('warehouse_id',$role->warehouse_id)->whereDate('created_at', $today)->pluck('id')->toArray(); //11,12
+                     //$order_id = \App\Model\PurchaseWarehouseOrder::where('warehouse_id',$role->warehouse_id)->pluck('id')->toArray();
+                     $order_id = \App\Model\PurchaseWarehouseOrder::where('warehouse_id',$role->warehouse_id)->whereDate('created_at', $today)->pluck('id')->toArray(); //11,12
                      //  $order_id_details = \App\Model\PurchaseWarehouseOrderDetail::whereIn('purchase_warehouse_order_id',$order_id)->get();//11, 12 all data
                       $WarehouseProducts = \App\Model\WarehouseProduct::where('warehouse_id',$warehouse_id)->with('productDetail')->get();//11, 12 all data
                 ?>
@@ -72,9 +72,9 @@
                         <th>Last Updated Date</th>
                     </thead>
                     <tbody>
-                        @foreach($WarehouseProducts as $products)            
+                        @foreach($WarehouseProducts as $key =>$products)            
                         <tr class="child-row">
-                            <td><?php echo $i++; ?></td>
+                            <td><?php echo $key+1; ?></td>
                             <td>{{$products->productDetail->name}}  
                                 <input type="hidden" value="{{$products->product_id}}" name="product_id[]" class="">
                             </td>

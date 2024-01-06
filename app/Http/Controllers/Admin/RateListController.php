@@ -236,8 +236,8 @@ function store(Request $request)
         ]);
     }
 }
-Toastr::success(translate('Price Updated Successfully!') );
-     return redirect()->back();
+    Toastr::success(translate('Price Updated Successfully!') );
+        return redirect()->back();
 
 }
 

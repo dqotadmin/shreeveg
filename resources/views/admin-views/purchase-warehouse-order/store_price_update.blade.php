@@ -86,7 +86,8 @@
                                 @endif
                             </td>
                             <td class="" style="width: 198px;" > 
-                                <input type="text" value="{{$products->avg_price? $products->avg_price:$products->store_price}}" name="store_price[]"  class="form-control updatePrice w-50"  required> 
+                                {{-- {{$products->avg_price? $products->avg_price:$products->store_price}} --}}
+                                <input type="text" value="" name="store_price[]"  class="form-control updatePrice w-50"> 
                             </td>
                             <td class="" >
                                 <h5 style="margin-left: 15px;">{{$products->store_price}}</h5>

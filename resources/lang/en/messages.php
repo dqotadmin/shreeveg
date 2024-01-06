@@ -1,4 +1,4 @@
-<?php return array(
+<?php return array (
   'attribute' => 'Attribute',
   'update' => 'Update',
   'name' => 'Name',
@@ -2597,4 +2597,8 @@
   'average_price_management' => 'Average price management',
   'store_price_management' => 'Store price management',
   'assign_rate_for_customer' => 'Assign rate for customer',
+  'price updated Successfully!' => 'Price updated Successfully!',
+  'average price updated Successfully!' => 'Average price updated Successfully!',
+  'Enter new prices' => 'Enter new prices',
+  'store price updated Successfully!' => 'Store price updated Successfully!',
 );

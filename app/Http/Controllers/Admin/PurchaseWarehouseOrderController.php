@@ -161,8 +161,9 @@ class PurchaseWarehouseOrderController extends Controller
 
     public function postPriceUpdate(Request $request)
     {
-        //dd($request->all());
         $authUser = auth('admin')->user();
+        $is_update = false;
+        $msg = 'Enter new prices';
         foreach ($request->product_id as $key => $product_id) {
             $existRow = WarehouseProduct::where('product_id', $product_id)->where('warehouse_id', $authUser->warehouse_id)->first();
 
@@ -177,25 +178,31 @@ class PurchaseWarehouseOrderController extends Controller
                 $existRow['product_id']  = $product_id;
             }
 
-            if (isset($request->margin[$key]) && !empty($request->margin[$key])) {
-
-                if ($request->type == 'store_price') {
-                    if (isset($request->store_price[$key])) {
-
-                        $existRow['store_price'] = $request->store_price[$key];
-                    }
+            if ($request->type == 'store_price') {
+                if (isset($request->store_price[$key])) {
+                    $is_update = true;
+                    $msg = 'store price updated Successfully!';
+                    $existRow['store_price'] = $request->store_price[$key];
                     $existRow['store_price_updated_date'] = date('Y-m-d H:i:s');
-                } else {
+                }
+            } else {
 
-                    if (isset($request->avg_price[$key])) {
-                        $existRow['avg_price'] = $request->avg_price[$key];
-                    }
+                if (isset($request->avg_price[$key])) {
+                    $msg = 'average price updated Successfully!';
+                    $is_update = true;
+                    $existRow['avg_price'] = $request->avg_price[$key];
                     $existRow['avg_price_updated_date'] = date('Y-m-d H:i:s');
                 }
             }
 
             $existRow->save();
         }
+        if ($is_update) {
+            Toastr::success(translate($msg));
+        } else {
+            Toastr::error(translate($msg));
+        }
+
         return redirect()->back();
     }
     public function product_price_updateOld(Request $request)

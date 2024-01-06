@@ -125,6 +125,7 @@ function store(Request $request)
   $warehouse_id =   auth('admin')->user()->warehouse_id;
     $array = $request->all();
     $productIds = $array['product_id'];
+    $customer_price = 0;
         // Process each product ID
     foreach ($productIds as $key => $productId) {
         $findId =   WarehouseProduct::where('warehouse_id',$warehouse_id)->where('product_id',$productId)->first();
@@ -159,7 +160,7 @@ function store(Request $request)
             'title' => @$product_data[0]['title'],
 
         ];
-
+        $customer_price = @$per_unit_price;
         // Process the second slot
         $secondSlotData = [];
         $quantity = $array['2_slot']['quantity'][$key];
@@ -208,11 +209,18 @@ function store(Request $request)
         $combinedData = array_merge($firstSlotData, $secondSlotData, $thirdSlotData);
 
         // Store the combined data in the database
-      
+        $maxDiscount =0;
+            $discounts = array_column($combinedData, 'discount');
+        if($discounts){
+            $maxDiscount = max($discounts);
+
+        }
       if($findId){
         $findId->product_details = json_encode($combinedData);
         $findId->market_price = $marketPrice;
         $findId->default_unit = $unit;
+        $findId->customer_price = @$customer_price;
+        $findId->discount_upto = @$maxDiscount;
         $findId->save();
         
       }else{
@@ -221,7 +229,10 @@ function store(Request $request)
             'warehouse_id' => $warehouse_id,
             'market_price' => $marketPrice,
             'default_unit' => $unit,
+            'customer_price' => @$customer_price,
             'product_details' => json_encode($combinedData),
+            'discount_upto' => @$maxDiscount,
+
         ]);
     }
 }

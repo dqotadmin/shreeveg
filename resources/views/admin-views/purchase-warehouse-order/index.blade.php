@@ -13,6 +13,7 @@
             <span>
             {{translate('warehouse_purchase_orders')}}
             </span>
+          
         </h1>
     </div>
  

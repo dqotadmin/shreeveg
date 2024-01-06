@@ -114,7 +114,7 @@ class ProductController extends Controller
         $authUser = auth('admin')->user();
         if ($authUser->admin_role_id == 3 || $authUser->admin_role_id == 5) {
             $assign_categories =  $this->warehouse_categories->where('warehouse_id', $authUser->warehouse_id)->pluck('category_id')->toArray();
-            $query = $query->whereIn('category_id', $assign_categories);
+            $query = $query->whereIn('category_id', $assign_categories)->where('status',1);
         }
 
         $query_param = [];
@@ -307,14 +307,23 @@ class ProductController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function status(Request $request): \Illuminate\Http\RedirectResponse
+    public function status(Request $request, $id): \Illuminate\Http\RedirectResponse
     {
+        if(auth('admin')->user()->admin_role_id == 3){
+            $product = $this->warehouse_products->find($request->id);
+            $product->status = $request->status;
+            $product->save();
+            Toastr::success(translate('Product status updated!'));
+            return back();
+        }else{
+
         $product = $this->product->find($request->id);
         $product->status = $request->status;
         $product->save();
         Toastr::success(translate('Product status updated!'));
         return back();
     }
+}
 
     public function order(Request $request) 
     {
@@ -458,7 +467,7 @@ class ProductController extends Controller
             'offer_price' => 'required',
         ]);
         $maxDiscount = NULL;
-        $product_details = [];
+        $product_details = []; 
         if ($request->quantity) {
             foreach ($request->quantity as $key => $qty) {
                 if (isset($request->offer_price[$key])) {
@@ -477,9 +486,9 @@ class ProductController extends Controller
                 if (isset($request->title[$key])) {
                     $product_details[$key]['title'] = $request->title[$key];
                 }
-                if (isset($request->discount[$key])) {
-                    $product_details[$key]['discount'] = $request->discount[$key];
-                }
+                $discountPercentage = ($request->market_price[$key] - ($request->offer_price[$key] / $qty)) / $request->market_price[$key] * 100;
+                $product_details[$key]['discount']  = number_format($discountPercentage, 2, '.', '');
+                
                 if (isset($request->per_unit_price[$key])) {
                     $product_details[$key]['per_unit_price'] = $request->per_unit_price[$key];
                 }

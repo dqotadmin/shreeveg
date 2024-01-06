@@ -259,28 +259,6 @@
 
 
 
-                        @if(auth('admin')->user()->admin_role_id == 8 || auth('admin')->user()->admin_role_id == 3 ||
-                        auth('admin')->user()->admin_role_id == 1)
-                        @if(auth('admin')->user()->admin_role_id == 8 )
-                        <li class="navbar-vertical-aside-has-menu ">
-                            <a class="js-navbar-vertical-aside-menu-link nav-link"
-                                href="{{route('admin.broker-rate-list.index')}}" title="{{translate('rate list')}}">
-                                <i class="tio-category nav-icon"></i>
-                                <span
-                                    class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('rate list')}}</span>
-                            </a>
-                        </li>
-                        @endif
-                        <li class="navbar-vertical-aside-has-menu ">
-                            <a class="js-navbar-vertical-aside-menu-link nav-link"
-                                href="{{route('admin.purchase-warehouse-order.index')}}"
-                                title="{{translate('order_list')}}">
-                                <i class="tio-map nav-icon"></i>
-                                <span
-                                    class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('warehouse_purchase_orders')}}</span>
-                            </a>
-                        </li>
-                        @endif
 
                         @if(auth('admin')->user()->admin_role_id == 5)
 
@@ -513,6 +491,29 @@
                         @endif
                         @endif
 
+                        
+                        @if(auth('admin')->user()->admin_role_id == 8 || auth('admin')->user()->admin_role_id == 3 ||
+                        auth('admin')->user()->admin_role_id == 1)
+                        @if(auth('admin')->user()->admin_role_id == 8 )
+                        <li class="navbar-vertical-aside-has-menu ">
+                            <a class="js-navbar-vertical-aside-menu-link nav-link"
+                                href="{{route('admin.broker-rate-list.index')}}" title="{{translate('rate list')}}">
+                                <i class="tio-category nav-icon"></i>
+                                <span
+                                    class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('rate list')}}</span>
+                            </a>
+                        </li>
+                        @endif
+                        <li class="navbar-vertical-aside-has-menu ">
+                            <a class="js-navbar-vertical-aside-menu-link nav-link"
+                                href="{{route('admin.purchase-warehouse-order.index')}}"
+                                title="{{translate('order_list')}}">
+                                <i class="tio-map nav-icon"></i>
+                                <span
+                                    class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('warehouse_purchase_orders')}}</span>
+                            </a>
+                        </li>
+                        @endif
                         @if(in_array(auth('admin')->user()->admin_role_id,[1,3,6]))
                         <li class="navbar-vertical-aside-has-menu {{Request::is('admin/store.index')?'active':''}}">
                             <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{route('admin.store.list')}}"

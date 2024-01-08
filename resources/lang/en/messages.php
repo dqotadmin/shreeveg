@@ -2606,4 +2606,5 @@
   'margin' => 'Margin',
   'shreeveg_price' => 'Shreeveg price',
   'Price Updated Successfully!' => 'Price Updated Successfully!',
+  'Shipping charge per Kilometer is required while shipping method is active' => 'Shipping charge per Kilometer is required while shipping method is active',
 );

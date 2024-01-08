@@ -69,7 +69,6 @@ class AdminUserController extends Controller
                     });    
                 }
             })->orderBy('id', 'desc');
-        dd($admins->get());
         $query_param = ['search' => $request['search']];
         }else{
             $admins = $this->admin->orderBy('id', 'desc')->where('admin_role_id', $role_id);

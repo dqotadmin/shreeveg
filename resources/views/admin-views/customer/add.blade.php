@@ -50,8 +50,8 @@
                         <div class="col-md-12">
                             <div>
                                 <label class="input-label" for="exampleFormControlInput1">{{translate('phone')}}</label>
-                                <input type="text" name="phone" value="{{ old('phone') }}" class="form-control"
-                                    placeholder="{{ translate('Ex : 017********') }}" required>
+                                <input type="number" pattern="[^e]*"  pattern="[0-9]*" name="phone" value="{{ old('phone') }}" class="form-control" id="phoneInput"
+                                    placeholder="{{ translate('Ex : 017********') }}" required pattern="\d*">
                             </div>
                         </div>
                     </div>
@@ -73,7 +73,7 @@
                             </label>
                             <div class="custom-file">
                                 <input type="file" name="image" id="customFileUpload" class="custom-file-input h--45px"
-                                    accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" required>
+                                    accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*"  >
                                 <label class="custom-file-label h--45px" for="customFileUpload"></label>
                             </div>
                         </div>
@@ -107,7 +107,7 @@
             </div>
             <div class="col-md-4 col-sm-6">
                 <label class="input-label" for="exampleFormControlInput1">{{translate('Confirm password')}}</label>
-                <input type="text" name="password_confirmation" class="form-control"
+                <input type="text" name="confirm_password" class="form-control"
                     placeholder="{{ translate('7+ Characters') }}" required>
             </div>
         </div>
@@ -132,6 +132,15 @@
 @endsection
 
 @push('script_2')
+<script>
+    $(document).ready(function () {
+        $('#phoneInput').on('input', function () {
+            $(this).val(function (_, val) {
+                return val.replace(/\D/g, ''); // Allow only numeric characters
+            });
+        });
+    });
+</script>
 <script>
 function readURL(input) {
     if (input.files && input.files[0]) {

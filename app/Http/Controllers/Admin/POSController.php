@@ -839,7 +839,7 @@ class POSController extends Controller
         return response()->json('', 200);
     }
 
-    /**
+    /** 
      * @param Request $request
      * @return RedirectResponse
      */
@@ -849,6 +849,8 @@ class POSController extends Controller
             'f_name' => 'required',
             'l_name' => 'required',
             'email' => 'required|email|unique:users',
+            'password' => 'nullable|same:confirm_password|min:8',
+
             'phone' => 'required|unique:users'
         ], [
             'f_name.required' => translate('first name is required'),
@@ -873,7 +875,8 @@ class POSController extends Controller
         $customer->password = $request->password ? Hash::make($request->password) : Hash::make('12345678');
         $customer->save();
         Toastr::success(translate('Customer added successfully!'));
-        return back();
+        return redirect()->route('admin.customer.list');
+
     }
 
     /**

@@ -115,7 +115,7 @@
                                         <div class="form-group">
                                             <label class="input-label" for="exampleFormControlInput1">{{translate('name')}}
                                                 ({{strtoupper($lang['code'])}})</label>
-                                            <input type="text" name="name[]" maxlength="255" value="{{$lang['code'] == 'en' ? $category['name'] : ($translate[$lang['code']]['name']??'')}}" class="form-control" @if($lang['status'] == true) oninvalid="document.getElementById('{{$lang['code']}}-link').click()" @endif placeholder="{{ translate('New Category') }}" {{$lang['status'] == true ? '':''}}>
+                                            <input type="text" name="name[]" maxlength="255" value="{{$lang['code'] == 'en' ? $category['name'] : ($translate[$lang['code']]['name']??'')}}" class="form-control" @if($lang['status'] == true) oninvalid="document.getElementById('{{$lang['code']}}-link').click()" @endif placeholder="{{ translate('New Category') }}" {{$lang['status'] == true ? '':''}} required>
                                         </div>
                                     </div>
 
@@ -171,7 +171,7 @@
                                 <label class="input-label" for="exampleFormControlInput1">{{translate('Category Code')}}</label>
                                 <input type="text" name="category_code" value="{{$lang['code'] == 'en' ? $category['category_code'] : ($category['category_code']??'')}}"
                                         class="form-control input-text-uc" oninvalid="document.getElementById('en-link').click()"
-                                        placeholder="{{ translate('Category Code') }}" >
+                                        placeholder="{{ translate('Category Code') }}" required>
                             </div>
                         </div>
                     </div>
@@ -180,7 +180,7 @@
                         
                         <div class="col-sm-3">
                             <center>
-                                <img class="img--105" id="viewer" onerror="this.src='{{asset('public/category/img1.jpg')}}'"
+                                <img class="img--105" id="viewer" onerror="this.src='{{asset('public/assets/admin/img/900x400/img1.jpg')}}'"
                                 src="{{asset('storage/app/public/category/')}}/{{$category['image']}}" alt="image"/>
                             </center>
                             <label>{{\App\CentralLogics\translate('image')}}</label><small style="color: red">* ( {{\App\CentralLogics\translate('ratio')}} 3:1 )</small>

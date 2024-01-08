@@ -133,10 +133,10 @@
                                     <div class="input-group input-group-sm-down-break">
                                         <input type="text" class="form-control" name="f_name" id="firstNameLabel" style="text-transform: capitalize;"
                                             placeholder="{{ translate('Your first name') }}"
-                                            aria-label="Your first name" value="{{old('f_name')}}">
+                                            aria-label="Your first name" value="{{old('f_name')}}" required>
                                         <input type="text" class="form-control" name="l_name" id="lastNameLabel" style="text-transform: capitalize;"
                                             placeholder="{{ translate('Your last name') }}" aria-label="Your last name"
-                                            value="{{old('l_name')}}">
+                                            value="{{old('l_name')}}" required>
                                     </div>
                                 </div>
                             </div>
@@ -146,14 +146,14 @@
                             <div class="row form-group">
                                 <label for="phoneLabel"
                                     class="col-sm-3 col-form-label input-label">{{ translate('Phone') }} <span
-                                        class="input-label-secondary"></span></label>
+                                        class="input-label-secondary" ></span></label>
 
                                 <div class="col-sm-9">
-                                    <input type="text" class="js-masked-input form-control" name="phone" id="phoneLabel"
-                                        placeholder="+x(xxx)xxx-xx-xx" aria-label="+(xxx)xx-xxx-xxxxx"
+                                    <input type="number" class="js-masked-input form-control" name="phone" id="phoneLabel" pattern="[^e]*"
+                                        placeholder="+x(xxx)xxx-xx-xx"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
                                         value="{{old('phone')}}" data-hs-mask-options='{
                                            "template": "+(880)00-000-00000"
-                                         }'>
+                                         }' required>
                                 </div>
                             </div>
                             <!-- End Form Group -->
@@ -166,7 +166,7 @@
                                     <input type="email" class="form-control" name="email" id="newEmailLabel"
                                         value="{{old('email')}}"
                                         placeholder="{{ translate('Enter new email address') }}"
-                                        aria-label="Enter new email address">
+                                        aria-label="Enter new email address" required>
                                 </div>
                             </div>
 

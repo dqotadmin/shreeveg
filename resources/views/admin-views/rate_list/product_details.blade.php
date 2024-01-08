@@ -2,6 +2,8 @@
  @foreach($products as $product)
  @php($whProduct = Helpers::warehouseProductData($product->id))
  @endforeach
+ 
+ </style>
  <div class="table-responsive datatable-custom">
  <form action="{{route('admin.rate_list.store')}}" method="post">
     @csrf
@@ -11,7 +13,7 @@
          <thead class="thead-light">
              <tr>
                  <!-- <th>{{translate('#')}}</th> -->
-                 <th>{{translate('category_name')}}</th>
+                 <th class="">{{translate('category_name')}}</th>
                  <th>{{translate('product_name')}}</th>
                  <th>{{translate('market_price/unit')}}</th>
                  <!-- <th>{{translate('unit')}}</th> -->
@@ -166,6 +168,9 @@
 
                      </div>
                  </th>
+                 <th>
+                 {{translate('rate_updated_date')}} 
+                 </th>
              </tr>
          </thead>
          <tbody id="set-rows">
@@ -178,13 +183,14 @@
               
              <tr>
                  <td class="pt-1 pb-3 ">
-                 <div class="max-85 text-right">
-                         {{ @$product->category->name }}
+                 <div class="max-85 text-left product-category " title="{{ @$product->category->name }}">
+                 {!! (nl2br(e(Str::words(@$product->category->name, '2')))) !!}
                      </div>
                  </td>
                  <td class="pt-1 pb-3 ">
-                     <div class="max-85 text-right">
-                         {{ $product['name'] }}
+                     <div class="max-85 text-center">
+                         {{ $product['name'] }} <br><small>({{ $product['product_code'] }} )</small>
+                         
                         
                      </div>
                  </td>
@@ -241,6 +247,15 @@
                     <input type="text"  name="3_slot[per_unit_price][]" id="" style="width: 70px;   border: none; padding-left: 8px;" class="3_per_unit_rate_<?php echo $key + 1; ?>" value="{{@$product_details_array[2]['per_unit_price']}}">
                      </div>
                  </td>
+                 <td class="" >
+                    @if(@$whProduct->product_rate_updated_date)
+                    <?php  $dateColor = 'red';
+                        if (date('Y-m-d', strtotime($whProduct->product_rate_updated_date)) == date('Y-m-d')) {
+                            $dateColor = 'green';
+                        } ?>
+                    <h5 style="margin-left: 15px;color:{{$dateColor}}">{{ date('d-M-Y h:i A', strtotime($whProduct->product_rate_updated_date)) }}</h5>
+                    @endif
+                </td>
              </tr>
              @endforeach
          </tbody>

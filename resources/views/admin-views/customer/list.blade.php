@@ -31,7 +31,7 @@
                     <div class="input-group">
                         <input id="datatableSearch_" type="search" name="search" class="form-control"
                             placeholder="{{translate('Search by Name or Phone or Email')}}" aria-label="Search"
-                            value="{{$search}}" required autocomplete="off">
+                            value="{{$search}}" autocomplete="off">
                         <div class="input-group-append">
                             <button type="submit" class="input-group-text">
                                 {{__('Search')}}

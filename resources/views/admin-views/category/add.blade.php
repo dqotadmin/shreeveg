@@ -95,7 +95,7 @@
                                         <div class="form-group">
                                             <label class="input-label" for="exampleFormControlInput1">{{translate('name')}}
                                                 ({{strtoupper($lang['code'])}})</label>
-                                            <input type="text" name="name[]" maxlength="255" value="" class="form-control" @if($lang['status'] == true) oninvalid="document.getElementById('{{$lang['code']}}-link').click()" @endif placeholder="{{ translate('New Category') }}" {{$lang['status'] == true ? '':''}}>
+                                            <input type="text" name="name[]" maxlength="255" value="" class="form-control" @if($lang['status'] == true) oninvalid="document.getElementById('{{$lang['code']}}-link').click()" @endif placeholder="{{ translate('New Category') }}" {{$lang['status'] == true ? '':''}} required>
                                         </div>
                                     </div>
 
@@ -137,7 +137,7 @@
                                     ({{strtoupper($default_lang)}})</label>
                                 <input type="text" name="name[]" value=""
                                         class="form-control" oninvalid="document.getElementById('en-link').click()"
-                                        placeholder="{{ translate('New Category') }}" >
+                                        placeholder="{{ translate('New Category') }}" required>
                             </div>
                             <input type="hidden" name="lang[]" value="{{$default_lang}}">
                         @endif
@@ -151,7 +151,7 @@
                                 <label class="input-label" for="exampleFormControlInput1">{{translate('Category Code')}}</label>
                                 <input type="text" name="category_code" value=""
                                         class="form-control input-text-uc" oninvalid="document.getElementById('en-link').click()"
-                                        placeholder="{{ translate('Category Code') }}" >
+                                        placeholder="{{ translate('Category Code') }}" required>
                             </div>
                         </div>
                     </div>

@@ -162,7 +162,6 @@ class CategoryController extends Controller
             'title_silver' => 'required',
             'title_gold' => 'required',
             'title_platinum' => 'required',
-            'image' => 'required',
         ]);
 
         foreach ($request->name as $name) {

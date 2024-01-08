@@ -1,4 +1,4 @@
-<?php return array (
+<?php return array(
   'attribute' => 'Attribute',
   'update' => 'Update',
   'name' => 'Name',
@@ -2606,5 +2606,5 @@
   'margin' => 'Margin',
   'shreeveg_price' => 'Shreeveg price',
   'Price Updated Successfully!' => 'Price Updated Successfully!',
-  'Shipping charge per Kilometer is required while shipping method is active' => 'Shipping charge per Kilometer is required while shipping method is active',
+  'rate_updated_date' => 'Rate updated date',
 );

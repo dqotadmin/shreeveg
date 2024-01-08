@@ -50,8 +50,8 @@
                         <div class="col-md-12">
                             <div>
                                 <label class="input-label" for="exampleFormControlInput1">{{translate('phone')}}</label>
-                                <input type="text" name="phone" value="{{ old('phone') }}" class="form-control"
-                                    placeholder="{{ translate('Ex : 017********') }}" required>
+                                <input type="number" pattern="[^e]*"  pattern="[0-9]*" name="phone" value="{{ old('phone') }}" class="form-control" id="phoneInput"
+                                    placeholder="{{ translate('Ex : 017********') }}" required pattern="\d*">
                             </div>
                         </div>
                     </div>
@@ -73,7 +73,7 @@
                             </label>
                             <div class="custom-file">
                                 <input type="file" name="image" id="customFileUpload" class="custom-file-input h--45px"
-                                    accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" required>
+                                    accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*"  >
                                 <label class="custom-file-label h--45px" for="customFileUpload"></label>
                             </div>
                         </div>
@@ -107,7 +107,7 @@
             </div>
             <div class="col-md-4 col-sm-6">
                 <label class="input-label" for="exampleFormControlInput1">{{translate('Confirm password')}}</label>
-                <input type="text" name="password_confirmation" class="form-control"
+                <input type="text" name="confirm_password" class="form-control"
                     placeholder="{{ translate('7+ Characters') }}" required>
             </div>
         </div>
@@ -120,7 +120,62 @@
 </div>
 
 </form>
+<form class="needs-validation form_customer" novalidate>
+  <div class="form-row">
+    <div class="col-md-6 mb-3">
+      <label for="validationCustom01">First name</label>
+      <input type="text" class="form-control" id="validationCustom01" value="" required>
+      <div class="invalid-feedback">
+        Please fill name.
+      </div>
+    </div>
+    <div class="col-md-6 mb-3">
+      <label for="validationCustom02">Last name</label>
+      <input type="text" class="form-control" id="validationCustom02" value="" required>
+      <div class="invalid-feedback">
+        Please fill last name.
+      </div>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="col-md-6 mb-3">
+      <label for="validationCustom03">City</label>
+      <input type="text" class="form-control" style="border: 0.0625rem solid #e7eaf3;">
+     
+    </div>
+   
+    <div class="col-md-3 mb-3">
+      <label for="validationCustom05">Zip</label>
+      <input type="text" class="form-control" id="validationCustom05" required>
+      <div class="invalid-feedback">
+        Please fill zip code.
+      </div>
+    </div>
+  </div>
+  
+  <button class="btn btn-primary" type="submit">Submit form</button>
+</form>
 
+<script>
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>
 </div>
 
 
@@ -132,6 +187,15 @@
 @endsection
 
 @push('script_2')
+<script>
+    $(document).ready(function () {
+        $('#phoneInput').on('input', function () {
+            $(this).val(function (_, val) {
+                return val.replace(/\D/g, ''); // Allow only numeric characters
+            });
+        });
+    });
+</script>
 <script>
 function readURL(input) {
     if (input.files && input.files[0]) {

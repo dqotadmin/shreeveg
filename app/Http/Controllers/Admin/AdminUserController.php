@@ -52,9 +52,9 @@ class AdminUserController extends Controller
     }
     function index(Request $request)
     {
-       $baseQuery = $this->admin;
-       $role_id = isset($_GET['role_id']) ? $_GET['role_id'] : null;
-       $query_param = [];
+        $baseQuery = $this->admin;
+        $role_id = isset($_GET['role_id']) ? $_GET['role_id'] : null;
+        $query_param = [];
         $search = $request['search'];
         if ($request->has('search')) {
             $key = explode(' ', $request['search']);
@@ -66,38 +66,38 @@ class AdminUserController extends Controller
                     $q->orWhere('l_name', 'like', "%{$value}%");
                     $q->orWhereHas('warehouse', function ($warehouseQuery) use ($value) {
                         $warehouseQuery->where('warehouse_id', 'like', "%{$value}%");
-                    });    
+                    });
                 }
             })->orderBy('id', 'desc');
-        $query_param = ['search' => $request['search']];
-        }else{
+            $query_param = ['search' => $request['search']];
+        } else {
             $admins = $this->admin->orderBy('id', 'desc')->where('admin_role_id', $role_id);
         }
-        if(auth('admin')->user()->admin_role_id == 3){
-            if( $role_id == 8){
+        if (auth('admin')->user()->admin_role_id == 3) {
+            if ($role_id == 8) {
                 $admins = $this->admin->orderBy('id', 'desc')->where('admin_role_id', $role_id)->paginate(Helpers::getPagination())->appends($query_param);
-            }elseif( $role_id == 6){
+            } elseif ($role_id == 6) {
                 $stores = $this->store->where('warehouse_id', auth('admin')->user()->warehouse_id)->pluck('id');
-                 $admins = $baseQuery->whereIn('store_id', $stores)->paginate(Helpers::getPagination())->appends($query_param);
+                $admins = $baseQuery->whereIn('store_id', $stores)->paginate(Helpers::getPagination())->appends($query_param);
                 //    $admins = $this->admin->orderBy('id', 'desc')->where('admin_role_id', $role_id)->paginate(Helpers::getPagination())->appends($query_param);
                 // $warehouse_id = '';
                 // foreach($admins as $admin){
                 //     $warehouse_id =   $admin->Store->warehouse_id;
                 // }
                 // $stores = $this->store->orderBy('id', 'desc')->where('warehouse_id', $warehouse_id)->pluck('id');
-                
+
                 // $admins = $this->admin->orderBy('id', 'desc')->whereIn('store_id', $stores)->where('admin_role_id', $role_id)->paginate(Helpers::getPagination())->appends($query_param);
 
-            }else{
-                $admins = $this->admin->orderBy('id', 'desc')->where('warehouse_id',auth('admin')->user()->warehouse_id)->where('admin_role_id', $role_id)->paginate(Helpers::getPagination())->appends($query_param);
+            } else {
+                $admins = $this->admin->orderBy('id', 'desc')->where('warehouse_id', auth('admin')->user()->warehouse_id)->where('admin_role_id', $role_id)->paginate(Helpers::getPagination())->appends($query_param);
             }
-                $role = $this->admin_role->where('id', $role_id)->first();
-            }else{
+            $role = $this->admin_role->where('id', $role_id)->first();
+        } else {
             $admins = $admins->paginate(Helpers::getPagination())->appends($query_param);
             $role = $this->admin_role->where('id', $role_id)->first();
         }
         $role = $this->admin_role->where('id', $role_id)->first();
-        return view('admin-views.warehouse-admin.index', compact('admins', 'role','search'));
+        return view('admin-views.warehouse-admin.index', compact('admins', 'role', 'search'));
     }
 
     public function user_management_create(Request $request): View|Factory|Application
@@ -117,7 +117,7 @@ class AdminUserController extends Controller
             'email' => 'required|max:255|unique:admins',
             'password' => 'required|same:confirm_password|min:8',
             'phone' => 'required|unique:admins',
-            'warehouse_id'=>'nullable',
+            'warehouse_id' => 'nullable',
         ], [
             'f_name.required' => 'First name is required!',
             'l_name.required' => 'Last name is required!',
@@ -172,7 +172,7 @@ class AdminUserController extends Controller
 
         $role = $this->admin_role->where('id', $request->role_id)->first();
         $user = auth('admin')->user();
-        return view('admin-views.warehouse-admin.edit', compact('admins', 'role','user'));
+        return view('admin-views.warehouse-admin.edit', compact('admins', 'role', 'user'));
     }
 
     public function status(Request $request): RedirectResponse
@@ -386,5 +386,37 @@ class AdminUserController extends Controller
         $admin->delete();
         Toastr::success(translate('Warehouse admin remved'));
         return back();
+    }
+
+    public function brokerHistory(Request $request, $id)
+    {
+
+        $broker = $this->admin->find($id);
+
+        $user = auth('admin')->user();
+
+        $query_param = [];
+        $search = $request['search'];
+        $user_id = auth('admin')->user()->id;
+
+        $rows = \App\Model\BrokerRateList::where('admin_id', $broker->id);
+        if ($request->has('search')) {
+            $key = explode(' ', $request['search']);
+            $rows->where(function ($q) use ($key) {
+                foreach ($key as $value) {
+                    $q->orWhere('title', 'like', "%{$value}%");
+                }
+            });
+            $query_param = ['search' => $request['search']];
+        }
+        $rows = $rows->orderBy('id', 'desc')->paginate(Helpers::getPagination())->appends($query_param);
+
+        return view('admin-views.warehouse-admin.broker-history', compact('rows', 'search'));
+    }
+
+    public function brokerHistoryDetail(Request $request, $id)
+    {
+        $row = \App\Model\BrokerRateList::find($id);
+        return view('admin-views.warehouse-admin.broker-history-detail', compact('row'));
     }
 }

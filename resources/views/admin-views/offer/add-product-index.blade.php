@@ -217,7 +217,7 @@
                             $('#products').empty();
                             // $('#products').append('<option value="">Select Product</option>');
                             $.each(data.products, function(key, value) {
-                                console.log(key)
+                               
                                 if(key == 0){
                                     $('.productSelect').trigger('change');
                                     getProductData(flash_deal_id,value.id);

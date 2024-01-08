@@ -29,7 +29,8 @@ class RateListController extends Controller
         private WarehouseCategory $warehouse_categories,
         private Category $category
 
-    ){}
+    ) {
+    }
 
     /**
      * @param Request $request 
@@ -37,7 +38,7 @@ class RateListController extends Controller
      */
     function index(Request $request): View|Factory|Application
     {
-        
+
         $query = $this->product;
         $authUser = auth('admin')->user();
         if ($authUser->admin_role_id == 3 || $authUser->admin_role_id == 5) {
@@ -51,7 +52,7 @@ class RateListController extends Controller
             $key = explode(' ', $request['search']);
             $query = $query->where(function ($q) use ($key) {
                 foreach ($key as $value) {
-                    $q->orWhere('id', 'like', "%{$value}%") 
+                    $q->orWhere('id', 'like', "%{$value}%")
                         ->orWhere('name', 'like', "%{$value}%")
                         ->orWhere('product_code', 'like', "%{$value}%");
                 }
@@ -59,30 +60,32 @@ class RateListController extends Controller
             $query_param = ['search' => $request['search']];
         }
         $products = $query->latest()->with('category')->paginate(Helpers::getPagination())->appends($query_param);
-        $wh_assign_categories = $this->warehouse_categories->where('warehouse_id',$authUser->warehouse_id)->pluck('category_id');
-        $categories = $this->category->whereIn('id',$wh_assign_categories)->get();
+        $wh_assign_categories = $this->warehouse_categories->where('warehouse_id', $authUser->warehouse_id)->pluck('category_id');
+        $categories = $this->category->whereIn('id', $wh_assign_categories)->get();
         $options = Helpers::getCategoryDropDown($categories);
 
-         return view('admin-views.rate_list.index', compact('products','options', 'search'));
+        return view('admin-views.rate_list.index', compact('products', 'options', 'search'));
     }
 
 
 
-    function get_product_by_cat(Request $request,$cat_id):  \Illuminate\Http\JsonResponse
+    function get_product_by_cat(Request $request, $cat_id): \Illuminate\Http\JsonResponse
     {
-        $products= $this->product->where('category_id',$cat_id)->get();
+        $products = $this->product->active();
+        if ($cat_id > 0) {
+            $products = $products->where('category_id', $cat_id);
+        }
+        $products = $products->get();
         return response()->json([
             'success' => 1,
             'd_none_class' => 'd-none',
             'view' => view('admin-views.rate_list.product_details', compact('products'))->render(),
-        ]);   
-
+        ]);
     }
-    
+
     function create(Request $request): View|Factory|Application
     {
-       return view('admin-views.unit.add');
-
+        return view('admin-views.unit.add');
     }
 
 
@@ -92,8 +95,8 @@ class RateListController extends Controller
      */
 
 
-   
- 
+
+
     /**
      * @param Request $request
      * @return JsonResponse
@@ -114,138 +117,135 @@ class RateListController extends Controller
     /**
      * @return Factory|View|Application
      */
-  
+
     /**
      * @param Request $request
      * @return RedirectResponse
      */
- 
-function store(Request $request)
-{
-  $warehouse_id =   auth('admin')->user()->warehouse_id;
-    $array = $request->all();
-    $productIds = $array['product_id'];
-    $customer_price = 0;
+
+    function store(Request $request)
+    {
+        $warehouse_id =   auth('admin')->user()->warehouse_id;
+        $array = $request->all();
+        $productIds = $array['product_id'];
+        $customer_price = 0;
         // Process each product ID
-    foreach ($productIds as $key => $productId) {
-        $findId =   WarehouseProduct::where('warehouse_id',$warehouse_id)->where('product_id',$productId)->first();
-        if($findId){
-            $product_data =   json_decode($findId->product_details,true);
-            //dd($product_data[0]['approx_piece']);
-          }
-          // Initialize an array to store combined data for the current product
-        $combinedData = [];
+        foreach ($productIds as $key => $productId) {
+            $findId =   WarehouseProduct::where('warehouse_id', $warehouse_id)->where('product_id', $productId)->first();
+            if ($findId) {
+                $product_data =   json_decode($findId->product_details, true);
+                //dd($product_data[0]['approx_piece']);
+            }
+            // Initialize an array to store combined data for the current product
+            $combinedData = [];
 
-        // Process the first slot
-        $firstSlotData = [];
-        $quantity = $array['1_slot']['quantity'][$key];
-        $offerPrice = $array['1_slot']['offer_price'][$key];
-        $marketPrice = $array['market_price'][$key];
-        $unit = $array['unit_id'][$key];
-        $margin = $array['1_slot']['margin'][$key];
-        $per_unit_price = $array['1_slot']['per_unit_price'][$key];
-       
+            // Process the first slot
+            $firstSlotData = [];
+            $quantity = $array['1_slot']['quantity'][$key];
+            $offerPrice = $array['1_slot']['offer_price'][$key];
+            $marketPrice = $array['market_price'][$key];
+            $unit = $array['unit_id'][$key];
+            $margin = $array['1_slot']['margin'][$key];
+            $per_unit_price = $array['1_slot']['per_unit_price'][$key];
 
-        // Calculate discount percentage
-        $discountPercentage = ($marketPrice - ($offerPrice / $quantity)) / $marketPrice * 100;
 
-        $firstSlotData[] = [
-            'quantity' => $quantity,
-            'offer_price' => $offerPrice,
-            'market_price' => $marketPrice,
-            'margin' => $margin,
-            'per_unit_price' => $per_unit_price,
-            'discount' => number_format($discountPercentage, 2, '.', ''),
-            'approx_piece' => @$product_data[0]['approx_piece'],
-            'title' => @$product_data[0]['title'],
+            // Calculate discount percentage
+            $discountPercentage = ($marketPrice - ($offerPrice / $quantity)) / $marketPrice * 100;
 
-        ];
-        $customer_price = @$per_unit_price;
-        // Process the second slot
-        $secondSlotData = [];
-        $quantity = $array['2_slot']['quantity'][$key];
-        $offerPrice = $array['2_slot']['offer_price'][$key];
-        $marketPrice = $array['market_price'][$key];
-        $margin = $array['2_slot']['margin'][$key];
-        $per_unit_price = $array['2_slot']['per_unit_price'][$key];
+            $firstSlotData[] = [
+                'quantity' => $quantity,
+                'offer_price' => $offerPrice,
+                'market_price' => $marketPrice,
+                'margin' => $margin,
+                'per_unit_price' => $per_unit_price,
+                'discount' => number_format($discountPercentage, 2, '.', ''),
+                'approx_piece' => @$product_data[0]['approx_piece'],
+                'title' => @$product_data[0]['title'],
 
-        // Calculate discount percentage
-        $discountPercentage = ($marketPrice - ($offerPrice / $quantity)) / $marketPrice * 100;
-       
-        $secondSlotData[] = [
-            'quantity' => $quantity,
-            'offer_price' => $offerPrice,
-            'market_price' => $marketPrice,
-            'margin' => $margin,
-            'per_unit_price' => $per_unit_price,
-            'discount' => number_format($discountPercentage, 2, '.', ''),
-            'approx_piece' => @$product_data[1]['approx_piece'],
-            'title' => @$product_data[1]['title'],
-        ];
+            ];
+            $customer_price = @$per_unit_price;
+            // Process the second slot
+            $secondSlotData = [];
+            $quantity = $array['2_slot']['quantity'][$key];
+            $offerPrice = $array['2_slot']['offer_price'][$key];
+            $marketPrice = $array['market_price'][$key];
+            $margin = $array['2_slot']['margin'][$key];
+            $per_unit_price = $array['2_slot']['per_unit_price'][$key];
 
-        // Process the third slot
-        $thirdSlotData = [];
-        $quantity = $array['3_slot']['quantity'][$key];
-        $offerPrice = $array['3_slot']['offer_price'][$key];
-        $marketPrice = $array['market_price'][$key];
-        $margin = $array['3_slot']['margin'][$key];
-        $per_unit_price = $array['3_slot']['per_unit_price'][$key];
+            // Calculate discount percentage
+            $discountPercentage = ($marketPrice - ($offerPrice / $quantity)) / $marketPrice * 100;
 
-        // Calculate discount percentage
-        $discountPercentage = ($marketPrice - ($offerPrice / $quantity)) / $marketPrice * 100;
+            $secondSlotData[] = [
+                'quantity' => $quantity,
+                'offer_price' => $offerPrice,
+                'market_price' => $marketPrice,
+                'margin' => $margin,
+                'per_unit_price' => $per_unit_price,
+                'discount' => number_format($discountPercentage, 2, '.', ''),
+                'approx_piece' => @$product_data[1]['approx_piece'],
+                'title' => @$product_data[1]['title'],
+            ];
 
-        $thirdSlotData[] = [
-            'quantity' => $quantity,
-            'offer_price' => $offerPrice,
-            'market_price' => $marketPrice,
-            'margin' => $margin,
-            'per_unit_price' => $per_unit_price,
-            'discount' => number_format($discountPercentage, 2, '.', ''),
-            'approx_piece' => @$product_data[2]['approx_piece'],
-            'title' => @$product_data[2]['title'],
-        ];
+            // Process the third slot
+            $thirdSlotData = [];
+            $quantity = $array['3_slot']['quantity'][$key];
+            $offerPrice = $array['3_slot']['offer_price'][$key];
+            $marketPrice = $array['market_price'][$key];
+            $margin = $array['3_slot']['margin'][$key];
+            $per_unit_price = $array['3_slot']['per_unit_price'][$key];
 
-        // Combine the data for all slots
-        $combinedData = array_merge($firstSlotData, $secondSlotData, $thirdSlotData);
+            // Calculate discount percentage
+            $discountPercentage = ($marketPrice - ($offerPrice / $quantity)) / $marketPrice * 100;
 
-        // Store the combined data in the database
-        $maxDiscount =0;
+            $thirdSlotData[] = [
+                'quantity' => $quantity,
+                'offer_price' => $offerPrice,
+                'market_price' => $marketPrice,
+                'margin' => $margin,
+                'per_unit_price' => $per_unit_price,
+                'discount' => number_format($discountPercentage, 2, '.', ''),
+                'approx_piece' => @$product_data[2]['approx_piece'],
+                'title' => @$product_data[2]['title'],
+            ];
+
+            // Combine the data for all slots
+            $combinedData = array_merge($firstSlotData, $secondSlotData, $thirdSlotData);
+
+            // Store the combined data in the database
+            $maxDiscount = 0;
             $discounts = array_column($combinedData, 'discount');
-        if($discounts){
-            $maxDiscount = max($discounts);
+            if ($discounts) {
+                $maxDiscount = max($discounts);
+            }
+            if ($findId) {
+                $findId->product_details = json_encode($combinedData);
+                $findId->market_price = $marketPrice;
+                $findId->default_unit = $unit;
+                $findId->customer_price = @$customer_price;
+                $findId->discount_upto = @$maxDiscount;
+                $findId->save();
+            } else {
+                WarehouseProduct::create([
+                    'product_id' => $productId,
+                    'warehouse_id' => $warehouse_id,
+                    'market_price' => $marketPrice,
+                    'default_unit' => $unit,
+                    'customer_price' => @$customer_price,
+                    'product_details' => json_encode($combinedData),
+                    'discount_upto' => @$maxDiscount,
 
+                ]);
+            }
         }
-      if($findId){
-        $findId->product_details = json_encode($combinedData);
-        $findId->market_price = $marketPrice;
-        $findId->default_unit = $unit;
-        $findId->customer_price = @$customer_price;
-        $findId->discount_upto = @$maxDiscount;
-        $findId->save();
-        
-      }else{
-        WarehouseProduct::create([
-            'product_id' => $productId,
-            'warehouse_id' => $warehouse_id,
-            'market_price' => $marketPrice,
-            'default_unit' => $unit,
-            'customer_price' => @$customer_price,
-            'product_details' => json_encode($combinedData),
-            'discount_upto' => @$maxDiscount,
-
-        ]);
-    }
-}
-    Toastr::success(translate('Price Updated Successfully!') );
+        Toastr::success(translate('Price Updated Successfully!'));
         return redirect()->back();
-
-}
+    }
 
     // function store(Request $request): RedirectResponse
     // {
 
     //     $array = $request->all();
-                
+
     //     // Assuming there are two product IDs
     //     $productIds = $array['product_id'];
 
@@ -327,7 +327,7 @@ function store(Request $request)
     //         //     'product_details' => $jsonCombinedData,
     //         // ]);
     //     }
-                
+
     //             dd('stop');    
 
     //             $request->validate([
@@ -339,8 +339,8 @@ function store(Request $request)
     //                     toastr::error(translate('Title is too long!'));
     //                     return back();
     //                 }
-            
-            
+
+
 
 
     //             //into db
@@ -349,7 +349,7 @@ function store(Request $request)
     //             $unit->description = $request->description;
     //             $unit->position = $request->position;
     //             $unit->save();
-            
+
 
     //             Toastr::success(translate('unit Added Successfully!') );
     //             return redirect()->route('admin.unit.list');
@@ -387,14 +387,15 @@ function store(Request $request)
     public function update(Request $request, $id): RedirectResponse
     {
         $request->validate([
-            'title' =>  ['required',
-                            Rule::unique('units')->ignore($id)
-                        ],
-       
-            'description' => 'required',
-     ]);
+            'title' =>  [
+                'required',
+                Rule::unique('units')->ignore($id)
+            ],
 
-     
+            'description' => 'required',
+        ]);
+
+
         if (strlen($request->title) > 10) {
             toastr::error(translate('Unit title is too long!'));
             return back();
@@ -404,10 +405,9 @@ function store(Request $request)
         $unit->title = $request->title;
         $unit->description = $request->description;
         $unit->save();
-        
-        Toastr::success( translate('Unit updated successfully!') );
-        return redirect()->route('admin.unit.list');
 
+        Toastr::success(translate('Unit updated successfully!'));
+        return redirect()->route('admin.unit.list');
     }
 
     /** 
@@ -417,12 +417,12 @@ function store(Request $request)
     public function delete(Request $request): RedirectResponse
     {
         $unit = $this->unit->find($request->id);
-       
+
         if ($unit) {
             $unit->delete();
-            Toastr::success( translate('unit removed!')  );
+            Toastr::success(translate('unit removed!'));
         } else {
-            Toastr::warning( translate('unit not removed!') );
+            Toastr::warning(translate('unit not removed!'));
         }
         return back();
     }

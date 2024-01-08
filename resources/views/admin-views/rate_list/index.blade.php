@@ -22,28 +22,15 @@
             <!-- Card -->
             <div class="card">
                 <!-- Header -->
-                <div class="card-header border-0">
-                    <div class="card--header justify-content-end max--sm-grow">
-                        <form action="{{url()->current()}}" method="GET" class="mr-sm-auto">
-                            <div class="input-group">
-                                <input id="datatableSearch_" type="search" name="search" class="form-control" placeholder="{{translate('Search_by_ID_or_name')}}" aria-label="Search" value="{{$search}}" required autocomplete="off">
-                                <div class="input-group-append">
-                                    <button type="submit" class="input-group-text">
-                                        {{translate('search')}}
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+                
                 <div class="card-header border-0">
                     <div class="card--header max--sm-grow">
                         <div class="row">
                             <div class="col-sm-12" id="category_box">
                                 <div class="form-group">
-                                    <label class="input-label" for="exampleFormControlInput1">{{translate('Select Parent Category')}}</label>
+                                    <label class="input-label" for="exampleFormControlInput1">{{translate('Select Category')}}</label>
                                     <select name="parent_id" id="parent_id" class="form-control">
-                                        <option value="">---{{translate('Select Parent Category')}}---</option>
+                                        <option value="">---{{translate('Select Category')}}---</option>
                                         <?php echo $options; ?>
                                     </select>
                                 </div>
@@ -60,7 +47,7 @@
                     </div>
                 </div>
                 <div class="table-responsive datatable-custom">
-                    <table id="columnSearchDatatable" class="table table-borderless table-thead-bordered table-nowrap table-align-middle card-table" data-hs-datatables-options='{
+                    {{-- <table id="columnSearchDatatable" class="table table-borderless table-thead-bordered table-nowrap table-align-middle card-table" data-hs-datatables-options='{
                                  "order": [],
                                  "orderCellsTop": true
                                }'>
@@ -181,7 +168,7 @@
                             </tr>
                             @endforeach
                         </tbody>
-                    </table>
+                    </table> --}}
 
                     <div class="page-area">
                         <table>
@@ -214,8 +201,17 @@
 
 
 <script>
+$(document).on('ready', function () {
+    renderWhProducts(0);
+    });
+
     $('#parent_id').on('change', function() {
-        cat_id = $(this).val();
+        var cat_id = $(this).val();
+        renderWhProducts(cat_id);
+    });
+
+    function renderWhProducts(cat_id){
+
         $.ajax({
             url: '{{url('/')}}/admin/rate_list/get-product-by-cat/' + cat_id,
             method: 'GET',
@@ -231,6 +227,6 @@
                 }
             },
         });
-    });
+    }
 </script>
 @endpush

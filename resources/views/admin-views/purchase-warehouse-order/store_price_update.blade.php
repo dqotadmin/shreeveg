@@ -3,6 +3,11 @@
 @push('css_or_js')
 @endpush
 @section('content')
+<style>
+    .table-striped .form-control{
+        border: 0.0625rem solid #cdcdcd !important;
+    }
+</style>
 <?php
     use App\Model\PurchaseWarehouseOrder;
     
@@ -53,6 +58,7 @@
                 <table class="table table-striped">
                     <thead>
                         <th>#</th>
+                        <th>Category</th>
                         <th>Product</th>
                         <th>average rate</th>
                         <th>
@@ -73,7 +79,8 @@
                         @foreach($WarehouseProducts as $key => $products)            
                         <tr class="child-row">
                             <td><?php echo $key+1; ?></td>
-                            <td>{{$products->productDetail->name}}  
+                            <td>{{$products->productDetail->category->name}}  </td>
+                            <td>{{$products->productDetail->name}}  <br>({{$products->productDetail->product_code}})
                                 <input type="hidden" value="{{$products->product_id}}" name="product_id[]" class="">
                             </td>
                             <td>{{$products->avg_price}} 

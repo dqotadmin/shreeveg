@@ -73,7 +73,7 @@
                                 {{ date('H:i A',strtotime($row->date_time))}}
 
                             </td>
-                           
+                            
                             <td>
                                 {{count($row->rateListDetail) }}
                             </td>

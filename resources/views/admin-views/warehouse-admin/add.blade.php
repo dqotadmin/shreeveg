@@ -4,7 +4,11 @@
 
 
 @push('css_or_js')
-
+<style>
+    .manually-border-color{
+  border: 0.0625rem solid #e7eaf3  !important;
+}
+</style>
 @endpush
 
 @section('content')
@@ -26,7 +30,7 @@
         <div class="col-sm-12 col-lg-12">
             <div class="card-body pt-sm-0 pb-sm-4">
 
-                <form action="{{route('admin.admin')}}" method="post" enctype="multipart/form-data">
+                <form action="{{route('admin.admin')}}" method="post" enctype="multipart/form-data" class="needs-validation form_customer" novalidate>
                     @csrf
                     <!-- Card -->
                     <div class="card mb-3 mb-lg-5" id="generalDiv">
@@ -84,18 +88,20 @@
                                         class="input-label-secondary"></span></label>
 
                                 <div class="col-sm-9">
-                                    <select id="state" name="warehouse_id" class="form-control js-select2-custom" required>
-                                        <option value="" disabled selected>Select Warehouse </option>
+                      
+                                    <select id="state" name="warehouse_id" class="custom-select" required>
+                                        <option selected disabled value="">Select Warehouse </option>
                                         @if($user->admin_role_id == 3)
                                         <option value="{{$user->Warehouse->id}}" selected>{{$user->Warehouse->name}}</option>
                                         @else
-                                          @foreach(\App\Model\Warehouse::where('status', 1)->where('deleted_at', null)->get() as $warehouse)
-                                
-                                         
+                                          @foreach(\App\Model\Warehouse::where('status', 1)->where('deleted_at', null)->get() as $warehouse)                                      
                                         <option value="{{$warehouse['id']}}">{{$warehouse['name']}}</option>
                                         @endforeach
                                         @endif
                                     </select>
+                                    <div class="invalid-feedback">
+                                        Please select Warehouse.
+                                    </div>
                                 </div>
                             </div>
                             @elseif($role->id == '6' || $role->id == '7' )
@@ -105,21 +111,25 @@
                                         class="input-label-secondary"></span></label>
 
                                 <div class="col-sm-9">
-                                    <select id="state" name="store_id" class="form-control js-select2-custom" required>
+                                    <select id="state" name="store_id" class="custom-select" required>
                                         @if($user->admin_role_id == 6)
                                         <option value="{{$user->Store->id}}">{{$user->Store->name}}</option>
                                         @elseif($user->admin_role_id == 1)
-                                        <option value="" disabled selected>Select Store </option>
+                                        <option selected disabled value="">Select Store </option>
                                         @foreach(\App\Model\Store::where('status', 1)->where('deleted_at', null)->get() as $store)
                                         <option value="{{$store['id']}}">{{$store['name']}}</option>
                                         @endforeach
                                         @else
-                                        <option value="" disabled selected>Select Store </option>
+                                        <option selected disabled value="">Select Store </option>
+
                                         @foreach(\App\Model\Store::where('status', 1)->where('warehouse_id', auth('admin')->user()->warehouse_id)->where('deleted_at', null)->get() as $store)
                                         <option value="{{$store['id']}}">{{$store['name']}}</option>
                                         @endforeach
                                         @endif
                                     </select>
+                                    <div class="invalid-feedback">
+                                        Please select Store.
+                                    </div>
                                 </div>
                             </div>
                             @endif
@@ -134,10 +144,15 @@
                                         <input type="text" class="form-control" name="f_name" id="firstNameLabel" style="text-transform: capitalize;"
                                             placeholder="{{ translate('Your first name') }}"
                                             aria-label="Your first name" value="{{old('f_name')}}" required>
+                                            
                                         <input type="text" class="form-control" name="l_name" id="lastNameLabel" style="text-transform: capitalize;"
                                             placeholder="{{ translate('Your last name') }}" aria-label="Your last name"
                                             value="{{old('l_name')}}" required>
+                                            <div class="invalid-feedback">
+                                            Please enter full name.
+                                            </div>
                                     </div>
+                                    
                                 </div>
                             </div>
                             <!-- End Form Group -->
@@ -154,6 +169,9 @@
                                         value="{{old('phone')}}" data-hs-mask-options='{
                                            "template": "+(880)00-000-00000"
                                          }' required>
+                                         <div class="invalid-feedback">
+                                            Please enter phone no.
+                                            </div>
                                 </div>
                             </div>
                             <!-- End Form Group -->
@@ -167,6 +185,9 @@
                                         value="{{old('email')}}"
                                         placeholder="{{ translate('Enter new email address') }}"
                                         aria-label="Enter new email address" required>
+                                        <div class="invalid-feedback">
+                                            Please enter email-id.
+                                            </div>
                                 </div>
                             </div>
 
@@ -179,12 +200,15 @@
                                 <label class="col-sm-3 col-form-label input-label" for="">{{ translate('City') }}
                                 </label>
                                 <div class="col-sm-9">
-                                    <select id="" name="city_id" class="form-control js-select2-custom" required>
-                                        <option value="" disabled selected>Select city </option>
+                                    <select id="" name="city_id" class="form-control custom-select" required>
+                                        <option selected  disabled value="">Select city </option>
                                         @foreach(\App\Model\City::where('status', '1')->orderBy('id', 'DESC')->get() as $city)
                                         <option value="{{$city['id']}}">{{$city['city']}}</option>
                                         @endforeach
                                     </select>
+                                    <div class="invalid-feedback">
+                                            Please select city.
+                                            </div>
                                 </div>
                             </div>
                         </div>
@@ -206,7 +230,7 @@
                                         class="input-label-secondary"></span></label>
 
                                 <div class="col-sm-9">
-                                    <input type="text" class="js-masked-input form-control" name="account_number" id="phoneLabel"
+                                    <input type="text" class="js-masked-input form-control manually-border-color" name="account_number" id="phoneLabel"
                                         placeholder="Account Number" >
                                 </div>
                             </div>
@@ -216,7 +240,7 @@
                                         class="input-label-secondary"></span></label>
 
                                 <div class="col-sm-9">
-                                    <input type="text" class="js-masked-input form-control" name="account_holder" id="phoneLabel"
+                                    <input type="text" class="js-masked-input form-control manually-border-color" name="account_holder" id="phoneLabel"
                                         placeholder="Account Holder" aria-label=" "
                                      >
                                 </div>
@@ -228,7 +252,7 @@
                                         class="input-label-secondary"></span></label>
 
                                 <div class="col-sm-9">
-                                    <input type="text" class="js-masked-input form-control" name="bank_name" id="phoneLabel"
+                                    <input type="text" class="js-masked-input form-control manually-border-color" name="bank_name" id="phoneLabel"
                                         placeholder="Bank Name" >
                                 </div>
                             </div>
@@ -238,7 +262,7 @@
                                         class="input-label-secondary"></span></label>
 
                                 <div class="col-sm-9">
-                                    <input type="text" class="js-masked-input form-control" name="ifsc_code" id="phoneLabel"
+                                    <input type="text" class="js-masked-input form-control manually-border-color" name="ifsc_code" id="phoneLabel"
                                         placeholder="IFSC Code" >
                                 </div>
                             </div>
@@ -248,7 +272,7 @@
                                         class="input-label-secondary"></span></label>
 
                                 <div class="col-sm-9">
-                                    <input type="text" class="js-masked-input form-control" name="upi_id" id="phoneLabel"
+                                    <input type="text" class="js-masked-input form-control manually-border-color" name="upi_id" id="phoneLabel"
                                         placeholder="UPI Id" >
                                 </div>
                             </div>
@@ -258,7 +282,7 @@
                                         class="input-label-secondary"></span></label>
 
                                 <div class="col-sm-9">
-                                    <input type="text" class="js-masked-input form-control" name="upi_number" id="upi_number"
+                                    <input type="text" class="js-masked-input form-control manually-border-color" name="upi_number" id="upi_number"
                                         placeholder="UPI Number" >
                                 </div>
                             </div>
@@ -285,7 +309,7 @@
 
                                 <div class="col-sm-9">
                                     <input type="password" class="js-pwstrength form-control" name="password"
-                                        id="newPassword" placeholder="{{ translate('Enter new password') }}"
+                                        id="newPassword" placeholder="{{ translate('Enter new password') }}" 
                                         aria-label="Enter new password" data-hs-pwstrength-options='{
                                            "ui": {
                                              "container": "#changePasswordForm",
@@ -295,11 +319,14 @@
                                              }
                                            }
                                          }' required>
-
+                                        <div class="invalid-feedback">
+                                            Please enter password.
+                                        </div>
                                     <p id="passwordStrengthVerdict" class="form-text mb-2"></p>
 
                                     <div id="passwordStrengthProgress"></div>
                                 </div>
+                              
                             </div>
                             <!-- End Form Group -->
 
@@ -314,8 +341,12 @@
                                             id="confirmNewPasswordLabel"
                                             placeholder="{{ translate('Confirm your new password') }}"
                                             aria-label="Confirm your new password" required>
+                                            <div class="invalid-feedback">
+                                            Please enter confirm password.
+                                            </div>
                                     </div>
                                 </div>
+                            
                             </div>
                             <!-- End Form Group -->
 

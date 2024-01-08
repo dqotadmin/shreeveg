@@ -26,7 +26,7 @@
 
     <div class="row g-2">
         <div class="col-sm-12 col-lg-12">
-            <form action="{{route('admin.warehouse.store')}}" method="post" id="timeForm" enctype="multipart/form-data">
+            <form action="{{route('admin.warehouse.store')}}" method="post" id="timeForm" enctype="multipart/form-data" class="needs-validation form_customer" novalidate>
                 @csrf
                 <div class="row g-2">
                     <div class="col-sm-12">
@@ -43,14 +43,16 @@
                                     <div class="col-sm-4">
                                         <label class="form-label"
                                             for="exampleFormControlInput1">{{ translate('Select City') }} </label>
-                                        <select id="city_code" name="city_id" class="city_code form-control">
+                                        <select id="city_code" name="city_id" class="city_code form-control custom-select" required>
                                             <option value="" disabled selected>Select City</option>
                                             @foreach(\App\Model\City::orderBy('id','DESC')->where(['state_id'=>19])->where('status','1')->get() as $city)
-
                                             <option value="{{$city['id']}}" id="city_alpha_code_{{$city['id']}} "
                                                 data-val="<?php echo $city->city_code; ?>">{{$city['city']}}</option>
                                             @endforeach
                                         </select>
+                                        <div class="invalid-feedback">
+                                            Please select city.
+                                        </div>
                                     </div>
 
                                  
@@ -59,14 +61,20 @@
                                         <label class="form-label"
                                             for="exampleFormControlInput1">{{ translate('Warehouse Code') }} </label>
                                         <input type="text" name="code" class="form-control city_by_code"
-                                            id="city_by_code">
+                                            id="city_by_code" required>
+                                            <div class="invalid-feedback">
+                                            Please enter warehouse code.
+                                        </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <label class="form-label"
                                             for="exampleFormControlInput1">{{ translate('Warehouse Name') }}
                                         </label>
-                                        <input type="text" name="name" class="form-control" maxlength="255">
+                                        <input type="text" name="name" class="form-control" maxlength="255" required>
+                                        <div class="invalid-feedback">
+                                            Please enter warehouse name.
+                                        </div>
                                     </div>
                                     
                                     <div class="col-sm-4">
@@ -74,7 +82,9 @@
                                             for="exampleFormControlInput1">{{ translate('Warehouse Address') }} </label>
                                         <textarea type="text" name="address" class="form-control" required
                                             maxlength="255"></textarea>
-
+                                            <div class="invalid-feedback">
+                                            Please enter warehouse address.
+                                        </div>
                                     </div>
 
                                 </div>
@@ -98,15 +108,19 @@
                                         <label class="form-label"
                                             for="exampleFormControlInput1">{{ translate('Warehouse Start Time') }}
                                         </label>
-                                        <input type="time" name="open_time" class="form-control" maxlength="255" value="{{ config('custom.start_time') }}">
-
+                                        <input type="time" name="open_time" class="form-control" maxlength="255" value="{{ config('custom.start_time') }}" required>
+                                        <div class="invalid-feedback">
+                                            Please enter warehouse start time.
+                                        </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <label class="form-label"
                                             for="exampleFormControlInput1">{{ translate('Warehouse End Time') }}
                                         </label>
-                                        <input type="time" name="close_time" class="form-control" maxlength="255" value="{{ config('custom.end_time') }}">
-
+                                        <input type="time" name="close_time" class="form-control" maxlength="255" value="{{ config('custom.end_time') }}" required>
+                                        <div class="invalid-feedback">
+                                            Please enter warehouse end time.
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -127,13 +141,13 @@
                                     <div class="col-sm-6">
                                         <label class="form-label"
                                             for="exampleFormControlInput1">{{ translate('BRN Number') }} </label>
-                                        <input type="text" name="brn_number" class="form-control" maxlength="255">
+                                        <input type="text" name="brn_number" class="form-control manually-border-color" maxlength="255">
                                     </div>
 
                                     <div class="col-sm-6">
                                         <label class="form-label"
                                             for="exampleFormControlInput1">{{ translate('MSME Number') }} </label>
-                                        <input type="text" name="msme_number" class="form-control" maxlength="255">
+                                        <input type="text" name="msme_number" class="form-control manually-border-color" maxlength="255">
 
                                     </div>
                                 </div>
@@ -191,7 +205,7 @@
                                                         </i>
                                                     </label>
                                                     <input type="number" name="coverage" min="1" max="1000"
-                                                        class="form-control" placeholder="{{ translate('Ex : 3') }}"
+                                                        class="form-control manually-border-color" placeholder="{{ translate('Ex : 3') }}"
                                                         value="{{ old('coverage') }}">
                                                 </div>
                                             </div>
@@ -289,10 +303,10 @@
 
 
                                             <td><input type="time" name="pre_order_open_time[]"
-                                                    class="form-control input-pre-order-pair" required />
+                                                    class="form-control input-pre-order-pair manually-border-color" required />
                                             </td>
                                             <td><input type="time" name="pre_order_close_time[]"
-                                                    class="form-control input-pre-order-pair" required />
+                                                    class="form-control input-pre-order-pair manually-border-color" required />
                                             </td>
                                             <!-- <td><button type="button"
                                                     class="remove-pre-order-pair btn btn-outline-danger">Remove</button>

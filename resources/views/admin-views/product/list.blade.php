@@ -1,6 +1,10 @@
 @extends('layouts.admin.app')
 
 @section('title', translate('Product List'))
+@push('css_or_js')
+
+ 
+@endpush
 
 @section('content')
     <div class="content container-fluid product-list-page">
@@ -49,7 +53,8 @@
 
                                 <div id="usersExportDropdown"
                                     class="hs-unfold-content dropdown-unfold dropdown-menu dropdown-menu-sm-right">
-<!--                                    <span class="dropdown-header">{{ translate('options') }}</span>
+                            <!--      
+                                          <span class="dropdown-header">{{ translate('options') }}</span>
                                     <a id="export-copy" class="dropdown-item" href="javascript:;">
                                         <img class="avatar avatar-xss avatar-4by3 mr-2"
                                             src="{{ asset('public/assets/admin') }}/svg/illustrations/copy.svg"
@@ -82,7 +87,7 @@
                                             src="{{ asset('public/assets/admin') }}/svg/components/pdf.svg"
                                             alt="Image Description">
                                         {{ translate('pdf') }}-->
-<!--                                    </a>-->
+                            <!--                                    </a>-->
                                 </div>
                             </div>
                             <!-- End Unfold -->
@@ -202,7 +207,7 @@
                                         </label>
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control ordering"  value="{{@$product->ordering}}" style="width: 70px;">
+                                        <input type="number" class="form-control ordering"  min="1" max="5000" value="{{@$product->ordering}}"  >
                                         <input type="hidden" class="form-control" id="product_id" value="{{$product->id}}" style="width: 70px;">
                                     </td>
                                        @endif
@@ -267,8 +272,10 @@
 @endsection
 
 @push('script_2')
+ 
 <script>
-    $('.ordering').on('input',function(){
+    
+    $('.ordering').on('blur',function(){
         var ordering = $(this).val();
         var product_id = $(this).closest('td').find('#product_id').val(); // Adjust the selector accordingly
         console.log(product_id);
@@ -308,6 +315,7 @@
                     }
                 },
                 error: function (error) {
+                    location.reload(true);
                     console.log(error);
 
                 },

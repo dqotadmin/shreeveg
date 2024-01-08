@@ -325,23 +325,49 @@ class ProductController extends Controller
     }
 }
 
+    // public function order(Request $request) 
+    // {
+    //     $product = $this->product->find($request->product_id);
+    //     $existingProduct = $this->product->where('ordering', $request->ordering)
+    //     ->where('id', '!=', $request->product_id)
+    //     ->first();
+    //     if ($existingProduct) {
+    //         // Ordering value already exists, choose another value or handle it as needed
+    //         return response()->json(['ordering_exist' => translate('Ordering value already exists. Choose another value.')]);
+    //     }
+    //     // Set the new ordering value
+    //     $product->ordering = $request->ordering;
+    //     $product->save();
+    
+    //     return response()->json(['message' => translate('Product ordering updated!')]);
+    // }
+
     public function order(Request $request) 
     {
         $product = $this->product->find($request->product_id);
-        $existingProduct = $this->product->where('ordering', $request->ordering)
-        ->where('id', '!=', $request->product_id)
-        ->first();
-        if ($existingProduct) {
-            // Ordering value already exists, choose another value or handle it as needed
-            return response()->json(['ordering_exist' => translate('Ordering value already exists. Choose another value.')]);
+        $existingProducts = $this->product->where('ordering', $request->ordering)
+            ->where('id', '!=', $request->product_id)
+            ->get(); // we check if this ordering is already exist or not
+            if ($existingProducts->isNotEmpty()) {
+          
+                // Ordering value already exists, so increment ordering values for products greater than or equal to the given value
+                foreach ($existingProducts as $productExist) {
+                    $productExist->ordering = $request->ordering + 1;
+                    $productExist->save();
+                }
+          
+        } else {
+            // Set the new ordering value
+            $product->ordering = $request->ordering;
+            $product->save();
         }
-    
-        // Set the new ordering value
-        $product->ordering = $request->ordering;
-        $product->save();
     
         return response()->json(['message' => translate('Product ordering updated!')]);
     }
+    
+ 
+
+
     /**
      * @param Request $request
      * @return RedirectResponse

@@ -26,30 +26,39 @@
         <div class="col-sm-12 col-lg-12">
             <div class="card">
                 <div class="card-body pt-sm-0 pb-sm-4">
-                    <form action="{{route('admin.city.store')}}" method="post" enctype="multipart/form-data">
+                <form action="{{route('admin.city.store')}}" method="post" enctype="multipart/form-data" class="needs-validation form_customer" novalidate>
                         @csrf
                         <div class="row align-items-end g-4" style="padding-top: 50px;">
                             <div class="col-sm-6">
                                 <label class="form-label" for="">{{ translate('City') }}
                                 </label>
                                 <input type="text" name="city" class="form-control"
-                                    placeholder="{{ translate('Ex: City') }}" maxlength="255">
+                                    placeholder="{{ translate('Ex: City') }}" maxlength="255" required>
+                                    <div class="invalid-feedback">
+                                        Please enter city name.
+                                    </div>
                             </div>
                             <div class="col-sm-6">
                                 <label class="form-label" for="">{{ translate('City') }} {{ translate('Code') }}
                                 </label>
                                 <input type="text" name="city_code" class="form-control"
-                                    placeholder="{{ translate('Ex: City Code') }}" maxlength="255">
+                                    placeholder="{{ translate('Ex: City Code') }}" maxlength="255" required>
+                                    <div class="invalid-feedback">
+                                        Please enter city code.
+                                    </div>
                             </div>
                             <div class="col-sm-6">
                                 <label class="form-label" for="">{{ translate('State') }}
                                 </label>
-                                <select id=" " name="state_id" class="form-control js-select2-custom" required>
-                                    <option value="" disabled selected>Select State </option>
+                                <select id=" " name="state_id" class="custom-select" required>
+                                <option selected disabled value="">Select State </option>
                                     @foreach(\App\Model\State::where('status','1')->orderBy('id', 'DESC')->get() as $state)
                                     <option value="{{$state['id']}}">{{$state['name']}}</option>
                                     @endforeach
                                 </select>
+                                <div class="invalid-feedback">
+                                        Please select state.
+                                    </div>
                             </div>
                             <div class="col-12">
                                 <div class="btn--container justify-content-end">

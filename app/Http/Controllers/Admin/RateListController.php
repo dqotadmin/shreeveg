@@ -223,6 +223,8 @@ class RateListController extends Controller
                 $findId->default_unit = $unit;
                 $findId->customer_price = @$customer_price;
                 $findId->discount_upto = @$maxDiscount;
+                $findId->product_rate_updated_date = date('Y-m-d H:i:s');
+
                 $findId->save();
             } else {
                 WarehouseProduct::create([
@@ -230,6 +232,7 @@ class RateListController extends Controller
                     'warehouse_id' => $warehouse_id,
                     'market_price' => $marketPrice,
                     'default_unit' => $unit,
+                    'product_rate_updated_date' => date('Y-m-d H:i:s'),
                     'customer_price' => @$customer_price,
                     'product_details' => json_encode($combinedData),
                     'discount_upto' => @$maxDiscount,

@@ -2606,4 +2606,5 @@
   'margin' => 'Margin',
   'shreeveg_price' => 'Shreeveg price',
   'Price Updated Successfully!' => 'Price Updated Successfully!',
+  'rate_updated_date' => 'Rate updated date',
 );

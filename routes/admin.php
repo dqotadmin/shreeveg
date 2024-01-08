@@ -29,6 +29,8 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
         Route::post('admin', 'AdminUserController@store')->name('admin');
         Route::get('admin-status/{id}/{status}', 'AdminUserController@status')->name('admin-status');
         Route::get('admin-edit/{id}', 'AdminUserController@edit')->name('admin-edit');
+        Route::get('broker-history/{id}', 'AdminUserController@brokerHistory')->name('broker-history');
+        Route::get('broker-rate-list-detail/{id}', 'AdminUserController@brokerHistoryDetail')->name('broker-rate-list-detail');
         Route::delete('admin-delete/{id}', 'AdminUserController@delete')->name('admin-delete');
         Route::post('admin-update/{id}', 'AdminUserController@update')->name('admin-update');
         Route::get('get-cities/{state}', 'AdminUserController@getCities')->name('get-cities');

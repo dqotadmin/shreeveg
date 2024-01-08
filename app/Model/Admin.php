@@ -30,5 +30,9 @@ class Admin extends Authenticatable
     return $this->hasOne(BankDetail::class, 'user_id');
   }
 
+  public function brokerRates(){
+    return $this->hasMany(BrokerRateList::class,'admin_id');
+
+  }
   
 }

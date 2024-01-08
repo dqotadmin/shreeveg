@@ -155,6 +155,12 @@
                         <td>
                             <!-- Dropdown -->
                             <div class="btn--container justify-content-center">
+                                @if( auth('admin')->user()->admin_role_id == 1 && $admin['admin_role_id'] ==8)
+                                <a class="action-btn" href="{{route('admin.broker-history',[$admin->id])}}">
+                                    <i class="tio-invisible"></i>
+                                </a>        
+                                @endif
+                                           
                                             <a class="action-btn"
                                                 href="{{route('admin.admin-edit',[$admin['id'],'role_id'=>$role->id])}}">
                                             <i class="tio-edit"></i></a>

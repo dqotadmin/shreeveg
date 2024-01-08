@@ -1,4 +1,4 @@
-<?php return array(
+<?php return array (
   'attribute' => 'Attribute',
   'update' => 'Update',
   'name' => 'Name',
@@ -2607,4 +2607,5 @@
   'shreeveg_price' => 'Shreeveg price',
   'Price Updated Successfully!' => 'Price Updated Successfully!',
   'rate_updated_date' => 'Rate updated date',
+  'rate list detail' => 'Rate list detail',
 );

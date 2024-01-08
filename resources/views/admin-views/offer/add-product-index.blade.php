@@ -190,7 +190,10 @@
         $('.productSelect').on('change',function(){ 
         var product_id = $(this).val();
         var flash_deal_id = "{{$flash_deal->id}}";
+        getProductData(flash_deal_id,product_id);
+    });
 
+    function getProductData(flash_deal_id,product_id){
         $.ajax({
             url: '{{url('/')}}/admin/offer/flash/product-price/'+flash_deal_id+'/'+product_id,
             type:'GET',
@@ -200,10 +203,11 @@
 
             }
         });
-        });
+    }
+        
         $('#category_id').on('change',function(){ 
                 var categoryId = $(this).val();
-               
+                var flash_deal_id = "{{$flash_deal->id}}";
                 if (categoryId) {
                     $.ajax({
                          url: '{{url('/')}}/admin/offer/get-product-by-category/' + categoryId,
@@ -213,6 +217,11 @@
                             $('#products').empty();
                             // $('#products').append('<option value="">Select Product</option>');
                             $.each(data.products, function(key, value) {
+                               
+                                if(key == 0){
+                                    $('.productSelect').trigger('change');
+                                    getProductData(flash_deal_id,value.id);
+                                }
                                 $('#products').append('<option value="' + value.id + '">' + value.name + ' (' + value.product_code + ')'+ ' / ' + value.unit.title + '</option>');
                             });
                         }

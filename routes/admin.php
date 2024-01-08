@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Admin\AnalyticController;
 use Illuminate\Support\Facades\Route;
+use Razorpay\Api\Resource;
+
 // Route::get('/', function(){
 //     return redirect()->route('admin.auth.login');
 
@@ -205,6 +207,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::post('order', 'ProductController@order')->name('order');
 
             Route::get('feature/{id}/{is_featured}', 'ProductController@feature')->name('feature');
+            Route::resource('donations', 'DonationController');
         });
 
         Route::group(['prefix' => 'orders', 'as' => 'orders.', 'middleware' => ['module:order_management']], function () {

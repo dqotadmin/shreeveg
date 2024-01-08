@@ -552,7 +552,15 @@
                                 @endif
                             </a>
                         </li>
-
+                        @if(in_array(auth('admin')->user()->admin_role_id,[3,6,7]))
+                        <li
+                            class="nav-item {{Request::is('admin/product/donations*')?'active':''}} {{Request::is('admin/product/donations')?'active':''}}">
+                            <a class="nav-link " href="{{route('admin.product.donations.index')}}" title="{{translate('donations')}}">
+                                <span class="tio-circle nav-indicator-icon"></span>
+                                <span class="text-truncate">{{translate('donations')}}</span>
+                            </a>
+                        </li>
+                        @endif
                         <!-- <li class="nav-item {{Request::is('admin/product/bulk-import')?'active':''}}">
                                     <a class="nav-link " href="{{route('admin.product.bulk-import')}}"
                                         title="{{translate('bulk_import')}}">

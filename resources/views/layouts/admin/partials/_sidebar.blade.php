@@ -1,4 +1,5 @@
-<div id="sidebarMain" class="d-none">
+
+ <div id="sidebarMain" class="d-none">
     <aside
         class="js-navbar-vertical-aside navbar navbar-vertical-aside navbar-vertical navbar-vertical-fixed navbar-expand-xl navbar-bordered  ">
         <div class="navbar-vertical-container text-capitalize">
@@ -203,62 +204,8 @@
 
                             </ul>
                         </li>
-
-                        <!-- <li
-                                class="navbar-vertical-aside-has-menu {{Request::is('admin/customer/loyalty-point*')?'active':''}}">
-                                <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle" href="javascript:"
-                                    title="{{translate('Customer Loyalty Point')}}">
-                                    <i class="tio-medal nav-icon"></i>
-                                    <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
-                                        {{translate('Customer Loyalty Point')}}
-                                    </span>
-                                </a>
-                                <ul class="js-navbar-vertical-aside-submenu nav nav-sub"
-                                    style="display: {{Request::is('admin/customer/loyalty-point*')?'block':'none'}}">
-
-                                    <li class="nav-item {{Request::is('admin/customer/loyalty-point/report')?'active':''}}">
-                                        <a class="nav-link" href="{{route('admin.customer.loyalty-point.report')}}"
-                                            title="{{translate('report')}}">
-                                            <span class="tio-circle nav-indicator-icon"></span>
-                                            <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
-                                                {{translate('report')}}
-                                            </span>
-                                        </a>
-                                    </li>
-
-                                </ul>
-                            </li> -->
-
-                        <!-- 
-                            <li class="navbar-vertical-aside-has-menu {{Request::is('admin/reviews*')?'active':''}}">
-                                <a class="js-navbar-vertical-aside-menu-link nav-link"
-                                   href="{{route('admin.reviews.list')}}"
-                                   title="{{translate('product')}} {{translate('reviews')}}"
-                                >
-                                    <i class="tio-star nav-icon"></i>
-                                    <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
-                                        {{translate('product')}} {{translate('reviews')}}
-                                    </span>
-                                </a>
-                            </li>
-                            
-                            <li class="navbar-vertical-aside-has-menu {{Request::is('admin/customer/subscribed-email*')?'active':''}}">
-                                <a class="js-navbar-vertical-aside-menu-link nav-link"
-                                   href="{{route('admin.customer.subscribed_emails')}}"
-                                   title="{{translate('Subscribed Emails')}}">
-                                    <i class="tio-email-outlined nav-icon"></i>
-                                    <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
-                                        {{translate('Subscribed Emails')}}
-                                    </span>
-                                </a>
-                            </li>
-                            -->
-
                         @endif
                         <!-- User management end here -->
-
-
-
 
                         @if(auth('admin')->user()->admin_role_id == 5)
 
@@ -315,103 +262,103 @@
 
                         @if( auth('admin')->user()->admin_role_id == 1 || auth('admin')->user()->admin_role_id == 3 )
 
-                        <li class="navbar-vertical-aside-has-menu ">
-                            <a class="js-navbar-vertical-aside-menu-link nav-link"
-                                href="{{route('admin.user-management',['role_id'=>'5'])}}"
-                                title="{{translate('Warehouse Receiver Admin')}}">
-                                <i class="tio-map nav-icon"></i>
-                                <span
-                                    class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Warehouse Receiver')}}</span>
-                            </a>
-                        </li>
+                            <li class="navbar-vertical-aside-has-menu ">
+                                <a class="js-navbar-vertical-aside-menu-link nav-link"
+                                    href="{{route('admin.user-management',['role_id'=>'5'])}}"
+                                    title="{{translate('Warehouse Receiver Admin')}}">
+                                    <i class="tio-map nav-icon"></i>
+                                    <span
+                                        class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Warehouse Receiver')}}</span>
+                                </a>
+                            </li>
 
-                        <li class="navbar-vertical-aside-has-menu ">
-                            <a class="js-navbar-vertical-aside-menu-link nav-link"
-                                href="{{route('admin.user-management',['role_id'=>'4'])}}"
-                                title="{{translate('warehouse_worker Admin')}}">
-                                <i class="tio-map nav-icon"></i>
-                                <span
-                                    class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Warehouse Worker')}}</span>
-                            </a>
-                        </li>
+                            <li class="navbar-vertical-aside-has-menu ">
+                                <a class="js-navbar-vertical-aside-menu-link nav-link"
+                                    href="{{route('admin.user-management',['role_id'=>'4'])}}"
+                                    title="{{translate('warehouse_worker Admin')}}">
+                                    <i class="tio-map nav-icon"></i>
+                                    <span
+                                        class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Warehouse Worker')}}</span>
+                                </a>
+                            </li>
 
-                        <li class="navbar-vertical-aside-has-menu {{Request::is('admin/delivery-man/*')?'active':''}}">
-                            <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle" href="javascript:"
-                                title="{{translate('deliveryman')}}">
-                                <i class="tio-user nav-icon"></i>
-                                <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
-                                    {{translate('deliveryman')}}
-                                </span>
-                            </a>
-                            <ul class="js-navbar-vertical-aside-submenu nav nav-sub"
-                                style="display: {{Request::is('admin/delivery-man*')?'block':'none'}}">
+                            <li class="navbar-vertical-aside-has-menu {{Request::is('admin/delivery-man/*')?'active':''}}">
+                                <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle" href="javascript:"
+                                    title="{{translate('deliveryman')}}">
+                                    <i class="tio-user nav-icon"></i>
+                                    <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                        {{translate('deliveryman')}}
+                                    </span>
+                                </a>
+                                <ul class="js-navbar-vertical-aside-submenu nav nav-sub"
+                                    style="display: {{Request::is('admin/delivery-man*')?'block':'none'}}">
 
-                                <li class="nav-item {{Request::is('admin/delivery-man/list')?'active':''}}">
-                                    <a class="nav-link" href="{{route('admin.delivery-man.list')}}"
-                                        title="{{translate('list')}}">
-                                        <span class="tio-circle nav-indicator-icon"></span>
-                                        <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
-                                            {{translate('Delivery Man List')}}
-                                        </span>
-                                    </a>
-                                </li>
+                                    <li class="nav-item {{Request::is('admin/delivery-man/list')?'active':''}}">
+                                        <a class="nav-link" href="{{route('admin.delivery-man.list')}}"
+                                            title="{{translate('list')}}">
+                                            <span class="tio-circle nav-indicator-icon"></span>
+                                            <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                                {{translate('Delivery Man List')}}
+                                            </span>
+                                        </a>
+                                    </li>
 
-                                <li class="nav-item {{Request::is('admin/delivery-man/add')?'active':''}}">
-                                    <a class="nav-link" href="{{route('admin.delivery-man.add')}}"
-                                        title="{{translate('register')}}">
-                                        <span class="tio-circle nav-indicator-icon"></span>
-                                        <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
-                                            {{translate('Add New Delivery Man')}}
-                                        </span>
-                                    </a>
-                                </li>
+                                    <li class="nav-item {{Request::is('admin/delivery-man/add')?'active':''}}">
+                                        <a class="nav-link" href="{{route('admin.delivery-man.add')}}"
+                                            title="{{translate('register')}}">
+                                            <span class="tio-circle nav-indicator-icon"></span>
+                                            <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                                {{translate('Add New Delivery Man')}}
+                                            </span>
+                                        </a>
+                                    </li>
 
-                                <li
-                                    class="nav-item {{Request::is('admin/delivery-man/pending/list') || Request::is('admin/delivery-man/denied/list')?'active':''}}">
-                                    <a class="nav-link" href="{{route('admin.delivery-man.pending')}}"
-                                        title="{{translate('joining request')}}">
-                                        <span class="tio-circle nav-indicator-icon"></span>
-                                        <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
-                                            {{translate('New Joining Request')}}
-                                        </span>
-                                    </a>
-                                </li>
+                                    <li
+                                        class="nav-item {{Request::is('admin/delivery-man/pending/list') || Request::is('admin/delivery-man/denied/list')?'active':''}}">
+                                        <a class="nav-link" href="{{route('admin.delivery-man.pending')}}"
+                                            title="{{translate('joining request')}}">
+                                            <span class="tio-circle nav-indicator-icon"></span>
+                                            <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                                {{translate('New Joining Request')}}
+                                            </span>
+                                        </a>
+                                    </li>
 
-                                <li class="nav-item {{Request::is('admin/delivery-man/reviews/list')?'active':''}}">
-                                    <a class="nav-link" href="{{route('admin.delivery-man.reviews.list')}}"
-                                        title="{{translate('reviews')}}">
-                                        <span class="tio-circle nav-indicator-icon"></span>
-                                        <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
-                                            {{translate('Delivery Man Reviews')}}
-                                        </span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                                    <li class="nav-item {{Request::is('admin/delivery-man/reviews/list')?'active':''}}">
+                                        <a class="nav-link" href="{{route('admin.delivery-man.reviews.list')}}"
+                                            title="{{translate('reviews')}}">
+                                            <span class="tio-circle nav-indicator-icon"></span>
+                                            <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                                {{translate('Delivery Man Reviews')}}
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
 
-                        <li class="navbar-vertical-aside-has-menu ">
-                            <a class="js-navbar-vertical-aside-menu-link nav-link"
-                                href="{{route('admin.user-management',['role_id'=>'6'])}}"
-                                title="{{translate('Store Admin')}}">
-                                <i class="tio-city nav-icon"></i>
-                                <span
-                                    class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Store Admin')}}</span>
-                            </a>
-                        </li>
+                            <li class="navbar-vertical-aside-has-menu ">
+                                <a class="js-navbar-vertical-aside-menu-link nav-link"
+                                    href="{{route('admin.user-management',['role_id'=>'6'])}}"
+                                    title="{{translate('Store Admin')}}">
+                                    <i class="tio-city nav-icon"></i>
+                                    <span
+                                        class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Store Admin')}}</span>
+                                </a>
+                            </li>
 
                         @endif
 
                         @if( auth('admin')->user()->admin_role_id == 1 || auth('admin')->user()->admin_role_id == 6 )
 
-                        <li class="navbar-vertical-aside-has-menu ">
-                            <a class="js-navbar-vertical-aside-menu-link nav-link"
-                                href="{{route('admin.user-management',['role_id'=>'7'])}}"
-                                title="{{translate('Warehouse Store Sales Person')}}">
-                                <i class="tio-map nav-icon"></i>
-                                <span
-                                    class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Store Sales Person')}}</span>
-                            </a>
-                        </li>
+                            <li class="navbar-vertical-aside-has-menu ">
+                                <a class="js-navbar-vertical-aside-menu-link nav-link"
+                                    href="{{route('admin.user-management',['role_id'=>'7'])}}"
+                                    title="{{translate('Warehouse Store Sales Person')}}">
+                                    <i class="tio-map nav-icon"></i>
+                                    <span
+                                        class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Store Sales Person')}}</span>
+                                </a>
+                            </li>
                         @endif
 
                         @if(auth('admin')->user()->admin_role_id == 1)
@@ -444,100 +391,98 @@
                         @if(Helpers::module_permission_check(MANAGEMENT_SECTION['store_management']))
 
                         <!-- Warehouse, store, location management from here -->
-                        @if( auth('admin')->user()->admin_role_id == 1 || auth('admin')->user()->admin_role_id == 3)
-                        <li class="nav-item">
-                            <small class="nav-subtitle">{{translate('warehouse_&_store setup')}} </small>
-                            <small class="tio-more-horizontal nav-subtitle-replacer"></small>
-                        </li>
-                        <!-- location  -->
-                        @if( auth('admin')->user()->admin_role_id == 1 )
-                        <li class="navbar-vertical-aside-has-menu {{Request::is('admin/area*')?'active':''}}">
-                            <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle" href="javascript:"
-                                title="{{translate('Location setup')}}">
-                                <i class="tio-map nav-icon"></i>
-                                <span
-                                    class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Location')}}</span>
-                            </a>
-                            <ul class="js-navbar-vertical-aside-submenu nav nav-sub"
-                                style="display: {{Request::is('admin/area*')?'block':'none'}} ">
+                            @if( auth('admin')->user()->admin_role_id == 1 || auth('admin')->user()->admin_role_id == 3)
+                                <li class="nav-item">
+                                    <small class="nav-subtitle">{{translate('warehouse_&_store setup')}} </small>
+                                    <small class="tio-more-horizontal nav-subtitle-replacer"></small>
+                                </li>
+                                <!-- location  -->
+                                @if( auth('admin')->user()->admin_role_id == 1 )
+                                <li class="navbar-vertical-aside-has-menu {{Request::is('admin/area*')?'active':''}}">
+                                    <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle" href="javascript:"
+                                        title="{{translate('Location setup')}}">
+                                        <i class="tio-map nav-icon"></i>
+                                        <span
+                                            class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Location')}}</span>
+                                    </a>
+                                    <ul class="js-navbar-vertical-aside-submenu nav nav-sub"
+                                        style="display: {{Request::is('admin/area*')?'block':'none'}} ">
 
-                                <li class="nav-item {{Request::is('admin/city/add')?'active':''}}">
-                                    <a class="nav-link " href="{{route('admin.city.list')}}"
-                                        title="{{translate('City')}}">
-                                        <span class="tio-circle nav-indicator-icon"></span>
-                                        <span class="text-truncate">{{translate('City')}}</span>
+                                        <li class="nav-item {{Request::is('admin/city/add')?'active':''}}">
+                                            <a class="nav-link " href="{{route('admin.city.list')}}"
+                                                title="{{translate('City')}}">
+                                                <span class="tio-circle nav-indicator-icon"></span>
+                                                <span class="text-truncate">{{translate('City')}}</span>
+                                            </a>
+                                        </li>
+
+                                        <li class="nav-item {{Request::is('admin/area/list')?'active':''}}">
+                                            <a class="nav-link " href="{{route('admin.area.list')}}"
+                                                title="{{translate('categories')}}">
+                                                <span class="tio-circle nav-indicator-icon"></span>
+                                                <span class="text-truncate">{{translate('Area')}}</span>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                                <!-- location end  -->
+                                <li class="navbar-vertical-aside-has-menu {{Request::is('admin/warehouse.add')?'active':''}}">
+                                    <a class="js-navbar-vertical-aside-menu-link nav-link"
+                                        href="{{route('admin.warehouse.list')}}" title="{{translate('Warehouse')}}">
+                                        <i class="tio-map nav-icon"></i>
+                                        <span
+                                            class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Warehouse')}}</span>
                                     </a>
                                 </li>
-
-                                <li class="nav-item {{Request::is('admin/area/list')?'active':''}}">
-                                    <a class="nav-link " href="{{route('admin.area.list')}}"
-                                        title="{{translate('categories')}}">
-                                        <span class="tio-circle nav-indicator-icon"></span>
-                                        <span class="text-truncate">{{translate('Area')}}</span>
-                                    </a>
-                                </li>
-
-                            </ul>
-                        </li>
-                        <!-- location end  -->
-                        <li class="navbar-vertical-aside-has-menu {{Request::is('admin/warehouse.add')?'active':''}}">
-                            <a class="js-navbar-vertical-aside-menu-link nav-link"
-                                href="{{route('admin.warehouse.list')}}" title="{{translate('Warehouse')}}">
-                                <i class="tio-map nav-icon"></i>
-                                <span
-                                    class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Warehouse')}}</span>
-                            </a>
-                        </li>
-                        @endif
+                                @endif
+                            @endif
                         @endif
 
-                        
-                        @if(auth('admin')->user()->admin_role_id == 8 || auth('admin')->user()->admin_role_id == 3 ||
-                        auth('admin')->user()->admin_role_id == 1)
-                        @if(auth('admin')->user()->admin_role_id == 8 )
-                        <li class="navbar-vertical-aside-has-menu ">
-                            <a class="js-navbar-vertical-aside-menu-link nav-link"
-                                href="{{route('admin.broker-rate-list.index')}}" title="{{translate('rate list')}}">
-                                <i class="tio-category nav-icon"></i>
-                                <span
-                                    class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('rate list')}}</span>
-                            </a>
-                        </li>
-                        @endif
-                        <li class="navbar-vertical-aside-has-menu ">
-                            <a class="js-navbar-vertical-aside-menu-link nav-link"
-                                href="{{route('admin.purchase-warehouse-order.index')}}"
-                                title="{{translate('order_list')}}">
-                                <i class="tio-map nav-icon"></i>
-                                <span
-                                    class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('warehouse_purchase_orders')}}</span>
-                            </a>
-                        </li>
+                        @if(auth('admin')->user()->admin_role_id == 8 || auth('admin')->user()->admin_role_id == 3 || auth('admin')->user()->admin_role_id == 1)
+                            @if(auth('admin')->user()->admin_role_id == 8 )
+                            <li class="navbar-vertical-aside-has-menu ">
+                                <a class="js-navbar-vertical-aside-menu-link nav-link"
+                                    href="{{route('admin.broker-rate-list.index')}}" title="{{translate('rate list')}}">
+                                    <i class="tio-category nav-icon"></i>
+                                    <span
+                                        class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('rate list')}}</span>
+                                </a>
+                            </li>
+                            @endif
+                            <li class="navbar-vertical-aside-has-menu ">
+                                <a class="js-navbar-vertical-aside-menu-link nav-link"
+                                    href="{{route('admin.purchase-warehouse-order.index')}}"
+                                    title="{{translate('order_list')}}">
+                                    <i class="tio-map nav-icon"></i>
+                                    <span
+                                        class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('warehouse_purchase_orders')}}</span>
+                                </a>
+                            </li>
                         @endif
                         @if(in_array(auth('admin')->user()->admin_role_id,[1,3,6]))
-                        <li class="navbar-vertical-aside-has-menu {{Request::is('admin/store.index')?'active':''}}">
-                            <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{route('admin.store.list')}}"
-                                title="{{translate('Store')}}">
-                                <i class="tio-map nav-icon"></i>
-                                <span
-                                    class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Store')}}</span>
-                            </a>
-                        </li>
+                            <li class="navbar-vertical-aside-has-menu {{Request::is('admin/store.index')?'active':''}}">
+                                <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{route('admin.store.list')}}"
+                                    title="{{translate('Store')}}">
+                                    <i class="tio-map nav-icon"></i>
+                                    <span
+                                        class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Store')}}</span>
+                                </a>
+                            </li>
 
-                        <li class="navbar-vertical-aside-has-menu {{Request::is('admin/store.index')?'active':''}}">
-                            <a class="js-navbar-vertical-aside-menu-link nav-link"
-                                href="{{route('admin.store.purchase-store-orders.index')}}"
-                                title="{{translate('Store orders')}}">
-                                <i class="tio-map nav-icon"></i>
-                                <span
-                                    class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Store Purchase orders')}}</span>
-                            </a>
-                        </li>
+                            <li class="navbar-vertical-aside-has-menu {{Request::is('admin/store.index')?'active':''}}">
+                                <a class="js-navbar-vertical-aside-menu-link nav-link"
+                                    href="{{route('admin.store.purchase-store-orders.index')}}"
+                                    title="{{translate('Store orders')}}">
+                                    <i class="tio-map nav-icon"></i>
+                                    <span
+                                        class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Store Purchase orders')}}</span>
+                                </a>
+                            </li>
                         <!-- Warehouse, store, location management end here -->
                         @endif
 
 
-                        @endif
 
                         <!-- Product management start here -->
                         @if( in_array(auth('admin')->user()->admin_role_id, [1,3,5]) )

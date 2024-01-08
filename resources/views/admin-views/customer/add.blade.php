@@ -21,7 +21,7 @@
     </div>
     <!-- End Page Header -->
 
-    <form action="{{route('admin.pos.customer.store')}}" method="post" enctype="multipart/form-data">
+    <form action="{{route('admin.pos.customer.store')}}" method="post" enctype="multipart/form-data" class="needs-validation form_customer" novalidate>
         @csrf
         <div class="card">
             <div class="card-header">
@@ -40,6 +40,9 @@
                                     for="exampleFormControlInput1">{{translate('First Name')}}</label>
                                 <input type="text" name="f_name" value="{{ old('f_name') }}" class="form-control" style="text-transform: capitalize;"
                                     placeholder="{{translate('Ex : First Name')}}" required>
+                                    <div class="invalid-feedback">
+                                        Please fill last name.
+                                    </div>
                             </div>
                             <div class="col-md-12">
                                 <label class="input-label"

@@ -208,7 +208,7 @@
                      <span class="product_rate_<?php echo $key + 1; ?>"> {{@$whProduct->avg_price}}</span>{{@$product->unit->title}}
                  </td>
                
-                 <td class="pt-1 pb-3 ">
+                 <td class="pt-1 pb-3 " width="35%">
                      <div class="row">
                     <input type="text" name="1_slot[quantity][]" class="form-control 1_quantity quantity_<?php echo $key + 1; ?>" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>)"  style="width: 70px;    margin: 0 2px;" 
                     value="{{@$product_details_array[0]['quantity']}}" >
@@ -247,7 +247,7 @@
                     <input type="text"  name="3_slot[per_unit_price][]" id="" style="width: 70px;   border: none; padding-left: 8px;" class="3_per_unit_rate_<?php echo $key + 1; ?>" value="{{@$product_details_array[2]['per_unit_price']}}">
                      </div>
                  </td>
-                 <td class="" >
+                 <!-- <td class="" >
                     @if(@$whProduct->product_rate_updated_date)
                     <?php  $dateColor = 'red';
                         if (date('Y-m-d', strtotime($whProduct->product_rate_updated_date)) == date('Y-m-d')) {
@@ -255,7 +255,7 @@
                         } ?>
                     <h5 style="margin-left: 15px;color:{{$dateColor}}">{{ date('d-M-Y h:i A', strtotime($whProduct->product_rate_updated_date)) }}</h5>
                     @endif
-                </td>
+                </td> -->
              </tr>
              @endforeach
          </tbody>
@@ -285,11 +285,12 @@
 
  @push('script_2')
  <script defer>
+    
 
-$('.market_price').on('input',function(){
-    console.log($(this).val());
-    $('.hidden_market_price').val($(this).val());
-})
+    $('.market_price').on('input',function(){
+        console.log($(this).val());
+        $('.hidden_market_price').val($(this).val());
+    })
     function handleFirstDiscountChange(id,classPrefix = ""){
 
 

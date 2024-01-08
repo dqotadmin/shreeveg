@@ -73,12 +73,7 @@
                                 <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">{{$products->firstItem()+$key}}</td>
                                 <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
                                     <a href="{{route('admin.product.view',[$product['id']])}}" class="product-list-media">
-                                        <!-- @if (!empty(json_decode(@$product['image'],true)))
-                                        <img src="{{asset('storage/app/public/product')}}/{{json_decode(@$product['image'],true)[0]}}"
-                                            onerror="this.src='{{asset('public/assets/admin/img/400x400/img2.jpg')}}'">
-                                        @else
-                                        <img src="{{asset('public/assets/admin/img/400x400/img2.jpg')}}">
-                                        @endif -->
+                                         
                                         @if (@$product['single_image'] &&
                                         (!empty(json_decode(@$product['single_image'],true))))
                                         @foreach(json_decode(@$product['single_image'],true) as $img)

@@ -2610,19 +2610,4 @@
   'rate list detail' => 'Rate list detail',
   'Ordering value already exists. Choose another value.' => 'Ordering value already exists. Choose another value.',
   'donations' => 'Donations',
-<<<<<<< HEAD
-=======
-  'donate products' => 'Donate products',
-  'Add new group' => 'Add new group',
-  'group setup' => 'Group setup',
-  'group' => 'Group',
-  'group List' => 'Group List',
-  'group name is required' => 'Group name is required',
-  'group updated successfully!' => 'Group updated successfully!',
-  'you_want_to_disable_this_group' => 'You want to disable this group',
-  'group status updated!' => 'Group status updated!',
-  'you_want_to_active_this_group' => 'You want to active this group',
-  'group removed!' => 'Group removed!',
-  'Select Group' => 'Select Group',
->>>>>>> b33c2b1c7224579df7ac7f3cf0217b4d0ebcdb91
 );

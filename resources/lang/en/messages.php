@@ -2621,4 +2621,5 @@
   'group status updated!' => 'Group status updated!',
   'you_want_to_active_this_group' => 'You want to active this group',
   'group removed!' => 'Group removed!',
+  'Select Group' => 'Select Group',
 );

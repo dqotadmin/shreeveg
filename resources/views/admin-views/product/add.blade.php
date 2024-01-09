@@ -147,6 +147,19 @@
                                     </div>
                                 </div>
                             </div>
+                            
+                                <div class="col-sm-12" id="">
+                                    <div class="form-group">
+                                        <label class="input-label" for="exampleFormControlInput1">{{translate('Select Group')}}</label>
+                                        <select name="group_ids[]" id="group_id"    class="form-control chosen-select" multiple >
+                                             <option value="" disabled>---{{translate('Select Group')}}---</option>
+                                                @foreach ($groups as $gKey => $group)
+                                             <option value="{{$gKey}}">{{$group}}</option>
+                                                @endforeach
+                                        </select>
+                                   
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

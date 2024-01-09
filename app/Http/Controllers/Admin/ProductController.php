@@ -114,7 +114,7 @@ class ProductController extends Controller
         $authUser = auth('admin')->user();
         if ($authUser->admin_role_id == 3 || $authUser->admin_role_id == 5) {
             $assign_categories =  $this->warehouse_categories->where('warehouse_id', $authUser->warehouse_id)->pluck('category_id')->toArray();
-            $query = $query->whereIn('category_id', $assign_categories)->where('status',1);
+            $query = $query->whereIn('category_id', $assign_categories)->where('status', 1);
         }
 
         $query_param = [];
@@ -144,7 +144,8 @@ class ProductController extends Controller
         $categories = $this->category->get();
         $options = Helpers::getCategoryDropDown($categories);
         $units =  $this->unit->get();
-        return view('admin-views.product.add', compact('options', 'units'));
+        $groups = \App\Model\Group::whereStatus(1)->pluck('name', 'id')->toArray();
+        return view('admin-views.product.add', compact('options', 'units', 'groups'));
     }
 
     /**
@@ -243,7 +244,8 @@ class ProductController extends Controller
         $p->single_image = $single_img_names;
         $p->maximum_order_quantity = $request->maximum_order_quantity;
         $p->status = $request->status ? $request->status : 0;
-        //dd($p);
+        $p->group_ids = json_encode($request->group_ids);
+        //dd($p);ALTER TABLE `products` ADD `group_ids` TEXT NULL AFTER `daily_needs`;
         $p->save();
 
         $data = [];
@@ -309,21 +311,21 @@ class ProductController extends Controller
      */
     public function status(Request $request, $id): \Illuminate\Http\RedirectResponse
     {
-        if(auth('admin')->user()->admin_role_id == 3){
+        if (auth('admin')->user()->admin_role_id == 3) {
             $product = $this->warehouse_products->find($request->id);
             $product->status = $request->status;
             $product->save();
             Toastr::success(translate('Product status updated!'));
             return back();
-        }else{
+        } else {
 
-        $product = $this->product->find($request->id);
-        $product->status = $request->status;
-        $product->save();
-        Toastr::success(translate('Product status updated!'));
-        return back();
+            $product = $this->product->find($request->id);
+            $product->status = $request->status;
+            $product->save();
+            Toastr::success(translate('Product status updated!'));
+            return back();
+        }
     }
-}
 
     // public function order(Request $request) 
     // {
@@ -338,34 +340,33 @@ class ProductController extends Controller
     //     // Set the new ordering value
     //     $product->ordering = $request->ordering;
     //     $product->save();
-    
+
     //     return response()->json(['message' => translate('Product ordering updated!')]);
     // }
 
-    public function order(Request $request) 
+    public function order(Request $request)
     {
         $product = $this->product->find($request->product_id);
         $existingProducts = $this->product->where('ordering', $request->ordering)
             ->where('id', '!=', $request->product_id)
             ->get(); // we check if this ordering is already exist or not
-            if ($existingProducts->isNotEmpty()) {
-          
-                // Ordering value already exists, so increment ordering values for products greater than or equal to the given value
-                foreach ($existingProducts as $productExist) {
-                    $productExist->ordering = $request->ordering + 1;
-                    $productExist->save();
-                }
-          
+        if ($existingProducts->isNotEmpty()) {
+
+            // Ordering value already exists, so increment ordering values for products greater than or equal to the given value
+            foreach ($existingProducts as $productExist) {
+                $productExist->ordering = $request->ordering + 1;
+                $productExist->save();
+            }
         } else {
             // Set the new ordering value
             $product->ordering = $request->ordering;
             $product->save();
         }
-    
+
         return response()->json(['message' => translate('Product ordering updated!')]);
     }
-    
- 
+
+
 
 
     /**
@@ -452,6 +453,7 @@ class ProductController extends Controller
 
         $p->maximum_order_quantity = $request->maximum_order_quantity;
         $p->status = $request->status ? $request->status : 0;
+        $p->group_ids = json_encode($request->group_ids);
         //dd($p);
         $p->save();
 
@@ -485,7 +487,7 @@ class ProductController extends Controller
 
     public function warehouse_rate_insertupdate(Request $request, $id): \Illuminate\Http\JsonResponse
     {
-   Validator::make($request->all(), [
+        Validator::make($request->all(), [
             'quantity' => 'required',
             'store_price' => 'required',
             'customer_price' => 'required',
@@ -493,7 +495,7 @@ class ProductController extends Controller
             'offer_price' => 'required',
         ]);
         $maxDiscount = NULL;
-        $product_details = []; 
+        $product_details = [];
         if ($request->quantity) {
             foreach ($request->quantity as $key => $qty) {
                 if (isset($request->offer_price[$key])) {
@@ -514,7 +516,7 @@ class ProductController extends Controller
                 }
                 $discountPercentage = ($request->market_price[$key] - ($request->offer_price[$key] / $qty)) / $request->market_price[$key] * 100;
                 $product_details[$key]['discount']  = number_format($discountPercentage, 2, '.', '');
-                
+
                 if (isset($request->per_unit_price[$key])) {
                     $product_details[$key]['per_unit_price'] = $request->per_unit_price[$key];
                 }
@@ -524,14 +526,13 @@ class ProductController extends Controller
             }
 
             $discounts = array_column($product_details, 'discount');
-            if($discounts){
+            if ($discounts) {
                 $maxDiscount = max($discounts);
-
             }
             $productData = json_encode($product_details, true);
         }
 
-        
+
         $authUser = auth('admin')->user();
         $row = $this->warehouse_products->where('product_id', $id)->where('warehouse_id', $authUser->warehouse_id)->first();
         // $row = $this->warehouse_products->find($id);
@@ -545,7 +546,7 @@ class ProductController extends Controller
         $row->avg_price = $request->avg_price;
         $row->customer_price = $request->customer_price;
         $row->store_price = $request->store_price;
-        $row->product_details = @$productData? @$productData : null;
+        $row->product_details = @$productData ? @$productData : null;
         $row->discount_upto = @$maxDiscount;
 
         $row->save();

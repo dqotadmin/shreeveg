@@ -370,6 +370,10 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
 
         Route::group(['prefix' => 'business-settings', 'as' => 'business-settings.', 'middleware' => ['module:system_management']], function () {
 
+            Route::resource('groups', 'GroupController');
+            Route::get('status/{id}/{status}', 'GroupController@status')->name('groups.status');
+            Route::delete('delete/{id}', 'GroupController@delete')->name('groups.delete');
+
             Route::group(['prefix' => 'store', 'as' => 'store.'], function () {
                 Route::get('ecom-setup', 'BusinessSettingsController@restaurant_index')->name('ecom-setup')->middleware('actch');
                 Route::get('delivery-setup', 'BusinessSettingsController@delivery_index')->name('delivery-setup')->middleware('actch');

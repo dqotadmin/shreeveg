@@ -18,7 +18,7 @@
     <!-- End Page Header -->
     <div class="card">
         <div class="card-body">
-            <form action="{{route('admin.product.donations.store')}}" method="post"
+            <form action="{{route('admin.store.donations.store')}}" method="post"
                 enctype="multipart/form-data">
                 @csrf
 
@@ -75,8 +75,9 @@
                             @if(count($products) >0)
                             @foreach($products as $key =>$product)
                             <?php
-                            if(in_array($user->admin_role_id,[6,7])){
-                                $stock = \App\Model\StoreProduct::where('store_id',$user->store_id)->where('product_id',$product->product_id)->first()->total_stock;
+                            if($store_id){ //dd($store_id,$product->product_id);
+                                $stockRow = \App\Model\StoreProduct::where('store_id',$store_id)->where('product_id',$product->product_id)->first();
+                                $stock = $stockRow?$stockRow->total_stock:0;
                             }else {
                                 $stock = $product->total_stock;
                             }
@@ -119,7 +120,7 @@
                 </div>
                 <div class="col-12">
                     <div class="btn--container justify-content-end">
-                        <a href="{{route('admin.product.donations.index')}}" type="reset" class="btn btn--reset">
+                        <a href="{{route('admin.store.donations.index')}}" type="reset" class="btn btn--reset">
                         {{translate('Back')}}</a>
                         <button type="submit" class="btn btn--primary">{{translate('submit')}}</button>
                     </div>

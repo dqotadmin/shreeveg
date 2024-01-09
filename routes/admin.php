@@ -207,7 +207,6 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::post('order', 'ProductController@order')->name('order');
 
             Route::get('feature/{id}/{is_featured}', 'ProductController@feature')->name('feature');
-            Route::resource('donations', 'DonationController');
         });
 
         Route::group(['prefix' => 'orders', 'as' => 'orders.', 'middleware' => ['module:order_management']], function () {
@@ -342,6 +341,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::resource('purchase-store-orders', 'PurchaseStoreOrderController');
             Route::post('purchase-store-orders-update-status/{id}', 'PurchaseStoreOrderController@updateStatus')->name('updateStatus');
             Route::get('stock-update/{id}', 'PurchaseStoreOrderController@stockUpdate')->name('stock-update');
+            Route::resource('donations', 'DonationController');
         });
 
         Route::group(['prefix' => 'message', 'as' => 'message.', 'middleware' => ['module:support_management']], function () {

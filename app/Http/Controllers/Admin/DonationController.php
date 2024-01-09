@@ -53,11 +53,23 @@ class DonationController extends Controller
         $user = auth('admin')->user();
 
         $rows = $this->mTable::query();
-        if ($user->admin_role_id == 6) {
+
+        if (($user->store_id) > 0) {
+            $wahrehouseId = $user->Store->warehouse_id;
+            $store_id = $user->store_id;
             $rows->where('store_id', $user->store_id);
-        } elseif ($user->admin_role_id == 3) {
+        } else {
+            $wahrehouseId = $user->warehouse_id;
             $rows->where('warehouse_id', $user->warehouse_id);
         }
+
+
+
+        // if ($user->admin_role_id == 6) {
+        //     $rows->where('store_id', $user->store_id);
+        // } elseif ($user->admin_role_id == 3) {
+        //     $rows->where('warehouse_id', $user->warehouse_id);
+        // }
 
         if ($request->has('search') && $search) {
             $key = explode(' ', $request['search']);
@@ -70,6 +82,7 @@ class DonationController extends Controller
             });
             $query_param = ['search' => $request['search']];
         }
+
         $rows = $rows->orderBy('id', 'desc')->paginate(Helpers::getPagination())->appends($query_param);
         return view($this->view_folder . '.index', compact('rows', 'search', 'user'));
     }
@@ -84,7 +97,7 @@ class DonationController extends Controller
         } else {
             $wahrehouseId = $user->warehouse_id;
         }
-        //dd($wahrehouseId, $store_id);
+        //dd($wahrehouseId, $store_id, $user->id);
         $categories = \App\Model\WarehouseCategory::where('warehouse_id', $wahrehouseId)->whereStatus('1')->get();
         return view($this->view_folder . '.create', compact('categories', 'wahrehouseId', 'store_id', 'user'));
     }
@@ -128,7 +141,7 @@ class DonationController extends Controller
 
             DB::commit();
             Toastr::success(translate('data Inserted Successfully!'));
-            return redirect()->route('admin.product.donations.index');
+            return redirect()->route('admin.store.donations.index');
         } catch (\Exception $e) {
             DB::rollback();
             $msg = $e->getMessage();

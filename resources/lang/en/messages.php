@@ -2608,6 +2608,5 @@
   'Price Updated Successfully!' => 'Price Updated Successfully!',
   'rate_updated_date' => 'Rate updated date',
   'rate list detail' => 'Rate list detail',
-  'donations' => 'Donations',
-  'donate products' => 'Donate products',
+  'Ordering value already exists. Choose another value.' => 'Ordering value already exists. Choose another value.',
 );

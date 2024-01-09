@@ -25,7 +25,7 @@
     <div class="row g-2">
         
         <div class="col-sm-12 col-lg-12">
-            <form action="{{route('admin.area.store')}}" method="post" enctype="multipart/form-data">
+            <form action="{{route('admin.area.store')}}" method="post" enctype="multipart/form-data" class="needs-validation form_customer" novalidate>
                 @csrf
                 <div class="row g-2">
                     <div class="col-sm-12">
@@ -41,26 +41,35 @@
                                     <div class="col-md-4">
                                         <label class="form-label">{{ translate('City') }}
                                         </label>
-                                        <select id=" " name="city_id" class="form-control js-select2-custom" required>
+                                        <select id=" " name="city_id" class="custom-select" required>
                                             <option value="" disabled selected>Select City</option>
                                             @foreach(\App\Model\City::orderBy('id',
                                             'DESC')->where(['state_id'=>19])->where('status','1')->get() as $city)
                                             <option value="{{$city['id']}}">{{$city['city']}}</option>
                                             @endforeach
                                         </select>
+                                        <div class="invalid-feedback">
+                                        Please select city.
+                                        </div>
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">{{ translate('Area') }}
                                             {{ translate('Name') }}
                                         </label>
                                         <input type="text" name="area" class="form-control"  
-                                        placeholder="{{ translate('Ex: Area Name') }}"     maxlength="255">
+                                        placeholder="{{ translate('Ex: Area Name') }}" maxlength="255" required>
+                                        <div class="invalid-feedback">
+                                        Please enter area name.
+                                        </div>
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">{{ translate('Pin Code') }}
                                         </label>
                                         <input type="number" name="pincode" class="form-control"  
-                                        placeholder="{{ translate('Ex: Pin Code') }}"     maxlength="255">
+                                        placeholder="{{ translate('Ex: Pin Code') }}" maxlength="255" required>
+                                        <div class="invalid-feedback">
+                                        Please enter pin code.
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -117,7 +126,7 @@
                                                         </i>
                                                     </label>
                                                     <input type="number" name="radius" min="1" max="1000"
-                                                        class="form-control" placeholder="{{ translate('Ex : 3') }}"
+                                                        class="form-control manually-border-color" placeholder="{{ translate('Ex : 3') }}"
                                                         value="{{ old('coverage') }}">
                                                 </div>
                                             </div>

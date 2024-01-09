@@ -24,22 +24,23 @@
                  <th width="25%">
                      <div class="row">
                          <div class="row">
-                             <div class="col-md-12">
+                            <div class="col-md-12">
                                  <div>
                                      {{translate('shreeveg Price')}} (first slot):
                                  </div>
-                             </div>
-                             <div class="col-md-3">
-                                 <!-- <div class="" style="margin-left: -25px;"> -->
-                                 <div class="">
+                            </div>
+                        </div>
+                             <div class="row gx-1 align-items-end w-100">
+                                <div class="col-3">
+                                <div class="">
                                      <small for=""> Quantity:</small>
                                      <input type="text" class="form-control" id="global_1_quantity" value="1"
                                          style="width: 70px;"    >
                                       
                                  </div>
                              </div>
-                              <div class="col-md-3">
-                                 <div class=""  style="margin-left: -18px;">
+                              <div class="col-3">
+                                 <div class=""  >
                                      <small for=""> margin(%):</small>
                                      <select name="" class="form-control" id="global_1_discount" style="width: 70px;padding: 3px;">
                                      @for($i=-100; $i<=100; $i++)
@@ -49,46 +50,33 @@
                                   
                                  </div>
                              </div>
-                             <div class="col-md-3">
-                                 <div class=""  style="margin-top: 43px;    margin-left: 36px;">
+                             <div class="col-auto ml-auto">
                                      <small for=""> 1 unit price</small>
                                  </div>
                              </div>
-                             <!-- <div class="col-md-2">
-                                 <div class="" style="margin: 0 -16px;">
-                                     <small for=""> Unit:</small>
-                                     <select name="" class="form-control" id="global_1_unit"
-                                         style="width: 70px;padding: 3px;">
-                                         <option value="" disabled selected>Unit</option>
-                                         @foreach(\App\Model\Unit::get() as $unit)
-                                         <option value="{{$unit->id}}">{{$unit->title}}</option>
-                                         @endforeach
-                                     </select>
-                                 </div>
-                             </div> -->
-                         </div>
+                            </div>
                      </div>
                  </th>
                  <th width="25%">
                      <div class="row">
-                         <div class="row">
-                             <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12">
                                  <div>
                                      {{translate('shreeveg Price')}} (second slot):
                                  </div>
-                             </div>
-                            
-
-                             <div class="col-md-3">
-                                 <div class=""    >
+                            </div>
+                        </div>
+                             <div class="row gx-1 align-items-end w-100">
+                                <div class="col-3">
+                                <div class="">
                                      <small for=""> Quantity:</small>
                                      <input type="text" class="form-control" id="global_2_quantity"
                                      style="width: 70px;" value="3">
                                   
                                  </div>
                              </div>
-                             <div class="col-md-3">
-                                 <div class=""  style="margin-left: -18px;" >
+                             <div class="col-3">
+                                 <div class=""  >
                                      <small for=""> margin(%):</small>
                                      <select name="" class="form-control" id="global_2_discount" style="width: 70px;padding: 3px;">
                                      @for($i=-100; $i<=100; $i++)
@@ -98,11 +86,9 @@
                                       
                                  </div>
                              </div>
-                             <div class="col-md-3">
-                                 <div class=""  style="margin-top: 43px;    margin-left: 36px;">
+                                <div class="col-auto ml-auto">
                                      <small for=""> 1 unit price</small>
-                                 </div>
-                             </div>
+                                </div>
                              <!-- <div class="col-md-2">
                                  <div class="" style="margin: 0 -16px;">
                                      <small for=""> Unit:</small>
@@ -117,17 +103,20 @@
                              </div> -->
                          </div>
                      </div>
+                     </div>
                  </th>
                  <th width="25%">
                      <div class="row">
-                         <div class="row">
+                        <div class="row">
                              <div class="col-md-12">
                                  <div>
                                      {{translate('shreeveg Price')}} ( (third slot)):
                                  </div>
-                             </div>
-                             
-                             <div class="col-md-3">
+                            </div>
+                                
+                        </div>
+                            <div class="row gx-1 align-items-end w-100">
+                            <div class="col-3">
                                  <div class="">
                                      <small for=""> Quantity:</small>
                                      <input type="text" class="form-control" id="global_3_quantity" value="5"
@@ -135,37 +124,22 @@
                                     
                                  </div>
                              </div>
-                             <div class="col-md-3">
-                                 <div class=""   style="margin-left: -18px;" >
+                             <div class="col-3">
+                                 <div class="">
                                      <small for=""> margin(%):</small>
                                      <select name="" class="form-control" id="global_3_discount"  style="width: 70px;padding: 3px;">
                                      @for($i=-100; $i<=100; $i++)
                                                 <option value="{{$i}}">{{$i}}</option>
                                         @endfor
                                     </select>
-                                  
                                  </div>
                              </div>
-                             <div class="col-md-3">
-                                 <div class=""  style="margin-top: 43px;    margin-left: 36px;">
+                             
+                             <div class="col-auto ml-auto">
                                      <small for=""> 1 unit price</small>
-                                 </div>
                              </div>
-                             <!-- <div class="col-md-2">
-                                 <div class="" style="margin: 0 -16px;">
-                                     <small for=""> Unit:</small>
-                                     <select name="" class="form-control" style="width: 70px;padding: 3px;"
-                                         id="global_3_unit">
-                                         <option value="" disabled selected>Unit</option>
-                                         @foreach(\App\Model\Unit::get() as $unit)
-                                         <option value="{{$unit->id}}">{{$unit->title}}</option>
-                                         @endforeach
-                                     </select>
-                                 </div>
-                             </div> -->
-                         </div>
-
-
+                            </div>
+                           
                      </div>
                  </th>
                  <th>
@@ -191,7 +165,7 @@
                      <div class="max-85 text-center">
                          {{ $product['name'] }} <br><small>({{ $product['product_code'] }} )</small>
                          
-                        
+
                      </div>
                  </td>
                  <td class="pt-1 pb-3 ">
@@ -209,8 +183,8 @@
                  </td>
                
                  <td class="pt-1 pb-3 " width="35%">
-                     <div class="row">
-                    <input type="text" name="1_slot[quantity][]" class="form-control 1_quantity quantity_<?php echo $key + 1; ?>" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>)"  style="width: 70px;    margin: 0 2px;" 
+                     <div class="row customrow">
+                    <input type="text" name="1_slot[quantity][]" class="form-control 1_quantity quantity_<?php echo $key + 1; ?>" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>)"  style="width: 70px;  " 
                     value="{{@$product_details_array[0]['quantity']}}" >
                       
                     <input type="text" name="1_slot[margin][]" class="form-control 1_discount discount_<?php echo $key + 1; ?>"   style="width: 70px;"   value="{{@$product_details_array[0]['margin']}}" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>)"  >
@@ -221,9 +195,9 @@
                      </div>
                  </td>
                  <td class="pt-1 pb-3 ">
-                     <div class="row">
+                     <div class="row customrow">
                         <input type="text" name="2_slot[quantity][]" class="form-control 2_quantity 2_quantity_<?php echo $key + 1; ?>"  value="{{@$product_details_array[1]['quantity']}}" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>,'2_')"
-                                style="width: 70px;    margin: 0 2px;">
+                                style="width: 70px;  ">
                              
                         <input type="text" name="2_slot[margin][]" class="form-control 2_discount 2_discount_<?php echo $key + 1; ?>" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>,'2_')" style="width: 70px;" value="{{@$product_details_array[1]['margin']}}">
                         
@@ -234,10 +208,10 @@
                      </div>
                  </td>
                  <td class="pt-1 pb-3 ">
-                     <div class="row">
+                     <div class="row customrow">
                         
                      <input type="text" class="form-control 3_quantity 3_quantity_<?php echo $key + 1; ?>" name="3_slot[quantity][]" value="{{@$product_details_array[2]['quantity']}}"  onkeyup="handleFirstDiscountChange(<?php  echo $key + 1; ?>,'3_')"
-                             style="width: 70px;    margin: 0 2px;">
+                             style="width: 70px;    ">
 
                     <input type="text" class="form-control 3_discount 3_discount_<?php echo $key + 1; ?>" name="3_slot[margin][]" style="width: 70px;" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>,'3_')"  value="{{@$product_details_array[2]['margin']}}">
                          
@@ -247,7 +221,7 @@
                     <input type="text"  name="3_slot[per_unit_price][]" id="" style="width: 70px;   border: none; padding-left: 8px;" class="3_per_unit_rate_<?php echo $key + 1; ?>" value="{{@$product_details_array[2]['per_unit_price']}}">
                      </div>
                  </td>
-                 <!-- <td class="" >
+                 <td class="" >
                     @if(@$whProduct->product_rate_updated_date)
                     <?php  $dateColor = 'red';
                         if (date('Y-m-d', strtotime($whProduct->product_rate_updated_date)) == date('Y-m-d')) {
@@ -255,7 +229,7 @@
                         } ?>
                     <h5 style="margin-left: 15px;color:{{$dateColor}}">{{ date('d-M-Y h:i A', strtotime($whProduct->product_rate_updated_date)) }}</h5>
                     @endif
-                </td> -->
+                </td>
              </tr>
              @endforeach
          </tbody>
@@ -361,6 +335,7 @@
         Array.from({
             length: 3
         }).forEach((item, index) => {
+            console.log('dynamicHandler'+index);
        
                 let sno = index + 1;
                 // let fixDiscount = parseFloat($("#discount").val() || 0)
@@ -368,8 +343,10 @@
 
                 /** @function first column's global discount, quantity & unit handler */
                 $(`#global_${sno}_discount`).on('input', function() {
+                    console.log('global_');
                     var global_1_discount = $(this).val();
                     Array.from($(`.${sno}_discount`)).forEach((_item,i)=>globalDynamicHandler(_item,i,global_1_discount, sno > 1 ? `${sno}_`:""));
+                    
 
                 });
 
@@ -389,28 +366,31 @@
                     });
 
                 });
-                /** @function first column's global discount, quantity & unit handler */
+                /** @function first column's global discount, quantity & unit handler 
+                 * its use is pass data_changed class in every input field when we manually fill input field
+                */
 
                 /** @function first column's discount, quantity & unit handler */
-                Array.from($(`.${sno}_discount`)).forEach(function(_item) {
-                    _item.oninput = function(event) {
-                        event.target.classList.add("data_changed");
-                    }
-                });
-                Array.from($(`.${sno}_quantity`)).forEach(function(_item) {
-                    _item.oninput = function(event) {
-                        event.target.classList.add("data_changed");
-                    }
-                });
-                Array.from($(`.${sno}_unit`)).forEach(function(_item) {
-                    _item.oninput = function(event) {
-                        event.target.classList.add("data_changed");
-                    }
-                });
+                // Array.from($(`.${sno}_discount`)).forEach(function(_item) {
+                //     _item.oninput = function(event) {
+                //         event.target.classList.add("data_changed");
+                //     }
+                // });
+                // Array.from($(`.${sno}_quantity`)).forEach(function(_item) {
+                //     _item.oninput = function(event) {
+                //         event.target.classList.add("data_changed");
+                //     }
+                // });
+                // Array.from($(`.${sno}_unit`)).forEach(function(_item) {
+                //     _item.oninput = function(event) {
+                //         event.target.classList.add("data_changed");
+                //     }
+                // });
                 /** @function first column's discount, quantity & unit handler */
     })
     }
 
 dynamicHandler()
+console.log('product_detail');
  </script>
  @endpush

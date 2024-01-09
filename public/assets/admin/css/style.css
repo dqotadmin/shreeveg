@@ -1,4 +1,4 @@
-u@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Open+Sans:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Open+Sans:wght@400;500;600&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap");
 .form--control {
   background: transparent;
@@ -1605,6 +1605,7 @@ a[class*=btn--]:hover {
 
 .table .thead-light th {
   font-size: 14px;
+  vertical-align: top;
   color: var(--title-clr);
   font-weight: 600;
 }
@@ -5809,3 +5810,14 @@ aside .navbar-vertical-content {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.manually-border-color{
+  border: 0.0625rem solid #e7eaf3  !important;
+}
+
+
+.row.customrow{
+flex-wrap: nowrap;
+column-gap: 2px;
+}
+
+.row.customrow .form-control{padding: 5px 5px;}

@@ -27,8 +27,7 @@
         <div class="col-sm-12 col-lg-12">
             <div class="card-body pt-sm-0 pb-sm-4">
 
-                <form action="{{route('admin.admin-update',[$admins['id']])}}" method="post"
-                    enctype="multipart/form-data">
+                <form action="{{route('admin.admin-update',[$admins['id']])}}" method="post" enctype="multipart/form-data" class="needs-validation form_customer" novalidate>
                     @csrf
                     <!-- Card -->
                     <div class="card mb-3 mb-lg-5" id="generalDiv">
@@ -85,12 +84,13 @@
                                         class="input-label-secondary"></span></label>
 
                                 <div class="col-sm-9">
-                                    <select id="state" name="warehouse_id" class="form-control js-select2-custom"
+                                    <select id="state" name="warehouse_id" class="custom-select"
                                         required>
                                         @if($user->admin_role_id == 3)
                                         <option value="{{$user->Warehouse->id}}" selected>{{$user->Warehouse->name}}</option>
                                         @else
-                                        <option value="" disabled selected>Select Warehouse </option>
+                                        <option selected disabled value="">Select Warehouse </option>
+
                                         @foreach(\App\Model\Warehouse::where('status', 1)->where('deleted_at',
                                         null)->get() as $warehouse)
                                         <option value="{{$warehouse['id']}}"
@@ -140,6 +140,9 @@
                                         <input type="text" class="form-control" name="l_name" id="lastNameLabel"
                                             placeholder="{{ translate('Your last name') }}" aria-label="Your last name"
                                             value="{{$admins->l_name}}">
+                                            <div class="invalid-feedback">
+                                            Please enter full name.
+                                            </div>
                                     </div>
                                 </div>
                             </div>
@@ -157,6 +160,9 @@
                                         value="{{$admins->phone}}" data-hs-mask-options='{
                                            "template": "+(880)00-000-00000"
                                          }'>
+                                         <div class="invalid-feedback">
+                                            Please enter phone no.
+                                            </div>
                                 </div>
                             </div>
                             <!-- End Form Group -->
@@ -170,6 +176,9 @@
                                         value="{{$admins->email}}"
                                         placeholder="{{ translate('Enter new email address') }}"
                                         aria-label="Enter new email address">
+                                        <div class="invalid-feedback">
+                                            Please enter email-id.
+                                            </div>
                                 </div>
                             </div>
 
@@ -196,7 +205,7 @@
                                         class="input-label-secondary"></span></label>
 
                                 <div class="col-sm-9">
-                                    <input type="text" class="js-masked-input form-control" name="account_number"
+                                    <input type="text" class="js-masked-input form-control  manually-border-color" name="account_number"
                                         id="phoneLabel" placeholder="Account Number"
                                         value="{{$admins->bankDetail ? $admins->bankDetail->account_number: ''}}">
                                 </div>
@@ -207,7 +216,7 @@
                                         class="input-label-secondary"></span></label>
 
                                 <div class="col-sm-9">
-                                    <input type="text" class="js-masked-input form-control" name="account_holder"
+                                    <input type="text" class="js-masked-input form-control  manually-border-color" name="account_holder"
                                         id="phoneLabel" placeholder="Account Holder"
                                         value="{{$admins->bankDetail ? $admins->bankDetail->account_holder: '';}}">
                                 </div>
@@ -219,7 +228,7 @@
                                         class="input-label-secondary"></span></label>
 
                                 <div class="col-sm-9">
-                                    <input type="text" class="js-masked-input form-control" name="bank_name"
+                                    <input type="text" class="js-masked-input form-control  manually-border-color" name="bank_name"
                                         id="phoneLabel" placeholder="Bank Name"
                                         value="{{$admins->bankDetail ? $admins->bankDetail->bank_name: '';}}">
                                 </div>
@@ -230,7 +239,7 @@
                                         class="input-label-secondary"></span></label>
 
                                 <div class="col-sm-9">
-                                    <input type="text" class="js-masked-input form-control" name="ifsc_code"
+                                    <input type="text" class="js-masked-input form-control  manually-border-color" name="ifsc_code"
                                         id="phoneLabel" placeholder="IFSC Code"
                                         value="{{$admins->bankDetail ? $admins->bankDetail->ifsc_code: '';}}">
                                 </div>
@@ -241,7 +250,7 @@
                                         class="input-label-secondary"></span></label>
 
                                 <div class="col-sm-9">
-                                    <input type="text" class="js-masked-input form-control" name="upi_id"
+                                    <input type="text" class="js-masked-input form-control  manually-border-color" name="upi_id"
                                         id="phoneLabel" placeholder="UPI Id"
                                         value="{{$admins->bankDetail ? $admins->bankDetail->upi_id: '';}}">
                                 </div>
@@ -252,7 +261,7 @@
                                         class="input-label-secondary"></span></label>
 
                                 <div class="col-sm-9">
-                                    <input type="text" class="js-masked-input form-control" name="upi_number"
+                                    <input type="text" class="js-masked-input form-control  manually-border-color" name="upi_number"
                                         id="upi_number"
                                         value="{{$admins->bankDetail ? $admins->bankDetail->upi_number : '';}}"
                                         placeholder="UPI Number">

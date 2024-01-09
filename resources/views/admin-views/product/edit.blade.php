@@ -21,7 +21,7 @@
         </h1>
     </div>
     <!-- End Page Header -->
-    <form action="javascript:" method="post" id="product_form" enctype="multipart/form-data" class="row g-2">
+    <form action="{{route('admin.product.update',[$product['id']])}}" method="post" id="timeForm" enctype="multipart/form-data" class="needs-validation form_customer row g-2" novalidate>
         @csrf
         @php($data = Helpers::get_business_settings('language'))
         @php($default_lang = Helpers::get_default_language())
@@ -63,14 +63,20 @@
                             <input type="text" {{$lang['status'] == true ? 'required':''}} name="name[]"
                                 id="{{$lang['code']}}_name"
                                 value="{{$translate[$lang['code']]['name']??$product['name']}}" class="form-control"
-                                placeholder="{{translate('New Product')}}">
+                                placeholder="{{translate('New Product')}}" required>
+                                <div class="invalid-feedback">
+                                    Please enter name.
+                                </div>
                         </div>
                         <input type="hidden" name="lang[]" value="{{$lang['code']}}">
                         <div class="form-group mb-0">
                             <label class="input-label" for="{{$lang['code']}}_description">{{translate('short')}}
                                 {{translate('description')}} ({{strtoupper($lang['code'])}})</label>
                             <textarea name="description[]" class="form-control h--172px"
-                                id="{{$lang['code']}}_hiddenArea">{{$translate[$lang['code']]['description']??$product['description']}}</textarea>
+                                id="{{$lang['code']}}_hiddenArea" required>{{$translate[$lang['code']]['description']??$product['description']}}</textarea>
+                                <div class="invalid-feedback">
+                                    Please enter description.
+                                </div>
                         </div>
                     </div>
                     @endforeach
@@ -114,10 +120,13 @@
                                     for="exampleFormControlSelect1">{{translate('category')}}<span
                                         class="input-label-secondary">*</span></label>
                                 <select name="category_id" id="category-id" class="form-control js-select2-custom"
-                                    onchange="getRequest('{{url('/')}}/admin/product/get-categories?parent_id='+this.value,'sub-categories')">
+                                    onchange="getRequest('{{url('/')}}/admin/product/get-categories?parent_id='+this.value,'sub-categories')" required>
                                     <option value="">---{{translate('select')}}---</option>
                                     <?php echo $options; ?>
                                 </select>
+                                <div class="invalid-feedback">
+                                        Please select category.
+                                    </div>
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -127,11 +136,14 @@
                                 <input type="text" min="1" step="1" value="{{$product['product_code']}}"
                                     name="product_code" style="text-transform: uppercase;" class="form-control"
                                     placeholder="{{ translate('Product_Code') }}" required>
+                                    <div class="invalid-feedback">
+                                        Please select product code.
+                                    </div>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <label class="input-label" for="exampleFormControlInput1">{{translate('Unit')}}</label>
-                            <select name="unit_id" id="" class="form-control js-select2-custom required-select">
+                            <select name="unit_id" id="" class="form-control js-select2-custom required-select" required>
                                 <option disabled selected>Please Select Unit</option>
                                 @foreach($units as $unit)
                                 <option value="{{$unit->id}}" {{ $unit->id == $product->unit_id ? 'selected' : ''}}
@@ -139,6 +151,9 @@
                                 </option>
                                 @endforeach
                             </select>
+                            <div class="invalid-feedback">
+                                    Please select unit.
+                                </div>
                         </div>
 
                         <div class="col-sm-6">

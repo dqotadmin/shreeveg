@@ -25,7 +25,7 @@
 
     <div class="card">
         <div class="card-body">
-            <form action="{{route('admin.unit.update',[$units['id']])}}" method="post" enctype="multipart/form-data">
+            <form action="{{route('admin.unit.update',[$units['id']])}}" method="post" id="timeForm" enctype="multipart/form-data" class="needs-validation form_customer" novalidate>
             @csrf
                    
                     <div class="row align-items-end g-4" style="margin-top: 40px;">
@@ -33,7 +33,10 @@
                             <label class="form-label" for=" ">{{ translate('Unit') }} {{ translate('Title') }}
                             </label>
                             <input type="text" name="title" class="form-control"  value="{{$units['title']}}"
-                                placeholder="{{ translate('Ex: gm') }}" maxlength="255" >
+                                placeholder="{{ translate('Ex: gm') }}" maxlength="255" required>
+                                <div class="invalid-feedback">
+                                    Please enter unit title.
+                                </div>
                         </div>
 
                         <div class="col-sm-6">
@@ -41,7 +44,10 @@
                                 {{ translate('Description') }}
                             </label>
                             <input type="text" name="description" class="form-control" value="{{$units->description}}"
-                                placeholder="{{ translate('Ex: gram') }}" maxlength="255">
+                                placeholder="{{ translate('Ex: gram') }}" maxlength="255" required>
+                                <div class="invalid-feedback">
+                                    Please enter unit description.
+                                </div>
                         </div>
                       
                         <input name="position" value="0" hidden>

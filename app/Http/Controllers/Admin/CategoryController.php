@@ -154,14 +154,11 @@ class CategoryController extends Controller
      */
     function store(Request $request): RedirectResponse
     {
-
         $request->validate([
             'category_type' => 'required',
-            'name' => 'required|unique:categories',
+            'name' => 'required|unique:categories,name',
             'category_code' => 'required|unique:categories',
-            'title_silver' => 'required',
-            'title_gold' => 'required',
-            'title_platinum' => 'required',
+           
         ]);
 
         foreach ($request->name as $name) {
@@ -170,7 +167,6 @@ class CategoryController extends Controller
                 return back();
             }
         }
-
         //uniqueness check
         $parent_id = $request->parent_id ?? 0;
         $all_category = $this->category->where(['parent_id' => $parent_id])->pluck('name')->toArray();
@@ -188,10 +184,11 @@ class CategoryController extends Controller
         }
         //into db
         $category = $this->category;
-        $category->name = $request->name[array_search('en', $request->lang)];
-        $category->title_silver = $request->title_silver[array_search('en', $request->lang)];
-        $category->title_gold = $request->title_gold[array_search('en', $request->lang)];
-        $category->title_platinum = $request->title_platinum[array_search('en', $request->lang)];
+
+        $category->name = @$request->name[array_search('en', $request->lang)];
+        $category->title_silver = @$request->title_silver[array_search('en', $request->lang)];
+        $category->title_gold = @$request->title_gold[array_search('en', $request->lang)];
+        $category->title_platinum = @$request->title_platinum[array_search('en', $request->lang)];
 
         $category->image = $image_name;
         $category->category_code = $request->category_code;

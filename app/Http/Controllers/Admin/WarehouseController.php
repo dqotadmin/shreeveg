@@ -114,13 +114,11 @@ class WarehouseController extends Controller
      */
     function store(Request $request): RedirectResponse
     {  
-       
         $request->validate([
             'name'  => 'required|unique:warehouses',
             'code'  => 'required|unique:warehouses',
             'address'  => 'required',
-            'brn_number'  => 'required',
-            'msme_number'  => 'required',
+        
         ]); 
              $revise = $deliver =  $order_cancel =  $pre_order = [];
         // echo '<pre>';
@@ -210,12 +208,14 @@ class WarehouseController extends Controller
     public function update(Request $request, $id): RedirectResponse
     {
         $request->validate([
+            'name'  => ['required',
+                        Rule::unique('warehouses')->ignore($id)],
+            'code'  => ['required',
+                    Rule::unique('warehouses')->ignore($id)],
+            // |unique:warehouses',
             'address'  => 'required',
-            'brn_number'  => 'required',
-            'msme_number'  => 'required',
-            'open_time'	  => 'required',
-            'close_time'  => 'required',	
         ]);
+      
             // $check_unique =  $this->warehouse->find($id);
         $revise = [];
         $revise = $deliver =  $order_cancel =  $pre_order = [];

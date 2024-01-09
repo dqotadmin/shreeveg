@@ -5821,3 +5821,15 @@ column-gap: 2px;
 }
 
 .row.customrow .form-control{padding: 5px 5px;}
+.gray-border{
+  border: 0.0625rem solid #e7eaf3  !important;
+
+}
+.black-color{
+  color:  #1e2022  !important;
+
+}
+/* .js-select2-custom .required-select .custom-select .select2-hidden-accessible
+.custom-select.is-invalid, .was-validated .custom-select:invalid {
+  border-color: #ed4c78 !important;
+} */

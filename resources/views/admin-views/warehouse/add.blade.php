@@ -106,7 +106,7 @@
 
                                     <div class="col-sm-6">
                                         <label class="form-label"
-                                            for="exampleFormControlInput1">{{ translate('Warehouse Start Time') }}
+                                            for="exampleFormControlInput1">{{ translate('Warehouse Open Time') }}
                                         </label>
                                         <input type="time" name="open_time" class="form-control" maxlength="255" value="{{ config('custom.start_time') }}" required>
                                         <div class="invalid-feedback">
@@ -141,13 +141,13 @@
                                     <div class="col-sm-6">
                                         <label class="form-label"
                                             for="exampleFormControlInput1">{{ translate('BRN Number') }} </label>
-                                        <input type="text" name="brn_number" class="form-control manually-border-color" maxlength="255">
+                                        <input type="text" name="brn_number" class="form-control manually-border-color"  >
                                     </div>
 
                                     <div class="col-sm-6">
                                         <label class="form-label"
                                             for="exampleFormControlInput1">{{ translate('MSME Number') }} </label>
-                                        <input type="text" name="msme_number" class="form-control manually-border-color" maxlength="255">
+                                        <input type="text" name="msme_number" class="form-control manually-border-color" >
 
                                     </div>
                                 </div>
@@ -204,9 +204,13 @@
                                                             title="{{ translate('This value is the radius from your branch location, and customer can order inside  the circle calculated by this radius. The coverage area value must be less or equal than 1000.') }}">
                                                         </i>
                                                     </label>
+                                                    
                                                     <input type="number" name="coverage" min="1" max="1000"
-                                                        class="form-control manually-border-color" placeholder="{{ translate('Ex : 3') }}"
+                                                        class="form-control" placeholder="{{ translate('Ex : 3') }}" required
                                                         value="{{ old('coverage') }}">
+                                                        <div class="invalid-feedback">
+                                                            Please enter coverage (km).
+                                                        </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -293,7 +297,7 @@
                                     <table class="table table-bordered" id="box-pre-order-pair">
                                         <tr>
                                             <th>Start Time</th>
-                                            <th> End Time</th>
+                                            <th> End Time</th> 
                                             <!-- <th> <button type="button" id="add-pre-order-pair"
                                                     class="remove-pre-order-pair btn btn-outline-success">Add
                                                     More</button> </th> -->
@@ -303,10 +307,10 @@
 
 
                                             <td><input type="time" name="pre_order_open_time[]"
-                                                    class="form-control input-pre-order-pair manually-border-color" required />
+                                                    class="form-control input-pre-order-pair manually-border-color" />
                                             </td>
                                             <td><input type="time" name="pre_order_close_time[]"
-                                                    class="form-control input-pre-order-pair manually-border-color" required />
+                                                    class="form-control input-pre-order-pair manually-border-color" />
                                             </td>
                                             <!-- <td><button type="button"
                                                     class="remove-pre-order-pair btn btn-outline-danger">Remove</button>

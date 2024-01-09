@@ -20,6 +20,7 @@ class Product extends Model
         'created_at'  => 'datetime',
         'updated_at'  => 'datetime',
         'is_featured'  => 'integer',
+        'group_ids' => 'string',
     ];
 
     public function translations(): \Illuminate\Database\Eloquent\Relations\MorphMany
@@ -88,7 +89,7 @@ class Product extends Model
 
     public function unit()
     {
-        return $this->belongsTo(Unit::class,'unit_id');
+        return $this->belongsTo(Unit::class, 'unit_id');
     }
     public function warehouseProducts()
     {

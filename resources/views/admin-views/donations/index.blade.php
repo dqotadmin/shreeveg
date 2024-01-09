@@ -20,7 +20,7 @@
         <div class="col-sm-12 col-lg-12">
             <div class="btn--container justify-content-end m-2">
                 
-                <a type="button"  href="{{route('admin.product.donations.create')}}" class="btn btn--primary">{{translate('Add new')}}</a>
+                <a type="button"  href="{{route('admin.store.donations.create')}}" class="btn btn--primary">{{translate('Add new')}}</a>
                 
             </div>
             </div>
@@ -62,7 +62,6 @@
                         <th class="border-0">{{translate('quantity')}}</th>
                         <th class="border-0">{{translate('date')}}</th>
                        
-                        <th class="text-center border-0">{{translate('action')}}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -79,7 +78,12 @@
                        
                         <td>
                             <span class="d-block font-size-sm text-body text-trim-25">
-                                {{ $row->store_id?$row->storeDetail->name:''  }} 
+                                @if($row->store_id)
+                                {{ $row->storeDetail->name }} 
+                                @else
+                                <b>{{ $row->warehouseDetail->name }} <br>(Self)</b>
+                                @endif
+                                
                             </span>
                         </td>
                       

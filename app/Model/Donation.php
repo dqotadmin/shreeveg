@@ -14,7 +14,7 @@ class Donation extends Model
   {
     return $this->belongsTo(Warehouse::class, 'warehouse_id');
   }
-  public function Store()
+  public function storeDetail()
   {
     return $this->belongsTo(Store::class, 'store_id');
   }

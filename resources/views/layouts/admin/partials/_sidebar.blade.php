@@ -437,7 +437,29 @@
                                 </li>
                                 @endif
                             @endif
+
+                            @if(in_array(auth('admin')->user()->admin_role_id,[3,6,7]))
+                            <li class="navbar-vertical-aside-has-menu ">
+                                <a class="js-navbar-vertical-aside-menu-link nav-link"
+                                    href="{{route('admin.store.donations.index')}}"
+                                    title="{{translate('donations')}}">
+                                    <i class="tio-map nav-icon"></i>
+                                    <span
+                                        class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('donations')}}</span>
+                                </a>
+                            </li>
+                            @endif
                         @endif
+                        
+                       
+                        {{-- <li
+                            class="nav-item {{Request::is('admin/product/donations*')?'active':''}} {{Request::is('admin/product/donations')?'active':''}}">
+                            <a class="nav-link " href="{{route('admin.product.donations.index')}}" title="{{translate('donations')}}">
+                                <span class="tio-circle nav-indicator-icon"></span>
+                                <span class="text-truncate">{{translate('donations')}}</span>
+                            </a>
+                        </li> --}}
+                        
 
                         @if(auth('admin')->user()->admin_role_id == 8 || auth('admin')->user()->admin_role_id == 3 || auth('admin')->user()->admin_role_id == 1)
                             @if(auth('admin')->user()->admin_role_id == 8 )
@@ -552,15 +574,7 @@
                                 @endif
                             </a>
                         </li>
-                        @if(in_array(auth('admin')->user()->admin_role_id,[3,6,7]))
-                        <li
-                            class="nav-item {{Request::is('admin/product/donations*')?'active':''}} {{Request::is('admin/product/donations')?'active':''}}">
-                            <a class="nav-link " href="{{route('admin.product.donations.index')}}" title="{{translate('donations')}}">
-                                <span class="tio-circle nav-indicator-icon"></span>
-                                <span class="text-truncate">{{translate('donations')}}</span>
-                            </a>
-                        </li>
-                        @endif
+                        
                         <!-- <li class="nav-item {{Request::is('admin/product/bulk-import')?'active':''}}">
                                     <a class="nav-link " href="{{route('admin.product.bulk-import')}}"
                                         title="{{translate('bulk_import')}}">
@@ -920,6 +934,17 @@
                                 <i class="tio-settings nav-icon"></i>
                                 <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
                                     {{translate('Business Setup')}}
+                                </span>
+                            </a>
+                        </li>
+                        <li
+                            class="navbar-vertical-aside-has-menu {{Request::is('admin/business-settings/groups*')?'active':''}}">
+                            <a class="js-navbar-vertical-aside-menu-link nav-link"
+                                href="{{route('admin.business-settings.groups.index')}}"
+                                title="{{translate('groups')}}">
+                                <i class="tio-settings nav-icon"></i>
+                                <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                    {{translate('groups')}}
                                 </span>
                             </a>
                         </li>

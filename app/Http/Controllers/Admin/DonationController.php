@@ -73,8 +73,12 @@ class DonationController extends Controller
 
         if ($request->has('search') && $search) {
             $key = explode(' ', $request['search']);
-            $rows->orWhereHas('productDetail', function ($q1) use ($search) {
-                $q1->where('name', 'like', "%{$search}%");
+            $rows->whereHas('productDetail', function ($q1) use ($search) {
+                $q1->where('name', 'like', "%{$search}%")
+                    ->orWhere('product_code', 'like', "%{$search}%")
+                    ->orWhereHas('category', function ($q2) use ($search) {
+                        $q2->where('name', 'like', "%{$search}%");
+                    });
             })->orWhereHas('warehouseDetail', function ($q1) use ($search) {
                 $q1->where('name', 'like', "%{$search}%");
             })->orWhereHas('storeDetail', function ($q1) use ($search) {
@@ -145,7 +149,7 @@ class DonationController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             $msg = $e->getMessage();
-            dd($msg);
+            //dd($msg);
             \Session::flash('warning', $msg);
             return redirect()->back()->withInput();
         }

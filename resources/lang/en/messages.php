@@ -2609,4 +2609,6 @@
   'rate_updated_date' => 'Rate updated date',
   'rate list detail' => 'Rate list detail',
   'Ordering value already exists. Choose another value.' => 'Ordering value already exists. Choose another value.',
+  'donations' => 'Donations',
+  'donate products' => 'Donate products',
 );

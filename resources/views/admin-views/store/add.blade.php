@@ -21,8 +21,7 @@
         </h1>
     </div>
     <!-- End Page Header -->
-    <form action="{{route('admin.store.store')}}" method="post" enctype="multipart/form-data">
-
+    <form action="{{route('admin.store.store')}}" method="post" id="timeForm" enctype="multipart/form-data" class="needs-validation form_customer" novalidate>
         <div class="row g-2">
             <div class="col-sm-12 col-lg-12">
                 <div class="card">
@@ -44,15 +43,18 @@
                             <div class="col-sm-6">
                                 <label class="form-label" for=" "> {{ translate('City') }} </label>
                                 @if(auth('admin')->user()->admin_role_id == 3)
-                                <input value="{{auth('admin')->user()->city->city}}" class="form-control" readonly>
+                                <input value="{{auth('admin')->user()->city->city}}" class="form-control manually-border-color" readonly>
                                 <input value="{{auth('admin')->user()->city_id}}" name="city_id" type="hidden" class="form-control" readonly>
                                 @else
-                                <select name="city_id" id="click_on_city" class="sget_city  form-control">
+                                <select name="city_id" id="click_on_city" class="sget_city  form-control" required>
                                     <option value="" disabled selected>Select City</option>
                                     @foreach(\App\Model\City::where('status','1')->get() as $city)
                                     <option value="{{$city->id}}">{{$city->city}}</option>
                                     @endforeach
                                 </select>
+                                <div class="invalid-feedback">
+                                    Please select city.
+                                </div>
                                 @endif
                             </div>
 
@@ -63,8 +65,11 @@
                                 <input value="{{auth('admin')->user()->warehouse->name}}" class="form-control" readonly>
                                 <input value="{{auth('admin')->user()->warehouse_id}}" name="warehouse_id" type="hidden" class="form-control" readonly>
                                 @else
-                                <select name="warehouse_id" id="" class="select_wh_option get_warehouse form-control">
+                                <select name="warehouse_id" id="" class="select_wh_option get_warehouse form-control" required>
                                 </select>
+                                <div class="invalid-feedback">
+                                    Please select warehouse.
+                                </div>
                                 @endif
                                 <span class="warehoues_error"></span>
                             </div>
@@ -88,36 +93,48 @@
                             <label class="form-label" for="exampleFormControlInput1">{{ translate('Store') }}
                                 {{ translate('Name') }} </label>
                             <input type="text" name="name" class="form-control"
-                                placeholder="{{ translate('Ex: Store Name') }}"  maxlength="255">
+                                placeholder="{{ translate('Ex: Store Name') }}"  maxlength="255" required>
+                                <div class="invalid-feedback">
+                                    Please enter store name.
+                                </div>
                         </div>
                         <div class="col-sm-6">
                             <label class="form-label" for="exampleFormControlInput1">{{ translate('Store') }}
                                 {{ translate('Code') }} </label>
                             <input type="text" name="code" class="get_wh_code form-control"
                                 style="text-transform: uppercase;"placeholder="{{ translate('Ex: QUINN1') }}" 
-                                maxlength="255">
+                                maxlength="255" required>
+                                <div class="invalid-feedback">
+                                    Please enter store code.
+                                </div>
                         </div>
                         <div class="col-sm-6">
                             <label class="form-label" for="exampleFormControlInput1">{{ translate('Shop') }}
                                 {{ translate('Licence') }} </label>
-                            <input type="text" name="shop_licence" class="form-control"  
+                            <input type="text" name="shop_licence" class="form-control manually-border-color"  
                                 placeholder="{{ translate('Ex: Shop Licence') }}" maxlength="255">
                         </div>
                         <div class="col-sm-6">
                             <label class="form-label" for="exampleFormControlInput1">
                                 {{ translate('Area') }} </label>
-                            <select name="area_id" id="" class="form-control">
+                            <select name="area_id" id="" class="form-control" required>
                                 <option value="">Select Area</option>
                                 @foreach(\App\Model\CityArea::where('status','1')->get() as $area)
                                 <option value="{{$area->id}}">{{$area->area}}</option>
                                 @endforeach
                             </select>
+                            <div class="invalid-feedback">
+                                    Please enter store area.
+                                </div>
                         </div>
                         <div class="col-sm-6">
                             <label class="form-label" for="exampleFormControlInput1">{{ translate('Store') }}
                                 {{ translate('Address') }} </label>
                             <textarea type="text" name="address" class="form-control"
-                                placeholder="{{ translate('Ex: Address)') }}" maxlength="255"></textarea>
+                                placeholder="{{ translate('Ex: Address)') }}" maxlength="255" required></textarea>
+                                <div class="invalid-feedback">
+                                    Please enter store address.
+                                </div>
                         </div>
                        
                         <div class="col-sm-6">
@@ -134,10 +151,10 @@
                                     ( {{ translate('ratio') }}
                                     3:1 )</small>
                                 <div class="custom-file">
-                                    <input type="file" name="document" id="customFileEg1" class="custom-file-input"
+                                    <input type="file" name="document" id="customFileEg1" class="custom-file-input manually-border-color"
                                         accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*"
                                         oninvalid="document.getElementById('en-link').click()">
-                                    <label class="custom-file-label" for="customFileEg1">{{ translate('choose') }}
+                                    <label class="custom-file-label manually-border-color" for="customFileEg1">{{ translate('choose') }}
                                         {{ translate('file') }}</label>
                                 </div>
 
@@ -160,14 +177,14 @@
                                 <label class="form-label" for="exampleFormControlInput1">
                                     {{ translate('BRN No.') }}
                                 </label>
-                                <input type="text" name="brn_number" class="form-control"
+                                <input type="text" name="brn_number" class="form-control manually-border-color"
                                     placeholder="{{ translate('Ex: BRN No.') }}" maxlength="255">
                             </div>
                             <div class="col-sm-6">
                                 <label class="form-label" for="exampleFormControlInput1">
                                     {{ translate('MSME No.') }}
                                 </label>
-                                <input type="text" name="msme_number" class="form-control"
+                                <input type="text" name="msme_number" class="form-control manually-border-color"
                                     placeholder="{{ translate('Ex: MSME No.') }}" maxlength="255">
                             </div>
                         </div>
@@ -189,14 +206,20 @@
                                     {{ translate('open_time') }}
                                 </label>
                                 <input type="time" name="open_time"
-                                                    class="form-control" required />
+                                                    class="form-control" value="{{ config('custom.start_time') }}" disabled required />
+                               <div class="invalid-feedback">
+                                    Please enter store open time.
+                                </div>
                             </div>
                             <div class="col-sm-6">
                                 <label class="form-label" for="exampleFormControlInput1">
                                     {{ translate('close_time') }}
                                 </label>
                                 <input type="time" name="close_time"
-                                                    class="form-control" required />
+                                                    class="form-control"  value="{{ config('custom.end_time') }}" disabled required />
+                                <div class="invalid-feedback">
+                                    Please enter store close time.
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -249,7 +272,10 @@
                                                 </i>
                                             </label>
                                             <input type="number" name="coverage" min="1" max="1000" class="form-control"
-                                                placeholder="{{ translate('Ex : 3') }}" value="{{ old('coverage') }}">
+                                                placeholder="{{ translate('Ex : 3') }}" value="{{ old('coverage') }}" required>
+                                                <div class="invalid-feedback">
+                                                    Please enter coverage(km).
+                                                </div>
                                         </div>
                                     </div>
                                 </div>

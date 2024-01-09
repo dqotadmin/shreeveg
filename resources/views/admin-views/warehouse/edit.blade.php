@@ -25,8 +25,7 @@
 
     <div class="row g-2">
         <div class="col-sm-12 col-lg-12">
-            <form action="{{route('admin.warehouse.update',[$warehouses['id']])}}" method="post"
-                enctype="multipart/form-data">
+            <form action="{{route('admin.warehouse.update',[$warehouses['id']])}}" method="post" id="timeForm" enctype="multipart/form-data" class="needs-validation form_customer" novalidate>
                 @csrf
                 <div class="row g-2">
                     <div class="col-sm-12">
@@ -47,38 +46,46 @@
                                             for="exampleFormControlInput1">{{ translate('Select City') }}
 
                                         </label>
-                                        <select id="city_code" name="city_id" class="city_code form-control">
+                                        <select id="city_code" name="city_id" class="city_code form-control" required>
                                             <option value="" disabled selected>Select City</option>
-                                            @foreach(\App\Model\City::orderBy('id',
-                                            'DESC')->where(['state_id'=>19])->get() as $city)
+                                            @foreach(\App\Model\City::orderBy('id','DESC')->where(['state_id'=>19])->where('status','1')->get() as $city)
                                             <option value="{{$city['id']}}" id="city_alpha_code_{{$city['id']}} "
                                                 data-val="<?php echo $city->city_code; ?>"
                                                 {{$warehouses->city_id ==$city->id ? 'selected': ''}}>{{$city['city']}}
                                             </option>
                                             @endforeach
                                         </select>
+                                        <div class="invalid-feedback">
+                                            Please select city.
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label class="form-label"
+                                            for="exampleFormControlInput1">{{ translate('Warehouse Code') }} </label>
+                                        <input type="text" name="code" class="form-control city_by_code" value="{{$warehouses->code}}" style="color:green"
+                                            id="city_by_code" required>
+                                        <div class="invalid-feedback">
+                                            Please enter warehouse code.
+                                        </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <label class="form-label"
                                             for="exampleFormControlInput1">{{ translate('Warehouse Name') }} </label>
                                         <input type="text" name="name" value="{{$warehouses->name}}"
-                                            class="form-control" maxlength="255">
+                                            class="form-control" maxlength="255"required>
+                                            <div class="invalid-feedback">
+                                            Please enter warehouse name.
+                                            </div>
                                     </div>
-
-                                    <div class="col-sm-4">
-                                        <label class="form-label"
-                                            for="exampleFormControlInput1">{{ translate('Warehouse Code') }} </label>
-                                        <input type="text" name="code" class="form-control city_by_code" value="{{$warehouses->code}}"
-                                            id="city_by_code">
-                                    </div>
-
                                     <div class="col-sm-4">
                                         <label class="form-label"
                                             for="exampleFormControlInput1">{{ translate('Warehouse Address') }} </label>
-                                        <textarea type="text" name="address" class="form-control"
+                                        <textarea type="text" name="address" class="form-control" required
                                             maxlength="255">{{$warehouses->address}}</textarea>
-
+                                            <div class="invalid-feedback">
+                                            Please enter warehouse address.
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -100,14 +107,20 @@
                                             for="exampleFormControlInput1">{{ translate('Warehouse Open Time') }}
                                         </label>
                                         <input type="time" name="open_time" class="form-control"
-                                            value="{{$warehouses->open_time}}">
+                                            value="{{$warehouses->open_time}}" required>
+                                        <div class="invalid-feedback">
+                                            Please enter warehouse open time.
+                                        </div>
                                     </div>
 
                                     <div class="col-sm-6">
                                         <label class="form-label" for=" ">{{ translate('Warehouse Close Time') }}
                                         </label>
                                         <input type="time" name="close_time" class="form-control"
-                                            value="{{$warehouses->close_time}}">
+                                            value="{{$warehouses->close_time}}" required>
+                                        <div class="invalid-feedback">
+                                            Please enter warehouse close time.
+                                        </div>
 
                                     </div>
                                 </div>
@@ -127,14 +140,14 @@
                                     <div class="col-sm-6">
                                         <label class="form-label"
                                             for="exampleFormControlInput1">{{ translate('BRN Number') }} </label>
-                                        <input type="text" name="brn_number" class="form-control" maxlength="255"
+                                        <input type="text" name="brn_number" class="form-control manually-border-color"  
                                             value="{{$warehouses->brn_number}}">
                                     </div>
 
                                     <div class="col-sm-6">
                                         <label class="form-label"
                                             for="exampleFormControlInput1">{{ translate('MSME Number') }} </label>
-                                        <input type="text" name="msme_number" class="form-control" maxlength="255"
+                                        <input type="text" name="msme_number" class="form-control manually-border-color"  
                                             value="{{$warehouses->msme_number}}">
                                     </div>
                                 </div>
@@ -195,7 +208,10 @@
                                                     </label>
                                                     <input type="number" name="coverage"
                                                         value="{{$warehouses->coverage}}" min="1" max="1000"
-                                                        class="form-control" placeholder="{{ translate('Ex : 3') }}">
+                                                        class="form-control" placeholder="{{ translate('Ex : 3') }}" required>
+                                                        <div class="invalid-feedback">
+                                                            Please enter coverage (km).
+                                                        </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -299,12 +315,12 @@
                                         @foreach(json_decode($warehouses->pre_order_time,true) as $key => $warehouse)
                                         <tr class="row-pre-order-pair">
                                             <td><input type="time" name="pre_order_open_time[]"
-                                                    class="form-control input-pre-order-pair" required
-                                                    value="{{$warehouse['open']}}" />
+                                                    class="form-control input-pre-order-pair manually-border-color" required
+                                                    value="{{@$warehouse['open']}}" />
                                             </td>
                                             <td><input type="time" name="pre_order_close_time[]"
-                                                    class="form-control input-pre-order-pair" required
-                                                    value="{{$warehouse['close']}}" />
+                                                    class="form-control input-pre-order-pair manually-border-color" required
+                                                    value="{{@$warehouse['close']}}" />
                                             </td>
                                             <!-- <td><button type="button"
                                                     class="remove-pre-order-pair btn btn-outline-danger">Remove</button>
@@ -312,6 +328,21 @@
 
                                         </tr>
                                         @endforeach
+                                        @else
+                                        <tr class="row-pre-order-pair">
+                                            <td><input type="time" name="pre_order_open_time[]"
+                                                    class="form-control input-pre-order-pair manually-border-color" 
+                                                    value="" />
+                                            </td>
+                                            <td><input type="time" name="pre_order_close_time[]"
+                                                    class="form-control input-pre-order-pair manually-border-color" 
+                                                    value="" />
+                                            </td>
+                                            <!-- <td><button type="button"
+                                                    class="remove-pre-order-pair btn btn-outline-danger">Remove</button>
+                                            </td> -->
+
+                                        </tr>
                                         @endif
                                     </table>
 

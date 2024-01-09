@@ -32,6 +32,7 @@ use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
 use Rap2hpoutre\FastExcel\FastExcel;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
 {
@@ -198,7 +199,6 @@ class ProductController extends Controller
             'category_id' => 'required',
             'product_code' => 'required|unique:products',
             'unit_id' => 'required',
-            'images' => 'required',
         ], [
             'name.required' => translate('Product name is required!'),
             'name.unique' => translate('Product name must be unique!'),
@@ -398,17 +398,19 @@ class ProductController extends Controller
      * @param $id
      * @return JsonResponse
      */
-    public function update(Request $request, $id): \Illuminate\Http\JsonResponse
+    public function update(Request $request, $id)
     {
-
         Validator::make($request->all(), [
-            'name' => 'required|unique:products',
+            'name' => ['required',
+                          Rule::unique('products')->ignore($id)],
             'description' => 'required',
             'category_id' => 'required',
-            'product_code' => 'required|unique:products',
-            'unit_id' => 'required',
-            'images' => 'required',
-        ], [
+            'product_code' =>  ['required',
+                                  Rule::unique('products')->ignore($id)],
+            'unit_id' =>  ['required',
+                    Rule::unique('products')->ignore($id)],
+        ],
+         [
             'name.required' => translate('Product name is required!'),
             'name.unique' => translate('Product name must be unique!'),
             'category_id.required' => translate('category  is required!'),
@@ -480,7 +482,8 @@ class ProductController extends Controller
             }
         }
 
-        return response()->json([], 200);
+        return redirect()->route('admin.product.list');
+
     }
 
     public function warehouse_rate_insertupdate(Request $request, $id): \Illuminate\Http\JsonResponse

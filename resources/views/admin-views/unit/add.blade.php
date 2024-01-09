@@ -25,7 +25,7 @@
             <div class="col-sm-12 col-lg-12">
                 <div class="card">
                     <div class="card-body pt-sm-0 pb-sm-4">
-                        <form action="{{route('admin.unit.store')}}" method="post" enctype="multipart/form-data">
+                        <form action="{{route('admin.unit.store')}}"  method="post" id="timeForm" enctype="multipart/form-data" class="needs-validation form_customer" novalidate>
                             @csrf
                             @php($data = Helpers::get_business_settings('language'))
                             @php($default_lang = Helpers::get_default_language())
@@ -34,18 +34,21 @@
                                 </ul>
                                 <div class="row align-items-end g-4" style="margin-top: 40px;">
                                         <div class="col-sm-6 ">
-                                            <label class="form-label"
-                                                    for="exampleFormControlInput1">{{ translate('Unit') }} {{ translate('Title') }}
-                                                
+                                            <label class="form-label" for="exampleFormControlInput1">{{ translate('Unit') }} {{ translate('Title') }}
                                             </label>
-                                            <input type="text" name="title" class="form-control" placeholder="{{ translate('Ex: gm') }}" maxlength="255">
+                                            <input type="text" name="title" class="form-control" value="{{old('title')}}" placeholder="{{ translate('Ex: gm') }}" maxlength="255" required>
+                                            <div class="invalid-feedback">
+                                                Please enter unit title.
+                                            </div>
                                         </div>
                                   
                                         <div class="col-sm-6" >
-                                            <label class="form-label"
-                                                    for="exampleFormControlInput1">{{ translate('Unit') }} {{ translate('Description') }}
+                                            <label class="form-label"  for="exampleFormControlInput1">{{ translate('Unit') }} {{ translate('Description') }}
                                             </label>
-                                            <input type="text" name="description" class="form-control" placeholder="{{ translate('Ex: gram') }}" maxlength="255">
+                                            <input type="text" name="description" class="form-control" value="{{old('description')}}" placeholder="{{ translate('Ex: gram') }}" maxlength="255" required>
+                                            <div class="invalid-feedback">
+                                                Please enter unit description.
+                                            </div>
                                         </div>
                                     
                                     <input name="position" value="0" hidden>

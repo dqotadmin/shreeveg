@@ -287,9 +287,10 @@ class ProductController extends Controller
         $product_category = $product->category_id;
         $categories = $this->category->get();
         $options = Helpers::getCategoryDropDown($categories, 0, 0, $product->category_id);
+        $groups = \App\Model\Group::whereStatus(1)->pluck('name', 'id')->toArray();
         $units =  $this->unit->get();
         // dd($product_category);
-        return view('admin-views.product.edit', compact('product', 'product_category', 'options', 'units'));
+        return view('admin-views.product.edit', compact('product', 'product_category', 'options', 'units', 'groups'));
     }
 
     public function warehouse_edit($id): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
@@ -402,23 +403,32 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        Validator::make($request->all(), [
-            'name' => ['required',
-                          Rule::unique('products')->ignore($id)],
-            'description' => 'required',
-            'category_id' => 'required',
-            'product_code' =>  ['required',
-                                  Rule::unique('products')->ignore($id)],
-            'unit_id' =>  ['required',
-                    Rule::unique('products')->ignore($id)],
-        ],
-         [
-            'name.required' => translate('Product name is required!'),
-            'name.unique' => translate('Product name must be unique!'),
-            'category_id.required' => translate('category  is required!'),
-            'product_code.required' => translate('Product code is required!'),
-            'product_code.unique' => translate('Product code must be unique!'),
-        ]);
+        Validator::make(
+            $request->all(),
+            [
+                'name' => [
+                    'required',
+                    Rule::unique('products')->ignore($id)
+                ],
+                'description' => 'required',
+                'category_id' => 'required',
+                'product_code' =>  [
+                    'required',
+                    Rule::unique('products')->ignore($id)
+                ],
+                'unit_id' =>  [
+                    'required',
+                    Rule::unique('products')->ignore($id)
+                ],
+            ],
+            [
+                'name.required' => translate('Product name is required!'),
+                'name.unique' => translate('Product name must be unique!'),
+                'category_id.required' => translate('category  is required!'),
+                'product_code.required' => translate('Product code is required!'),
+                'product_code.unique' => translate('Product code must be unique!'),
+            ]
+        );
 
         $p = $this->product->find($id);
 
@@ -486,7 +496,6 @@ class ProductController extends Controller
         }
 
         return redirect()->route('admin.product.list');
-
     }
 
     public function warehouse_rate_insertupdate(Request $request, $id): \Illuminate\Http\JsonResponse

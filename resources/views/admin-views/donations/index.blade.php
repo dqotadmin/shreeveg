@@ -29,7 +29,7 @@
         <!-- Header -->
         <div class="card-header border-0">
             <div class="card--header justify-content-between max--sm-grow">
-                <h5 class="card-title">{{translate('store orders')}} <span class="badge badge-soft-secondary">{{ $rows->total() }}</span></h5>
+                <h5 class="card-title">{{translate('total donations')}} <span class="badge badge-soft-secondary">{{ $rows->total() }}</span></h5>
                 <form action="{{url()->current()}}" method="GET">
                     <div class="input-group">
                         <input type="search" name="search" class="form-control"

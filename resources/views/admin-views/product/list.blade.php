@@ -156,7 +156,7 @@
                                     <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
                                         <div class="max-85 text-left">
                                             @if (!empty($product->category->name))
-                                                {{ $product->category->name }}
+                                            {{ $product->category->name }}
                                             @endif
                                         </div>
                                     </td>
@@ -171,8 +171,13 @@
                                                     if($stock->total_stock > 0){
                                                         $current_stock =  $stock->total_stock;
                                                     }
-                                                    echo $current_stock;
-                                                    ?>    /({{@$product->unit['title'] }})
+                                                    //echo $current_stock;
+                                                    ?>
+                                                    @if($current_stock <= $stock_limit)
+                                                    <span class="text-danger">  {{$current_stock}} /({{@$product->unit['title'] }})</span>
+                                                    @else
+                                                    {{$current_stock}} /({{@$product->unit['title'] }})
+                                                    @endif
                                                     <?php $warehouse_id = auth('admin')->user()->warehouse_id; $product_id = $product['id'];
                                                 if(\App\Model\WarehouseProduct::where('warehouse_id',$warehouse_id)->where('product_id',$product_id)->exists('product_details')){
                                                 } ?>

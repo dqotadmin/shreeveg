@@ -110,6 +110,7 @@ class ProductController extends Controller
      */
     public function list(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
+        $stock_limit = $this->business_setting->where('key', 'minimum_stock_limit')->first()->value;
         $query = $this->product;
         $authUser = auth('admin')->user();
         if ($authUser->admin_role_id == 3 || $authUser->admin_role_id == 5) {
@@ -132,7 +133,7 @@ class ProductController extends Controller
         }
         $products = $query->latest()->with('category')->paginate(Helpers::getPagination())->appends($query_param);
 
-        return view('admin-views.product.list', compact('products', 'search'));
+        return view('admin-views.product.list', compact('products', 'search', 'stock_limit'));
     }
 
     /**

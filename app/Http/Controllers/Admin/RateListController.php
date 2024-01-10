@@ -141,19 +141,14 @@ class RateListController extends Controller
             $unit = $array['unit_id'][$key];
             $margin = $array['1_slot']['margin'][$key];
             $per_unit_price = $array['1_slot']['per_unit_price'][$key];
-<<<<<<< HEAD
            if($marketPrice === null || $quantity == null){
             $marketPrice = 1;
             $quantity = 1;
         }
  
-=======
-
-
->>>>>>> f54bec7959e4f99cf58afc58bee46cf246c0b360
             // Calculate discount percentage
             $discountPercentage = ($marketPrice - ($offerPrice / $quantity)) / $marketPrice * 100;
-
+ 
             $firstSlotData[] = [
                 'quantity' => $quantity,
                 'offer_price' => $offerPrice,

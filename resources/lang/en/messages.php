@@ -2624,4 +2624,5 @@
   'please fill atleast one order quantity' => 'Please fill atleast one order quantity',
   'donate products' => 'Donate products',
   'please fill atleast one donate quantity' => 'Please fill atleast one donate quantity',
+  'min. purchase' => 'Min. purchase',
 );

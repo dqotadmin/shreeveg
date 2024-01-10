@@ -23,7 +23,7 @@
         <div class="card">
             <div class="card-body">
                 <form action="{{route('admin.business-settings.groups.update',[$row['id']])}}" method="post"
-                      enctype="multipart/form-data">
+                method="post" enctype="multipart/form-data" class="needs-validation form_customer g-2" novalidate >
                     @csrf @method('put')
                     <div class="row g-3">
                         <div class="col-md-6">
@@ -33,6 +33,9 @@
                                         <label class="input-label" for="exampleFormControlInput1">{{translate('name')}}</label>
                                         <input type="text" name="name" value="{{$row['name']}}" class="form-control"
                                             placeholder="{{ translate('Name') }}" required>
+                                            <div class="invalid-feedback">
+                                        Please enter name.
+                                    </div>
                                     </div>
                                 </div>
                                
@@ -46,7 +49,10 @@
                                         <div class="form-group mb-0">
                                             <label class="input-label"
                                                 for="{{translate('description')}}">{{translate('description')}}</label>
-                                            <textarea name="description" class="form-control h--172px " id="">{{$row['description']}}</textarea>
+                                            <textarea name="description" class="form-control h--172px " id="" required>{{$row['description']}}</textarea>
+                                            <div class="invalid-feedback">
+                                        Please enter description.
+                                    </div>
                                         </div>
                                        
                                     </div>

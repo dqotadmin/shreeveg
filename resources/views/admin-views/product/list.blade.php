@@ -161,39 +161,39 @@
                                         </div>
                                     </td>
                                     @if(in_array(auth('admin')->user()->admin_role_id, [3,5]))
-                                    <?php
-                                    foreach(\App\Model\WarehouseProduct::where('warehouse_id',auth('admin')->user()->warehouse_id)->where('product_id',$product->id)->get() as $stock){
-                                   ?>
-                                        <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
                                         <?php
-                                            $current_stock =  0;
+                                        foreach(\App\Model\WarehouseProduct::where('warehouse_id',auth('admin')->user()->warehouse_id)->where('product_id',$product->id)->get() as $stock){
+                                        ?>
+                                        <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
+                                            <?php
+                                                $current_stock =  0;
 
-                                                    if($stock->total_stock > 0){
-                                                        $current_stock =  $stock->total_stock;
-                                                    }
-                                                    echo $current_stock;
-                                                    ?>    /({{@$product->unit['title'] }})
-                                                    <?php $warehouse_id = auth('admin')->user()->warehouse_id; $product_id = $product['id'];
-                                                if(\App\Model\WarehouseProduct::where('warehouse_id',$warehouse_id)->where('product_id',$product_id)->exists('product_details')){
-                                                } ?>
+                                                        if($stock->total_stock > 0){
+                                                            $current_stock =  $stock->total_stock;
+                                                        }
+                                                        echo $current_stock;
+                                                        ?>    /({{@$product->unit['title'] }})
+                                                        <?php $warehouse_id = auth('admin')->user()->warehouse_id; $product_id = $product['id'];
+                                                    if(\App\Model\WarehouseProduct::where('warehouse_id',$warehouse_id)->where('product_id',$product_id)->exists('product_details')){
+                                                    } ?>
+                                                        
                                                     
-                                                   
-                                    </td>
-                                    <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
+                                        </td>
+                                        <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
                                    
-                                        <label class="toggle-switch my-0">
-                                            <input type="checkbox"
-                                                onclick="status_change_alert('{{ route('admin.product.status', [$stock->id, $stock->status ? 0 : 1]) }}', '{{ $stock->status? translate('you want to disable this product'): translate('you want to active this product') }}', event)"
-                                                class="toggle-switch-input" id="stocksCheckbox{{ $product->id }}"
-                                                {{ $stock->status ? 'checked' : '' }}>
-                                            <span class="toggle-switch-label mx-auto text">
-                                                <span class="toggle-switch-indicator"></span>
-                                            </span>
-                                        </label>
-                                    </td>
-                                    <?php
-                                                }
-                                                    ?>
+                                            <label class="toggle-switch my-0">
+                                                <input type="checkbox"
+                                                    onclick="status_change_alert('{{ route('admin.product.status', [$stock->id, $stock->status ? 0 : 1]) }}', '{{ $stock->status? translate('you want to disable this product'): translate('you want to active this product') }}', event)"
+                                                    class="toggle-switch-input" id="stocksCheckbox{{ $product->id }}"
+                                                    {{ $stock->status ? 'checked' : '' }}>
+                                                <span class="toggle-switch-label mx-auto text">
+                                                    <span class="toggle-switch-indicator"></span>
+                                                </span>
+                                            </label>
+                                        </td>
+                                        <?php
+                                            }
+                                        ?>
                                     @else
                                     <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
                                         <label class="toggle-switch my-0">
@@ -212,10 +212,7 @@
                                     </td>
                                        @endif
                                     @if(auth('admin')->user()->admin_role_id != 5)
-
-                                   
-                                  
-                                    @endif
+ 
                                     <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
                                         @if( auth('admin')->user()->admin_role_id == 1 )
                                             <!-- Dropdown -->
@@ -240,9 +237,10 @@
                                             <!-- End Dropdown -->
                                              
                                             </div>
+                                            @endif
+                                        </td>
                                         @endif
                                 
-                                    </td>
                                 </tr>
                             @endforeach
                             </tbody>

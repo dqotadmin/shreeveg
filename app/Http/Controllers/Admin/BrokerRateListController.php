@@ -132,7 +132,7 @@ class BrokerRateListController extends Controller
 
     public function wh_receiver_rate_list(Request $request)
     {
-// dd($request->all());
+        // dd($request->all());
         $query_param = [];
         $search = $request['search'];
         $user_id = auth('admin')->user()->id;
@@ -149,9 +149,17 @@ class BrokerRateListController extends Controller
 
     public function wh_receiver_post_order(Request $request)
     {
+        
         $user = auth('admin')->user();
         // dd( $user, $request->all());
         try {
+            $filteredOrderQtyArray = array_filter($request->order_qty, function ($value) {
+                return $value !== null;
+            });
+            if(!$filteredOrderQtyArray){
+                Toastr::error(translate('please fill atleast one order quantity'));
+                return redirect()->back();
+            }
             DB::beginTransaction();
             $user = auth('admin')->user();
             $broker_rate_list = $this->mTable::find($request->broker_rate_list_id);

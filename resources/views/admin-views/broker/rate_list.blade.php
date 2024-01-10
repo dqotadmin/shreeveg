@@ -85,7 +85,7 @@
                                 </div>
 
                                 <div class="text-right">
-                                    <button type="submit" class="btn btn-primary px-5">{{translate('save')}}</button>
+                                    <button type="submit" class="btn btn-primary px-5 " id="save" >{{translate('save')}}</button>
                                 </div>
                            
                                 
@@ -101,7 +101,8 @@
 @endsection
 
 @push('script_2')
-  <script>
+<script>
+ 
   $(document).ready(function () {
         // Add a class to the order_qty input for easier selection
         $('input[name="order_qty[]"]').on('input', function () {

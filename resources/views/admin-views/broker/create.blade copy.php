@@ -107,13 +107,13 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group mb-0">
-                                        <input type="text" name="available_qty[]" class="form-control gray-border" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
+                                        <input type="text" name="available_qty[]" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
                                             placeholder="Available Qty" >
                                     </div>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group mb-0">
-                                        <input type="text" name="rate[]"  class="form-control gray-border" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
+                                        <input type="text" name="rate[]"  class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
                                             placeholder="Rate" >
                                     </div>
                                 </div>
@@ -121,7 +121,67 @@
                             @endif
 
 
-                            
+                            {{-- <div class="col-md-3">
+                                <div class="form-group mb-0">
+                                    <input type="text" name="title" value="" class="form-control"
+                                        placeholder="first product" required>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group mb-0">
+                                    <select name="unit" class="form-control js-select2-custom">
+                                        <option value="kg">{{translate('kg')}}</option>
+                                        <option value="gm">{{translate('gm')}}</option>
+                                        <option value="ltr">{{translate('ltr')}}</option>
+                                        <option value="pc" >{{translate('pc')}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group mb-0">
+                                    <input type="text" name="title" value="" class="form-control"
+                                        placeholder="Available Qty" required>
+                                        <div class="invalid-feedback">
+                                        Please enter title.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group mb-0">
+                                    <input type="text" name="title" value="" class="form-control"
+                                        placeholder="Rate" required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group mb-0">
+                                    <input type="text" name="title" value="" class="form-control"
+                                        placeholder="first product" required>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group mb-0">
+                                    <select name="unit" class="form-control js-select2-custom">
+                                        <option value="kg">{{translate('kg')}}</option>
+                                        <option value="gm">{{translate('gm')}}</option>
+                                        <option value="ltr">{{translate('ltr')}}</option>
+                                        <option value="pc" >{{translate('pc')}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group mb-0">
+                                    <input type="text" name="title" value="" class="form-control"
+                                        placeholder="Available Qty" required>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group mb-0">
+                                    <input type="text" name="title" value="" class="form-control"
+                                        placeholder="Rate" required>
+                                </div>
+                            </div> --}}
                         </div>
                         @endforeach
                     </div>

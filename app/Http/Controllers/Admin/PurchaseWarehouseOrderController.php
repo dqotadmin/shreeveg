@@ -80,9 +80,9 @@ class PurchaseWarehouseOrderController extends Controller
 
     public function destroy($id)
     {
-        $status =  $this->mTable::find($id);
-        if ($status == 'Pending') {
-            $this->mTable::find($id)->delete();
+        $row =  $this->mTable::find($id);
+        if ($row->status == 'Pending') {
+            $row->delete();
             Toastr::success(translate('order remved'));
             return back();
         } else {

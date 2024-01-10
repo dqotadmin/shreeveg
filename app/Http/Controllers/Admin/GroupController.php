@@ -58,7 +58,6 @@ class GroupController extends Controller
     {
         $request->validate([
             'name' => 'required|max:255',
-            'image' => 'required',
         ], [
             'name.required' => translate('group name is required'),
             'image.required' => translate('Image is required'),

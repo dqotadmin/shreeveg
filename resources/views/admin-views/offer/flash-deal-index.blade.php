@@ -18,24 +18,25 @@
     <!-- End Page Header -->
     <div class="card mb-3">
         <div class="card-body">
-            <form action="{{route('admin.offer.flash.store')}}" method="post" enctype="multipart/form-data">
+            <form action="{{route('admin.offer.flash.store')}}" method="post" id="product_form"
+                enctype="multipart/form-data" class="needs-validation form_customer row g-2" novalidate>
                 @csrf
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label class="form-label">{{ translate('Select Offer Type') }}</label>
                         <div class="d-flex flex-wrap align-items-center form-control border">
                             <label class="form-check form--check mr-2 mr-md-4 mb-0">
-                            <input type="radio" class="form-check-input offer_type" name="offer_type"  value="one_rupee"  > 
-                            <span class="form-check-label"> {{ Helpers::set_symbol(1) }}</span>
+                            <input type="radio" class="form-check-input offer_type gray-color" name="offer_type"  value="one_rupee"  > 
+                            <span class="form-check-label gray-color"> {{ Helpers::set_symbol(1) }}</span>
                             </label>
                             <label class="form-check form--check mb-0">
-                            <input type="radio" class="form-check-input offer_type" name="offer_type"  value="other" checked>
-                            <span class="form-check-label"> {{ translate('Sell') }}</span>
+                            <input type="radio" class="form-check-input offer_type gray-color" name="offer_type"  value="other" checked>
+                            <span class="form-check-label gray-color"> {{ translate('Sell') }}</span>
                             </label>
                         </div>
                     </div>
                 </div>
-                <div class="col-6 manageMinPurchase">
+                <div class="col-3 manageMinPurchase">
                     <div class="form-group mb-0">
                         <label class="input-label" for="exampleFormControlInput1">{{translate('minimum purchase amount')}}</label>
                         <input type="number"  name="min_purchase_amount" value="{{old('min_purchase_amount')}}" class="form-control" placeholder="{{ translate('minimum purchase amount') }}">
@@ -47,11 +48,14 @@
                             <div class="col-12">
                                 <div class="form-group mb-0">
                                     <label class="input-label" for="exampleFormControlInput1">{{translate('warehouse')}}</label>
-                                    <select name="warehouse_id[]" id="" class="form-control chosen-select" multiple>
+                                    <select name="warehouse_id[]" id="" class="form-control chosen-select custom-select" multiple required> 
                                         @foreach(\App\Model\Warehouse::where('deleted_at',null)->get() as $warehouse)
                                         <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
                                         @endforeach
                                     </select>
+                                    <div class="invalid-feedback">
+                                        Please enter warehouse.
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-12">
@@ -59,6 +63,9 @@
                                     <label class="input-label" for="exampleFormControlInput1">{{translate('title')}}</label>
                                     <input type="text" name="title" value="{{old('title')}}" class="form-control"
                                         placeholder="{{ translate('enter title') }}" maxlength="255" required>
+                                        <div class="invalid-feedback">
+                                        Please enter title.
+                                    </div>
                                 </div>
                             </div>
                             
@@ -68,6 +75,9 @@
                                         for="exampleFormControlInput1">{{translate('description')}}</label>
                                     <input type="text" name="description" value="{{old('description')}}" class="form-control"
                                         placeholder="{{ translate('enter description') }}" maxlength="255" required>
+                                        <div class="invalid-feedback">
+                                        Please enter description.
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-6">
@@ -77,6 +87,9 @@
                                     <input type="datetime-local" name="start_date" required id="start_date"
                                         class="js-flatpickr form-control flatpickr-custom" placeholder=""  min="<?=date('Y-m-d\Th:i')?>"
                                         data-hs-flatpickr-options=' '>
+                                        <div class="invalid-feedback">
+                                            Please enter start date.
+                                        </div>
                                     <!-- class="js-flatpickr form-control flatpickr-custom" placeholder="{{ \App\CentralLogics\translate('dd/mm/yy') }}" data-hs-flatpickr-options='{"dateFormat": "Y/m/d", "minDate": "today", "enableTime": true, "inline": true, "timeFormat": "h:i K" }' -->
                                 </div>
                             </div>
@@ -87,6 +100,9 @@
                                     <input type="datetime-local" name="end_date" required id="end_date"
                                         class="js-flatpickr form-control flatpickr-custom" placeholder=" " min="<?=date('Y-m-d\Th:i')?>"
                                         data-hs-flatpickr-options=' '>
+                                        <div class="invalid-feedback">
+                                            Please enter end date.
+                                        </div>
                                 </div>
                             </div>
                             

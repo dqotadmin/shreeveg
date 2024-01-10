@@ -69,8 +69,9 @@
                                 <label for="switch6" data-on-label="on" data-off-label="off"></label>
                             </div>
                         </div>
-                        <form action="{{env('APP_MODE')!='demo'?route('admin.business-settings.web-app.mail-config'):'javascript:'}}" method="post"
-                            enctype="multipart/form-data">
+                        <form action="{{env('APP_MODE')!='demo'?route('admin.business-settings.web-app.mail-config'):'javascript:'}}" 
+                        method="post" enctype="multipart/form-data" class="needs-validation form_customer g-2" novalidate>
+                         
                             @csrf
                             @if(isset($config))
                                 <div class="row mt-3">
@@ -78,42 +79,66 @@
                                         <label class="form-label">{{translate('mailer')}} {{translate('name')}}</label><br>
                                         <input type="text" placeholder="{{ translate('ex : Alex') }}" class="form-control" name="name"
                                             value="{{env('APP_MODE')!='demo'?$data['name']:''}}" required>
+                                            <div class="invalid-feedback">
+                                            Please enter mailer name.
+                                            </div>
                                     </div>
 
                                     <div class="form-group col-md-6">
                                         <label class="form-label">{{translate('host')}}</label><br>
                                         <input type="text" class="form-control" name="host" value="{{env('APP_MODE')!='demo'?$data['host']:''}}" required>
+                                        <div class="invalid-feedback">
+                                            Please enter host.
+                                            </div>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label class="form-label">{{translate('driver')}}</label><br>
                                         <input type="text" class="form-control" name="driver" value="{{env('APP_MODE')!='demo'?$data['driver']:''}}" required>
+                                        <div class="invalid-feedback">
+                                            Please enter driver.
+                                            </div>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label class="form-label">{{translate('port')}}</label><br>
                                         <input type="text" class="form-control" name="port" value="{{env('APP_MODE')!='demo'?$data['port']:''}}" required>
+                                        <div class="invalid-feedback">
+                                            Please enter port.
+                                            </div>
                                     </div>
 
                                     <div class="form-group col-md-6">
                                         <label class="form-label">{{translate('username')}}</label><br>
                                         <input type="text" placeholder="{{ translate('ex : ex@yahoo.com') }}" class="form-control" name="username"
                                             value="{{env('APP_MODE')!='demo'?$data['username']:''}}" required>
+                                            <div class="invalid-feedback">
+                                            Please enter username.
+                                            </div>
                                     </div>
 
                                     <div class="form-group col-md-6">
                                         <label class="form-label">{{translate('email')}} {{translate('id')}}</label><br>
                                         <input type="text" placeholder="{{ translate('ex : ex@yahoo.com') }}" class="form-control" name="email"
                                             value="{{env('APP_MODE')!='demo'?$data['email_id']:''}}" required>
+                                            <div class="invalid-feedback">
+                                            Please enter email-id.
+                                            </div>
                                     </div>
 
                                     <div class="form-group col-md-6">
                                         <label class="form-label">{{translate('encryption')}}</label><br>
                                         <input type="text" placeholder="{{ translate('ex : tls') }}" class="form-control" name="encryption"
                                             value="{{env('APP_MODE')!='demo'?$data['encryption']:''}}" required>
+                                            <div class="invalid-feedback">
+                                            Please enter encryption.
+                                            </div>
                                     </div>
 
                                     <div class="form-group col-md-6">
                                         <label class="form-label">{{translate('password')}}</label><br>
                                         <input type="text" class="form-control" name="password" value="{{env('APP_MODE')!='demo'?$data['password']:''}}" required>
+                                        <div class="invalid-feedback">
+                                            Please enter password.
+                                            </div>
                                     </div>
                                 </div>
                                 <div class="btn--container justify-content-end">

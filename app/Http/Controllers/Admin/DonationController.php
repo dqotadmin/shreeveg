@@ -108,8 +108,14 @@ class DonationController extends Controller
 
     public function store(Request $request)
     {
-        //dd($request->all());
         try {
+            $filteredOrderQtyArray = array_filter($request->qty, function ($value) {
+                return $value !== null;
+            });
+            if(!$filteredOrderQtyArray){
+                Toastr::error(translate('please fill atleast one donate quantity'));
+                return redirect()->back();
+            }
             DB::beginTransaction();
             $request->validate([
                 'product_id/*' => 'required',

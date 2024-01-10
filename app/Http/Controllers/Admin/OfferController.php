@@ -70,7 +70,6 @@ class OfferController extends Controller
             'title' => 'required|max:255',
             'start_date' => 'required',
             'end_date' => 'required',
-            'image' => 'required',
         ], [
             'title.required' => translate('Title is required'),
         ]);

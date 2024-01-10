@@ -85,7 +85,8 @@ class POSController extends Controller
             ->when($keyword, function ($query) use ($key) {
                 return $query->where(function ($q) use ($key) {
                     foreach ($key as $value) {
-                        $q->orWhere('name', 'like', "%{$value}%");
+                        $q->orWhere('name', 'like', "%{$value}%")
+                            ->orWhere('product_code', 'like', "%{$value}%");
                     }
                 });
             })
@@ -876,7 +877,6 @@ class POSController extends Controller
         $customer->save();
         Toastr::success(translate('Customer added successfully!'));
         return redirect()->route('admin.customer.list');
-
     }
 
     /**

@@ -2,7 +2,8 @@
     <button class="close call-when-done" type="button" data-dismiss="modal" aria-label="Close">
     <span aria-hidden="true">&times;</span>
     </button>
-    @php($whProduct =  Helpers::warehouseProductData($product['id']))
+    <?php $whProduct =  Helpers::warehouseProductData($product['id']); ?>
+    
     <div class="modal--media">
         <!-- Product gallery-->
         <div class="modal--media-avatar">
@@ -14,6 +15,11 @@
             @else
             <img src="{{asset('public/assets/admin/img/160x160/2.png')}}" >
             @endif
+            @if(@$whProduct->discount_upto > 0)
+                <div class="off_bg">
+                    Up to {{$whProduct->discount_upto}}% Off
+                </div>
+            @endif
             <div class="cz-image-zoom-pane"></div>
         </div>
         <!-- Product details-->
@@ -22,13 +28,18 @@
             <span class="product-name"><a href="#" class="h3 mb-2 product-title">{{ Str::limit($product->name, 100) }}</a></span>
             <div class="mb-3 text-dark">
                 <span class="h3 font-weight-normal text-accent mr-1">
+                    @if($whProduct['market_price'] && $whProduct['market_price'] > $whProduct['customer_price'])
+                <strike style="font-size: 12px!important;">
+                {{ Helpers::set_symbol(@$whProduct['market_price']) }} / {{ @$whProduct->unit->title }}
+                </strike><br>
+                @endif
                 {{ Helpers::set_symbol(($whProduct['customer_price']- $discount)) }} / {{ @$whProduct->unit->title }}
                 </span>
-                @if($discount > 0)
+                {{-- @if($discount > 0)
                 <strike style="font-size: 12px!important;">
                 {{ Helpers::set_symbol($whProduct['customer_price']) }}
                 </strike>
-                @endif
+                @endif --}}
             </div>
             @if($discount > 0)
             <div class="mb-3 text-dark">
@@ -94,6 +105,7 @@
                         {{@$product_details_array[$i]['quantity']}}{{ @$whProduct->unit->title }}
                         <strong class="text-dark mx-2 d-inline-block">₹{{@$product_details_array[$i]['offer_price']}} <strike>₹{{@$product_details_array[$i]['market_price']}}</strike></strong>  
                         <span class="bg-danger discountbox px-2 py-1 rounded-sm text-white "> {{@$product_details_array[$i]['discount']}}%</span>
+                        {{@$product_details_array[$i]['per_unit_price']}} /{{ @$whProduct->unit->title }}
                     </div>
                     <?php $i++ ?>
                     @endforeach
@@ -195,6 +207,6 @@
             $('.show-more span').text('{{translate('See Less')}}')
             $(this).addClass('active')
         }
-    })
+    });
     
 </script>

@@ -17,6 +17,8 @@
             </span>
         </h1>
     </div>
+    <?php $stock_limit_row = \App\Model\BusinessSetting::where('key', 'minimum_stock_limit')->first();
+        $stock_limit = $stock_limit_row?$stock_limit_row->value:0; ?>
     <!-- End Page Header -->
     <div class="row gx-2 gx-lg-3">
         <div class="col-sm-12 col-lg-12 mb-3 mb-lg-2">
@@ -219,17 +221,19 @@
             tbody.append(noDataHtml);
         }else{
         $.each(data.data, function (index, item) {
+            var lowStockClass = (item.total_stock <= "{{$stock_limit}}") ? 'text-danger' : '';
+            
             var rowHtml = '<tr>';
             rowHtml += '<td class="pt-1 pb-3  pt-4">' + (index + 1) + '</td>';
             rowHtml += '<td class="pt-1 pb-3  pt-4">' + item.product.name + '</td>'; // Replace with actual property names
-            rowHtml += '<td class="pt-1 pb-3  pt-4">' + item.total_stock;
+            rowHtml += '<td class="pt-1 pb-3  pt-4 ' + lowStockClass + '">' + item.total_stock;
                     if ((item.product.unit)) {
                         rowHtml += ' ' + item.product.unit.title;
                     }
 
                     rowHtml += '</td>'; // Replace with actual property names'
             rowHtml += '</tr>';
-            console.log(item)
+            //console.log(item)
             tbody.append(rowHtml); });
               
             }// ... Your existing logic for displaying data ...

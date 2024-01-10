@@ -179,6 +179,7 @@
                         <th class="border-0">{{translate('image')}}</th>
                         <th class="border-0">{{translate('type')}}</th>
                         <th class="border-0">{{translate('title')}}</th>
+                        <th class="border-0">{{translate('min. purchase')}}</th>
                         <th class="border-0">{{translate('duration')}}</th>
                         <th class="border-0">{{translate('status')}}</th>
                         <th class="border-0">{{translate('publish')}}</th>
@@ -205,6 +206,12 @@
                         <td>
                             <span class="d-block font-size-sm text-body text-trim-25">
                             {{$flash_deal['title']}}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="d-block font-size-sm text-body text-trim-25">
+                            {{$flash_deal['min_purchase_amount']}}
                             </span>
                         </td>
                         

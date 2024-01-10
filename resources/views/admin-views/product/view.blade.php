@@ -101,6 +101,17 @@
                                                     <span>{!! @$product->maximum_order_quantity!!}</span>
 
                                             </div>
+                                            @if($product->group_ids)
+                                            <div>
+                                                <strong class="text--title">{{translate('groups')}} :</strong>
+                                                <?php 
+                                                $groupIds = json_decode($product->group_ids,true);
+                                                $groupNames = \App\Model\Group::whereIn('id', $groupIds)->pluck('name')->implode(', ');
+                                                ?>
+                                                <span>{!! @$groupNames !!}</span>
+
+                                        </div>
+                                            @endif
                                             </td>
                                             <td>
                                             </td>

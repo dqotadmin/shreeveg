@@ -380,7 +380,7 @@
 }
 
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
-    background-color: #5897fb;
+    background-color: #c3c7cd;
     color: #fff
 }
 
@@ -608,7 +608,7 @@
 }
 
 .select2-container--classic .select2-results__option--highlighted[aria-selected] {
-    background-color: #3875d7;
+    background-color: #c2c8d3;
     color: #fff
 }
 

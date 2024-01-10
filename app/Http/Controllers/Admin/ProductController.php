@@ -313,7 +313,7 @@ class ProductController extends Controller
      */
     public function status(Request $request, $id): \Illuminate\Http\RedirectResponse
     {
-        if (auth('admin')->user()->admin_role_id == 3) {
+        if (in_array(auth('admin')->user()->admin_role_id,[3,5] ) ) {
             $product = $this->warehouse_products->find($request->id);
             $product->status = $request->status;
             $product->save();

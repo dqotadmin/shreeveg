@@ -160,12 +160,11 @@
                                             @endif
                                         </div>
                                     </td>
-                                    @if(in_array(auth('admin')->user()->admin_role_id, [3,5]))
-                                        <?php
-                                        foreach(\App\Model\WarehouseProduct::where('warehouse_id',auth('admin')->user()->warehouse_id)->where('product_id',$product->id)->get() as $stock){
-                                        ?>
+                                     @if(in_array(auth('admin')->user()->admin_role_id, [3,5]))
+                                      
                                         <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
                                             <?php
+                                            foreach(\App\Model\WarehouseProduct::where('warehouse_id',auth('admin')->user()->warehouse_id)->where('product_id',$product->id)->get() as $stock){
                                                 $current_stock =  0;
 
                                                     if($stock->total_stock > 0){
@@ -180,12 +179,16 @@
                                                     @endif
                                                     <?php $warehouse_id = auth('admin')->user()->warehouse_id; $product_id = $product['id'];
                                                 if(\App\Model\WarehouseProduct::where('warehouse_id',$warehouse_id)->where('product_id',$product_id)->exists('product_details')){
-                                                } ?>
-                                                    
+                                                } 
+                                            }
+                                        ?> 
                                         </td>
                                      
                                         <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
-                                   
+                                        <?php
+                                        foreach(\App\Model\WarehouseProduct::where('warehouse_id',auth('admin')->user()->warehouse_id)->where('product_id',$product->id)->get() as $stock){
+                                        ?>
+                                        
                                             <label class="toggle-switch my-0">
                                                 <input type="checkbox"
                                                     onclick="status_change_alert('{{ route('admin.product.status', [$stock->id, $stock->status ? 0 : 1]) }}', '{{ $stock->status? translate('you want to disable this product'): translate('you want to active this product') }}', event)"
@@ -195,10 +198,11 @@
                                                     <span class="toggle-switch-indicator"></span>
                                                 </span>
                                             </label>
-                                        </td>
-                                        <?php
+                                            <?php
                                             }
-                                        ?>
+                                        ?> 
+                                        </td>
+                                      
                                     @else
                                     <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
                                         <label class="toggle-switch my-0">
@@ -219,14 +223,14 @@
                                     @if(auth('admin')->user()->admin_role_id != 5)
  
                                     <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
-                                        @if( auth('admin')->user()->admin_role_id == 1 )
                                             <!-- Dropdown -->
                                             <div class="btn--container justify-content-center">
-                                            <a class="action-btn   btn-outline-info" href="{{route('admin.product.view',[$product['id']])}}">
+                                            @if( auth('admin')->user()->admin_role_id == 1 )
+                                                <a class="action-btn   btn-outline-info" href="{{route('admin.product.view',[$product['id']])}}">
                                                     <i class="tio-invisible"></i>
                                                 </a>
-                                                 <a class="action-btn"  href="{{route('admin.product.edit',[$product['id']])}}">
-                                                <i class="tio-edit"></i></a>
+                                                <a class="action-btn"  href="{{route('admin.product.edit',[$product['id']])}}">
+                                                    <i class="tio-edit"></i></a>
                                                 <a class="action-btn btn--danger btn-outline-danger" href="javascript:" onclick="form_alert('product-{{$product['id']}}','{{ translate("Want to delete this") }}')">
                                                     <i class="tio-delete-outlined"></i>
                                                 </a>
@@ -235,14 +239,15 @@
                                                     @csrf @method('delete')
                                                 </form>
                                                 @endif
-                                        @if( auth('admin')->user()->admin_role_id == 3 )
+                                                @if( auth('admin')->user()->admin_role_id == 3 )
 
                                                 <a class="action-btn"  href="{{route('admin.product.warehouse-edit',[$product['id']])}}">
                                                 <i class="tio-money"></i></a>
+                                                @endif
+
                                             <!-- End Dropdown -->
                                              
                                             </div>
-                                            @endif
                                         </td>
                                         @endif
                                 

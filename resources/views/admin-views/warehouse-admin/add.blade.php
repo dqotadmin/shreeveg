@@ -95,7 +95,8 @@
                                         <option value="{{$user->Warehouse->id}}" selected>{{$user->Warehouse->name}}</option>
                                         @else
                                           @foreach(\App\Model\Warehouse::where('status', 1)->where('deleted_at', null)->get() as $warehouse)                                      
-                                        <option value="{{$warehouse['id']}}">{{$warehouse['name']}}</option>
+                                        <option value="{{$warehouse['id']}}" {{ old('warehouse_id') == $warehouse['id'] ? 'selected' : '' }} >{{$warehouse['name']}}</option>
+
                                         @endforeach
                                         @endif
                                     </select>
@@ -203,12 +204,12 @@
                                     <select id="" name="city_id" class="form-control custom-select" required>
                                         <option selected  disabled value="">Select city </option>
                                         @foreach(\App\Model\City::where('status', '1')->orderBy('id', 'DESC')->get() as $city)
-                                        <option value="{{$city['id']}}">{{$city['city']}}</option>
+                                        <option value="{{ $city['id'] }}" {{ old('city_id') == $city['id'] ? 'selected' : '' }}>{{$city['city']}}</option>
                                         @endforeach
                                     </select>
                                     <div class="invalid-feedback">
-                                            Please select city.
-                                            </div>
+                                        Please select city.
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -120,8 +120,10 @@ class WarehouseController extends Controller
             'address'  => 'required',
         
         ]); 
-             $revise = $deliver =  $order_cancel =  $pre_order = [];
+             $revise = $deliver =  $order_cancel =   [];
+            
         // echo '<pre>';
+
         if($request->delivery_open_time){
             foreach($request->delivery_open_time as $deliveryKey => $delivery_open){
                 if(isset($request->delivery_close_time[$deliveryKey])){
@@ -132,16 +134,15 @@ class WarehouseController extends Controller
             }
             $delivery_time = json_encode($deliver,true);
         }
-      
-        if($request->pre_order_open_time){
-         
+        if (!isset($request->pre_order_open_time) || empty($request->pre_order_open_time)) {
+        $pre_order = [];
             foreach($request->pre_order_open_time as $preOrderKey => $pre_order_opentime){
                 if(isset($request->pre_order_close_time[$preOrderKey])){
                     $pre_order[$preOrderKey]['open'] = $pre_order_opentime;
                     $pre_order[$preOrderKey]['close'] = $request->pre_order_close_time[$preOrderKey];
                 }
             }
-            $pre_order_time = json_encode($pre_order,true);
+            $pre_order_time = !empty(json_encode($pre_order)) ? json_encode($pre_order,true): null;
         } 
         //into db
         $warehouse = $this->warehouse;
@@ -159,7 +160,7 @@ class WarehouseController extends Controller
         $warehouse->latitude = $request->latitude;
         $warehouse->longitude = $request->longitude;
         $warehouse->delivery_time =  isset($delivery_time) ? $delivery_time :null ;
-        $warehouse->pre_order_time =  isset($pre_order_time) ?  $pre_order_time : null;
+        $warehouse->pre_order_time =  !empty($pre_order_time) ?  $pre_order_time : null;
         $warehouse->save();
  
         Toastr::success(translate('Warehouse Added Successfully!') );

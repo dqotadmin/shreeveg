@@ -22,33 +22,39 @@
         <!-- End Page Header -->
         <div class="card gx-2 gx-lg-3">
             <div class="card-body">
-{{--                                <form action="{{route('admin.customer.wallet.add-fund-store')}}" method="post" >--}}
-                <form action="javascript:" method="post" id="add_fund">
+                {{-- <form action="{{route('admin.customer.wallet.add-fund-store')}}" method="post" >--}}
+                <form action="javascript:" method="post" id="add_fund" 
+                enctype="multipart/form-data"  class="needs-validation form_customer g-2" novalidate>
                     @csrf
                     <div class="row">
                         <div class="col-sm-6 col-12">
                             <div class="form-group">
                                 <label class="form-label" for="customer">{{translate('customer')}}</label>
                                 <select id='customer' name="customer_id" data-placeholder="{{translate('select_customer')}}" class="js-data-example-ajax form-control h--45px" required>
-
                                 </select>
+                                <div class="invalid-feedback">
+                                        Please select customer name.
+                                    </div>
                             </div>
                         </div>
                         <div class="col-sm-6 col-12">
                             <div class="form-group">
                                 <label class="form-label" for="amount">{{translate('amount')}}</label>
-                                <input type="number" class="form-control h--45px" name="amount" id="amount" step=".01" required>
+                                <input type="number" class="form-control h--45px" name="amount" id="amount" step=".01"oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"  required>
+                                <div class="invalid-feedback">
+                                        Please enter amount.
+                                    </div>
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="form-group">
                                 <label class="form-label" for="referance">{{translate('reference')}} <small>({{translate('optional')}})</small></label>
-                                <input type="text" class="form-control h--45px" name="referance" id="referance">
+                                <input type="text" class="form-control h--45px gray-border" name="referance" id="referance">
                             </div>
                         </div>
                     </div>
                     <div class="btn--container justify-content-end">
-                        <button type="reset" id="reset" class="btn btn-secondary">{{translate('reset')}}</button>
+                        <a type="reset" id="reset" href="{{route('admin.customer.wallet.report')}}" class="btn btn-secondary">{{translate('back')}}</a>
                         <button type="submit" id="submit" class="btn btn-primary">{{translate('submit')}}</button>
                     </div>
                 </form>

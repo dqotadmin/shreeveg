@@ -26,7 +26,7 @@
 
     <div class="row g-2">
         <div class="col-sm-12 col-lg-12">
-            <form action="{{route('admin.warehouse-category.store')}}" method="post" id="timeForm" enctype="multipart/form-data">
+            <form action="{{route('admin.warehouse-category.store')}}" method="post" id="timeForm" enctype="multipart/form-data"  class="needs-validation form_customer g-2" novalidate>
                 @csrf
                 <div class="row g-2">
                     <div class="col-sm-12">
@@ -41,24 +41,30 @@
                                 <div class="row align-items-end g-4" style="padding-top: 50px;">
 
                                     <div class="col-sm-6">
-                                        <select id="city_code" name="group_name" class="city_code form-control">
+                                        <select id="city_code" name="group_name" class="city_code form-control" required>
                                             <option value="" disabled selected>Select Group</option>
                                             @foreach(Helpers::getAlphabet() as $alphabet)
                                             <option value="{{$alphabet}}">{{$alphabet}}</option>
                                             @endforeach
                                         </select>
+                                        <div class="invalid-feedback">
+                                            Please select group name
+                                        </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <label class="form-label"
                                             for="exampleFormControlInput1">{{ translate('Select Category For Grouping') }}
                                         </label>
                                         <select id="city_code" name="category_id[]"
-                                            class="city_code form-control chosen-select" multiple>
+                                            class="city_code form-control chosen-select" multiple required>
                                             @foreach($warehouses as $key=>$warehouse)
                                             <option value="{{$warehouse['category_id']}}">{{$warehouse->getCategory->name}}
                                             </option>
                                             @endforeach
                                         </select>
+                                        <div class="invalid-feedback">
+                                            Please select category name
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-12 mt-3">

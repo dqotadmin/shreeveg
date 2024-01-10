@@ -5,7 +5,7 @@
 @section('content')
 <style>
     .table-striped .form-control{
-        border: 0.0625rem solid #cdcdcd !important;
+        /* border: 0.0625rem solid #cdcdcd !important; */
     }
 </style>
 <?php
@@ -138,6 +138,7 @@
 @endsection
 @push('script_2')
 <script>
+ 
     $('#margin').on('change',function () {
         var selectedMargin = $(this).val();
         $('.child-row').each(function () {
@@ -149,6 +150,17 @@
                 var updatedPrice = parseFloat(avgPrice) + (parseFloat(avgPrice) * parseFloat(selectedMargin) / 100);
     
                 updatedPrice = updatedPrice.toFixed(2);
+               var updatePrice =  $(this).find('.updatePrice').val();
+               console.log(updatePrice)
+                if(updatePrice == 0.00){
+                    $(this).find('.updatePrice').css({
+                    'border': '0.0625rem solid #db0000',
+                    'important': 'true'
+                });
+                    console.log('updatefgdfPrice')
+                }else{
+                }
+                    
                 $(this).find('.updatePrice').val(updatedPrice);
             }
     
@@ -158,6 +170,7 @@
         var margin = $(this).val();
         var row = $(this).closest('tr');
         var product_rate = row.find('.product_rate');
+   
     
         var product_rate = parseFloat(product_rate.val());
      
@@ -173,6 +186,16 @@
             avg_price.val(avgPrice.toFixed(2));
           
         }
+    });
+    $(document).on("input", ".updatePrice", function () {
+        var updatePrice = $(this).val();
+        var row = $(this).closest('tr');
+        if(updatePrice > 0){
+            console.log(updatePrice);
+           row.find('.updatePrice').removeAttr('style');
+          
+        }
+          
     });
     
 </script>

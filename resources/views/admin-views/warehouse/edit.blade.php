@@ -311,24 +311,27 @@
                                                     More</button> </th> -->
 
                                         </tr>
-                                        @if($warehouses->pre_order_time)
+                                        
+                                        @if(isset($warehouses->pre_order_time))
+                                        {{$warehouses->pre_order_time}}
                                         @foreach(json_decode($warehouses->pre_order_time,true) as $key => $warehouse)
-                                        <tr class="row-pre-order-pair">
-                                            <td><input type="time" name="pre_order_open_time[]"
-                                                    class="form-control input-pre-order-pair manually-border-color" required
-                                                    value="{{@$warehouse['open']}}" />
-                                            </td>
-                                            <td><input type="time" name="pre_order_close_time[]"
-                                                    class="form-control input-pre-order-pair manually-border-color" required
-                                                    value="{{@$warehouse['close']}}" />
-                                            </td>
-                                            <!-- <td><button type="button"
-                                                    class="remove-pre-order-pair btn btn-outline-danger">Remove</button>
-                                            </td> -->
+                                            <tr class="row-pre-order-pair">
+                                                <td><input type="time" name="pre_order_open_time[]"
+                                                        class="form-control input-pre-order-pair manually-border-color" required
+                                                        value="{{@$warehouse['open']}}" />
+                                                </td>
+                                                <td><input type="time" name="pre_order_close_time[]"
+                                                        class="form-control input-pre-order-pair manually-border-color" required
+                                                        value="{{@$warehouse['close']}}" />
+                                                </td>
+                                                <!-- <td><button type="button"
+                                                        class="remove-pre-order-pair btn btn-outline-danger">Remove</button>
+                                                </td> -->
 
-                                        </tr>
+                                            </tr>
                                         @endforeach
                                         @else
+                                        {{$warehouses->pre_order_time}}
                                         <tr class="row-pre-order-pair">
                                             <td><input type="time" name="pre_order_open_time[]"
                                                     class="form-control input-pre-order-pair manually-border-color" 
@@ -338,9 +341,7 @@
                                                     class="form-control input-pre-order-pair manually-border-color" 
                                                     value="" />
                                             </td>
-                                            <!-- <td><button type="button"
-                                                    class="remove-pre-order-pair btn btn-outline-danger">Remove</button>
-                                            </td> -->
+                                             
 
                                         </tr>
                                         @endif

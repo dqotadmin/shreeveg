@@ -21,7 +21,7 @@
         </div>
         <!-- End Page Header -->
         <form action="{{route('admin.delivery-man.update',[$delivery_man['id']])}}" method="post"
-                enctype="multipart/form-data">
+                enctype="multipart/form-data" class="needs-validation form_customer g-2" novalidate>
             @csrf
             <div class="card">
                 <div class="card-header">
@@ -41,11 +41,19 @@
                                             <label class="input-label" for="exampleFormControlInput1">{{translate('First Name')}}</label>
                                             <input type="text" name="f_name" value="{{$delivery_man['f_name']}}" class="form-control" placeholder="{{translate('Ex : First Name')}}"
                                                    required>
+                                            <div class="invalid-feedback">
+                                            Please enter first name.
+
+                                            </div>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="input-label" for="exampleFormControlInput1">{{translate('Last Name')}}</label>
                                             <input type="text" name="l_name" value="{{$delivery_man['l_name']}}" class="form-control" placeholder="{{translate('Ex : Last Name')}}"
                                                    required>
+                                            <div class="invalid-feedback">
+                                            Please enter last name.
+
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -55,16 +63,22 @@
                                     <input type="text" name="phone" value="{{$delivery_man['phone']}}" class="form-control"
                                             placeholder="{{ translate('Ex : 017********') }}"
                                             required>
+                                            <div class="invalid-feedback">
+                                            Please enter phone no.
+                                        </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div>
                                         <label class="input-label" for="exampleFormControlInput1">{{translate('Warehouse Name')}}</label>
-                                        <select name="warehouse_id" class="form-control">
+                                        <select name="warehouse_id" class="custom-select">
                                             <option  disabled selected>{{translate('Select Warehouse')}}</option>
                                             @foreach(\App\Model\Warehouse::where('status',1)->where('deleted_at',null)->get() as $warehouse)
                                                 <option value="{{$warehouse['id']}}" {{$warehouse['id']==$delivery_man['warehouse_id']?'selected':''}}>{{$warehouse['name']}}</option>
                                             @endforeach
                                         </select>
+                                        <div class="invalid-feedback">
+                                            Please select warehouse.
+                                        </div>
                                     </div>
                                 </div>
                                 
@@ -86,6 +100,9 @@
                                             {{translate('store')}} {{translate('id')}}
                                         </option>
                                     </select>
+                                    <div class="invalid-feedback">
+                                            Please enter identity type.
+                                        </div>
                                 </div>
                                 <div class="col-md-12">
                                     <label class="input-label" for="exampleFormControlInput1">{{translate('identity')}} {{translate('number')}}</label>
@@ -93,6 +110,9 @@
                                             class="form-control"
                                             placeholder="{{ translate('Ex : DH-23434-LS') }}"
                                             required>
+                                            <div class="invalid-feedback">
+                                        Please enter identity number.
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -108,7 +128,7 @@
                                     <label class="form-label d-block">{{translate('deliveryman')}} {{translate('image')}} <small class="text-danger">* ( {{translate('ratio')}} 1:1 )</small></label>
                                     <div class="custom-file">
                                         <input type="file" name="image" id="customFileUpload" class="custom-file-input h--45px" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*">
-                                        <label class="custom-file-label h--45px" for="customFileUpload"></label>
+                                        <label class="custom-file-label h--45px gray-border" for="customFileUpload"></label>
                                     </div>
                                 </div>
                             </div>
@@ -147,16 +167,25 @@
                             <input type="email" value="{{$delivery_man['email']}}" name="email" class="form-control"
                                     placeholder="{{ translate('Ex : ex@example.com') }}"
                                     required>
-                        </div>
+                                    <div class="invalid-feedback">
+                                        Please enter email.
+                                    </div>
+                                 </div>
 
                         <div class="col-md-4 col-sm-6">
                             <label class="input-label" for="exampleFormControlInput1">{{translate('Password')}}</label>
-                            <input type="text" name="password" class="form-control" placeholder="{{ translate('7+ character') }}">
-                        </div>
+                            <input type="text" name="password" class="form-control gray-border" placeholder="{{ translate('7+ character') }}">
+                            <div class="invalid-feedback">
+                                        Please enter password.
+                                    </div>
+                                </div>
                         <div class="col-md-4 col-sm-6">
                             <label class="input-label" for="exampleFormControlInput1">{{translate('Confirm Password')}}</label>
-                            <input type="text" name="password_confirmation" class="form-control" placeholder="{{ translate('7+ character') }}">
-                        </div>
+                            <input type="text" name="password_confirmation" class="form-control gray-border" placeholder="{{ translate('7+ character') }}">
+                            <div class="invalid-feedback">
+                                        Please enter confirm password.
+                                    </div>
+                                 </div>
                     </div>
                 </div>
             </div>

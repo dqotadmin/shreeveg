@@ -83,10 +83,7 @@ class RateListController extends Controller
         ]);
     }
 
-    function create(Request $request): View|Factory|Application
-    {
-        return view('admin-views.unit.add');
-    }
+ 
 
 
     /**
@@ -101,18 +98,7 @@ class RateListController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function search(Request $request): JsonResponse
-    {
-        $key = explode(' ', $request['search']);
-        $units = $this->unit->where(function ($q) use ($key) {
-            foreach ($key as $value) {
-                $q->orWhere('title', 'like', "%{$value}%");
-            }
-        })->get();
-        return response()->json([
-            'view' => view('admin-views.unit.unit', compact('units'))->render()
-        ]);
-    }
+  
 
     /**
      * @return Factory|View|Application
@@ -136,19 +122,20 @@ class RateListController extends Controller
                 $product_data =   json_decode($findId->product_details, true);
                 //dd($product_data[0]['approx_piece']);
             }
+        
             // Initialize an array to store combined data for the current product
             $combinedData = [];
 
             // Process the first slot
             $firstSlotData = [];
             $quantity = $array['1_slot']['quantity'][$key];
-            $offerPrice = $array['1_slot']['offer_price'][$key];
+            $offerPrice = ($array['1_slot']['offer_price'][$key] ==="NaN")?'0':$array['1_slot']['offer_price'][$key];
             $marketPrice = $array['market_price'][$key];
             $unit = $array['unit_id'][$key];
             $margin = $array['1_slot']['margin'][$key];
             $per_unit_price = $array['1_slot']['per_unit_price'][$key];
-
-
+           
+ 
             // Calculate discount percentage
             $discountPercentage = ($marketPrice - ($offerPrice / $quantity)) / $marketPrice * 100;
 
@@ -167,7 +154,7 @@ class RateListController extends Controller
             // Process the second slot
             $secondSlotData = [];
             $quantity = $array['2_slot']['quantity'][$key];
-            $offerPrice = $array['2_slot']['offer_price'][$key];
+            $offerPrice = ($array['2_slot']['offer_price'][$key]==="NaN")?'0':$array['2_slot']['offer_price'][$key];
             $marketPrice = $array['market_price'][$key];
             $margin = $array['2_slot']['margin'][$key];
             $per_unit_price = $array['2_slot']['per_unit_price'][$key];
@@ -189,7 +176,7 @@ class RateListController extends Controller
             // Process the third slot
             $thirdSlotData = [];
             $quantity = $array['3_slot']['quantity'][$key];
-            $offerPrice = $array['3_slot']['offer_price'][$key];
+            $offerPrice = ($array['3_slot']['offer_price'][$key]==="NaN")?'0':$array['3_slot']['offer_price'][$key];
             $marketPrice = $array['market_price'][$key];
             $margin = $array['3_slot']['margin'][$key];
             $per_unit_price = $array['3_slot']['per_unit_price'][$key];

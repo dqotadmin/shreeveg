@@ -194,7 +194,6 @@ class PurchaseWarehouseOrderController extends Controller
                     $existRow['avg_price_updated_date'] = date('Y-m-d H:i:s');
                 }
             }
-
             $existRow->save();
         }
         if ($is_update) {

@@ -2624,4 +2624,11 @@
   'please fill atleast one order quantity' => 'Please fill atleast one order quantity',
   'donate products' => 'Donate products',
   'please fill atleast one donate quantity' => 'Please fill atleast one donate quantity',
+  'Enter new prices' => 'Enter new prices',
+  'average price updated Successfully!' => 'Average price updated Successfully!',
+  'store price updated Successfully!' => 'Store price updated Successfully!',
+  'confirm_password' => 'Confirm password',
+  'total donations' => 'Total donations',
+  'rate list wed Inserted Successfully!' => 'Rate list wed Inserted Successfully!',
+  'stock not availale for orange' => 'Stock not availale for orange',
 );

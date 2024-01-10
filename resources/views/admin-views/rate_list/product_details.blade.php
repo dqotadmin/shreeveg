@@ -184,41 +184,41 @@
                
                  <td class="pt-1 pb-3 " width="35%">
                      <div class="row customrow">
-                    <input type="text" name="1_slot[quantity][]" class="form-control 1_quantity quantity_<?php echo $key + 1; ?>" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>)"  style="width: 70px;  " 
+                    <input type="number" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"  name="1_slot[quantity][]" class="form-control 1_quantity quantity_<?php echo $key + 1; ?>" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>)"  style="width: 70px;  " 
                     value="{{@$product_details_array[0]['quantity']}}" >
                       
-                    <input type="text" name="1_slot[margin][]" class="form-control 1_discount discount_<?php echo $key + 1; ?>"   style="width: 70px;"   value="{{@$product_details_array[0]['margin']}}" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>)"  >
+                    <input type="number" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"  name="1_slot[margin][]" class="form-control 1_discount discount_<?php echo $key + 1; ?>"   style="width: 70px;"   value="{{@$product_details_array[0]['margin']}}" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>)"  >
                  
-                    <input type="text" class="form-control 1_offer_rate offer_rate_<?php echo $key + 1; ?>" name="1_slot[offer_price][]"  style="width: 70px;"  value="{{@$product_details_array[0]['offer_price']}}">
+                    <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control 1_offer_rate offer_rate_<?php echo $key + 1; ?>" name="1_slot[offer_price][]"  style="width: 70px;"  value="{{@$product_details_array[0]['offer_price']}}">
 
-                        <input type="text"  name="1_slot[per_unit_price][]" id="" style="width: 70px;   padding-left: 8px;border: none;" class="per_unit_rate_<?php echo $key + 1; ?>"  value="{{@$product_details_array[0]['per_unit_price']}}">
+                        <input type="number" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"  name="1_slot[per_unit_price][]" id="" style="width: 70px;   padding-left: 8px;border: none;" class="per_unit_rate_<?php echo $key + 1; ?>"  value="{{@$product_details_array[0]['per_unit_price']}}" readonly>
                      </div>
                  </td>
                  <td class="pt-1 pb-3 ">
                      <div class="row customrow">
-                        <input type="text" name="2_slot[quantity][]" class="form-control 2_quantity 2_quantity_<?php echo $key + 1; ?>"  value="{{@$product_details_array[1]['quantity']}}" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>,'2_')"
+                        <input type="number" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"  name="2_slot[quantity][]" class="form-control 2_quantity 2_quantity_<?php echo $key + 1; ?>"  value="{{@$product_details_array[1]['quantity']}}" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>,'2_')"
                                 style="width: 70px;  ">
                              
-                        <input type="text" name="2_slot[margin][]" class="form-control 2_discount 2_discount_<?php echo $key + 1; ?>" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>,'2_')" style="width: 70px;" value="{{@$product_details_array[1]['margin']}}">
+                        <input type="number" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"  name="2_slot[margin][]" class="form-control 2_discount 2_discount_<?php echo $key + 1; ?>" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>,'2_')" style="width: 70px;" value="{{@$product_details_array[1]['margin']}}">
                         
-                         <input type="text" class="form-control 2_offer_rate 2_offer_rate_<?php echo $key + 1; ?>" name="2_slot[offer_price][]" value="{{@$product_details_array[1]['offer_price']}}"
+                         <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control 2_offer_rate 2_offer_rate_<?php echo $key + 1; ?>" name="2_slot[offer_price][]" value="{{@$product_details_array[1]['offer_price']}}"
                              style="width: 70px;">
 
-                        <input type="text" id="" name="2_slot[per_unit_price][]" style="width: 70px;border: none; padding-left: 8px;" class="2_per_unit_rate_<?php echo $key + 1; ?>" value="{{@$product_details_array[1]['per_unit_price']}}" >
+                        <input type="number" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"  name="2_slot[per_unit_price][]" style="width: 70px;border: none; padding-left: 8px;" class="2_per_unit_rate_<?php echo $key + 1; ?>" value="{{@$product_details_array[1]['per_unit_price']}}" readonly>
                      </div>
                  </td>
                  <td class="pt-1 pb-3 ">
                      <div class="row customrow">
                         
-                     <input type="text" class="form-control 3_quantity 3_quantity_<?php echo $key + 1; ?>" name="3_slot[quantity][]" value="{{@$product_details_array[2]['quantity']}}"  onkeyup="handleFirstDiscountChange(<?php  echo $key + 1; ?>,'3_')"
+                     <input type="number" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"  class="form-control 3_quantity 3_quantity_<?php echo $key + 1; ?>" name="3_slot[quantity][]" value="{{@$product_details_array[2]['quantity']}}"  onkeyup="handleFirstDiscountChange(<?php  echo $key + 1; ?>,'3_')"
                              style="width: 70px;    ">
 
-                    <input type="text" class="form-control 3_discount 3_discount_<?php echo $key + 1; ?>" name="3_slot[margin][]" style="width: 70px;" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>,'3_')"  value="{{@$product_details_array[2]['margin']}}">
+                    <input type="number" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"  class="form-control 3_discount 3_discount_<?php echo $key + 1; ?>" name="3_slot[margin][]" style="width: 70px;" onkeyup="handleFirstDiscountChange(<?php echo $key + 1; ?>,'3_')"  value="{{@$product_details_array[2]['margin']}}">
                          
-                    <input type="text" class="form-control 3_offer_rate   3_offer_rate_<?php echo $key + 1; ?>" name="3_slot[offer_price][]"  
+                    <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control 3_offer_rate   3_offer_rate_<?php echo $key + 1; ?>" name="3_slot[offer_price][]"  
                              style="width: 70px;" value="{{@$product_details_array[2]['offer_price']}}">
                              
-                    <input type="text"  name="3_slot[per_unit_price][]" id="" style="width: 70px;   border: none; padding-left: 8px;" class="3_per_unit_rate_<?php echo $key + 1; ?>" value="{{@$product_details_array[2]['per_unit_price']}}">
+                    <input type="number"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"  name="3_slot[per_unit_price][]" id="" style="width: 70px;   border: none; padding-left: 8px;" class="3_per_unit_rate_<?php echo $key + 1; ?>" value="{{@$product_details_array[2]['per_unit_price']}}" readonly>
                      </div>
                  </td>
                  <td class="" >

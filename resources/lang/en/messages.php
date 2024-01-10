@@ -2631,5 +2631,5 @@
   'total donations' => 'Total donations',
   'rate list wed Inserted Successfully!' => 'Rate list wed Inserted Successfully!',
   'stock not availale for orange' => 'Stock not availale for orange',
-  'Rateer List' => 'Rateer List',
+  'min. purchase' => 'Min. purchase',
 );

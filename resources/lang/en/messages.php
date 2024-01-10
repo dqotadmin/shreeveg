@@ -1,4 +1,4 @@
-<?php return array(
+<?php return array (
   'attribute' => 'Attribute',
   'update' => 'Update',
   'name' => 'Name',
@@ -2623,4 +2623,5 @@
   'group removed!' => 'Group removed!',
   'Select Group' => 'Select Group',
   'total donations' => 'Total donations',
+  'min. purchase' => 'Min. purchase',
 );

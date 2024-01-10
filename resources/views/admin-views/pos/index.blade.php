@@ -51,12 +51,17 @@
                             <div id="items">
                                 <div class="row g-1">
                                     @foreach($products as $product)
+                                    <?php 
+                                        $chkWhProduct =  Helpers::warehouseProductData($product['id']) ?>
+                                    @if($chkWhProduct && $chkWhProduct->status == 1)
+
                                         <div class="order--item-box item-box">
                                             @include('admin-views.pos._single_product',['product'=>$product])
                                         </div>
+                                    @endif
                                     @endforeach
                                 </div>
-                            </div>
+                            </div> 
 
                             <div class="pt-4">
                                 {!!$products->withQueryString()->links()!!}

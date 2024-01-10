@@ -1,7 +1,7 @@
 <div class="product-card card wrapper" onclick="quickView('{{$product->id}}')">
     <?php $offers = Helpers::getWhProductOffers($product->id); ?>
     @if(count($offers )> 0)
-    <div class="ribbon-wrapper-green"><div class="ribbon-green">{{count($offers )}} Offer</div></div>
+    <div class="ribbon-wrapper-green"><div class="ribbon-green"> Offer</div></div>
     @endif
     <?php
     //dd( $product);
@@ -40,7 +40,11 @@
         </div>
         <div class="justify-content-between text-center">
             <div class="product-price text-center">
-                
+                @if($whProduct->market_price && $whProduct->market_price > $whProduct->customer_price)
+                <strike style="font-size: 12px!important;">
+                {{ Helpers::set_symbol(@$whProduct->market_price) }} / {{ @$whProduct->unit->title }}
+                </strike><br>
+                @endif
                 {{ Helpers::set_symbol(@$whProduct->customer_price - $discount) }} / {{ @$whProduct->unit->title }}
             </div>
         </div>

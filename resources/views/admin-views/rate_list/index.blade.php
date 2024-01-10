@@ -64,7 +64,7 @@
                                 <th class="text-center">{{translate('status')}}</th>
                                 <th class="text-center">{{translate('action')}}</th>
                                 @endif
-                            </tr>
+                            </tr> 
                         </thead>
 
                         <tbody id="set-rows">

@@ -34,7 +34,7 @@
                                 <div class="col-3">
                                 <div class="">
                                      <small for=""> Quantity:</small>
-                                     <input type="text" class="form-control" id="global_1_quantity" value="1"
+                                     <input type="number" class="form-control" id="global_1_quantity" value="1"
                                          style="width: 70px;"    >
                                       
                                  </div>
@@ -119,7 +119,7 @@
                             <div class="col-3">
                                  <div class="">
                                      <small for=""> Quantity:</small>
-                                     <input type="text" class="form-control" id="global_3_quantity" value="5"
+                                     <input type="number" class="form-control" id="global_3_quantity" value="5"
                                      style="width: 70px;">
                                     
                                  </div>
@@ -171,7 +171,7 @@
                  <td class="pt-1 pb-3 ">
                      <div class="row">
                          <div class="d-flex align-items-center">
-                             <input type="text" class="form-control market_price" style="width: 70px; margin: 0 10px;"  value="{{ @$whProduct['market_price'] }}"  name="market_price[]" required>/{{ @$product->unit->title }}
+                             <input type="number" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control market_price" style="width: 70px; margin: 0 10px;"  value="{{ @$whProduct['market_price'] }}"  name="market_price[]">/{{ @$product->unit->title }}
                              <input type="hidden" class="form-control" value="{{ $product['id'] }}" style="width: 70px; margin: 0 10px;" name="product_id[]">
                              <input type="hidden" class="form-control" value="{{ $product['unit_id'] }}" style="width: 70px; margin: 0 10px;" name="unit_id[]">
                             

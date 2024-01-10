@@ -110,7 +110,7 @@ class RateListController extends Controller
      */
 
     function store(Request $request)
-    {
+    { 
         $warehouse_id =   auth('admin')->user()->warehouse_id;
         $array = $request->all();
         $productIds = $array['product_id'];
@@ -134,7 +134,10 @@ class RateListController extends Controller
             $unit = $array['unit_id'][$key];
             $margin = $array['1_slot']['margin'][$key];
             $per_unit_price = $array['1_slot']['per_unit_price'][$key];
-           
+           if($marketPrice === null || $quantity == null){
+            $marketPrice = 1;
+            $quantity = 1;
+        }
  
             // Calculate discount percentage
             $discountPercentage = ($marketPrice - ($offerPrice / $quantity)) / $marketPrice * 100;
@@ -158,7 +161,10 @@ class RateListController extends Controller
             $marketPrice = $array['market_price'][$key];
             $margin = $array['2_slot']['margin'][$key];
             $per_unit_price = $array['2_slot']['per_unit_price'][$key];
-
+            if($marketPrice === null || $quantity == null){
+                $marketPrice = 1;
+                $quantity = 1;
+               }
             // Calculate discount percentage
             $discountPercentage = ($marketPrice - ($offerPrice / $quantity)) / $marketPrice * 100;
 
@@ -180,7 +186,10 @@ class RateListController extends Controller
             $marketPrice = $array['market_price'][$key];
             $margin = $array['3_slot']['margin'][$key];
             $per_unit_price = $array['3_slot']['per_unit_price'][$key];
-
+            if($marketPrice === null || $quantity == null){
+                $marketPrice = 1;
+                $quantity = 1;
+               }
             // Calculate discount percentage
             $discountPercentage = ($marketPrice - ($offerPrice / $quantity)) / $marketPrice * 100;
 
@@ -346,74 +355,6 @@ class RateListController extends Controller
 
     // }
 
-    /**
-     * @param $id
-     * @return Factory|View|Application
-     */
-    public function edit($id): View|Factory|Application
-    {
-        $units = $this->unit->withoutGlobalScopes()->with('translations')->find($id);
-        return view('admin-views.unit.edit', compact('units'));
-    }
-
-    /**
-     * @param Request $request
-     * @return RedirectResponse
-     */
-    public function status(Request $request): RedirectResponse
-    {
-        $unit = $this->unit->find($request->id);
-        $unit->status = $request->status;
-        $unit->save();
-        Toastr::success(translate('Unit status updated!'));
-        return back();
-    }
-
-    /**
-     * @param Request $request
-     * @param $id
-     * @return RedirectResponse
-     */
-    public function update(Request $request, $id): RedirectResponse
-    {
-        $request->validate([
-            'title' =>  [
-                'required',
-                Rule::unique('units')->ignore($id)
-            ],
-
-            'description' => 'required',
-        ]);
-
-
-        if (strlen($request->title) > 10) {
-            toastr::error(translate('Unit title is too long!'));
-            return back();
-        }
-
-        $unit = $this->unit->find($id);
-        $unit->title = $request->title;
-        $unit->description = $request->description;
-        $unit->save();
-
-        Toastr::success(translate('Unit updated successfully!'));
-        return redirect()->route('admin.unit.list');
-    }
-
-    /** 
-     * @param Request $request
-     * @return RedirectResponse
-     */
-    public function delete(Request $request): RedirectResponse
-    {
-        $unit = $this->unit->find($request->id);
-
-        if ($unit) {
-            $unit->delete();
-            Toastr::success(translate('unit removed!'));
-        } else {
-            Toastr::warning(translate('unit not removed!'));
-        }
-        return back();
-    }
+    
+ 
 }

@@ -263,7 +263,7 @@ class Helpers
             }
         }
 
-
+        //dd($data);
         return $data;
     }
     public static function get_business_settings($name)
@@ -996,7 +996,7 @@ class Helpers
                 else
                     $sel = ($category['id'] == $selected) ? 'selected' : '';
 
-                    $name = str_repeat("&nbsp;", $level * 5) . '<strong>' . $category['name'] . '</strong>'; // Indent based on level and make text bold
+                $name = str_repeat("&nbsp;", $level * 5) . '<strong>' . $category['name'] . '</strong>'; // Indent based on level and make text bold
                 $colorClass = isset($colors[$level]) ? $colors[$level] : '';
                 $html .= "<option value='{$category['id']}' {$sel} class='{$colorClass}' > $name</option>";
 

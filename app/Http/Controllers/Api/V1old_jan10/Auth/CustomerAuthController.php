@@ -379,16 +379,15 @@ class CustomerAuthController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'full_name' => 'required',
-            'gender' => 'required|in:Male,Female,Other',
+            'f_name' => 'required',
+            'l_name' => 'required',
+            'gender' => 'required',
             'email' => '',
             'phone' => 'required|unique:users',
             'password' => 'required|min:6',
-            'confirm_password' => 'required|same:password',
-            'language' => 'required|in:hi,en'
         ], [
-            'full_name.required' => 'The full name field is required.',
-            'language.required' => 'The language should be hindi or english.',
+            'f_name.required' => 'The first name field is required.',
+            'l_name.required' => 'The last name field is required.',
         ]);
 
         if ($validator->fails()) {
@@ -411,12 +410,10 @@ class CustomerAuthController extends Controller
         }
 
         $temporary_token = Str::random(40);
-        $tmpName = $this->get_f_l_name($request->full_name);
 
         $user = $this->user->create([
-            'full_name' => $request->full_name,
-            'f_name' => $tmpName['f_name'],
-            'l_name' => $tmpName['l_name'],
+            'f_name' => $request->f_name,
+            'l_name' => $request->l_name,
             'email' => $request->email ?? '',
             'phone' => $request->phone,
             'gender' => $request->gender,
@@ -438,21 +435,6 @@ class CustomerAuthController extends Controller
         $token = $user->createToken('RestaurantCustomerAuth')->accessToken;
 
         return response()->json(['token' => $token], 200);
-    }
-
-    public static function get_f_l_name($string)
-    {
-        $words = explode(' ', $string);
-        if (count($words) == 1) {
-            $firstName = array_pop($words);
-            $lastName = null;
-        } else {
-            $lastName = array_pop($words);
-            $firstName = implode(' ', $words);
-        }
-        $data['f_name'] = $firstName;
-        $data['l_name'] = $lastName;
-        return $data;
     }
 
     /**

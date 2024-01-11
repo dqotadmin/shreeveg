@@ -37,8 +37,7 @@ class ProductController extends Controller
         private SearchedProduct $searched_product,
         private Translation $translation,
         private VisitedProduct $visited_product
-    ) {
-    }
+    ){}
 
 
     /**
@@ -103,9 +102,9 @@ class ProductController extends Controller
         $searched_count->save();
 
         $category_ids = [];
-        foreach ($products['products'] as $searched_result) {
+        foreach ($products['products'] as $searched_result){
             $categories =  json_decode($searched_result['category_ids']);
-            if (!is_null($categories) && count($categories) > 0) {
+            if(!is_null($categories) && count($categories) > 0) {
                 foreach ($categories as $value) {
                     if ($value->position == 1) {
                         $category_ids[] = $value->id;
@@ -121,7 +120,7 @@ class ProductController extends Controller
                 'product_id' => $searched_result->id
             ]);
 
-            if (auth('api')->user()) {
+            if (auth('api')->user()){
                 $product_searched_by_user = $this->product_searched_by_user->firstOrCreate([
                     'user_id' => $auth_user->id,
                     'product_id' => $searched_result->id
@@ -133,7 +132,7 @@ class ProductController extends Controller
         }
 
         $category_ids = array_unique($category_ids);
-        foreach ($category_ids as $cat_id) {
+        foreach ($category_ids as $cat_id){
             $searched_category_data = $this->searched_category->firstOrCreate([
                 'recent_search_id' => $recent_search->id,
                 'category_id' => $cat_id,
@@ -142,7 +141,7 @@ class ProductController extends Controller
                 'category_id' => $cat_id,
             ]);
 
-            if (auth('api')->user()) {
+            if (auth('api')->user()){
                 $category_searched_by_user = $this->category_searched_by_user->firstOrCreate([
                     'user_id' => $auth_user->id,
                     'category_id' => $cat_id
@@ -151,6 +150,7 @@ class ProductController extends Controller
                     'category_id' => $cat_id
                 ]);
             }
+
         }
 
         $products['products'] = Helpers::product_data_formatting($products['products'], true);
@@ -166,17 +166,15 @@ class ProductController extends Controller
     {
         try {
             $product = ProductLogic::get_product($id);
-
             if (!isset($product)) {
                 return response()->json(['errors' => ['code' => 'product-001', 'message' => 'Product not found!']], 404);
             }
-            //dd($product);
-            //$product = Helpers::product_data_formatting($product, false);
-            $product = Helpers::product_data_formattingOld($product, false);
-            // dd($product);
+
+            $product = Helpers::product_data_formatting($product, false);
+
             $product->increment('view_count');
 
-            if ($request->has('attribute') && $request->attribute == 'product' && !is_null(auth('api')->user())) {
+            if($request->has('attribute') && $request->attribute == 'product' && !is_null(auth('api')->user())) {
 
                 $visited_product = $this->visited_product;
                 $visited_product->user_id = auth('api')->user()->id ?? null;
@@ -185,6 +183,7 @@ class ProductController extends Controller
             }
 
             return response()->json($product, 200);
+
         } catch (\Exception $e) {
             return response()->json(['errors' => ['code' => 'product-001', 'message' => 'Product not found!']], 404);
         }
@@ -351,6 +350,7 @@ class ProductController extends Controller
         $products = ProductLogic::get_popular_products($request['limit'], $request['offset']);
         $products['products'] = Helpers::product_data_formatting($products['products'], true);
         return response()->json($products, 200);
+
     }
 
     /**
@@ -359,14 +359,12 @@ class ProductController extends Controller
      */
     public function add_favorite_products(Request $request): \Illuminate\Http\JsonResponse
     {
-        $validator = Validator::make(
-            $request->all(),
+        $validator = Validator::make($request->all(), [
+            'product_ids' => 'required|array',
+        ],
             [
-                'product_ids' => 'required|array',
-            ],
-            [
-                'product_ids.required' => 'product_ids ' . translate('is required'),
-                'product_ids.array' => 'product_ids ' . translate('must be an array')
+                'product_ids.required' => 'product_ids ' .translate('is required'),
+                'product_ids.array' => 'product_ids ' .translate('must be an array')
             ]
         );
 
@@ -395,14 +393,12 @@ class ProductController extends Controller
      */
     public function remove_favorite_products(Request $request): \Illuminate\Http\JsonResponse
     {
-        $validator = Validator::make(
-            $request->all(),
+        $validator = Validator::make($request->all(), [
+            'product_ids' => 'required|array',
+        ],
             [
-                'product_ids' => 'required|array',
-            ],
-            [
-                'product_ids.required' => 'product_ids ' . translate('is required'),
-                'product_ids.array' => 'product_ids ' . translate('must be an array')
+                'product_ids.required' => 'product_ids ' .translate('is required'),
+                'product_ids.array' => 'product_ids ' .translate('must be an array')
             ]
         );
 
@@ -491,4 +487,5 @@ class ProductController extends Controller
         $products['products'] = Helpers::product_data_formatting($products['products'], true);
         return response()->json($products, 200);
     }
+
 }

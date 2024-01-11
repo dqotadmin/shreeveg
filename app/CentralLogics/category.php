@@ -22,23 +22,27 @@ class CategoryLogic
         $products = Product::active()->get();
         $product_ids = [];
         foreach ($products as $product) {
-            foreach (json_decode($product['category_ids'], true) as $category) {
-                if ($category['id'] == $category_id) {
-                    array_push($product_ids, $product['id']);
-                }
+            if ($product['category_id'] == $category_id) {
+                array_push($product_ids, $product['id']);
             }
+
+            // foreach (json_decode($product['category_ids'], true) as $category) {
+            //     if ($category['id'] == $category_id) {
+            //         array_push($product_ids, $product['id']);
+            //     }
+            // }
         }
         return Product::active()->withCount(['wishlist', 'active_reviews'])->with('rating')->whereIn('id', $product_ids)->get();
     }
 
     public static function all_products($id)
     {
-        $cate_ids=[];
-        array_push($cate_ids,(int)$id);
-        foreach (CategoryLogic::child($id) as $ch1){
-            array_push($cate_ids,$ch1['id']);
-            foreach (CategoryLogic::child($ch1['id']) as $ch2){
-                array_push($cate_ids,$ch2['id']);
+        $cate_ids = [];
+        array_push($cate_ids, (int)$id);
+        foreach (CategoryLogic::child($id) as $ch1) {
+            array_push($cate_ids, $ch1['id']);
+            foreach (CategoryLogic::child($ch1['id']) as $ch2) {
+                array_push($cate_ids, $ch2['id']);
             }
         }
 
@@ -46,7 +50,7 @@ class CategoryLogic
         $product_ids = [];
         foreach ($products as $product) {
             foreach (json_decode($product['category_ids'], true) as $category) {
-                if (in_array($category['id'],$cate_ids)) {
+                if (in_array($category['id'], $cate_ids)) {
                     array_push($product_ids, $product['id']);
                 }
             }

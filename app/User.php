@@ -20,8 +20,8 @@ class User extends Authenticatable
      *
      * @var array
      */
-protected $fillable = [
-        'name','f_name', 'l_name', 'phone', 'email', 'password', 'loyalty_point', 'wallet_balance', 'referral_code', 'referred_by','gender'
+    protected $fillable = [
+        'full_name', 'f_name', 'l_name', 'phone', 'email', 'password', 'loyalty_point', 'wallet_balance', 'referral_code', 'referred_by', 'gender'
     ];
     /**
      * The attributes that should be hidden for arrays.
@@ -44,8 +44,9 @@ protected $fillable = [
         'wallet_balance' => 'float',
     ];
 
-    public function orders(){
-        return $this->hasMany(Order::class,'user_id');
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'user_id');
     }
 
     public function visited_products(): HasMany
@@ -53,19 +54,21 @@ protected $fillable = [
         return $this->hasMany(VisitedProduct::class, 'user_id', 'id');
     }
 
-    public function addresses(){
-        return $this->hasMany(CustomerAddress::class,'user_id');
+    public function addresses()
+    {
+        return $this->hasMany(CustomerAddress::class, 'user_id');
     }
 
-    public function favorite_products(){
-        return $this->hasMany(FavoriteProduct::class,'user_id');
+    public function favorite_products()
+    {
+        return $this->hasMany(FavoriteProduct::class, 'user_id');
     }
 
     static function total_order_amount($customer_id)
     {
         $total_amount = 0;
         $customer = User::where(['id' => $customer_id])->first();
-        foreach ($customer->orders as $order){
+        foreach ($customer->orders as $order) {
             $total_amount += $order->order_amount;
         }
         return $total_amount;

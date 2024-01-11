@@ -117,13 +117,16 @@
                                     });
                                 }
                             } else {
-                                $('#customer').val(null).trigger('change');
+                                location.href = '{{ route("admin.customer.wallet.report") }}';
+                                if(location.href){
+                                    $('#customer').val(null).trigger('change');
                                 $('#amount').val(null).trigger('change');
                                 $('#referance').val(null).trigger('change');
                                 toastr.success('{{__("Fund added successfully")}}', {
                                     CloseButton: true,
                                     ProgressBar: true
                                 });
+                                }
                             }
                         }
                     });

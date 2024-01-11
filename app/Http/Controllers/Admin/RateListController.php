@@ -122,127 +122,144 @@ class RateListController extends Controller
         $array = $request->all();
         $productIds = $array['product_id'];
         $customer_price = 0;
+        $discountPercentage = null;
+        $chkStatus = false;
         // Process each product ID
         foreach ($productIds as $key => $productId) {
-            $findId =   WarehouseProduct::where('warehouse_id', $warehouse_id)->where('product_id', $productId)->first();
-            if ($findId) {
-                $product_data =   json_decode($findId->product_details, true);
-                //dd($product_data[0]['approx_piece']);
-            }
+            if(!empty($array['market_price'][$key])){
+        
+            $chkStatus = true;
+                $originalmarketPrice = NULL;
+                $findId =   WarehouseProduct::where('warehouse_id', $warehouse_id)->where('product_id', $productId)->first();
+                if ($findId) {
+                    $product_data =   json_decode($findId->product_details, true);
+                    //dd($product_data[0]['approx_piece']);
+                }
 
-            // Initialize an array to store combined data for the current product
-            $combinedData = [];
+                // Initialize an array to store combined data for the current product
+                $combinedData = [];
 
-            // Process the first slot
-            $firstSlotData = [];
-            $quantity = $array['1_slot']['quantity'][$key];
-            $offerPrice = ($array['1_slot']['offer_price'][$key] === "NaN") ? '0' : $array['1_slot']['offer_price'][$key];
-            $marketPrice = $array['market_price'][$key];
-            $unit = $array['unit_id'][$key];
-            $margin = $array['1_slot']['margin'][$key];
-            $per_unit_price = $array['1_slot']['per_unit_price'][$key];
-           if($marketPrice === null || $quantity == null){
-            $marketPrice = 1;
-            $quantity = 1;
-        }
- 
-            // Calculate discount percentage
-            $discountPercentage = ($marketPrice - ($offerPrice / $quantity)) / $marketPrice * 100;
- 
-            $firstSlotData[] = [
-                'quantity' => $quantity,
-                'offer_price' => $offerPrice,
-                'market_price' => $marketPrice,
-                'margin' => $margin,
-                'per_unit_price' => $per_unit_price,
-                'discount' => number_format($discountPercentage, 2, '.', ''),
-                'approx_piece' => @$product_data[0]['approx_piece'],
-                'title' => @$product_data[0]['title'],
-
-            ];
-            $customer_price = @$per_unit_price;
-            // Process the second slot
-            $secondSlotData = [];
-            $quantity = $array['2_slot']['quantity'][$key];
-            $offerPrice = ($array['2_slot']['offer_price'][$key] === "NaN") ? '0' : $array['2_slot']['offer_price'][$key];
-            $marketPrice = $array['market_price'][$key];
-            $margin = $array['2_slot']['margin'][$key];
-            $per_unit_price = $array['2_slot']['per_unit_price'][$key];
-            if($marketPrice === null || $quantity == null){
-                $marketPrice = 1;
-                $quantity = 1;
-               }
-            // Calculate discount percentage
-            $discountPercentage = ($marketPrice - ($offerPrice / $quantity)) / $marketPrice * 100;
-
-            $secondSlotData[] = [
-                'quantity' => $quantity,
-                'offer_price' => $offerPrice,
-                'market_price' => $marketPrice,
-                'margin' => $margin,
-                'per_unit_price' => $per_unit_price,
-                'discount' => number_format($discountPercentage, 2, '.', ''),
-                'approx_piece' => @$product_data[1]['approx_piece'],
-                'title' => @$product_data[1]['title'],
-            ];
-
-            // Process the third slot
-            $thirdSlotData = [];
-            $quantity = $array['3_slot']['quantity'][$key];
-            $offerPrice = ($array['3_slot']['offer_price'][$key] === "NaN") ? '0' : $array['3_slot']['offer_price'][$key];
-            $marketPrice = $array['market_price'][$key];
-            $margin = $array['3_slot']['margin'][$key];
-            $per_unit_price = $array['3_slot']['per_unit_price'][$key];
-            if($marketPrice === null || $quantity == null){
-                $marketPrice = 1;
-                $quantity = 1;
-               }
-            // Calculate discount percentage
-            $discountPercentage = ($marketPrice - ($offerPrice / $quantity)) / $marketPrice * 100;
-
-            $thirdSlotData[] = [
-                'quantity' => $quantity,
-                'offer_price' => $offerPrice,
-                'market_price' => $marketPrice,
-                'margin' => $margin,
-                'per_unit_price' => $per_unit_price,
-                'discount' => number_format($discountPercentage, 2, '.', ''),
-                'approx_piece' => @$product_data[2]['approx_piece'],
-                'title' => @$product_data[2]['title'],
-            ];
-
-            // Combine the data for all slots
-            $combinedData = array_merge($firstSlotData, $secondSlotData, $thirdSlotData);
-
-            // Store the combined data in the database
-            $maxDiscount = 0;
-            $discounts = array_column($combinedData, 'discount');
-            if ($discounts) {
-                $maxDiscount = max($discounts);
-            }
-            if ($findId) {
-                $findId->product_details = json_encode($combinedData);
-                $findId->market_price = $marketPrice;
-                $findId->default_unit = $unit;
-                $findId->customer_price = @$customer_price;
-                $findId->discount_upto = @$maxDiscount;
-                $findId->product_rate_updated_date = date('Y-m-d H:i:s');
-
-                $findId->save();
-            } else {
-                WarehouseProduct::create([
-                    'product_id' => $productId,
-                    'warehouse_id' => $warehouse_id,
+                // Process the first slot
+                $firstSlotData = [];
+                $quantity = $array['1_slot']['quantity'][$key];
+                $offerPrice = ($array['1_slot']['offer_price'][$key] === "NaN") ? '0' : $array['1_slot']['offer_price'][$key];
+                if(isset($quantity) &&  $quantity != "NaN"){
+                    $marketPrice = $array['market_price'][$key] * $quantity;
+                    $originalmarketPrice = $array['market_price'][$key];
+                    $discountPercentage = ($marketPrice - ($offerPrice / $quantity)) / $marketPrice * 100;
+                }
+                $unit = $array['unit_id'][$key];
+                $margin = $array['1_slot']['margin'][$key];
+                $per_unit_price = $array['1_slot']['per_unit_price'][$key];
+                //    if($marketPrice === null || $quantity == null){
+                //     $marketPrice = 1;
+                //     $quantity = 1;
+                // }
+    
+                $firstSlotData[] = [
+                    'quantity' => $quantity,
+                    'offer_price' => $offerPrice,
                     'market_price' => $marketPrice,
-                    'default_unit' => $unit,
-                    'product_rate_updated_date' => date('Y-m-d H:i:s'),
-                    'customer_price' => @$customer_price,
-                    'product_details' => json_encode($combinedData),
-                    'discount_upto' => @$maxDiscount,
+                    'margin' => $margin,
+                    'per_unit_price' => $per_unit_price,
+                    'discount' => number_format($discountPercentage, 2, '.', ''),
+                    'approx_piece' => @$product_data[0]['approx_piece'],
+                    'title' => @$product_data[0]['title'],
 
-                ]);
-            }
+                ];
+                $customer_price = @$per_unit_price;
+                // Process the second slot
+                $secondSlotData = [];
+                $quantity = $array['2_slot']['quantity'][$key];
+                $offerPrice = ($array['2_slot']['offer_price'][$key] === "NaN") ? '0' : $array['2_slot']['offer_price'][$key];
+                if(isset($quantity) &&  $quantity != "NaN"){
+                    $marketPrice = $array['market_price'][$key] * $quantity;
+                    $discountPercentage = ($marketPrice - ($offerPrice / $quantity)) / $marketPrice * 100;
+                }
+                $margin = $array['2_slot']['margin'][$key];
+                $per_unit_price = $array['2_slot']['per_unit_price'][$key];
+                // if($marketPrice === null || $quantity == null){
+                //     $marketPrice = 1;
+                //     $quantity = 1;
+                //    }
+                // Calculate discount percentage
+                $secondSlotData[] = [
+                    'quantity' => $quantity,
+                    'offer_price' => $offerPrice,
+                    'market_price' => $marketPrice,
+                    'margin' => $margin,
+                    'per_unit_price' => $per_unit_price,
+                    'discount' => number_format($discountPercentage, 2, '.', ''),
+                    'approx_piece' => @$product_data[1]['approx_piece'],
+                    'title' => @$product_data[1]['title'],
+                ];
+                // Process the third slot
+                $thirdSlotData = [];
+                $quantity = $array['3_slot']['quantity'][$key];
+                $offerPrice = ($array['3_slot']['offer_price'][$key] === "NaN") ? '0' : $array['3_slot']['offer_price'][$key];
+                if(isset($quantity) &&  $quantity != "NaN"){
+                    $marketPrice = $array['market_price'][$key] * $quantity;
+                    $discountPercentage = ($marketPrice - ($offerPrice / $quantity)) / $marketPrice * 100;
+                }
+                $margin = $array['3_slot']['margin'][$key];
+                $per_unit_price = $array['3_slot']['per_unit_price'][$key];
+                // if($marketPrice === null || $quantity == null ){
+                //     $marketPrice = 1;
+                //     $quantity = 1;
+                //    }
+                // Calculate discount percentage
+
+                $thirdSlotData[] = [
+                    'quantity' => $quantity,
+                    'offer_price' => $offerPrice,
+                    'market_price' => $marketPrice,
+                    'margin' => $margin,
+                    'per_unit_price' => $per_unit_price,
+                    'discount' => number_format($discountPercentage, 2, '.', ''),
+                    'approx_piece' => @$product_data[2]['approx_piece'],
+                    'title' => @$product_data[2]['title'],
+                ];
+                    // Combine the data for all slots
+                $combinedData = array_merge($firstSlotData, $secondSlotData, $thirdSlotData);
+                // Store the combined data in the database
+                $maxDiscount = 0;
+                $discounts = array_column($combinedData, 'discount');
+                if ($discounts) {
+                    $maxDiscount = max($discounts);
+                }
+                if ($findId) {
+                    $findId->product_details = json_encode($combinedData);
+                    $findId->market_price = $originalmarketPrice;
+                    $findId->default_unit = $unit;
+                    $findId->customer_price = @$customer_price;
+                    $findId->discount_upto = @$maxDiscount;
+                    $findId->product_rate_updated_date = date('Y-m-d H:i:s');
+
+                    $findId->save();
+                } else {
+                    WarehouseProduct::create([
+                        'product_id' => $productId,
+                        'warehouse_id' => $warehouse_id,
+                        'market_price' => $originalmarketPrice,
+                        'default_unit' => $unit,
+                        'product_rate_updated_date' => date('Y-m-d H:i:s'),
+                        'customer_price' => @$customer_price,
+                        'product_details' => json_encode($combinedData),
+                        'discount_upto' => @$maxDiscount,
+
+                    ]);
+                }
+
+                //dump($chkStatus);
         }
+        
+        
+    }
+    
+    if(!$chkStatus){
+        Toastr::error(translate('Please fill atleast one market price!'));
+        return redirect()->back();
+    }
         Toastr::success(translate('Price Updated Successfully!'));
         return redirect()->back();
     }

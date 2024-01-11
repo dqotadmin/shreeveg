@@ -312,8 +312,8 @@
 
                                         </tr>
                                         
-                                        @if(isset($warehouses->pre_order_time))
-                                        {{$warehouses->pre_order_time}}
+                                        @if(isset($warehouses->pre_order_time) )
+                                      
                                         @foreach(json_decode($warehouses->pre_order_time,true) as $key => $warehouse)
                                             <tr class="row-pre-order-pair">
                                                 <td><input type="time" name="pre_order_open_time[]"
@@ -331,7 +331,6 @@
                                             </tr>
                                         @endforeach
                                         @else
-                                        {{$warehouses->pre_order_time}}
                                         <tr class="row-pre-order-pair">
                                             <td><input type="time" name="pre_order_open_time[]"
                                                     class="form-control input-pre-order-pair manually-border-color" 

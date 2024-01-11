@@ -118,11 +118,14 @@
                                 <th>{{translate('product_code')}}</th>
                                 <th>{{translate('product_category')}}</th>
                                 @if(in_array(auth('admin')->user()->admin_role_id ,[3,5]))
-                                <th class="">{{translate('stock')}}</th>
-                                <th class="">{{translate('status')}}</th>
+                                    <th class="">{{translate('stock')}}</th>
+                               
                                 @else
-                                <th class="text-center">{{translate('status')}}</th>
-                                <th class="text-center">{{translate('order')}}</th>
+                                    <th class="text-center">{{translate('status')}}</th>
+                                    <th class="text-center">{{translate('order')}}</th>
+                                @endif
+                                @if(in_array(auth('admin')->user()->admin_role_id ,[3]))
+                                <th class="">{{translate('status')}}</th>
                                 @endif
                                 @if(auth('admin')->user()->admin_role_id != 5)
                                 <th class="text-center">{{translate('action')}}</th>
@@ -181,45 +184,50 @@
                                                 if(\App\Model\WarehouseProduct::where('warehouse_id',$warehouse_id)->where('product_id',$product_id)->exists('product_details')){
                                                 } 
                                             }
-                                        ?> 
+                                            ?> 
                                         </td>
+                              
                                      
+                                      
+                                      
+                                    @else
                                         <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
-                                        <?php
-                                        foreach(\App\Model\WarehouseProduct::where('warehouse_id',auth('admin')->user()->warehouse_id)->where('product_id',$product->id)->get() as $stock){
-                                        ?>
-                                        
                                             <label class="toggle-switch my-0">
                                                 <input type="checkbox"
-                                                    onclick="status_change_alert('{{ route('admin.product.status', [$stock->id, $stock->status ? 0 : 1]) }}', '{{ $stock->status? translate('you want to disable this product'): translate('you want to active this product') }}', event)"
+                                                    onclick="status_change_alert('{{ route('admin.product.status', [$product->id, $product->status ? 0 : 1]) }}', '{{ $product->status? translate('you want to disable this product'): translate('you want to active this product') }}', event)"
                                                     class="toggle-switch-input" id="stocksCheckbox{{ $product->id }}"
-                                                    {{ $stock->status ? 'checked' : '' }}>
+                                                    {{ $product->status ? 'checked' : '' }}>
                                                 <span class="toggle-switch-label mx-auto text">
                                                     <span class="toggle-switch-indicator"></span>
                                                 </span>
                                             </label>
-                                            <?php
-                                            }
-                                        ?> 
                                         </td>
-                                      
-                                    @else
-                                    <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
-                                        <label class="toggle-switch my-0">
-                                            <input type="checkbox"
-                                                onclick="status_change_alert('{{ route('admin.product.status', [$product->id, $product->status ? 0 : 1]) }}', '{{ $product->status? translate('you want to disable this product'): translate('you want to active this product') }}', event)"
-                                                class="toggle-switch-input" id="stocksCheckbox{{ $product->id }}"
-                                                {{ $product->status ? 'checked' : '' }}>
-                                            <span class="toggle-switch-label mx-auto text">
-                                                <span class="toggle-switch-indicator"></span>
-                                            </span>
-                                        </label>
-                                    </td>
-                                    <td>
-                                        <input type="number" class="form-control ordering"  min="1" max="5000" value="{{@$product->ordering}}"  >
-                                        <input type="hidden" class="form-control" id="product_id" value="{{$product->id}}" style="width: 70px;">
-                                    </td>
-                                       @endif
+                                        <td>
+                                            <input type="number" class="form-control ordering"  min="1" max="5000" value="{{@$product->ordering}}"  >
+                                            <input type="hidden" class="form-control" id="product_id" value="{{$product->id}}" style="width: 70px;">
+                                        </td>
+                                    @endif
+                                @if(in_array(auth('admin')->user()->admin_role_id ,[3]))
+                                        <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
+                                            <?php
+                                            foreach(\App\Model\WarehouseProduct::where('warehouse_id',auth('admin')->user()->warehouse_id)->where('product_id',$product->id)->get() as $stock){
+                                            ?>
+                                            
+                                                <label class="toggle-switch my-0">
+                                                    <input type="checkbox"
+                                                        onclick="status_change_alert('{{ route('admin.product.status', [$stock->id, $stock->status ? 0 : 1]) }}', '{{ $stock->status? translate('you want to disable this product'): translate('you want to active this product') }}', event)"
+                                                        class="toggle-switch-input" id="stocksCheckbox{{ $product->id }}"
+                                                        {{ $stock->status ? 'checked' : '' }}>
+                                                    <span class="toggle-switch-label mx-auto text">
+                                                        <span class="toggle-switch-indicator"></span>
+                                                    </span>
+                                                </label>
+                                                <?php
+                                                }
+                                            ?> 
+                                        </td>
+                                @endif
+
                                     @if(auth('admin')->user()->admin_role_id != 5)
  
                                     <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">

@@ -51,7 +51,7 @@
             <h5 class="card-title">{{$role->name}}<span class="badge badge-soft-secondary">{{ $admins->total() }}</span> </h5>
                 </h5>
                 
-                <form action="{{url()->current()}}" method="GET">
+                <!-- <form action="{{url()->current()}}" method="GET">
                     <div class="input-group">
                     <input type="hidden" name="role_id" value="{{ request('role_id') }}">
                         <input id="datatableSearch_" type="search" name="search" maxlength="255"
@@ -64,7 +64,7 @@
                             </button>
                         </div>
                     </div>
-                </form>
+                </form> -->
             </div>
         </div>
         <!-- Table -->

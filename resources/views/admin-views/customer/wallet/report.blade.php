@@ -68,9 +68,9 @@
                         </div>
                     </div>
                     <div class="btn--container justify-content-end">
-                        <button type="reset" id="reset_btn" class="btn btn-secondary">
+                        <a type="reset" href="{{route('admin.customer.wallet.report')}}" id="reset_btn" class="btn btn-secondary">
                             {{translate('reset')}}
-                        </button>
+                        </a>
                         <button type="submit" class="btn btn-primary">
                             <i class="tio-filter-list mr-1"></i>{{translate('filter')}}
                         </button>

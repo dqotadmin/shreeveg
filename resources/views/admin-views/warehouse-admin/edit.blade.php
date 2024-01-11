@@ -102,7 +102,7 @@
                                     </select>
                                 </div>
                             </div>
-                            {{auth('admin')->user()->warehouse_id}}
+                         
                             @elseif($role->id == '6' || $role->id == '7' )
                             <div class="row form-group">
                                 <label for="phoneLabel"

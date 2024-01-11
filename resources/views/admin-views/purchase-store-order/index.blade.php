@@ -62,9 +62,11 @@
                         <th class="border-0">{{translate('amount')}}</th>
                         <th class="border-0">{{translate('order_date')}}</th>
                         @if(in_array($user->admin_role_id ,[6]))
+                        <th class="border-0">{{translate('order_status')}}</th>
+                        
+                        @endif
                         <th class="border-0">{{translate('stock_updated')}}</th>
-                        @endif<th class="border-0">{{translate('order_status')}}</th>
-                        <th class="text-center border-0">{{translate('action')}}</th>
+                        <th class="border-0">{{translate('action')}}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -116,14 +118,14 @@
                         @elseif($row->status == 'Received')
                         <span class="d-block font-size-sm text-trim-25  text-primary" >
                         @else
-                        <span class="d-block font-size-sm text-body text-trim-25 text-dark">
+                        <span class="d-block font-size-sm text-body text-trim-25 text-dark ">
                         @endif
                          <strong>   {{$row->status }}</strong>
                         </td>
                             <!-- Dropdown -->
                             @if( $user->admin_role_id == '6')
                         <td>
-                            <div class="btn--container justify-content-center">
+                            <div class="btn--container justify-content-left">
                                 @if($row->status == 'Received' && $user->admin_role_id == '6' && $row->stock_update == 'Pending')
                                     <a type="button"  href="{{route('admin.store.stock-update',[$row->id])}}" class="btn btn--primary">
                                     {{'Stock update'}}

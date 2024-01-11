@@ -2632,4 +2632,6 @@
   'rate list wed Inserted Successfully!' => 'Rate list wed Inserted Successfully!',
   'stock not availale for orange' => 'Stock not availale for orange',
   'min. purchase' => 'Min. purchase',
+  'Price enter market price!' => 'Price enter market price!',
+  'Please fill atleast one market price!' => 'Please fill atleast one market price!',
 );

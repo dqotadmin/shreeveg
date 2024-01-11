@@ -1991,7 +1991,7 @@ a[class*=btn--]:hover {
   }
 }
 .card--header form input {
-  border-color: rgba(1, 119, 205, 0.3);
+  /* border-color: rgba(1, 119, 205, 0.3); */
   height: 40px;
 }
 
@@ -5321,7 +5321,7 @@ input.non-printable.btn-primary ~ .non-printable {
 }
 
 .form_customer input:focus{
-  border-color: rgba(55, 125, 255, 0.4) !important;
+  border-color: transparent !important;
 }
 .off_bg{
     background: rgb(2, 102, 2);

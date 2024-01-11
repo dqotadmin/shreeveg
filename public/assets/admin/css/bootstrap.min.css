@@ -4,7 +4,7 @@
  * Copyright 2011-2020 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
-:root {
+ :root {
     --blue: #01684b;
     --indigo: #6610f2;
     --purple: #6f42c1;
@@ -2631,7 +2631,7 @@ pre code {
 .form-control:focus {
     color: #1e2022;
     background-color: #fff;
-    border-color: rgba(55, 125, 255, 0.4);
+    /* border-color: rgba(55, 125, 255, 0.4); */
     outline: 0;
     box-shadow: 0 0 10px rgba(55, 125, 255, 0.1);
 }
@@ -4597,7 +4597,7 @@ input[type="submit"].btn-block {
 }
 
 .custom-select:focus {
-    border-color: rgba(55, 125, 255, 0.4);
+    /* border-color: rgba(55, 125, 255, 0.4); */
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(55, 125, 255, 0.25);
 }

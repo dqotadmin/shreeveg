@@ -27,10 +27,10 @@
                         <h3 class="mb-0 text-capitalize">{{$flash_deal['title']}}</h3>
                     </div>
                     <div class="card-body">
-                        <form action="{{route('admin.offer.flash.add-product',[$flash_deal['id']])}}" method="post" id="product_form"  enctype="multipart/form-data" class="needs-validation form_customer row g-2" novalidate> 
+                        <form action="{{route('admin.offer.flash.add-product',[$flash_deal['id']])}}" method="post" id="product_form"  enctype="multipart/form-data" class="needs-validation form_customer g-2" novalidate> 
                           @csrf
                             <div class="form-group">
-                                <div class="col-sm-5 ">
+                                <div class="col-sm-6" style="margin-left: -15px;">
                                     <div class="form-group">
                                         <label class="input-label" for="exampleFormControlInput1">{{translate('Select Category')}}</label>
                                         <select name="category_id" id="category_id" class="form-control" >

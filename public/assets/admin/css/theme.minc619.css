@@ -15031,7 +15031,7 @@ a:hover .text-hover-primary {
 .select2-container--default
     .select2-results__option--highlighted[aria-selected]:not([aria-selected="true"]) {
     color: #1e2022;
-    background-color: #aeb8be;
+    background-color: rgba(189, 197, 209, 0.3);
 }
 
 .select2-container--default .select2-search--dropdown .select2-search__field {

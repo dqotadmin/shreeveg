@@ -113,7 +113,7 @@ class WarehouseController extends Controller
      * @return RedirectResponse
      */
     function store(Request $request): RedirectResponse
-    {  
+    { 
         $request->validate([
             'name'  => 'required|unique:warehouses',
             'code'  => 'required|unique:warehouses',
@@ -134,8 +134,11 @@ class WarehouseController extends Controller
             }
             $delivery_time = json_encode($deliver,true);
         }
-        if (!isset($request->pre_order_open_time) || empty($request->pre_order_open_time)) {
-        $pre_order = [];
+        if (!empty($request->pre_order_open_time) && is_array($request->pre_order_open_time) &&
+        !empty(array_filter($request->pre_order_open_time, function($value) { return $value !== null; })) &&
+        !empty($request->pre_order_close_time) && is_array($request->pre_order_close_time) &&
+        !empty(array_filter($request->pre_order_close_time, function($value) { return $value !== null; }))) {
+            $pre_order = [];
             foreach($request->pre_order_open_time as $preOrderKey => $pre_order_opentime){
                 if(isset($request->pre_order_close_time[$preOrderKey])){
                     $pre_order[$preOrderKey]['open'] = $pre_order_opentime;
@@ -219,7 +222,7 @@ class WarehouseController extends Controller
       
             // $check_unique =  $this->warehouse->find($id);
         $revise = [];
-        $revise = $deliver =  $order_cancel =  $pre_order = [];
+        $revise = $deliver =  $order_cancel =   [];
         // echo '<pre>';
         
         if($request->delivery_open_time){
@@ -233,15 +236,19 @@ class WarehouseController extends Controller
             $delivery_time = json_encode($deliver,true);
         }
        
-        if($request->pre_order_open_time){
          
+        if (!empty($request->pre_order_open_time) && is_array($request->pre_order_open_time) &&
+            !empty(array_filter($request->pre_order_open_time, function($value) { return $value !== null; })) &&
+            !empty($request->pre_order_close_time) && is_array($request->pre_order_close_time) &&
+            !empty(array_filter($request->pre_order_close_time, function($value) { return $value !== null; }))) {
+            $pre_order = [];
             foreach($request->pre_order_open_time as $preOrderKey => $pre_order_opentime){
                 if(isset($request->pre_order_close_time[$preOrderKey])){
                     $pre_order[$preOrderKey]['open'] = $pre_order_opentime;
                     $pre_order[$preOrderKey]['close'] = $request->pre_order_close_time[$preOrderKey];
                 }
             }
-            $pre_order_time = json_encode($pre_order,true);
+            $pre_order_time = !empty(json_encode($pre_order)) ? json_encode($pre_order,true): null;
         } 
           
             $warehouse = $this->warehouse->find($id);

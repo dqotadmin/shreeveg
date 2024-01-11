@@ -115,7 +115,7 @@
                         <td>
                             <span class="d-block font-size-sm text-body text-trim-50" style="text-transform: capitalize ;">
                                 @if($admin->warehouse_id > 0 && !empty($admin->warehouse_id))
-                                    {{$admin->Warehouse->name }}
+                                    {{@$admin->Warehouse->name }}
                                 @endif 
                            
                             </span>
@@ -125,7 +125,7 @@
                             <span class="d-block font-size-sm text-body text-trim-50" style="text-transform: capitalize ;">
                             
                             @if($admin->store_id > 0 && $admin->store_id)
-                            {{$admin->Store->name }} 
+                            {{@$admin->Store->name }} 
                             @endif
                             </span>
                         </td>

@@ -95,7 +95,7 @@ class PurchaseStoreOrderController extends Controller
             $wahrehouseId = $user->warehouse_id;
         }
         $categories = \App\Model\WarehouseCategory::where('warehouse_id', $wahrehouseId)->whereStatus('1')->get();
-        return view($this->view_folder . '.create', compact('categories', 'wahrehouseId', 'user'));
+        return view($this->view_folder . '.list', compact('categories', 'wahrehouseId', 'user'));
     }
 
     public function store(Request $request)

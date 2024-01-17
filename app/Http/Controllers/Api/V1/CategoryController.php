@@ -23,7 +23,7 @@ class CategoryController extends Controller
               $warehouse_id =  auth('api')->user()->warehouse_id;
             $category_id = $this->warehouse_category->where(['warehouse_id' => $warehouse_id])->pluck('category_id')->toArray();
             if (!empty($category_id)) {
-                $categories = $this->category->whereIn('id', $category_id)->get();
+                $categories = $this->category->whereIn('id', $category_id)->where('parent_id', 0)->get();
             } else {
                 $categories = collect(); // or any default value you prefer
             }

@@ -79,7 +79,7 @@
                         @foreach($categories as $category)
                         <?php 
                             $productsIds = \App\Model\Product::where('category_id',$category->category_id)->pluck('id')->toArray();
-                            $products = \App\Model\WarehouseProduct::where('warehouse_id',$wahrehouseId)->whereIn('product_id',$productsIds)->get();
+                            $products = \App\Model\WarehouseProduct::where('warehouse_id',$wahrehouseId)->whereIn('product_id',$productsIds)->active()->get();
                              ?>  
                         <div class="row g-3 mt-5">
                             <div class="col-md-2">

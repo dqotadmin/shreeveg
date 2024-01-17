@@ -24,6 +24,28 @@ use Symfony\Component\Console\Helper\Helper;
 
 class Helpers
 {
+    public static  function getWarehouseProductsdetail()
+    {
+        $warehouseId = auth('api')->user()->warehouse_id;
+        $whcategpries = self::warehouseAssignCategories($warehouseId);
+        
+        return WarehouseProduct::whereHas('productDetail', function ($query) use ($whcategpries) {
+            $query->whereIn('category_id', $whcategpries)->active();
+        })->where('warehouse_id', $warehouseId)->get();
+    }
+
+    public static function warehouseAssignCategories($warehouseId )
+    {
+        $row = [];
+        $data = \App\Model\WarehouseCategory::whereHas('getCategory',function ($q){
+            $q->active();
+        })->where(['warehouse_id' => $warehouseId])->select('category_id')->pluck('category_id')->toArray();
+        if (isset($data)) {
+            $row = $data;
+        }
+        return $row;
+    }
+
     public static function getParentCategories($categoryIds)
     {
         $categoryModel = \App\Model\Category::get();
@@ -298,15 +320,17 @@ class Helpers
 
     public static function api_product_data_formatting($data, $multi_data = false)
     {
-
         $storage = [];
+        $multi_image ='';
         //dd($data->productDetail['image'], $data->productDetail->category->id);
         // dd($data);
         foreach ($data as $item) {
             $variations = [];
             $item['category_id'] = isset($item->productDetail->category->id); //json_decode($item['category_id']);
-            $item['image'] = json_decode($item['image']);
-            $item['attributes'] = json_decode($item['attributes']);
+            $item['image'] = json_decode($item->productDetail['image']);
+            //$multi_image = json_decode(stripslashes($item->productDetail['image']));
+            //dump($multi_image);
+   // $item['attributes'] = json_decode($item['attributes']);
             $item['choice_options'] = json_decode($item['choice_options']);
 
             $categories = gettype($item['category_id']) == 'array' ? $item['category_id'] : json_decode($item['category_id']);
@@ -336,6 +360,7 @@ class Helpers
     
             }
              $item['variations'] = $variations;
+
              $item['total_stock'] = $item->total_stock;
             // foreach (json_decode($item['variations'], true) as $var) {
             //     $variations[] = [
@@ -360,7 +385,7 @@ class Helpers
             array_push($storage, $item);
         }
         
-
+        $data = $storage;
          
 
        

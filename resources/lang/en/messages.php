@@ -2634,4 +2634,5 @@
   'min. purchase' => 'Min. purchase',
   'Price enter market price!' => 'Price enter market price!',
   'Please fill atleast one market price!' => 'Please fill atleast one market price!',
+  'rate list Inserted Successfully!' => 'Rate list Inserted Successfully!',
 );

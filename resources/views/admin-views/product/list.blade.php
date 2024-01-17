@@ -117,6 +117,7 @@
                                 <th>{{translate('product_name')}}</th>
                                 <th>{{translate('product_code')}}</th>
                                 <th>{{translate('product_category')}}</th>
+                                
                                 @if(in_array(auth('admin')->user()->admin_role_id ,[3,5]))
                                     <th class="">{{translate('stock')}}</th>
                                
@@ -127,6 +128,8 @@
                                 @if(in_array(auth('admin')->user()->admin_role_id ,[3]))
                                 <th class="">{{translate('status')}}</th>
                                 @endif
+                                <th class="text-center">{{translate('show_in_daily_needs')}}</th>
+
                                 @if(auth('admin')->user()->admin_role_id != 5)
                                 <th class="text-center">{{translate('action')}}</th>
                                 @endif
@@ -230,9 +233,16 @@
                                             ?> 
                                         </td>
                                 @endif
-
+                                <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
+                                        <div class="text-center">
+                                            <label class="switch my-0">
+                                                <input type="checkbox" class="status" {{ auth('admin')->user()->admin_role_id == 3 ? 'disabled' : '' }}  onchange="daily_needs('{{$product['id']}}','{{$product->daily_needs==1?0:1}}')"
+                                                    id="{{$product['id']}}" {{$product->daily_needs == 1?'checked':''}}>
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </div>
+                                    </td>
                                     @if(auth('admin')->user()->admin_role_id != 5)
- 
                                     <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
                                             <!-- Dropdown -->
                                             <div class="btn--container justify-content-center">

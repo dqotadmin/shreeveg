@@ -20,6 +20,7 @@ class WarehouseProduct extends Model
 
     public function productDetail()
     {
+       
         return $this->belongsTo(Product::class, 'product_id');
     }
 

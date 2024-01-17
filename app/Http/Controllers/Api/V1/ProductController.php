@@ -356,10 +356,11 @@ class ProductController extends Controller
                 'offset' => $request['offset'],
                 'products' => $paginator->items()
             ];
-            $paginator = Helpers::product_data_formatting($products['products'], true);
+            $whPoduct =    Helpers::getWarehouseProductsdetail();
+             
+            $paginator = Helpers::api_product_data_formatting($whPoduct, true);
 
-
-            return response()->json($products, 200);
+            return response()->json($whPoduct, 200);
         } catch (\Exception $e) {
             return response()->json([
                 'errors' => ['code' => 'product-001', 'message' => 'Products not found!'],

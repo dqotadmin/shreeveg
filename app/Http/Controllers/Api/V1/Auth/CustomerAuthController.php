@@ -407,7 +407,7 @@ class CustomerAuthController extends Controller
         if ($request->referral_code) {
             $refer_user = $this->user->where(['referral_code' => $request->referral_code])->first();
         }
-        dd(11);
+        //dd(11);
         $temporary_token = Str::random(40);
         $tmpName = $this->get_f_l_name($request->full_name);
         $user = $this->user->create([

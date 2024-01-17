@@ -203,11 +203,8 @@
                                             </label>
                                         </td>
                                         <td>
-                                        <input type="text" name="sequence" class="form-control w-50" value="{{ $product->sequence }}"
-                                        oninput="updateSequence('{{ route('admin.product.update-sequence', ['id' => $product->id]) }}', this.value)" 
-                                        id="old_val{{$product->id}}">
-                                         
-                                        <input type="hidden" class="form-control" id="product_id" value="{{$product->id}}" style="width: 70px;">
+                                            <input type="number" class="form-control ordering"  min="1" max="5000" value="{{@$product->ordering}}"  >
+                                            <input type="hidden" class="form-control" id="product_id" value="{{$product->id}}" style="width: 70px;">
                                         </td>
                                     @endif
                                 @if(in_array(auth('admin')->user()->admin_role_id ,[3]))
@@ -293,42 +290,53 @@
 @push('script_2')
  
 <script>
-   function updateSequence(url, sequence) {
-     fetch(url, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            },
-            body: JSON.stringify({ sequence }),
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                console.log(data.success); // Handle success response as needed
-                Swal.fire({
+    
+    $('.ordering').on('blur',function(){
+        var ordering = $(this).val();
+        var product_id = $(this).closest('td').find('#product_id').val(); // Adjust the selector accordingly
+        console.log(product_id);
+        $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+             $.ajax({
+                url: '{{route('admin.product.order')}}',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    product_id: product_id,
+                    ordering: ordering
+                },
+                success: function (response) {
+                    if (response.message) {
+                        var message = response.message;
+                        Swal.fire({
                             title: 'Alert',
-                            html: data.success,
-                            icon: 'success',
+                            html: message,
+                            icon: 'info',
                             confirmButtonText: 'OK'
                         });
-            } else if (data.error) {
-                Swal.fire({
+                    }else if(response.ordering_exist) {
+                        var message = response.ordering_exist;
+                        Swal.fire({
                             title: 'Alert',
-                            html: data.error,
-                            icon: 'warning',
+                            html: message,
+                            icon: 'info',
                             confirmButtonText: 'OK'
-                        }).then((result) => {
+                    }).then((result) => {
                     // Reload the page after the user clicks "OK"
                         location.reload(true);
                 });
+                    }
+                },
+                error: function (error) {
+                    location.reload(true);
+                    console.log(error);
 
-                            // $('input[name="sequence"]').val(4);
-                        // document.querySelector('input[name="sequence"]').value = 12;
-            }
-        })
-      
-    }
+                },
+            });
+    });
 </script>
 <script>
         function status_change_alert(url, message, e) {

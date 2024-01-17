@@ -749,7 +749,6 @@ class POSController extends Controller
                     }
                     // dump($product);
                     $product = Helpers::product_data_formatting($product);
-                    //dd(1, $product);
                     $or_d = [
                         'product_id' => $c['id'],
                         'product_details' => $product,

@@ -776,7 +776,7 @@
                             <small class="tio-more-horizontal nav-subtitle-replacer"></small>
                         </li>
 
-                        <!-- <li class="navbar-vertical-aside-has-menu {{Request::is('admin/banner*')?'active':''}}">
+                         <li class="navbar-vertical-aside-has-menu {{Request::is('admin/banner*')?'active':''}}">
                                 <a class="js-navbar-vertical-aside-menu-link nav-link"
                                    href="{{route('admin.banner.add-new')}}"
                                    title="{{translate('banner')}}"
@@ -786,7 +786,7 @@
                                         class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('banner')}}</span>
                                 </a>
                             </li>
-
+                            <!--
                             <li class="navbar-vertical-aside-has-menu {{Request::is('admin/coupon*')?'active':''}}">
                                 <a class="js-navbar-vertical-aside-menu-link nav-link"
                                    href="{{route('admin.coupon.add-new')}}"

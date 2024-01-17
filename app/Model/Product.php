@@ -6,6 +6,7 @@ use App\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
@@ -100,5 +101,9 @@ class Product extends Model
     public function getWarehouseProducts()
     {
         return $this->hasMany(WarehouseProduct::class)->where('product_id', $this->id)->where('warehouse_id', $this->warehouse_id);
+    }
+    public static function generateUniqueSequence()
+    {
+        return (string) Str::uuid();
     }
 }

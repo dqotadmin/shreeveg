@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
 use App\CentralLogics\Helpers;
 use App\Http\Controllers\Controller;
 use App\Model\Warehouse;
@@ -19,6 +18,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use DateTime;
+use Symfony\Component\Console\Helper\Helper;
+
 class WarehouseController extends Controller
 {
     public function __construct(
@@ -300,16 +301,19 @@ class WarehouseController extends Controller
 
     function wh_assign_category_store(Request $request): RedirectResponse
     {
-       // dd( $request->all());
         $warehouse_id = $request->warehouse_id;
-
+        $category_id = $request->category_id;
+        $category = array_map('intval', $category_id);
+        $category_ids = array_unique($category);
+        $parentCategories = Helpers::getParentCategories($category_ids);
         $request->validate([
             // 'margin' => 'required',
             'category_id' => 'required',
         ]);
         $this->warehouse_categories->where('warehouse_id',$request->warehouse_id)->delete();
-
-        foreach($request->category_id as  $catId){
+        $numberOfCategories = count($category_ids);
+        $array_unique = array_unique($parentCategories);
+        foreach($array_unique as  $catId){
             $row = new WarehouseCategory;
             $row->warehouse_id = $warehouse_id;
             $row->category_id = $catId;
@@ -321,6 +325,7 @@ class WarehouseController extends Controller
         
     }
   
+    
 
     public function wh_assign_category_status(Request $request): RedirectResponse
     {

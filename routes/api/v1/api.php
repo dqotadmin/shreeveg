@@ -11,13 +11,15 @@ Route::group(['namespace' => 'Api\V1', 'middleware'=>'localization'], function (
 
         Route::post('check-phone', 'CustomerAuthController@check_phone');
         Route::post('verify-phone', 'CustomerAuthController@verify_phone');
-
+        Route::post('login-otp', 'CustomerAuthController@login_otp');// new api 
+        
         Route::post('check-email', 'CustomerAuthController@check_email');
         Route::post('verify-email', 'CustomerAuthController@verify_email');
 
         Route::post('forgot-password', 'PasswordResetController@reset_password_request');
         Route::post('verify-token', 'PasswordResetController@verify_token');
         Route::put('reset-password', 'PasswordResetController@reset_password_submit');
+        Route::post('get-location', 'LocationController@get_location');
 
         Route::group(['prefix' => 'delivery-man'], function () {
             Route::post('register', 'DeliveryManLoginController@registration');

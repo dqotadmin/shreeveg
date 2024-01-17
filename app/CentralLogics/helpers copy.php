@@ -249,19 +249,20 @@ class Helpers
 
     public static function product_data_formatting($data, $multi_data = false)
     {
-
         $storage = [];
-        // dd($data->productDetail['image'], $data->productDetail);
-      
-        $variations = [];
-        $data['category_id'] = json_decode($data->productDetail->category->id); //json_decode($data['category_id']);
-        $data['image'] = json_decode($data->productDetail['image']);
-        $data['customer_price'] = json_decode($data['customer_price']);
-        $data['store_price'] = json_decode($data['store_price']);
-        $data['attributes'] = json_decode($data['attributes']);
-        $data['choice_options'] = json_decode($data['choice_options']);
+        //dd($data->productDetail['image'], $data->productDetail->category->id);
 
-        $categories = gettype($data['category_id']) == 'array' ? $data['category_id'] : json_decode($data['category_id']);
+        $variations = [];
+        // $data['category_id'] = json_decode(@$data->productDetail->category->id); //json_decode($data['category_id']);
+        // $data['image'] = json_decode(@$data->productDetail['image']);
+        // $data['customer_price'] = json_decode($data['customer_price']);
+        // $data['store_price'] = json_decode($data['store_price']);
+        // $data['attributes'] = json_decode($data['attributes']);
+        // $data['choice_options'] = json_decode($data['choice_options']);
+      
+        // $categories = gettype($data['category_id']) == 'array' ? $data['category_id'] : json_decode($data['category_id']);
+        $categories = $data->pluck('category_id')->unique()->toArray();
+        // dd($categories);
         if (!is_null($categories) && ($categories) > 0) {
             $ids[] = $categories;
 
@@ -269,19 +270,28 @@ class Helpers
         } else {
             $data['category_discount'] = [];
         }
+        if(isset(auth('api')->user()->warehouse_id)){
+            $warehouse_id =  auth('api')->user()->warehouse_id;
+        }
+        $warehouse_products = WarehouseProduct::where('product_id',$data['id'])->where('warehouse_id',$warehouse_id)->first();
+        if (isset($warehouse_products)) {
 
-        if (isset($data['variations'])) {
-
-            foreach (json_decode($data['variations'], true) as $var) {
+            foreach (json_decode($warehouse_products['product_details'], true) as $var) {
                 $variations[] = [
-                    'type' => $var['type'],
-                    'price' => (float)$var['price'],
-                    'stock' => isset($var['stock']) ? (int)$var['stock'] : (int)0,
+                    'quantity' => $var['quantity'],
+                    'discount' =>  $var['discount'],
+                    'approx_piece' =>   $var['approx_piece'],
+                    'title' =>   $var['title'],
+                    'offer_price' =>   $var['offer_price'],
+                    'market_price' =>   $var['market_price'],
                 ];
             }
+
         }
-        $data['variations'] = $variations;
+         $data['variations'] = $variations;
+
         if ($variations && count($data['translations']) > 0) {
+
             foreach ($data['translations'] as $translation) {
                 if ($translation->key == 'name') {
                     $data['name'] = $translation->value;
@@ -291,83 +301,31 @@ class Helpers
                 }
             }
         }
-
-        //dd($data);
-        return $data;
-    }
-
-    public static function api_product_data_formatting($data, $multi_data = false)
-    {
-
-        $storage = [];
-        //dd($data->productDetail['image'], $data->productDetail->category->id);
-        // dd($data);
-        foreach ($data as $item) {
-            $variations = [];
-            $item['category_id'] = isset($item->productDetail->category->id); //json_decode($item['category_id']);
-            $item['image'] = json_decode($item['image']);
-            $item['attributes'] = json_decode($item['attributes']);
-            $item['choice_options'] = json_decode($item['choice_options']);
-
-            $categories = gettype($item['category_id']) == 'array' ? $item['category_id'] : json_decode($item['category_id']);
-            // if (!is_null($categories) && count($categories) > 0) {
-            //     $ids = [];
-            //     foreach ($categories as $value) {
-            //         if ($value->position == 1) {
-            //             $ids[] = $value->id;
-            //         }
-            //     }
-            //     $item['category_discount'] = CategoryDiscount::active()->where('category_id', $ids)->first();
-            // } else {
-            //     $item['category_discount'] = [];
-            // }
-            if (isset($item)) {
-
-                foreach (json_decode($item['product_details'], true) as $var) {
-                    $variations[] = [
-                        'quantity' => $var['quantity'],
-                        'discount' =>  $var['discount'],
-                        'approx_piece' =>   $var['approx_piece'],
-                        'title' =>   $var['title'],
-                        'offer_price' =>   $var['offer_price'],
-                        'market_price' =>   $var['market_price'],
-                    ];
-                }
-    
-            }
-             $item['variations'] = $variations;
-             $item['total_stock'] = $item->total_stock;
-            // foreach (json_decode($item['variations'], true) as $var) {
-            //     $variations[] = [
-            //         'type' => $var['type'],
-            //         'price' => (float)$var['price'],
-            //         'stock' => isset($var['stock']) ? (int)$var['stock'] : (int)0,
-            //     ];
-            // }
-            // $item['variations'] = $variations;
-
-            // if (count($item['translations'])) {
-            //     foreach ($item['translations'] as $translation) {
-            //         if ($translation->key == 'name') {
-            //             $item['name'] = $translation->value;
-            //         }
-            //         if ($translation->key == 'description') {
-            //             $item['description'] = $translation->value;
-            //         }
-            //     }
-            // }
-            // unset($item['translations']);
-            array_push($storage, $item);
-        }
-        
-
-         
-
        
+        // if (isset($data['variations'])) {
+
+        //     foreach (json_decode($data['variations'], true) as $var) {
+        //         $variations[] = [
+        //             'type' => $var['type'],
+        //             'price' => (float)$var['price'],
+        //             'stock' => isset($var['stock']) ? (int)$var['stock'] : (int)0,
+        //         ];
+        //     }
+        // }
+        // $data['variations'] = $variations;
+        // if ($variations && count($data['translations']) > 0) {
+        //     foreach ($data['translations'] as $translation) {
+        //         if ($translation->key == 'name') {
+        //             $data['name'] = $translation->value;
+        //         }
+        //         if ($translation->key == 'description') {
+        //             $data['description'] = $translation->value;
+        //         }
+        //     }
+        // }
+
         return $data;
     }
-
-
     public static function get_business_settings($name)
     {
         $config = null;
@@ -393,6 +351,7 @@ class Helpers
         if (isset($data)) {
             $row = $data;
         }
+        //dd($row);
         return $row;
     }
 

@@ -204,7 +204,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::get('limited-stock', 'ProductController@limited_stock')->name('limited-stock');
             Route::get('get-variations', 'ProductController@get_variations')->name('get-variations');
             Route::post('update-quantity', 'ProductController@update_quantity')->name('update-quantity');
-            Route::post('order', 'ProductController@order')->name('order');
+            Route::patch('{id}/update-sequence', 'ProductController@updateSequence')->name('update-sequence');
 
             Route::get('feature/{id}/{is_featured}', 'ProductController@feature')->name('feature');
         });

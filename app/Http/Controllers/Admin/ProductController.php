@@ -33,6 +33,7 @@ use Intervention\Image\Facades\Image;
 use Rap2hpoutre\FastExcel\FastExcel;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -346,27 +347,52 @@ class ProductController extends Controller
     //     return response()->json(['message' => translate('Product ordering updated!')]);
     // }
 
-    public function order(Request $request)
+    public function updateSequence(Request $request, $id)
     {
-        $product = $this->product->find($request->product_id);
-        $existingProducts = $this->product->where('ordering', $request->ordering)
-            ->where('id', '!=', $request->product_id)
-            ->get(); // we check if this ordering is already exist or not
-        if ($existingProducts->isNotEmpty()) {
+        $request->validate([
+            'sequence' => 'required|string',
+            Rule::unique('products', 'sequence')->ignore($id),
+        ]);
 
-            // Ordering value already exists, so increment ordering values for products greater than or equal to the given value
-            foreach ($existingProducts as $productExist) {
-                $productExist->ordering = $request->ordering + 1;
-                $productExist->save();
+            $product = Product::findOrFail($id);
+    
+            // Check if the new sequence already exists in the database
+            $existingProduct = Product::where('sequence', $request->input('sequence'))
+                ->where('id', '!=', $id)
+                ->first();
+            if ($existingProduct) {
+                return response()->json(['error' => 'Sequence already exists']);
             }
-        } else {
-            // Set the new ordering value
-            $product->ordering = $request->ordering;
+    
+            // Update the sequence
+            $product->sequence = $request->input('sequence');
             $product->save();
-        }
+    
+            return response()->json(['success' => 'Product sequence updated successfully']);
+    }   
+    // public function order(Request $request)
+    // {
 
-        return response()->json(['message' => translate('Product ordering updated!')]);
-    }
+        
+    //     $product = $this->product->find($request->product_id);
+    //     $existingProducts = $this->product->where('ordering', $request->ordering)
+    //         ->where('id', '!=', $request->product_id)
+    //         ->get(); // we check if this ordering is already exist or not
+    //     if ($existingProducts->isNotEmpty()) {
+
+    //         // Ordering value already exists, so increment ordering values for products greater than or equal to the given value
+    //         foreach ($existingProducts as $productExist) {
+    //             $productExist->ordering = $request->ordering + 1;
+    //             $productExist->save();
+    //         }
+    //     } else {
+    //         // Set the new ordering value
+    //         $product->ordering = $request->ordering;
+    //         $product->save();
+    //     }
+
+    //     return response()->json(['message' => translate('Product ordering updated!')]);
+    // }
 
 
 

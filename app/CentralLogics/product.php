@@ -26,6 +26,7 @@ class ProductLogic
             ->with(['rating', 'active_reviews'])
             ->latest()->paginate($limit, ['*'], 'page', $offset);
 
+        
         return [
             'total_size' => $paginator->total(),
             'limit' => $limit,
@@ -55,7 +56,7 @@ class ProductLogic
     public static function get_related_products($product_id)
     {
         $product = Product::find($product_id);
-        return Product::active()->withCount(['wishlist'])->with(['rating', 'active_reviews'])->where('category_ids', $product->category_ids)
+        return Product::active()->withCount(['wishlist'])->with(['rating', 'active_reviews'])->where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
             ->limit(10)
             ->get();

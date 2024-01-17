@@ -32,3 +32,4 @@ class LocationSettingsController extends Controller
         return back();
     }
 }
+ 

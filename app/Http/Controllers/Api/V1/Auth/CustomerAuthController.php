@@ -381,8 +381,8 @@ class CustomerAuthController extends Controller
         $validator = Validator::make($request->all(), [
             'full_name' => 'required',
             'gender' => 'required|in:Male,Female,Other',
-            'email' => 'required|unique:users',
-            'phone' => 'required|unique:users',
+            'email' => 'nullable|email|unique:users',
+            'phone' => 'nullable|min:10|unique:users',
             // 'password' => 'required|min:6',
             // 'confirm_password' => 'required|same:password',
             'language' => 'required|in:hi,en'
@@ -395,21 +395,19 @@ class CustomerAuthController extends Controller
             return response()->json(['errors' => Helpers::error_processor($validator)], 403);
         }
 
-        if ($request->email) {
-            $user = $this->user->where(['email' => $request->email])->first();
-            if ($user) {
-                $errors = [];
-                $errors[] = ['code' => 'auth-001', 'message' => 'The email has already been taken.'];
-                return response()->json([
-                    'errors' => $errors
-                ], 403);
-            }
+        if (empty($request->email) && empty($request->phone)) {
+
+            $errors = [];
+            $errors[] = ['code' => 'auth-001', 'message' => 'The email or phone field is required.'];
+            return response()->json([
+                'errors' => $errors
+            ], 403);
         }
 
         if ($request->referral_code) {
             $refer_user = $this->user->where(['referral_code' => $request->referral_code])->first();
         }
-
+        //dd(11);
         $temporary_token = Str::random(40);
         $tmpName = $this->get_f_l_name($request->full_name);
         $user = $this->user->create([
@@ -417,7 +415,7 @@ class CustomerAuthController extends Controller
             'f_name' => $tmpName['f_name'],
             'l_name' => $tmpName['l_name'],
             'email' => $request->email ?? '',
-            'phone' => $request->phone,
+            'phone' => $request->phone ?? '',
             'gender' => $request->gender,
             'password' => bcrypt(123456),
             'temporary_token' => $temporary_token,
@@ -460,12 +458,12 @@ class CustomerAuthController extends Controller
      */
     public function login(Request $request): JsonResponse
     {
-      
+
         $validator = Validator::make($request->all(), [
             'email_or_phone' => 'required',
             'otp' => 'required|min:4'
         ]);
-          if ($request->has('email_or_phone')) {
+        if ($request->has('email_or_phone')) {
             $user_id = $request['email_or_phone'];
         }
 
@@ -498,18 +496,18 @@ class CustomerAuthController extends Controller
             $user->save();
             $request_otp = (int)$request->otp;
             if ($user->otp === $request_otp) {
-            $data = [
+                $data = [
                     'email' => $user_id,
                     'otp' => $request->otp,
                     'is_block' => 0
                 ];
-            }else{
+            } else {
                 return response()->json([
                     'errors' => 'opt is wrong'
                 ], 401);
             }
-            
-            if(\Auth::loginUsingId($user->id)){
+
+            if (\Auth::loginUsingId($user->id)) {
                 $token = auth()->user()->createToken('RestaurantCustomerAuth')->accessToken;
 
                 $user->login_hit_count = 0;
@@ -578,31 +576,31 @@ class CustomerAuthController extends Controller
             'errors' => $errors
         ], 401);
     }
-       /**
+    /**
      * @param Request $request
      * @return JsonResponse
      * @throws GuzzleException
      */
     public function login_otp(Request $request): JsonResponse
     {
-       
+
         $validator = Validator::make($request->all(), [
             'email_or_phone' => 'required'
         ]);
         if ($validator->fails()) {
             return response()->json(['errors' => Helpers::error_processor($validator)], 403);
         }
-         if ($request->has('email_or_phone')) {
+        if ($request->has('email_or_phone')) {
             $user_id = $request['email_or_phone'];
             $customer = $this->user->where(['email' => $user_id])->orWhere(['phone' => $user_id])->first();
             if ($customer) {
                 $otp = rand(1000, 9999);
-                    $this->user->where('id',$customer->id)->update(['otp'=>$otp]);
-                    
+                $this->user->where('id', $customer->id)->update(['otp' => $otp]);
+
                 return response()->json([
                     'otp' => $otp
                 ], 200);
-            }else{
+            } else {
                 return response()->json([
                     'errors' => 'User not found'
                 ], 401);

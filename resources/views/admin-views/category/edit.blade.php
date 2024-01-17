@@ -55,7 +55,7 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-5 {{(isset($category['parent_id']) && $category['parent_id']!=0)?'':'d-none'}}" id="category_box">
+                        <div class="col-sm-5 {{(isset($category['parent_id']) && $category['parent_id']!=0)?'':'g'}}" id="category_box">
                             <div class="form-group">
                                 <label class="input-label" for="exampleFormControlInput1">{{translate('Select Parent Category')}}</label>
                                 <select name="parent_id" id="parent_id" class="form-control" >

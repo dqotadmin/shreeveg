@@ -247,6 +247,9 @@ class ProductController extends Controller
         $p->maximum_order_quantity = $request->maximum_order_quantity;
         $p->status = $request->status ? $request->status : 0;
         $p->group_ids = json_encode($request->group_ids);
+        $lastSequence = $this->product->max('sequence');
+        //dd($lastSequence);
+        $p->sequence = $lastSequence? $lastSequence+1:1;
         //dd($p);ALTER TABLE `products` ADD `group_ids` TEXT NULL AFTER `daily_needs`;
         $p->save();
 

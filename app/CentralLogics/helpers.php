@@ -335,31 +335,30 @@ class Helpers
         } else {
 
             $variations = [];
-            $data['category_id'] = json_decode($data['category_id']);
-            $data['image'] = json_decode($data['image']);
-            $data['attributes'] = json_decode($data['attributes']);
-            $data['choice_options'] = json_decode($data['choice_options']);
+            $data['category_id'] = $data->productDetail->category->id;
+            $data['name'] = $data->productDetail->name;
+            $data['product_code'] = $data->productDetail->product_code;
+            $data['description'] = $data->productDetail->description;
+            $data['unit'] = $data->productDetail->unit->title;
+            $data['image'] = json_decode($data->productDetail['image']);
+            $data['single_image'] = json_decode($data->productDetail['single_image']);
+            if (isset($data)) {
 
-            $categories = gettype($data['category_id']) == 'array' ? $data['category_id'] : json_decode($data['category_id']);
-            if (!is_null($categories) && ($categories) > 0) {
-                $ids[] = $categories;
-
-                $data['category_discount'] = CategoryDiscount::active()->where('category_id', $ids)->first();
-            } else {
-                $data['category_discount'] = [];
-            }
-
-            if (isset($data['variations'])) {
-
-                foreach (json_decode($data['variations'], true) as $var) {
+                foreach (json_decode($data['product_details'], true) as $var) {
                     $variations[] = [
-                        'type' => $var['type'],
-                        'price' => (float)$var['price'],
-                        'stock' => isset($var['stock']) ? (int)$var['stock'] : (int)0,
+                        'quantity' => $var['quantity'],
+                        'discount' =>  $var['discount'],
+                        'approx_piece' =>   $var['approx_piece'],
+                        'title' =>   $var['title'],
+                        'offer_price' =>   $var['offer_price'],
+                        'market_price' =>   $var['market_price'],
                     ];
                 }
             }
             $data['variations'] = $variations;
+
+            $data['total_stock'] = $data->total_stock;
+
             if (count($data['translations']) > 0) {
                 foreach ($data['translations'] as $translation) {
                     if ($translation->key == 'name') {

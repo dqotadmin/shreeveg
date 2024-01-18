@@ -38,7 +38,7 @@ class ProductController extends Controller
         private SearchedProduct $searched_product,
         private Translation $translation,
         private VisitedProduct $visited_product,
- 
+
 
     ) {
     }
@@ -51,16 +51,17 @@ class ProductController extends Controller
     public function get_latest_products(Request $request): \Illuminate\Http\JsonResponse
     {
         $products = ProductLogic::get_latest_products($request['limit'], $request['offset']);
-        $product_id=[];
+        $product_id = [];
         $warehouse_id = auth('api')->user()->warehouse_id;
         $product_data = $products['products'];
-        foreach($products['products'] as  $product){
-            array_push($product_id,@$product->id);
+        foreach ($products['products'] as  $product) {
+            array_push($product_id, @$product->id);
         }
-        $whProoducts =WarehouseProduct::whereHas('productDetail',function ($query) use ($product_id){
-            $query->whereIn('id',$product_id);
-        })->where('warehouse_id', $warehouse_id)->get();
-        $products['products'] = Helpers::api_product_data_formatting($whProoducts, true);
+
+        $whProoductQuery = Helpers::getWhProductsByProductIds($product_id);
+        $whProoducts = $whProoductQuery->get();
+
+        $products['products'] = Helpers::apk_product_data_formatting($whProoducts, true);
         return response()->json($products, 200);
     }
 
@@ -70,6 +71,7 @@ class ProductController extends Controller
      */
     public function get_searched_products(Request $request): \Illuminate\Http\JsonResponse
     {
+
         $validator = Validator::make($request->all(), [
             'name' => 'required',
         ]);
@@ -78,8 +80,8 @@ class ProductController extends Controller
         }
 
         $products = ProductLogic::search_products($request['name'], $request['limit'], $request['offset']);
-        
-       
+
+
         if (count($products['products']) == 0) {
             $key = explode(' ', $request['name']);
             $ids = $this->translation->where(['key' => 'name'])->where(function ($query) use ($key) {
@@ -165,17 +167,21 @@ class ProductController extends Controller
                 ]);
             }
         }
-        $product_id=[];
+        $product_id = [];
         $product_data = $products['products'];
-        foreach($products['products'] as  $product){
-            array_push($product_id,@$product->id);
+        foreach ($products['products'] as  $product) {
+            array_push($product_id, @$product->id);
         }
-        $warehouse_id = auth('api')->user()->warehouse_id;
+        //$warehouse_id = auth('api')->user()->warehouse_id;
 
-        $whProoducts =WarehouseProduct::whereHas('productDetail',function ($query) use ($product_id){
-            $query->whereIn('id',$product_id);
-        })->where('warehouse_id', $warehouse_id)->get();
-        $products['products'] = Helpers::api_product_data_formatting($whProoducts, true);
+        // $whProoducts = WarehouseProduct::whereHas('productDetail', function ($query) use ($product_id) {
+        //     $query->whereIn('id', $product_id);
+        // })->where('warehouse_id', $warehouse_id)->get();
+
+        $whProoductQuery = Helpers::getWhProductsByProductIds($product_id);
+        $whProoducts = $whProoductQuery->get();
+
+        $products['products'] = Helpers::apk_product_data_formatting($whProoducts, true);
         return response()->json($products, 200);
     }
 
@@ -188,21 +194,23 @@ class ProductController extends Controller
     {
         try {
             $product = ProductLogic::get_product($id);
-
+            //dd($product);
             if (!isset($product)) {
                 return response()->json(['errors' => ['code' => 'product-001', 'message' => 'Product not found!']], 404);
             }
+
+            $product->increment('view_count');
             $product_id[] = $product->id;
-            $warehouse_id = auth('api')->user()->warehouse_id;
-            $whProoducts =WarehouseProduct::whereHas('productDetail',function ($query) use ($product_id){
-                $query->whereIn('id',$product_id);
-            })->where('warehouse_id', $warehouse_id)->get();
-            $product = Helpers::api_product_data_formatting($whProoducts, false);
+            //$warehouse_id = auth('api')->user()->warehouse_id;
+            // $whProoducts = WarehouseProduct::whereHas('productDetail', function ($query) use ($product_id) {
+            //     $query->whereIn('id', $product_id);
+            // })->where('warehouse_id', $warehouse_id)->get();
+
+            $whProoductQuery = Helpers::getWhProductsByProductIds($product_id);
+            $whProoducts = $whProoductQuery->get();
+
+            $product = Helpers::apk_product_data_formatting($whProoducts, true);
             // $product = Helpers::product_data_formattingOld($product, false);
-
-            // $product->increment('view_count');
-            Product::query()->increment('view_count');
-
 
             if ($request->has('attribute') && $request->attribute == 'product' && !is_null(auth('api')->user())) {
 
@@ -225,17 +233,21 @@ class ProductController extends Controller
     public function get_related_products($id): \Illuminate\Http\JsonResponse
     {
 
-        $warehouse_id = auth('api')->user()->warehouse_id;
+        //$warehouse_id = auth('api')->user()->warehouse_id;
         if ($this->product->find($id)) {
             $products = ProductLogic::get_related_products($id);
             $product_id = [];
-            foreach($products as $product){
-                array_push($product_id,$product->id);
+            foreach ($products as $product) {
+                array_push($product_id, $product->id);
             }
-            $whProoducts =WarehouseProduct::whereHas('productDetail',function ($query) use ($product_id){
-                $query->whereIn('id',$product_id);
-            })->where('warehouse_id', $warehouse_id)->get();
-            $products = Helpers::api_product_data_formatting($whProoducts, true);
+            // $whProoducts = WarehouseProduct::whereHas('productDetail', function ($query) use ($product_id) {
+            //     $query->whereIn('id', $product_id);
+            // })->where('warehouse_id', $warehouse_id)->get();
+
+            $whProoductQuery = Helpers::getWhProductsByProductIds($product_id);
+            $whProoducts = $whProoductQuery->get();
+
+            $products = Helpers::apk_product_data_formatting($whProoducts, true);
             return response()->json($products, 200);
         }
         return response()->json([
@@ -349,19 +361,22 @@ class ProductController extends Controller
     public function get_daily_need_products(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
-            $paginator = $this->product->active()->withCount(['wishlist'])->with(['rating'])->where(['daily_needs' => 1])->orderBy('id', 'desc')->paginate($request['limit'], ['*'], 'page', $request['offset']);
+
+            $whPoduct =    Helpers::getWarehouseProductsdetail();
+
+            $paginator = $whPoduct->orderBy('id', 'asc')->paginate($request['limit'], ['*'], 'page', $request['offset']);
             $products = [
                 'total_size' => $paginator->total(),
                 'limit' => $request['limit'],
                 'offset' => $request['offset'],
                 'products' => $paginator->items()
             ];
-            $whPoduct =    Helpers::getWarehouseProductsdetail();
-             
-            $paginator = Helpers::api_product_data_formatting($whPoduct, true);
 
-            return response()->json($whPoduct, 200);
+            $paginator = Helpers::apk_product_data_formatting($products['products'], true);
+
+            return response()->json($products, 200);
         } catch (\Exception $e) {
+            //dd($e);
             return response()->json([
                 'errors' => ['code' => 'product-001', 'message' => 'Products not found!'],
             ], 404);
@@ -386,21 +401,24 @@ class ProductController extends Controller
      */
     public function get_popular_products(Request $request): \Illuminate\Http\JsonResponse
     {
-        $product_id =[];
+        $product_id = [];
         $products = ProductLogic::get_popular_products($request['limit'], $request['offset']);
         // dd($products['products']);
         $product_data = $products['products'];
-        foreach($products['products'] as  $product){
-            array_push($product_id,@$product->id);
+        foreach ($products['products'] as  $product) {
+            array_push($product_id, @$product->id);
         }
         // dd($product_id, 'stop');
-        $warehouse_id = auth('api')->user()->warehouse_id;
+        // $warehouse_id = auth('api')->user()->warehouse_id;
 
-        $whProoducts =WarehouseProduct::whereHas('productDetail',function ($query) use ($product_id){
-            $query->whereIn('id',$product_id);
-        })->where('warehouse_id', $warehouse_id)->get();
+        // $whProoducts = WarehouseProduct::whereHas('productDetail', function ($query) use ($product_id) {
+        //     $query->whereIn('id', $product_id);
+        // })->where('warehouse_id', $warehouse_id)->get();
+
+        $whProoductQuery = Helpers::getWhProductsByProductIds($product_id);
+        $whProoducts = $whProoductQuery->get();
         // dd($whProoducts);
-        $products['products'] = Helpers::api_product_data_formatting($whProoducts, true);
+        $products['products'] = Helpers::apk_product_data_formatting($whProoducts, true);
         return response()->json($products, 200);
     }
 

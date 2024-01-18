@@ -24,20 +24,22 @@ use Symfony\Component\Console\Helper\Helper;
 
 class Helpers
 {
-    public static  function getWarehouseProductsdetail()
+    public static  function getWarehouseProductsdetail($whCategories = null)
     {
         $warehouseId = auth('api')->user()->warehouse_id;
-        $whcategpries = self::warehouseAssignCategories($warehouseId);
-        
-        return WarehouseProduct::whereHas('productDetail', function ($query) use ($whcategpries) {
-            $query->whereIn('category_id', $whcategpries)->active();
-        })->where('warehouse_id', $warehouseId)->get();
+        if (empty($whCategories)) {
+            $whCategories = self::warehouseAssignCategories($warehouseId);
+        }
+
+        return WarehouseProduct::whereHas('productDetail', function ($query) use ($whCategories) {
+            $query->whereIn('category_id', $whCategories)->active()->withCount(['wishlist'])->with(['rating'])->where(['daily_needs' => 1]);
+        })->where('warehouse_id', $warehouseId);
     }
 
-    public static function warehouseAssignCategories($warehouseId )
+    public static function warehouseAssignCategories($warehouseId)
     {
         $row = [];
-        $data = \App\Model\WarehouseCategory::whereHas('getCategory',function ($q){
+        $data = \App\Model\WarehouseCategory::whereHas('getCategory', function ($q) {
             $q->active();
         })->where(['warehouse_id' => $warehouseId])->select('category_id')->pluck('category_id')->toArray();
         if (isset($data)) {
@@ -46,33 +48,43 @@ class Helpers
         return $row;
     }
 
+
+    public static  function getWhProductsByProductIds($product_ids)
+    {
+        $warehouseId = auth('api')->user()->warehouse_id;
+
+        return WarehouseProduct::whereHas('productDetail', function ($query) use ($product_ids) {
+            $query->whereIn('id', $product_ids)->active()->withCount(['wishlist'])->with(['rating']);
+        })->where('warehouse_id', $warehouseId);
+    }
+
     public static function getParentCategories($categoryIds)
     {
         $categoryModel = \App\Model\Category::get();
-            $parentCategoriesArray = [];
-    
-            foreach ($categoryIds as $categoryId) {
-                // Base case: If $categoryId is zero, skip to the next iteration
-                if ($categoryId == 0) {
-                    continue;
-                }
-    
-                // Retrieve parent_id for the given category_id
-                $parentCategory = $categoryModel->where('id', $categoryId)->pluck('parent_id')->first();
-    
-                // Recursive case: Call the function with the parent category_id
-                $parentCategories = Helpers::getParentCategories([$parentCategory]);
-    
-                // Append the current category_id to the result
-                $parentCategories[] = $categoryId;
-    
-                // Merge the current result with the overall result array
-                $parentCategoriesArray = array_merge($parentCategoriesArray, $parentCategories);
+        $parentCategoriesArray = [];
+
+        foreach ($categoryIds as $categoryId) {
+            // Base case: If $categoryId is zero, skip to the next iteration
+            if ($categoryId == 0) {
+                continue;
             }
-    
-            return $parentCategoriesArray;
+
+            // Retrieve parent_id for the given category_id
+            $parentCategory = $categoryModel->where('id', $categoryId)->pluck('parent_id')->first();
+
+            // Recursive case: Call the function with the parent category_id
+            $parentCategories = Helpers::getParentCategories([$parentCategory]);
+
+            // Append the current category_id to the result
+            $parentCategories[] = $categoryId;
+
+            // Merge the current result with the overall result array
+            $parentCategoriesArray = array_merge($parentCategoriesArray, $parentCategories);
         }
-       
+
+        return $parentCategoriesArray;
+    }
+
     public static function warehouseProductData($product_id, $warehouseId = false)
     {
 
@@ -269,12 +281,106 @@ class Helpers
         return $data;
     }
 
+
+    public static function apk_product_data_formatting($data, $multi_data = false)
+    {
+
+        $storage = [];
+        if ($multi_data == true) {
+            foreach ($data as $item) {
+                //dump(json_decode($item->productDetail['image']));
+                //dd($item);
+                $variations = [];
+                $item['category_id'] = $item->productDetail->category->id;
+                $item['name'] = $item->productDetail->name;
+                $item['product_code'] = $item->productDetail->product_code;
+                $item['description'] = $item->productDetail->description;
+                $item['unit'] = $item->productDetail->unit->title;
+                $item['image'] = json_decode($item->productDetail['image']);
+                $item['single_image'] = json_decode($item->productDetail['single_image']);
+                if (isset($item)) {
+
+                    foreach (json_decode($item['product_details'], true) as $var) {
+                        $variations[] = [
+                            'quantity' => $var['quantity'],
+                            'discount' =>  $var['discount'],
+                            'approx_piece' =>   $var['approx_piece'],
+                            'title' =>   $var['title'],
+                            'offer_price' =>   $var['offer_price'],
+                            'market_price' =>   $var['market_price'],
+                        ];
+                    }
+                }
+                $item['variations'] = $variations;
+
+                $item['total_stock'] = $item->total_stock;
+                //$item['attributes'] = json_decode($item['attributes']);
+                //$item['choice_options'] = json_decode($item['choice_options']);
+
+                if (count($item->productDetail['translations'])) {
+                    foreach ($item->productDetail['translations'] as $translation) {
+                        if ($translation->key == 'name') {
+                            $item['name_translate'] = $translation->value;
+                        }
+                        if ($translation->key == 'description') {
+                            $item['description_translate'] = $translation->value;
+                        }
+                    }
+                }
+                //dd($item);
+                //unset($item['translations']);
+                array_push($storage, $item);
+            }
+            $data = $storage;
+        } else {
+
+            $variations = [];
+            $data['category_id'] = json_decode($data['category_id']);
+            $data['image'] = json_decode($data['image']);
+            $data['attributes'] = json_decode($data['attributes']);
+            $data['choice_options'] = json_decode($data['choice_options']);
+
+            $categories = gettype($data['category_id']) == 'array' ? $data['category_id'] : json_decode($data['category_id']);
+            if (!is_null($categories) && ($categories) > 0) {
+                $ids[] = $categories;
+
+                $data['category_discount'] = CategoryDiscount::active()->where('category_id', $ids)->first();
+            } else {
+                $data['category_discount'] = [];
+            }
+
+            if (isset($data['variations'])) {
+
+                foreach (json_decode($data['variations'], true) as $var) {
+                    $variations[] = [
+                        'type' => $var['type'],
+                        'price' => (float)$var['price'],
+                        'stock' => isset($var['stock']) ? (int)$var['stock'] : (int)0,
+                    ];
+                }
+            }
+            $data['variations'] = $variations;
+            if (count($data['translations']) > 0) {
+                foreach ($data['translations'] as $translation) {
+                    if ($translation->key == 'name') {
+                        $data['name'] = $translation->value;
+                    }
+                    if ($translation->key == 'description') {
+                        $data['description'] = $translation->value;
+                    }
+                }
+            }
+        }
+
+        return $data;
+    }
+
     public static function product_data_formatting($data, $multi_data = false)
     {
 
         $storage = [];
         // dd($data->productDetail['image'], $data->productDetail);
-      
+
         $variations = [];
         $data['category_id'] = json_decode($data->productDetail->category->id); //json_decode($data['category_id']);
         $data['image'] = json_decode($data->productDetail['image']);
@@ -321,7 +427,7 @@ class Helpers
     public static function api_product_data_formatting($data, $multi_data = false)
     {
         $storage = [];
-        $multi_image ='';
+        $multi_image = '';
         //dd($data->productDetail['image'], $data->productDetail->category->id);
         // dd($data);
         foreach ($data as $item) {
@@ -330,7 +436,7 @@ class Helpers
             $item['image'] = json_decode($item->productDetail['image']);
             //$multi_image = json_decode(stripslashes($item->productDetail['image']));
             //dump($multi_image);
-   // $item['attributes'] = json_decode($item['attributes']);
+            // $item['attributes'] = json_decode($item['attributes']);
             $item['choice_options'] = json_decode($item['choice_options']);
 
             $categories = gettype($item['category_id']) == 'array' ? $item['category_id'] : json_decode($item['category_id']);
@@ -357,11 +463,10 @@ class Helpers
                         'market_price' =>   $var['market_price'],
                     ];
                 }
-    
             }
-             $item['variations'] = $variations;
+            $item['variations'] = $variations;
 
-             $item['total_stock'] = $item->total_stock;
+            $item['total_stock'] = $item->total_stock;
             // foreach (json_decode($item['variations'], true) as $var) {
             //     $variations[] = [
             //         'type' => $var['type'],
@@ -384,11 +489,11 @@ class Helpers
             // unset($item['translations']);
             array_push($storage, $item);
         }
-        
-        $data = $storage;
-         
 
-       
+        $data = $storage;
+
+
+
         return $data;
     }
 
@@ -1167,7 +1272,6 @@ class Helpers
         }
         return $html;
     }
-    
 }
 
 

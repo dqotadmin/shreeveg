@@ -9,6 +9,7 @@ use App\Model\Order;
 use App\Model\OrderDetail;
 use App\Model\Product;
 use App\Model\Review;
+use App\Model\WarehouseProduct;
 use App\User;
 use Illuminate\Support\Facades\DB;
 
@@ -39,11 +40,14 @@ class ProductLogic
     {
         $limit = is_null($limit) ? 10 : $limit;
         $offset = is_null($offset) ? 1 : $offset;
+        $warehouse_id = auth('api')->user()->warehouse_id;
 
         $ids = User::with('favorite_products')->find($user_id)->favorite_products->pluck('product_id')->toArray();
+        $whProoducts = WarehouseProduct::whereHas('productDetail', function ($query) use ($ids) {
+            $query->whereIn('id', $ids);
+        })->where('warehouse_id', $warehouse_id)->get();
         $favorite_products = Product::whereIn('id', $ids)->paginate($limit, ['*'], 'page', $offset);
-
-        $formatted_products = Helpers::product_data_formatting($favorite_products, true);
+        $formatted_products = Helpers::apk_product_data_formatting($whProoducts, true);
 
         return [
             'total_size' => $favorite_products->total(),

@@ -22,15 +22,16 @@ class CategoryLogic
 
     public static function products($category_id)
     {
+
         $warehouse_id = auth('api')->user()->warehouse_id;
-        $whProoducts =WarehouseProduct::whereHas('productDetail',function ($query) use ($category_id){
+        $whProoducts = WarehouseProduct::whereHas('productDetail', function ($query) use ($category_id) {
             $query->active()->withCount(['wishlist', 'active_reviews'])->with('rating')
-            ->where('category_id',$category_id);
+                ->where('category_id', $category_id);
         })->where('warehouse_id', $warehouse_id)->active()->get();
-      
+
         return $whProoducts;
 
-        
+
         $products = Product::active()->get();
         $product_ids = [];
         foreach ($products as $product) {
@@ -43,18 +44,18 @@ class CategoryLogic
             //     }
             // }
         }
-      
-      
-     
+
+
+
         return Product::active()->withCount(['wishlist', 'active_reviews'])->with('rating')->whereIn('id', $product_ids)->get();
-}
+    }
 
     public static function all_products($id)
     {
         $warehouse_id = auth('api')->user()->warehouse_id;
- 
+
         $assign_category_check = Helpers::getWhCategoriesData($id, $warehouse_id);
-        if($assign_category_check){
+        if ($assign_category_check) {
             $cate_ids = [];
             array_push($cate_ids, (int)$id);
             foreach (CategoryLogic::child($id) as $ch1) {
@@ -63,11 +64,11 @@ class CategoryLogic
                     array_push($cate_ids, $ch2['id']);
                 }
             }
-            $whProoducts =WarehouseProduct::whereHas('productDetail',function ($query) use ($cate_ids){
-                $query->whereIn('category_id',$cate_ids);
+            $whProoducts = WarehouseProduct::whereHas('productDetail', function ($query) use ($cate_ids) {
+                $query->whereIn('category_id', $cate_ids)->active()->withCount(['wishlist', 'active_reviews'])->with('rating');
             })->where('warehouse_id', $warehouse_id)->get();
             // dd($whProoducts);
-    
+
             return $whProoducts;
         }
         return 'data not found';

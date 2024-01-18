@@ -2635,4 +2635,10 @@
   'Price enter market price!' => 'Price enter market price!',
   'Please fill atleast one market price!' => 'Please fill atleast one market price!',
   'rate list Inserted Successfully!' => 'Rate list Inserted Successfully!',
+  'Rating' => 'Rating',
+  'Ex: 1 to 5' => 'Ex: 1 to 5',
+  'Home Page' => 'Home Page',
+  'Popup' => 'Popup',
+  'video' => 'Video',
+  'sequence' => 'Sequence',
 );

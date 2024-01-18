@@ -40,13 +40,14 @@
                                         <label class="input-label" for="exampleFormControlSelect1">{{translate('item')}} {{translate('type')}}<span
                                                 class="input-label-secondary">*</span></label>
                                         <select name="item_type" class="form-control" onchange="show_item(this.value)">
-                                            <option value="product" {{$banner['product_id']==null?'':'selected'}}>{{translate('product')}}</option>
-                                            <option value="category" {{$banner['category_id']==null?'':'selected'}}>{{translate('category')}}</option>
+                                            <option value="home_page" {{$banner['item_type']== 'home_page'?'selected' : '' }} >{{translate('Home Page')}}</option>
+                                            <option value="popup"  {{$banner['item_type']== 'popup'?'selected' : '' }} >{{translate('Popup')}}</option>
+                                            <option value="category"  {{$banner['item_type']== 'category'?'selected' : '' }} >{{translate('category')}}</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-12">
-                                    <div class="form-group mb-0" id="type-product"
+                                    <!-- <div class="form-group mb-0" id="type-product"
                                         style="display: {{$banner['product_id']==null?'none':'block'}}">
                                         <label class="input-label" for="exampleFormControlSelect1">{{translate('product')}} <span
                                                 class="input-label-secondary">*</span></label>
@@ -58,16 +59,25 @@
                                                 </option>
                                             @endforeach
                                         </select>
-                                    </div>
+                                    </div> -->
                                     <div class="form-group mb-0" id="type-category"
                                         style="display: {{$banner['category_id']==null?'none':'block'}}">
                                         <label class="input-label" for="exampleFormControlSelect1">{{translate('category')}} <span
                                                 class="input-label-secondary">*</span></label>
                                         <select name="category_id" class="form-control js-select2-custom">
-                                            @foreach($categories as $category)
+                                            @foreach($categories->where('parent_id',0) as $category)
+                                            
                                                 <option value="{{$category['id']}}" {{$banner['category_id']==$category['id']?'selected':''}}>{{$category['name']}}</option>
                                             @endforeach
                                         </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="d-flex flex-column justify-content-center h-100">
+                                        <div class="form-group mb-0">
+                                            <label class="input-label" for="exampleFormControlInput1"> {{translate('video')}} {{translate('banner')}} </label>
+                                            <input type="url" name="video_url" value="{{$banner->video_url}}" class="form-control"  placeholder="https://example.com" maxlength="255" >
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -90,7 +100,7 @@
 
                     <div class="col-12">
                         <div class="btn--container justify-content-end">
-                            <button type="reset" class="btn btn--reset">{{translate('reset')}}</button>
+                            <a href="{{route('admin.banner.add-new')}}" class="btn btn--reset">{{translate('back')}}</a>
                             <button type="submit" class="btn btn--primary">{{translate('update')}}</button>
                         </div>
                     </div>
@@ -120,14 +130,13 @@
         });
 
         function show_item(type) {
-            if (type === 'product') {
-                $("#type-product").show();
-                $("#type-category").hide();
-            } else {
-                $("#type-product").hide();
+            if (type === 'category') {
                 $("#type-category").show();
+            } else {
+                $("#type-category").hide();
             }
         }
+
     </script>
 
 

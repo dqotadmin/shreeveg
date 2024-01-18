@@ -141,6 +141,7 @@ class StoreController extends Controller
         $store->latitude = $request->latitude == null ? null : $request->latitude;
         $store->longitude = $request->longitude == null ? null : $request->longitude;
         $store->coverage = $request->coverage == null ? null : $request->coverage;
+        $store->admin_rating = $request->admin_rating == null ? null : $request->admin_rating;
         $store->document = $request->has('document') ? Helpers::update('store/', $store->document, 'png', $request->file('document')) : $store->document;
         $store->save();
 
@@ -207,6 +208,8 @@ class StoreController extends Controller
         $store->latitude = $request->latitude == null ? null : $request->latitude;
         $store->longitude = $request->longitude == null ? null : $request->longitude;
         $store->coverage = $request->coverage == null ? null : $request->coverage;
+        $store->admin_rating = $request->admin_rating == null ? null : $request->admin_rating;
+
         $store->document = $request->has('document') ? Helpers::update('store/', $store->document, 'png', $request->file('document')) : $store->document;
 
         $store->save();

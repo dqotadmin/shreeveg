@@ -93,9 +93,11 @@ class BannerController extends Controller
             'title.required'=>translate('Title is required'),
             'image.required'=>translate('Image is required'),
         ]);
-
         $banner = $this->banner;
         $banner->title = $request->title;
+        $banner->video_url = $request->video_url?  $request->video_url : null;
+        
+        $banner->item_type = $request->item_type;
         if ($request['item_type'] == 'product') {
             $banner->product_id = $request->product_id;
         } elseif ($request['item_type'] == 'category') {
@@ -154,6 +156,8 @@ class BannerController extends Controller
             $banner->product_id = null;
             $banner->category_id = $request->category_id;
         }
+        $banner->video_url = $request->video_url?  $request->video_url : null;
+
         $banner->image = $request->has('image') ? Helpers::update('banner/', $banner->image, 'png', $request->file('image')) : $banner->image;
         $banner->save();
         Toastr::success(translate('Banner updated successfully!'));

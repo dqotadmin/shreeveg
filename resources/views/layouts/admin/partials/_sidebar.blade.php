@@ -769,6 +769,7 @@
                         </li>
                         @endif
                         @endif
+                        
                         @if(Helpers::module_permission_check(MANAGEMENT_SECTION['promotion_management']))
 
                         <li class="nav-item">

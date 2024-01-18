@@ -10,7 +10,7 @@ use App\Model\WarehouseCategory;
 
 class CategoryController extends Controller
 {
-    public function __construct(
+    public function __construct( 
         private Category $category,
         private WarehouseCategory $warehouse_category
     ) {

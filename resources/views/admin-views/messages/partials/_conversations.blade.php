@@ -166,7 +166,7 @@ var lightbox = function (o) {
                         (t.alt = o.getAttribute("data-image-alt")),
                     t
                 );
-            }
+            } 
             if (e.match(/(youtube|vimeo)/)) {
                 var a = [];
                 return (

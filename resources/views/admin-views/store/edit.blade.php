@@ -92,7 +92,7 @@
                     <div class="card-body pt-sm-0 pb-sm-4">
                         <div class="row align-items-end g-4" style="margin-top: 40px;">
 
-                            <div class="col-sm-6 ">
+                            <div class="col-sm-4">
                                 <label class="form-label" for="exampleFormControlInput1">{{ translate('Store') }}
                                     {{ translate('Name') }} </label>
                                 <input type="text" name="name" class="form-control" placeholder="{{ translate('Ex: Store Name') }}" value="{{$stores->name}}" required>
@@ -100,7 +100,7 @@
                                     Please enter store name.
                                 </div>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
                                 <label class="form-label" for="exampleFormControlInput1">{{ translate('Store') }}
                                     {{ translate('Code') }} </label>
                                 <input type="text" name="code" class="get_wh_code form-control" style="text-transform: uppercase;" value="{{$stores->code}}" placeholder="{{ translate('Ex: QUINN1') }}" readonly required>
@@ -108,6 +108,15 @@
                                     Please enter store code.
                                 </div>
                             </div>
+                            <div class="col-sm-4">
+                            <label class="form-label" for="exampleFormControlInput1">{{ translate('Store') }}
+                                {{ translate('Rating') }} </label>
+                                <input   min="1" max="5" name="admin_rating" class="form-control" oninput="validateRating(this)"
+                            type="text"  pattern="^\d+(\.\d+)?$"   placeholder="{{ translate('Ex: 1 to 5') }}"  required value="{{$stores->admin_rating}}">
+                                <div class="invalid-feedback">
+                                Please enter a valid rating between 1 and 5.
+                                </div>
+                        </div>
                             <div class="col-sm-6">
                                 <label class="form-label" for="exampleFormControlInput1">{{ translate('Shop') }}
                                     {{ translate('Licence') }} </label>
@@ -280,6 +289,22 @@
 @endsection
 
 @push('script_2')
+
+<script>
+function validateRating(input) {
+ 
+    if(input.value == ''){
+        input.value = '';
+
+    }
+    if (input.value > 5) {
+        input.setCustomValidity('Rating must be between 1 and 5');
+        input.value = '';
+    } else {
+        input.setCustomValidity('');
+    }
+}
+</script>
 <script>
     $(document).ready(function() {
         $('#click_on_city').on('change', function() {

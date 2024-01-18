@@ -123,7 +123,7 @@
                                
                                 @else
                                     <th class="text-center">{{translate('status')}}</th>
-                                    <th class="text-center">{{translate('order')}}</th>
+                                    <th data-searchable="true">{{translate('sequence')}}</th>
                                 @endif
                                 @if(in_array(auth('admin')->user()->admin_role_id ,[3]))
                                 <th class="">{{translate('status')}}</th>
@@ -205,12 +205,11 @@
                                                 </span>
                                             </label>
                                         </td>
-                                        <td>
-                                        <input type="text" name="sequence" class="form-control w-50" value="{{ $product->sequence }}"
-                                        oninput="updateSequence('{{ route('admin.product.update-sequence', ['id' => $product->id]) }}', this.value)" 
-                                        id="old_val{{$product->id}}">
-                                         
-                                        <input type="hidden" class="form-control" id="product_id" value="{{$product->id}}" style="width: 70px;">
+                                        <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
+                                            <input type="text" name="sequence" class="form-control w-50" value="{{ $product->sequence }}"
+                                            oninput="updateSequence('{{ route('admin.product.update-sequence', ['id' => $product->id]) }}', this.value)" 
+                                            id="old_val{{$product->id}}">
+                                            <input type="hidden" class="form-control" id="product_id" value="{{$product->id}}" style="width: 70px;">
                                         </td>
                                     @endif
                                 @if(in_array(auth('admin')->user()->admin_role_id ,[3]))
@@ -449,7 +448,7 @@
                     .search(this.value)
                     .draw();
             });
-
+          
 
             // INITIALIZATION OF SELECT2
             // =======================================================

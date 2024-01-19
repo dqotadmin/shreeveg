@@ -2641,4 +2641,5 @@
   'Popup' => 'Popup',
   'video' => 'Video',
   'sequence' => 'Sequence',
+  'Item removed from favourite list! ' => 'Item removed from favourite list! ',
 );

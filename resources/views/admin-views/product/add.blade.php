@@ -65,6 +65,10 @@
                                     </div>
                                 </div>
                             @endforeach
+                            <div class="form-group mb-2">
+                                <label class="input-label" for="exampleFormControlInput1">Tax rate <span id="tax_symbol">(%)</span></label>
+                                <input type="number" min="0" value="0" step="0.01" max="100000" name="tax" class="form-control manually-border-color" placeholder="Ex : ₹ 100" >
+                            </div>
                         @else
                             <div id="{{$default_lang}}-form">
                                 <div class="form-group">
@@ -81,6 +85,7 @@
                     </div>
                 </div>
             </div>
+            
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-header">

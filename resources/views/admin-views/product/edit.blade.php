@@ -80,6 +80,10 @@
                         </div>
                     </div>
                     @endforeach
+                    <div class="form-group mb-2">
+                        <label class="input-label" for="exampleFormControlInput1">Tax rate <span id="tax_symbol">(%)</span></label>
+                        <input type="number" min="0" value="{{ $product['tax'] }}" step="0.01" max="100000" name="tax" class="form-control manually-border-color" placeholder="Ex : ₹ 100" >
+                    </div>
                     @else
                     <div id="english-form">
                         <div class="form-group">

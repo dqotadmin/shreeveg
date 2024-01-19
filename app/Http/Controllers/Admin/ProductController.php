@@ -195,7 +195,6 @@ class ProductController extends Controller
      */
     public function store(Request $request): \Illuminate\Http\JsonResponse
     {
-
         Validator::make($request->all(), [
             'name' => 'required|unique:products',
             'description' => 'required',
@@ -245,6 +244,7 @@ class ProductController extends Controller
         $p->image = $image_data;
         $p->single_image = $single_img_names;
         $p->maximum_order_quantity = $request->maximum_order_quantity;
+        $p->tax = $request->tax ? $request->tax : 0;
         $p->status = $request->status ? $request->status : 0;
         $p->group_ids = json_encode($request->group_ids);
         $lastSequence = $this->product->max('sequence');
@@ -487,6 +487,7 @@ class ProductController extends Controller
 
         $p->name = $request->name[array_search('en', $request->lang)];
         $p->description = $request->description[array_search('en', $request->lang)];
+        $p->tax = $request->tax ? $request->tax : 0;
 
         $p->category_id = $request->category_id;
         $p->product_code = $request->product_code;

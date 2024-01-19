@@ -76,21 +76,21 @@
                         @if(in_array($user->admin_role_id ,[6,1]))
                         <td>
                             <span class="d-block font-size-sm text-body text-trim-25">
-                                {{ $row->warehouseDetail->name }} 
+                                {{ @$row->warehouseDetail->name }} 
                             </span>
                         </td>
                         @endif
                         @if(in_array($user->admin_role_id ,[3,1]))
                         <td>
                             <span class="d-block font-size-sm text-body text-trim-25">
-                                {{ $row->storeDetail->name  }} 
+                                {{ @$row->storeDetail->name  }} 
                             </span>
                         </td>
                         @endif
                         
                         <td>
                             <span class="d-block font-size-sm text-body text-trim-25">
-                            {{$row->invoice_number }}
+                            {{@$row->invoice_number }}
                             </span>
                         </td>
                         <td>

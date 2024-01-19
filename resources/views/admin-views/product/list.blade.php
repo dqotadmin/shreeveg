@@ -33,7 +33,7 @@
                                     <input id="datatableSearch_" type="search" name="search"
                                         class="form-control"
                                         placeholder="{{translate('Search_by_ID_or_name')}}" aria-label="Search"
-                                        value="{{$search}}" required autocomplete="off">
+                                        value="{{$search}}" autocomplete="off">
                                     <div class="input-group-append">
                                         <button type="submit" class="input-group-text">
                                             {{translate('search')}}
@@ -123,7 +123,7 @@
                                
                                 @else
                                     <th class="text-center">{{translate('status')}}</th>
-                                    <th data-searchable="true">{{translate('sequence')}}</th>
+                                    <th data-searchable="true"  id="column3_search">{{translate('sequence')}}</th>
                                 @endif
                                 @if(in_array(auth('admin')->user()->admin_role_id ,[3]))
                                 <th class="">{{translate('status')}}</th>
@@ -380,81 +380,82 @@
         })
     }
 </script>
-    <script>
-        $('#search-form').on('submit', function () {
-            var formData = new FormData(this);
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.post({
-                url: '{{route('admin.product.search')}}',
-                data: formData,
-                cache: false,
-                contentType: false,
-                processData: false,
-                beforeSend: function () {
-                    $('#loading').show();
-                },
-                success: function (data) {
-                    $('#set-rows').html(data.view);
-                    $('.page-area').hide();
-                },
-                complete: function () {
-                    $('#loading').hide();
-                },
-            });
+<script>
+    $('#search-form').on('submit', function () {
+        var formData = new FormData(this);
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
         });
-    </script>
+        $.post({
+            url: '{{route('admin.product.search')}}',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                $('#loading').show();
+            },
+            success: function (data) {
+                $('#set-rows').html(data.view);
+                $('.page-area').hide();
+            },
+            complete: function () {
+                $('#loading').hide();
+            },
+        });
+    });
+</script>
 
-    <script>
-        function daily_needs(id, status) {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                url: "{{route('admin.product.daily-needs')}}",
-                method: 'POST',
-                data: {
-                    id: id,
-                    status: status
-                },
-                success: function () {
-                    toastr.success('{{ translate("Daily need status updated successfully") }}');
-                }
-            });
-        }
-    </script>
+<script>
+    function daily_needs(id, status) {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: "{{route('admin.product.daily-needs')}}",
+            method: 'POST',
+            data: {
+                id: id,
+                status: status
+            },
+            success: function () {
+                toastr.success('{{ translate("Daily need status updated successfully") }}');
+            }
+        });
+    }
+</script>
     <script>
         $(document).on('ready', function () {
-            // INITIALIZATION OF DATATABLES
-            // =======================================================
-            var datatable = $.HSCore.components.HSDatatables.init($('#columnSearchDatatable'));
+    // INITIALIZATION OF DATATABLES
+    var datatable = $.HSCore.components.HSDatatables.init($('#columnSearchDatatable'));
 
-            $('#column1_search').on('keyup', function () {
-                datatable
-                    .columns(1)
-                    .search(this.value)
-                    .draw();
-            });
+    // Add searching functionality for the "Sequence" column
+    $('#column3_search').on('keyup', function () {
+        datatable
+            .columns(5) // "Sequence" column index is 1
+            .search(this.value)
+            .draw();
+    });
 
+    // Add searching functionality for the "Status" column
+    $('#column1_search').on('change', function () {
+        var statusValue = this.value;
+        datatable
+            .columns(4) // "Status" column index is 0
+            .search(statusValue)
+            .draw();
+    });
 
-            $('#column3_search').on('change', function () {
-                datatable
-                    .columns(2)
-                    .search(this.value)
-                    .draw();
-            });
-          
+    // ... (existing code)
 
-            // INITIALIZATION OF SELECT2
-            // =======================================================
-            $('.js-select2-custom').each(function () {
-                var select2 = $.HSCore.components.HSSelect2.init($(this));
-            });
-        });
+    // INITIALIZATION OF SELECT2
+    $('.js-select2-custom').each(function () {
+        var select2 = $.HSCore.components.HSSelect2.init($(this));
+    });
+});
     </script>
 @endpush

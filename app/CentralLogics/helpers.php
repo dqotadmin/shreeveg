@@ -30,7 +30,6 @@ class Helpers
         if (empty($whCategories)) {
             $whCategories = self::warehouseAssignCategories($warehouseId);
         }
-
         return WarehouseProduct::whereHas('productDetail', function ($query) use ($whCategories) {
             $query->whereIn('category_id', $whCategories)->active()->withCount(['wishlist'])->with(['rating'])->where(['daily_needs' => 1]);
         })->where('warehouse_id', $warehouseId);
@@ -294,6 +293,12 @@ class Helpers
                 $item['category_id'] = $item->productDetail->category->id;
                 $item['name'] = $item->productDetail->name;
                 $item['product_code'] = $item->productDetail->product_code;
+                $item['price'] = $item->customer_price;
+                $item['rating'] = $item->productDetail->rating;
+                $item['tax'] = $item->productDetail->tax;
+                $item['tax_type'] = $item->productDetail->tax_type;
+                $item['attributes'] = [];
+
                 $item['description'] = $item->productDetail->description;
                 $item['unit'] = $item->productDetail->unit->title;
                 $item['image'] = json_decode($item->productDetail['image']);
@@ -338,6 +343,11 @@ class Helpers
             $data['category_id'] = $data->productDetail->category->id;
             $data['name'] = $data->productDetail->name;
             $data['product_code'] = $data->productDetail->product_code;
+            $data['price'] = $data->customer_price;
+            $data['tax'] = $data->productDetail->tax;
+            $data['tax_type'] = $data->productDetail->tax_type;
+            $data['attributes'] = [];
+
             $data['description'] = $data->productDetail->description;
             $data['unit'] = $data->productDetail->unit->title;
             $data['image'] = json_decode($data->productDetail['image']);

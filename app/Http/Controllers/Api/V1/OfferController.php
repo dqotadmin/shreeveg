@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Model\FlashDeal;
 use App\Model\FlashDealProduct;
 use App\Model\Product;
+use App\Model\WarehouseProduct;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -27,7 +28,7 @@ class OfferController extends Controller
         try {
             $flash_deals = $this->flash_deal->active()
                 ->where('deal_type','flash_deal')
-                ->first();
+                ->get();
 
             return response()->json($flash_deals, 200);
         } catch (\Exception $e) {
@@ -50,8 +51,6 @@ class OfferController extends Controller
             ->pluck('product_id')
             ->toArray();
 
-        //dd($p_ids);
-
         if (count($p_ids) > 0) {
             $paginator = $this->product->with(['rating'])
                ->whereIn('id', $p_ids)
@@ -62,9 +61,11 @@ class OfferController extends Controller
                 'limit' => $request['limit'],
                 'offset' => $request['offset'],
                 'products' => $paginator->items()
-            ];
-
-            $products['products'] = Helpers::product_data_formatting($products['products'], true);
+            ];  
+           $data = Helpers::getWarehouseProductsdetail();
+           $whProducts = $data->whereIn('product_id',$p_ids)->get();
+            
+            $products['products'] = Helpers::apk_product_data_formatting($whProducts, true);
             return response()->json($products, 200);
         }
 

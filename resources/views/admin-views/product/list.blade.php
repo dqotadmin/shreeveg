@@ -197,10 +197,9 @@
                                             }
 
                                             ?> 
-                                                <input type="text" name="sequence" class="form-control w-50" value="{{ $sequence->sequence }}"
+                                                <input type="text" name="sequence" class="form-control w-50" value="{{ @$sequence->sequence }}"
                                                 onblur="updateSequence('{{ route('admin.product.update-sequence', ['id' => $sequence->id]) }}', this.value)" 
                                             >
-                                                <input type="hidden" class="form-control" id="product_id" value="{{$sequence->product_id}}" style="width: 70px;">
                                             </td>
                                         
                                         

@@ -32,56 +32,38 @@
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-body pt-2">
-                        @if($data && array_key_exists('code', $data[0]))
 
-                            <ul class="nav nav-tabs mb-4">
-
-                                @foreach($data as $lang)
-                                    <li class="nav-item">
-                                        <a class="nav-link lang_link {{$lang['default'] == true ? 'active':''}}" href="#" id="{{$lang['code']}}-link">{{Helpers::get_language_name($lang['code']).'('.strtoupper($lang['code']).')'}}</a>
-                                    </li>
-                                @endforeach
-
-                            </ul>
-                            @foreach($data as $lang)
-                                <div class="{{$lang['default'] == false ? 'd-none':''}} lang_form" id="{{$lang['code']}}-form">
+                             
+                                <div class=" lang_form" id="-form">
                                     <div class="form-group">
-                                        <label class="input-label" for="{{$lang['code']}}_name">{{translate('name')}} ({{strtoupper($lang['code'])}})</label>
-                                        <input type="text" name="name[]" id="{{$lang['code']}}_name" class="form-control"
-                                            placeholder="{{translate('New Product')}}" {{$lang['status'] == true ? 'required':''}}
-                                            @if($lang['status'] == true) oninvalid="document.getElementById('{{$lang['code']}}-link').click()" @endif required >
+                                        <label class="input-label" for="_name">{{translate('name')}} (EN) </label>
+                                        <input type="text" name="name" id="_name" class="form-control"
+                                            placeholder="{{translate('New Product')}}"  
+                                              required >
                                             <div class="invalid-feedback">
                                                 Please enter name.
                                             </div>
                                     </div>
-                                    <input type="hidden" name="lang[]" value="{{$lang['code']}}">
                                     <div class="form-group mb-0">
                                         <label class="input-label"
-                                            for="{{$lang['code']}}_description">{{translate('short')}} {{translate('description')}}  ({{strtoupper($lang['code'])}})</label>
-                                        <textarea name="description[]" class="form-control h--172px " id="{{$lang['code']}}_hiddenArea" required></textarea>
+                                            for="_description">{{translate('short')}} {{translate('description')}} (EN)  </label>
+                                        <textarea name="description" class="form-control h--90px " id="_hiddenArea" required></textarea>
                                         <div class="invalid-feedback">
                                                 Please enter description.
                                             </div>
                                     </div>
                                 </div>
-                            @endforeach
-                            <div class="form-group mb-2">
-                                <label class="input-label" for="exampleFormControlInput1">Tax rate <span id="tax_symbol">(%)</span></label>
-                                <input type="number" min="0" value="0" step="0.01" max="100000" name="tax" class="form-control manually-border-color" placeholder="Ex : ₹ 100" >
-                            </div>
-                        @else
-                            <div id="{{$default_lang}}-form">
-                                <div class="form-group">
-                                    <label class="input-label" for="exampleFormControlInput1">{{translate('name')}} (EN)</label>
-                                    <input type="text" name="name[]" class="form-control" placeholder="{{translate('New Product')}}" required >
+                         
+                            <div id="" class="lang_form mt-4">
+                                <div class="form-group mb-0 mt-2">
+                                    <label class="input-label" for="exampleFormControlInput1">{{translate('name')}} (HI)</label>
+                                    <input type="text" name="hn_name" class="form-control" placeholder="{{translate('New Product')}}" required >
                                 </div>
-                                <input type="hidden" name="lang[]" value="en">
-                                <div class="form-group mb-0">
-                                    <label class="input-label" for="exampleFormControlInput1">{{translate('short')}} {{translate('description')}} (EN)</label>
-                                    <textarea name="description[]" class="form-control  h--172px" id="hiddenArea" required></textarea>
+                                <div class="form-group mb-0 mt-4">
+                                    <label class="input-label" for="exampleFormControlInput1">{{translate('short')}} {{translate('description')}} (HI)</label>
+                                    <textarea name="hn_description" class="form-control  h--90px" id="hiddenArea" required></textarea>
                                 </div>
                             </div>
-                        @endif
                     </div>
                 </div>
             </div>
@@ -107,7 +89,7 @@
                                             class="input-label-secondary">*</span></label>
                                     <select name="category_id" class="form-control js-select2-custom"
                                             onchange="getRequest('{{url('/')}}/admin/product/get-categories?parent_id='+this.value,'sub-categories')" required>
-                                        <option value="">---{{translate('select')}}---</option>
+                                        <option value="" disabled>---{{translate('select')}}---</option>
                                         <?php echo $options; ?>
                                     </select>
                                     
@@ -152,7 +134,18 @@
                                            placeholder="{{ translate('Ex : 3') }}" >
                                 </div>
                             </div>
-
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="input-label" for="exampleFormControlInput1">GST <span id="tax_symbol">(%)</span></label>
+                                    <select class="form-control" name="tax">
+                                        <option value=""  disabled>Please Select GST</option>
+                                         @for($i=0;$i<=50; $i++)
+                                            <option value="{{$i}}" >{{$i}}</option>
+                                        @endfor
+                                    </select>
+                                </div>
+                            </div>
+<!-- 
                             <div class="col-sm-6">
                                 <div class="form-group">
                                 <label class="input-label"
@@ -167,12 +160,12 @@
                                         </label>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                             
                                 <div class="col-sm-12" id="">
                                     <div class="form-group">
                                         <label class="input-label" for="exampleFormControlInput1">{{translate('Select Group')}}</label>
-                                        <select name="group_ids[]" id="group_id"    class="form-control chosen-select" multiple >
+                                        <select name="group_ids[]" id="group_id" class="form-control chosen-select" multiple >
                                              <option value="" disabled>---{{translate('Select Group')}}---</option>
                                                 @foreach ($groups as $gKey => $group)
                                              <option value="{{$gKey}}">{{$group}}</option>
@@ -180,6 +173,7 @@
                                         </select>
                                    
                                 </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -314,8 +308,8 @@
                 },
                 onExtensionErr: function (index, file) {
                     toastr.error('{{ translate("Please only input png or jpg type file") }}', {
-                        CloseButton: true,
-                        ProgressBar: true
+                        CloseButton: false,
+                        ProgressBar: false
                     });
                 },
                 onSizeErr: function (index, file) {

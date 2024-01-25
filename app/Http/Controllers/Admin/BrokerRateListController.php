@@ -99,9 +99,9 @@ class BrokerRateListController extends Controller
             $row->date_time = date('Y-m-d H:i:s');
 
             if ($row->save()) {
-                if ($request->rate) {
+                if (isset($request->rate) && $request->rate !== null) {
                     foreach ($request->rate as $key => $rate) {
-                        if (isset($request->available_qty[$key])) {
+                        if (isset($request->available_qty[$key]) && $rate !== null) {
                             $detailRow = new \App\Model\BrokerRateListDetail();
                             $detailRow['broker_rate_list_id'] = $row->id;;
                             $detailRow['product_id'] = $request->product_id[$key];

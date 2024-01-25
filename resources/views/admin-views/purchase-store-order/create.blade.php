@@ -18,8 +18,7 @@
     <!-- End Page Header -->
     <div class="card">
         <div class="card-body">
-            <form action="{{route('admin.store.purchase-store-orders.store')}}" method="post"
-                enctype="multipart/form-data">
+            <form action="{{route('admin.store.purchase-store-orders.store')}}" method="post" enctype="multipart/form-data">
                 @csrf
 
                 <div class="row g-3">

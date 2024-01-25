@@ -91,7 +91,7 @@
                 @endif
             </div>
             <span  class="font-20px font-weight-bold text-dark">
-            {{ @$stock->total_stock }}/ {{ @$whProduct->unit->title }} 
+            {{ @$stock->total_stock? $stock->total_stock : 0; }}/ {{ @$whProduct->unit->title }} 
             </span>
             </p>
             <div  >

@@ -192,8 +192,7 @@
                             </center>
                             <label>{{\App\CentralLogics\translate('image')}}</label><small style="color: red">* ( {{\App\CentralLogics\translate('ratio')}} 3:1 )</small>
                             <div class="custom-file">
-                                <input type="file" name="image" id="customFileEg1" class="custom-file-input"
-                                        accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*">
+                                <input type="file" name="image" id="customFileEg1" class="custom-file-input" >
                                 <label class="custom-file-label gray-border" for="customFileEg1">{{\App\CentralLogics\translate('choose')}} {{\App\CentralLogics\translate('file')}}</label>
                             </div>
                         </div>

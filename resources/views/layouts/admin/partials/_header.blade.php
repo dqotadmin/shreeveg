@@ -17,6 +17,7 @@
             <!-- Secondary Content -->
             <div class="navbar-nav-wrap-content-right">
                 <!-- Navbar -->
+                 
                 <ul class="navbar-nav align-items-center flex-row">
                     <li class="nav-item mr-0">
                         <div class="hs-unfold">
@@ -124,9 +125,17 @@
                                     </div>
                                 </div>
 
+                                @if(session()->has('issuperadminlogin'))
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{{route('admin.login-superadmin',1)}}">
+                                    <span class="text-truncate pr-2" title="Settings">{{translate('Superadmin')}}</span>
+                                </a>
+                 
+                @endif
+                               
                                 <div class="dropdown-divider"></div>
 
-                                <a class="dropdown-item" href="{{route('admin.settings')}}">
+                                  <a class="dropdown-item" href="{{route('admin.settings')}}">
                                     <span class="text-truncate pr-2" title="Settings">{{translate('settings')}}</span>
                                 </a>
 

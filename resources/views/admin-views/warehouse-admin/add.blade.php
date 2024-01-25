@@ -294,7 +294,7 @@
                     <!-- Card -->
                     <div id="passwordDiv" class="card mb-3 mb-lg-5">
                         <div class="card-header">
-                            <h4 class="card-title"><i class="tio-lock"></i> {{ translate('Change your password') }}
+                            <h4 class="card-title"><i class="tio-lock"></i> {{ translate('New password') }}
                             </h4>
                         </div>
 

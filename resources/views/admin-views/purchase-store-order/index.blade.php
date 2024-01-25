@@ -134,19 +134,20 @@
                                         {{$row->stock_update }}
                                     </span>
                                  @endif
-                            </a>
+                            </a> 
                         </td>
                         @endif
                         <td>
+                            <div class="btn--container justify-content-center">
                                 <a class="action-btn" href="{{route('admin.store.purchase-store-orders.show',[$row->id])}}">
                                 <i class="tio-invisible"></i>
-                                </a>
-                                @if($user->admin_role_id == 5 && $row->status == 'Pending')
-                                <a class="action-btn btn--danger btn-outline-danger" href="javascript:"
-                                onclick="form_alert('order-{{$row->id}}','{{ translate("Want to delete this") }}')">
-                                 <i class="tio-delete-outlined"></i>
+                                </a> 
+                                @if($user->admin_role_id == 6 && $row->status == 'Pending')
+                                    <a class="action-btn btn--danger btn-outline-danger" href="javascript:"
+                                    onclick="form_alert('order-{{$row->id}}','{{ translate("Want to delete this") }}')">
+                                    <i class="tio-delete-outlined"></i>
+                                 @endif
                              </a>
-                             @endif
                          </div>
                          <form action="{{route('admin.purchase-warehouse-order.destroy',[$row->id])}}"
                                method="post" id="order-{{$row->id}}">

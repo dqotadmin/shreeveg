@@ -61,7 +61,6 @@
                         <th class="border-0">{{translate('product')}}</th>
                         <th class="border-0">{{translate('quantity')}}</th>
                         <th class="border-0">{{translate('date')}}</th>
-                       
                     </tr>
                 </thead>
                 <tbody>
@@ -108,7 +107,6 @@
                         <td>
                             {{ date('d M Y h:i A',strtotime($row->created_at))}}
                         </td>
-                        <td>
                        
                        
                        

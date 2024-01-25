@@ -124,11 +124,11 @@
                                 @else
                                     <th class="text-center">{{translate('status')}}</th>
                                     <th data-searchable="true"  id="column3_search">{{translate('sequence')}}</th>
+                                    <th data-searchable="true"  id="column3_search">{{translate('tax')}}</th>
                                 @endif
                                 @if(in_array(auth('admin')->user()->admin_role_id ,[3]))
                                 <th class="">{{translate('status')}}</th>
                                 @endif
-                                <th class="text-center">{{translate('show_in_daily_needs')}}</th>
 
                                 @if(auth('admin')->user()->admin_role_id != 5)
                                 <th class="text-center">{{translate('action')}}</th>
@@ -141,7 +141,7 @@
                                 <tr>
                                     <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">{{$products->firstItem()+$key}}</td>
                                     <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
-                                        <a href="{{route('admin.product.view',[$product['id']])}}" class="product-list-media">
+                                        <a @if(auth('admin')->user()->admin_role_id == '1') href="{{route('admin.product.view',[$product['id']])}}" @endif class="product-list-media">
                                             @if (!empty(json_decode($product['image'],true)))
                                         <img
                                             src="{{asset('storage/app/public/product')}}/{{json_decode($product['image'],true)[0]}}"
@@ -211,6 +211,7 @@
                                             id="old_val{{$product->id}}">
                                             <input type="hidden" class="form-control" id="product_id" value="{{$product->id}}" style="width: 70px;">
                                         </td>
+                                        <td>{{$product->tax}}</td>
                                     @endif
                                 @if(in_array(auth('admin')->user()->admin_role_id ,[3]))
                                         <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
@@ -231,8 +232,7 @@
                                                 }
                                             ?> 
                                         </td>
-                                @endif
-                                <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
+                                        <!-- <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
                                         <div class="text-center">
                                             <label class="switch my-0">
                                                 <input type="checkbox" class="status" {{ auth('admin')->user()->admin_role_id == 3 ? 'disabled' : '' }}  onchange="daily_needs('{{$product['id']}}','{{$product->daily_needs==1?0:1}}')"
@@ -240,7 +240,9 @@
                                                 <span class="slider round"></span>
                                             </label>
                                         </div>
-                                    </td>
+                                        </td> -->
+                                @endif
+                                    
                                     @if(auth('admin')->user()->admin_role_id != 5)
                                     <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
                                             <!-- Dropdown -->

@@ -74,7 +74,7 @@
                             </div>
                         </th>
                         <th>New rate</th>
-                        <th>Old rate</th>
+                        <th>Current rate</th>
                         <th>Last Updated Date</th>
                     </thead>
                     <tbody>

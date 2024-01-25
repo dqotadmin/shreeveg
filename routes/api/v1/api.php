@@ -41,6 +41,7 @@ Route::group(['namespace' => 'Api\V1', 'middleware'=>'localization'], function (
         Route::get('reviews/{product_id}', 'ProductController@get_product_reviews');
         Route::get('rating/{product_id}', 'ProductController@get_product_rating');
         Route::get('daily-needs', 'ProductController@get_daily_need_products');
+        Route::get('group', 'ProductController@product_group');
         Route::post('reviews/submit', 'ProductController@submit_product_review')->middleware('auth:api');
 
         Route::group(['prefix' => 'favorite', 'middleware' => ['auth:api', 'customer_is_block']], function () {
@@ -73,7 +74,7 @@ Route::group(['namespace' => 'Api\V1', 'middleware'=>'localization'], function (
 
     Route::group(['prefix' => 'customer', 'middleware' => ['auth:api', 'customer_is_block']], function () {
         Route::get('info', 'CustomerController@info');
-        Route::put('update-profile', 'CustomerController@update_profile');
+        Route::post('update-profile', 'CustomerController@update_profile');
         Route::put('cm-firebase-token', 'CustomerController@update_cm_firebase_token');
         Route::delete('unsubscribe-topic', 'CustomerController@unsubscribe_topic');
 
@@ -82,7 +83,7 @@ Route::group(['namespace' => 'Api\V1', 'middleware'=>'localization'], function (
         Route::group(['prefix' => 'address'], function () {
             Route::get('list', 'CustomerController@address_list');
             Route::post('add', 'CustomerController@add_new_address');
-            Route::put('update/{id}', 'CustomerController@update_address');
+            Route::post('update/{id}', 'CustomerController@update_address');
             Route::delete('delete', 'CustomerController@delete_address');
         });
 

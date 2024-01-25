@@ -25,7 +25,7 @@ class CategoryController extends Controller
 
     /**
      * @param Request $request
-     * @return Application|Factory|View
+    * @return Application|Factory|View
      */
     function index(Request $request): View|Factory|Application
     {
@@ -63,7 +63,7 @@ class CategoryController extends Controller
 
         //Category Dropdown
         $categories = $this->category->get();
-        $options = Helpers::getCategoryDropDown($categories);
+        $options = Helpers::getCategoryDropDownColors($categories);
 
         return view('admin-views.category.add', compact('options', 'search'));
 
@@ -160,13 +160,11 @@ class CategoryController extends Controller
             'category_code' => 'required|unique:categories',
            
         ]);
-
-        foreach ($request->name as $name) {
-            if (strlen($name) > 255) {
+       
+            if (strlen($request->name) > 255) {
                 toastr::error(translate('Category name is too long!'));
                 return back();
             }
-        }
         //uniqueness check
         $parent_id = $request->parent_id ?? 0;
         $all_category = $this->category->where(['parent_id' => $parent_id])->pluck('name')->toArray();
@@ -185,63 +183,21 @@ class CategoryController extends Controller
         //into db
         $category = $this->category;
 
-        $category->name = @$request->name[array_search('en', $request->lang)];
-        $category->title_silver = @$request->title_silver[array_search('en', $request->lang)];
-        $category->title_gold = @$request->title_gold[array_search('en', $request->lang)];
-        $category->title_platinum = @$request->title_platinum[array_search('en', $request->lang)];
+        $category->name = @$request->name;
+        $category->hn_name = @$request->hn_name;
+        
+        $category->title_silver = @$request->title_silver;
+        $category->title_gold = @$request->title_gold;
+        $category->title_platinum = @$request->title_platinum;
 
         $category->image = $image_name;
         $category->category_code = $request->category_code;
         $category->parent_id = $request->parent_id == null ? 0 : $request->parent_id;
-        $category->position = $request->position;
         $category->status = 1;
-        
         $category->save();
 
         //translation
-        $data = [];
-        foreach ($request->lang as $index => $key) {
-            if ($request->name[$index] && $key != 'en') {
-                $data[] = array(
-                    'translationable_type' => 'App\Model\Category',
-                    'translationable_id' => $category->id,
-                    'locale' => $key,
-                    'key' => 'name',
-                    'value' => $request->name[$index],
-                );
-            }
-            if ($request->title_silver[$index] && $key != 'en') {
-                $data[] = array(
-                    'translationable_type' => 'App\Model\Category',
-                    'translationable_id' => $category->id,
-                    'locale' => $key,
-                    'key' => 'title_silver',
-                    'value' => $request->title_silver[$index],
-                );
-            }
-            if ($request->title_gold[$index] && $key != 'en') {
-                $data[] = array(
-                    'translationable_type' => 'App\Model\Category',
-                    'translationable_id' => $category->id,
-                    'locale' => $key,
-                    'key' => 'title_gold',
-                    'value' => $request->title_gold[$index],
-                );
-            }
-            if ($request->title_platinum[$index] && $key != 'en') {
-                $data[] = array(
-                    'translationable_type' => 'App\Model\Category',
-                    'translationable_id' => $category->id,
-                    'locale' => $key,
-                    'key' => 'title_platinum',
-                    'value' => $request->title_platinum[$index],
-                );
-            }
-        }
-        if (count($data)) {
-            Translation::insert($data);
-        }
-
+          
         Toastr::success($request->parent_id == 0 ? translate('Category Added Successfully!') : translate('Sub Category Added Successfully!'));
         return redirect()->route('admin.category.list');
     }
@@ -256,7 +212,7 @@ class CategoryController extends Controller
         $category = $this->category->withoutGlobalScopes()->with('translations')->find($id);
         //Category Dropdown
         $categories = $this->category->where('id','!=',$category['id'])->get();
-        $options = Helpers::getCategoryDropDown($categories, 0, 0, $category['parent_id']);
+        $options = Helpers::getCategoryDropDownColors($categories, 0, 0, $category['parent_id']);
         
         return view('admin-views.category.edit', compact('category','options'));
     }

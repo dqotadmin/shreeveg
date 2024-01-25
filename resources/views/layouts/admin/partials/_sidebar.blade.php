@@ -348,7 +348,7 @@
 
                         @endif
 
-                        @if( auth('admin')->user()->admin_role_id == 1 || auth('admin')->user()->admin_role_id == 6 )
+                        @if(in_array(auth('admin')->user()->admin_role_id ,[1,6,3])  )
 
                             <li class="navbar-vertical-aside-has-menu ">
                                 <a class="js-navbar-vertical-aside-menu-link nav-link"

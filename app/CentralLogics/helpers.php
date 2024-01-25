@@ -28,11 +28,17 @@ class Helpers
     {
         $warehouseId = auth('api')->user()->warehouse_id;
         if (empty($whCategories)) {
-            $whCategories = self::warehouseAssignCategories($warehouseId);
+            $whCategories = self::warehouseAssignCategories($warehouseId);// , 1 , 3 , 10 , 11 , 12 , 2 , 4 , 5 , 8 , 9 10 => 6 11 => 7
         }
+       
+
         return WarehouseProduct::whereHas('productDetail', function ($query) use ($whCategories) {
-            $query->whereIn('category_id', $whCategories)->active()->withCount(['wishlist'])->with(['rating'])->where(['daily_needs' => 1]);
+            $query->whereIn('product_id', $whCategories)->active();
         })->where('warehouse_id', $warehouseId);
+
+        // return WarehouseProduct::whereHas('productDetail', function ($query) use ($whCategories) {
+        //     $query->whereIn('category_id', $whCategories)->active()->withCount(['wishlist'])->with(['rating'])->where(['daily_needs' => 1]);
+        // })->where('warehouse_id', $warehouseId);
     }
 
     public static function warehouseAssignCategories($warehouseId)
@@ -283,7 +289,7 @@ class Helpers
 
     public static function apk_product_data_formatting($data, $multi_data = false)
     {
-
+ 
         $storage = [];
         if ($multi_data == true) {
             foreach ($data as $item) {
@@ -380,7 +386,7 @@ class Helpers
                 }
             }
         }
-
+       
         return $data;
     }
 

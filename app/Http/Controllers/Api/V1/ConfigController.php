@@ -76,6 +76,7 @@ class ConfigController extends Controller
                 'delivery_man_image_url' => asset('storage/app/public/delivery-man'),
                 'chat_image_url'         => asset('storage/app/public/conversation'),
                 'flash_sale_image_url'   => asset('storage/app/public/offer'),
+                'group_image_url'        => asset('storage/app/public/groups'),
             ],
             'currency_symbol'             => $currency_symbol,
             'delivery_charge'             => (float) BusinessSetting::where(['key' => 'delivery_charge'])->first()->value,

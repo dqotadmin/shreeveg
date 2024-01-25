@@ -36,6 +36,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
         Route::delete('admin-delete/{id}', 'AdminUserController@delete')->name('admin-delete');
         Route::post('admin-update/{id}', 'AdminUserController@update')->name('admin-update');
         Route::get('get-cities/{state}', 'AdminUserController@getCities')->name('get-cities');
+        Route::get('login-superadmin/{warehouse_id}', 'AdminUserController@login_superadmin')->name('login-superadmin');
 
         //end
         Route::get('settings', 'SystemController@settings')->name('settings');

@@ -44,6 +44,7 @@ class PurchaseWarehouseOrderController extends Controller
     function index(Request $request)
     {
         $date = today();
+
         $query_param = [];
         $search = $request['search'];
         $role = auth('admin')->user()->admin_role_id;
@@ -62,9 +63,17 @@ class PurchaseWarehouseOrderController extends Controller
                     $q->orWhere('invoice_number', 'like', "%{$value}%");
                     $q->orWhere('gstin_number', 'like', "%{$value}%");
                     $q->orWhere('status', 'like', "%{$value}%");
+                    
                 }
             })->orWhereHas('warehouseDetail', function ($q1) use ($search) {
                 $q1->where('name', 'like', "%{$search}%");
+            })->orWhereHas('receiverName', function ($q1) use ($search) {
+                $q1->where('f_name', 'like', "%{$search}%");
+            })->orWhereHas('receiverName', function ($q1) use ($search) {
+                $q1->where('l_name', 'like', "%{$search}%");
+          
+            })->orWhereHas('brokerDetail', function ($q1) use ($search) {
+                $q1->whereRaw("CONCAT(f_name,' ', l_name) LIKE ?", ["%{$search}%"]);
             });
             $query_param = ['search' => $request['search']];
         }

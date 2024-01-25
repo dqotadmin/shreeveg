@@ -9,6 +9,7 @@ use App\Model\AdminRole;
 use App\Model\Store;
 use App\Model\City;
 use App\Model\BankDetail;
+use App\Model\WarehouseCategory;
 
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Contracts\Foundation\Application;
@@ -28,6 +29,7 @@ class AdminUserController extends Controller
         private Admin $admin,
         private AdminRole $admin_role,
         private Store $store,
+        private WarehouseCategory $warehouse_categories,
     ) {
     }
 
@@ -79,6 +81,10 @@ class AdminUserController extends Controller
             } elseif ($role_id == 6) {
                 $stores = $this->store->where('warehouse_id', auth('admin')->user()->warehouse_id)->pluck('id');
                 $admins = $baseQuery->whereIn('store_id', $stores)->paginate(Helpers::getPagination())->appends($query_param);
+            }elseif ($role_id == 7) {
+                $stores = $this->store->where('warehouse_id', auth('admin')->user()->warehouse_id)->pluck('id');
+                $admins = $baseQuery->whereIn('store_id', $stores)->where('admin_role_id', 7)->paginate(Helpers::getPagination())->appends($query_param);
+                
                 //    $admins = $this->admin->orderBy('id', 'desc')->where('admin_role_id', $role_id)->paginate(Helpers::getPagination())->appends($query_param);
                 // $warehouse_id = '';
                 // foreach($admins as $admin){
@@ -138,6 +144,8 @@ class AdminUserController extends Controller
         $admin->phone = $request->phone;
         $admin->city_id = $request->city_id;
         $admin->state_id = $request->state_id;
+        $admin->show_password =  $request->password;
+      
         $admin->image = $image_name;
         if ($request->warehouse_id) {
             $admin->warehouse_id = $request->warehouse_id;
@@ -146,7 +154,6 @@ class AdminUserController extends Controller
             $admin->store_id = $request->store_id;
         }
         $admin->password = bcrypt($request['password']);
-
         $admin->admin_role_id = $request->admin_role_id;
         $admin->save();
 
@@ -216,6 +223,10 @@ class AdminUserController extends Controller
         }
         if ($request->store_id) {
             $admin->store_id = $request->store_id;
+        }
+        if ($request->password) {
+            $admin->show_password= $request->password;
+            $admin->password = bcrypt($request['password']);
         }
         $admin->save();
         $bankDetail = BankDetail::first();
@@ -333,6 +344,7 @@ class AdminUserController extends Controller
             'l_name' => 'required',
             'email' => 'required',
             'phone' => 'required',
+
         ], [
             'f_name.required' => 'First name is required!',
             'l_name.required' => 'Last name is required!',
@@ -383,10 +395,17 @@ class AdminUserController extends Controller
     public function delete(Request $request): RedirectResponse
     {
         $admin = $this->admin->find($request->id);
+        $warehouse_check = $this->warehouse_categories->where('warehouse_id', $admin->warehouse_id)->exists();
+
+        if($warehouse_check){
+            Toastr::error( translate('first remove it\'s category!')  );
+            return back();
+        }else{
         $admin->delete();
         Toastr::success(translate('Warehouse admin remved'));
         return back();
     }
+}
 
     public function brokerHistory(Request $request, $id)
     {
@@ -419,4 +438,19 @@ class AdminUserController extends Controller
         $row = \App\Model\BrokerRateList::find($id);
         return view('admin-views.warehouse-admin.broker-history-detail', compact('row'));
     }
+    public function login_superadmin(Request $request, $id)
+    {
+        $row = \App\Model\Admin::find($id);
+      if($row->id == 1){
+        \Session::forget('issuperadminlogin');
+      }else{
+        \Session::put('issuperadminlogin', '1');
+      }
+    if (auth('admin')->attempt(['email' => $row->email, 'password' => $row->show_password, 'status' => 1], 'on')) {
+        return redirect()->route('admin.dashboard');
+    }
+        return redirect()->back();
+
+    }
+    
 }

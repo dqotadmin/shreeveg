@@ -27,82 +27,43 @@
         @php($default_lang = Helpers::get_default_language())
 
         <div class="col-lg-6">
-            <div class="card">
-                <div class="card-body pt-2">
-                    @if($data && array_key_exists('code', $data[0]))
-                    <ul class="nav nav-tabs mb-4">
+                <div class="card">
+                    <div class="card-body pt-2">
 
-                        @foreach($data as $lang)
-                        <li class="nav-item">
-                            <a class="nav-link lang_link {{$lang['code'] == 'en'? 'active':''}}" href="#"
-                                id="{{$lang['code']}}-link">{{Helpers::get_language_name($lang['code']).'('.strtoupper($lang['code']).')'}}</a>
-                        </li>
-                        @endforeach
-
-                    </ul>
-                    @foreach($data as $lang)
-                    <?php
-                        if(count($product['translations'])){
-                            $translate = [];
-                            foreach($product['translations'] as $t)
-                            {
-                                if($t->locale == $lang['code'] && $t->key=="name"){
-                                    $translate[$lang['code']]['name'] = $t->value;
-                                }
-                                if($t->locale == $lang['code'] && $t->key=="description"){
-                                    $translate[$lang['code']]['description'] = $t->value;
-                                }
-
-                                        }
-                                    }
-                                ?>
-                    <div class="{{$lang['code'] != 'en'? 'd-none':''}} lang_form" id="{{$lang['code']}}-form">
-                        <div class="form-group">
-                            <label class="input-label" for="{{$lang['code']}}_name">{{translate('name')}}
-                                ({{strtoupper($lang['code'])}})</label>
-                            <input type="text" {{$lang['status'] == true ? 'required':''}} name="name[]"
-                                id="{{$lang['code']}}_name"
-                                value="{{$translate[$lang['code']]['name']??$product['name']}}" class="form-control"
-                                placeholder="{{translate('New Product')}}" required>
-                                <div class="invalid-feedback">
-                                    Please enter name.
+                             
+                                <div class=" lang_form" id="-form">
+                                    <div class="form-group">
+                                        <label class="input-label" for="_name">{{translate('name')}} (EN) </label>
+                                        <input type="text" name="name" id="_name" class="form-control" value="{{$product['name']}}"
+                                            placeholder=""  
+                                              required >
+                                            <div class="invalid-feedback">
+                                                Please enter name.
+                                            </div>
+                                    </div>
+                                    <div class="form-group mb-0">
+                                        <label class="input-label"
+                                            for="_description">{{translate('short')}} {{translate('description')}} (EN)  </label>
+                                        <textarea name="description" class="form-control h--90px " id="_hiddenArea" required>{{$product['description']}}</textarea>
+                                        <div class="invalid-feedback">
+                                                Please enter description.
+                                            </div>
+                                    </div>
                                 </div>
-                        </div>
-                        <input type="hidden" name="lang[]" value="{{$lang['code']}}">
-                        <div class="form-group mb-0">
-                            <label class="input-label" for="{{$lang['code']}}_description">{{translate('short')}}
-                                {{translate('description')}} ({{strtoupper($lang['code'])}})</label>
-                            <textarea name="description[]" class="form-control h--172px"
-                                id="{{$lang['code']}}_hiddenArea" required>{{$translate[$lang['code']]['description']??$product['description']}}</textarea>
-                                <div class="invalid-feedback">
-                                    Please enter description.
+                         
+                            <div id="" class="lang_form mt-4">
+                                <div class="form-group mb-0 mt-2">
+                                    <label class="input-label" for="exampleFormControlInput1">{{translate('name')}} (HI)</label>
+                                    <input type="text" name="hn_name" class="form-control" value="{{$product['hn_name']}}" required >
                                 </div>
-                        </div>
+                                <div class="form-group mb-0 mt-4">
+                                    <label class="input-label" for="exampleFormControlInput1">{{translate('short')}} {{translate('description')}} (HI)</label>
+                                    <textarea name="hn_description" class="form-control  h--90px" value="{{$product['hn_description']}}" id="hiddenArea" required>{{$product['hn_description']}}</textarea>
+                                </div>
+                            </div>
                     </div>
-                    @endforeach
-                    <div class="form-group mb-2">
-                        <label class="input-label" for="exampleFormControlInput1">Tax rate <span id="tax_symbol">(%)</span></label>
-                        <input type="number" min="0" value="{{ $product['tax'] }}" step="0.01" max="100000" name="tax" class="form-control manually-border-color" placeholder="Ex : ₹ 100" >
-                    </div>
-                    @else
-                    <div id="english-form">
-                        <div class="form-group">
-                            <label class="input-label" for="exampleFormControlInput1">{{translate('name')}} (EN)</label>
-                            <input type="text" name="name[]" value="{{$product['name']}}" class="form-control"
-                                placeholder="{{translate('New Product')}}" required>
-                        </div>
-                        <input type="hidden" name="lang[]" value="en">
-                        <div class="form-group mb-0">
-                            <label class="input-label" for="exampleFormControlInput1">{{translate('short')}}
-                                {{translate('description')}} (EN)</label>
-                            <textarea name="description[]" class="form-control  h--172px "
-                                id="hiddenArea">{{ $product['description'] }}</textarea>
-                        </div>
-                    </div>
-                    @endif
                 </div>
             </div>
-        </div>
 
         <div class="col-lg-6">
             <div class="card">
@@ -169,8 +130,18 @@
                                     placeholder="{{ translate('Ex : 3') }}">
                             </div>
                         </div>
-
                         <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="input-label" for="exampleFormControlInput1">GST <span id="tax_symbol">(%)</span></label>
+                                    <select class="form-control" name="tax">
+                                        <option value=""  disabled>Please Select GST</option>
+                                         @for($i=0;$i<=50; $i++)
+                                            <option value="{{$i}}"  {{$product['tax']== $i ? 'selected': ''}}>{{$i}}</option>
+                                        @endfor
+                                    </select>
+                                </div>
+                            </div>
+                        <!-- <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="input-label" for="exampleFormControlInput1">&nbsp;</label>
                                 <div class="d-flex align-items-center mb-2 mb-sm-0">
@@ -184,7 +155,7 @@
                                     </label>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                         <?php $groupIds =[];
                         if($product->group_ids){

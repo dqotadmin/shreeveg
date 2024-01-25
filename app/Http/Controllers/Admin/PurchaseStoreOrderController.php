@@ -9,7 +9,6 @@ use App\Model\AdminRole;
 use App\Model\City;
 use App\Model\BankDetail;
 use App\Model\Category;
-
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -78,7 +77,7 @@ class PurchaseStoreOrderController extends Controller
         return view($this->view_folder . '.index', compact('rows', 'search', 'user'));
     }
 
-    public function destroy($id)
+    public function destroy($id) 
     {
         $this->mTable::find($id)->delete();
         Toastr::success(translate('order remved'));
@@ -95,6 +94,7 @@ class PurchaseStoreOrderController extends Controller
             $wahrehouseId = $user->warehouse_id;
         }
         $categories = \App\Model\WarehouseCategory::where('warehouse_id', $wahrehouseId)->whereStatus('1')->get();
+        // return redirect()->route('admin.store.purchase-store-orders.index');
         return view($this->view_folder . '.create', compact('categories', 'wahrehouseId', 'user'));
     }
 
@@ -131,14 +131,14 @@ class PurchaseStoreOrderController extends Controller
                 if ($request->product_id) {
                     foreach ($request->product_id as $key => $productId) {
                         if (isset($request->qty[$key])) {
-                            $storeProduct = \App\Model\WarehouseProduct::find($productId);
+                            $storeProduct = \App\Model\WarehouseProduct::where('product_id',$productId)->first();
                             $tableDetail = new \App\Model\PurchaseStoreOrderDetail();
                             $tableDetail->purchase_store_order_id = $row->id;
                             $tableDetail->product_id = $productId;
                             $tableDetail->qty =  $request->qty[$key];
                             $tableDetail->unit_name = $request->unit[$key];
-                            $tableDetail->price_per_unit = $storeProduct->store_price;
-                            $totalPrice = $request->qty[$key] * $storeProduct->store_price;
+                            $tableDetail->price_per_unit = @$storeProduct->store_price ? $storeProduct->store_price: null;
+                            $totalPrice = $request->qty[$key] * (@$storeProduct->store_price ? $storeProduct->store_price: 0);
                             $tableDetail->total_price =  $totalPrice;
                             $tableDetail->save();
                             $finalPrice += $totalPrice;
@@ -169,16 +169,18 @@ class PurchaseStoreOrderController extends Controller
             $row->total_purchase_amt = $finalPrice;
             $row->save();
 
-
             //DB::commit();
             Toastr::success(translate('data Inserted Successfully!'));
-            return redirect()->route('admin.store.purchase-store-orders.index');
+        return redirect()->route('admin.store.purchase-store-orders.index');
+
+            
         } catch (\Exception $e) {
             // DB::rollback();
             $msg = $e->getMessage();
-            //dd($msg);
+            dd($msg);
             \Session::flash('warning', $msg);
-            return redirect()->back()->withInput();
+                return redirect()->route('admin.store.purchase-store-orders.index');
+
         }
     }
     public function show(Request $request, $id)
@@ -225,7 +227,6 @@ class PurchaseStoreOrderController extends Controller
     }
     public function updateStatus(Request $request, $id)
     {
-
         try {
             DB::beginTransaction();
             $role = auth('admin')->user()->admin_role_id;
@@ -244,20 +245,21 @@ class PurchaseStoreOrderController extends Controller
             }
 
             if ($request->status == 'Delivered') {
-                foreach ($request->product_id as $key => $productId) {
-                    if (isset($request->qty[$key])) {
-
-                        $whProductRow =   \App\Model\WarehouseProduct::where('warehouse_id', $user->warehouse_id)->where('product_id', $productId)->first();
-                        if ($whProductRow->total_stock > $request->qty[$key]) {
-                            $whProductRow->decrement('total_stock', $request->qty[$key]);
+                $productIds = DB::table('purchase_store_order_details')
+                ->where('purchase_store_order_id', $id)
+                ->get();
+                foreach ($productIds as $key => $productId) {
+                      $whProductRow =   \App\Model\WarehouseProduct::where('warehouse_id', $user->warehouse_id)->where('product_id', $productId->product_id)->first();
+                        if ($whProductRow->total_stock > $productId->qty) {
+                            $whProductRow->decrement('total_stock', $productId->qty);
                         } else {
                             //dd($whProductRow->productDetail->name);
                             Toastr::error(translate('stock not availale for ' . $whProductRow->productDetail->name));
                             return redirect()->back();
                         }
-                    }
                 }
             }
+           
 
             $row->save();
             DB::commit();

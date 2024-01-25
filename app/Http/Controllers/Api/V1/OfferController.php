@@ -43,6 +43,7 @@ class OfferController extends Controller
      */
     public function get_flash_deal_products(Request $request, $flash_deal_id): JsonResponse
     {
+        $qty_amnt = $this->flash_deal_product->get();
         $p_ids = $this->flash_deal_product->with(['product'])
             ->whereHas('product',function($q){
                 $q->active();
@@ -50,7 +51,6 @@ class OfferController extends Controller
             ->where(['flash_deal_id' => $flash_deal_id])
             ->pluck('product_id')
             ->toArray();
-
         if (count($p_ids) > 0) {
             $paginator = $this->product->with(['rating'])
                ->whereIn('id', $p_ids)
@@ -62,13 +62,30 @@ class OfferController extends Controller
                 'offset' => $request['offset'],
                 'products' => $paginator->items()
             ];  
+
            $data = Helpers::getWarehouseProductsdetail();
            $whProducts = $data->whereIn('product_id',$p_ids)->get();
+     
+     
+           // Assuming $qty_amnt is an associative array with product_id as keys
+ 
             
+                    // Update all items with the same product_id
+                    foreach ($whProducts as &$whProduct) {
+                        $product_id = $whProduct['product_id'];
+                        // Find the corresponding item in $qty_amnt based on 'product_id'
+                        $qty_amnt_item = collect($qty_amnt)->where('product_id', $product_id)->first();
+                        if ($qty_amnt_item) {
+                        // Add 'quantity' and 'amount' keys to each item in $whProducts
+                            $whProduct['quantity'] = $qty_amnt_item['quantity'];
+                            $whProduct['amount`'] = $qty_amnt_item['amount'];
+                        }
+                    }
+                    
             $products['products'] = Helpers::apk_product_data_formatting($whProducts, true);
             return response()->json($products, 200);
         }
 
         return response()->json([], 200);
     }
-}
+} 

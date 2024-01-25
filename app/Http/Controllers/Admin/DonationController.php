@@ -83,6 +83,8 @@ class DonationController extends Controller
                 $q1->where('name', 'like', "%{$search}%");
             })->orWhereHas('storeDetail', function ($q1) use ($search) {
                 $q1->where('name', 'like', "%{$search}%");
+            })->orWhere(function ($q) use ($search) {
+                $q->whereRaw("DATE_FORMAT(created_at, '%d %b') like ?", ["%{$search}%"]);
             });
             $query_param = ['search' => $request['search']];
         }

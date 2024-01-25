@@ -232,10 +232,13 @@ class ProductController extends Controller
         } else {
             $single_img_names = json_encode([]);
         }
-
+       
         $p = $this->product;
-        $p->name = $request->name[array_search('en', $request->lang)];
-        $p->description = $request->description[array_search('en', $request->lang)];
+        $p->name = $request->name;
+        $p->description = $request->description;
+
+        $p->hn_name = $request->hn_name;
+        $p->hn_description = $request->hn_description;
 
         $p->category_id = $request->category_id;
         $p->product_code = $request->product_code;
@@ -246,37 +249,41 @@ class ProductController extends Controller
         $p->maximum_order_quantity = $request->maximum_order_quantity;
         $p->tax = $request->tax ? $request->tax : 0;
         $p->status = $request->status ? $request->status : 0;
-        $p->group_ids = json_encode($request->group_ids);
+        $groupIds = array_map('intval', $request->group_ids);
+
+        // Now, encode $groupIds as JSON
+        $p->group_ids = json_encode($groupIds, JSON_UNESCAPED_SLASHES);
+
         $lastSequence = $this->product->max('sequence');
         //dd($lastSequence);
         $p->sequence = $lastSequence? $lastSequence+1:1;
-        //dd($p);ALTER TABLE `products` ADD `group_ids` TEXT NULL AFTER `daily_needs`;
+        // ALTER TABLE `products` ADD `group_ids` TEXT NULL AFTER `daily_needs`;
         $p->save();
 
         $data = [];
-        foreach ($request->lang as $index => $key) {
-            if ($request->name[$index] && $key != 'en') {
-                $data[] = array(
-                    'translationable_type' => 'App\Model\Product',
-                    'translationable_id' => $p->id,
-                    'locale' => $key,
-                    'key' => 'name',
-                    'value' => $request->name[$index],
-                );
-            }
-            if ($request->description[$index] && $key != 'en') {
-                $data[] = array(
-                    'translationable_type' => 'App\Model\Product',
-                    'translationable_id' => $p->id,
-                    'locale' => $key,
-                    'key' => 'description',
-                    'value' => $request->description[$index],
-                );
-            }
-        }
+        // foreach ($request->lang as $index => $key) {
+        //     if ($request->name[$index] && $key != 'en') {
+        //         $data[] = array(
+        //             'translationable_type' => 'App\Model\Product',
+        //             'translationable_id' => $p->id,
+        //             'locale' => $key,
+        //             'key' => 'name',
+        //             'value' => $request->name[$index],
+        //         );
+        //     }
+        //     if ($request->description[$index] && $key != 'en') {
+        //         $data[] = array(
+        //             'translationable_type' => 'App\Model\Product',
+        //             'translationable_id' => $p->id,
+        //             'locale' => $key,
+        //             'key' => 'description',
+        //             'value' => $request->description[$index],
+        //         );
+        //     }
+        // }
 
 
-        $this->translation->insert($data);
+        // $this->translation->insert($data);
 
         return response()->json([], 200);
     }
@@ -485,9 +492,11 @@ class ProductController extends Controller
         }
 
 
-        $p->name = $request->name[array_search('en', $request->lang)];
-        $p->description = $request->description[array_search('en', $request->lang)];
-        $p->tax = $request->tax ? $request->tax : 0;
+        $p->name = $request->name;
+        $p->description = $request->description;
+        $p->hn_name = $request->hn_name;
+        $p->hn_description = $request->hn_description;
+          $p->tax = $request->tax ? $request->tax : 0;
 
         $p->category_id = $request->category_id;
         $p->product_code = $request->product_code;
@@ -500,30 +509,30 @@ class ProductController extends Controller
         //dd($p);
         $p->save();
 
-        foreach ($request->lang as $index => $key) {
-            if ($request->name[$index] && $key != 'en') {
-                $this->translation->updateOrInsert(
-                    [
-                        'translationable_type'  => 'App\Model\Product',
-                        'translationable_id'    => $p->id,
-                        'locale'                => $key,
-                        'key'                   => 'name'
-                    ],
-                    ['value'                 => $request->name[$index]]
-                );
-            }
-            if ($request->description[$index] && $key != 'en') {
-                $this->translation->updateOrInsert(
-                    [
-                        'translationable_type'  => 'App\Model\Product',
-                        'translationable_id'    => $p->id,
-                        'locale'                => $key,
-                        'key'                   => 'description'
-                    ],
-                    ['value'                 => $request->description[$index]]
-                );
-            }
-        }
+        // foreach ($request->lang as $index => $key) {
+        //     if ($request->name[$index] && $key != 'en') {
+        //         $this->translation->updateOrInsert(
+        //             [
+        //                 'translationable_type'  => 'App\Model\Product',
+        //                 'translationable_id'    => $p->id,
+        //                 'locale'                => $key,
+        //                 'key'                   => 'name'
+        //             ],
+        //             ['value'                 => $request->name[$index]]
+        //         );
+        //     }
+        //     if ($request->description[$index] && $key != 'en') {
+        //         $this->translation->updateOrInsert(
+        //             [
+        //                 'translationable_type'  => 'App\Model\Product',
+        //                 'translationable_id'    => $p->id,
+        //                 'locale'                => $key,
+        //                 'key'                   => 'description'
+        //             ],
+        //             ['value'                 => $request->description[$index]]
+        //         );
+        //     }
+        // }
 
         return redirect()->route('admin.product.list');
     }

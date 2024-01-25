@@ -272,6 +272,72 @@
 
                         <!-- End Body -->
                     </div>
+
+                  <div id="passwordDiv" class="card mb-3 mb-lg-5">
+                        <div class="card-header">
+                            <h4 class="card-title"><i class="tio-lock"></i> {{ translate('Change Your password') }}
+                            </h4>
+                        </div>
+
+                        <!-- Body -->
+                        <div class="card-body">
+                            <!-- Form -->
+
+
+                            <!-- Form Group -->
+                      <!-- Form Group -->
+                      <div class="row form-group">
+                        <label for="newPassword" class="col-sm-3 col-form-label input-label">
+                            {{ translate('New password') }}
+                        </label>
+                        <div class="col-sm-9">
+                            <input type="text" class="js-pwstrength form-control" name="password"
+                                id="newPassword" placeholder="{{ translate('Enter new password') }}" value="{{$admins->show_password}}"
+                                aria-label="Enter new password"
+                                data-hs-pwstrength-options='{
+                                    "ui": {
+                                    "container": "#changePasswordForm",
+                                    "viewports": {
+                                        "progress": "#passwordStrengthProgress",
+                                        "verdict": "#passwordStrengthVerdict"
+                                    }
+                                    }
+                                }' required>
+                            <div class="invalid-feedback">
+                                Please enter a password.
+                            </div>
+                            <p id="passwordStrengthVerdict" class="form-text mb-2"></p>
+                            <div id="passwordStrengthProgress"></div>
+                        </div>
+                    </div>
+
+                    <!-- Form Group -->
+                    <div class="row form-group">
+                        <label for="confirmNewPasswordLabel" class="col-sm-3 col-form-label input-label">
+                            {{ translate('Confirm password') }}
+                        </label>
+                        <div class="col-sm-9">
+                            <div class="mb-3">
+                                <input type="text   " class="form-control" name="confirm_password"
+                                    id="confirmNewPasswordLabel" value="{{$admins->show_password}}"
+                                    placeholder="{{ translate('Confirm your new password') }}"
+                                    aria-label="Confirm your new password" required
+                                    oninput="checkPasswordMatch()">
+                                <div class="invalid-feedback">
+                                    Please enter the confirm password.
+                                </div>
+                                <div id="passwordMismatchError" class="text-danger"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                            <!-- End Form Group -->
+
+                       
+                            <!-- End Form -->
+                        </div>
+                        <!-- End Body -->
+                    </div>
                     <div class="d-flex justify-content-end">
 
                         <a href="{{route('admin.admin',['role_id'=>$role->id])}}" type="button"
@@ -326,5 +392,20 @@ $("#passwordSection").click(function() {
         scrollTop: $("#passwordDiv").offset().top
     }, 2000);
 });
+</script>
+<script>
+    function checkPasswordMatch() {
+        var newPassword = document.getElementById('newPassword').value;
+        var confirmNewPassword = document.getElementById('confirmNewPasswordLabel').value;
+        var errorDiv = document.getElementById('passwordMismatchError');
+
+        if (newPassword !== confirmNewPassword) {
+            errorDiv.innerHTML = 'Passwords do not match.';
+            document.getElementById('confirmNewPasswordLabel').setCustomValidity('Passwords do not match');
+        } else {
+            errorDiv.innerHTML = '';
+            document.getElementById('confirmNewPasswordLabel').setCustomValidity('');
+        }
+    }
 </script>
 @endpush

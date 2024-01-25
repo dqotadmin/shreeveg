@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Model\CategorySearchedByUser;
 use App\Model\FavoriteProduct;
 use App\Model\Product;
+use App\Model\Group;
 use App\Model\WarehouseProduct;
 use App\Model\ProductSearchedByUser;
 use App\Model\RecentSearch;
@@ -38,6 +39,7 @@ class ProductController extends Controller
         private SearchedProduct $searched_product,
         private Translation $translation,
         private VisitedProduct $visited_product,
+        private Group $groups,
 
 
     ) {
@@ -559,5 +561,11 @@ class ProductController extends Controller
         $products = ProductLogic::get_most_reviewed_products($request['limit'], $request['offset']);
         $products['products'] = Helpers::product_data_formatting($products['products'], true);
         return response()->json($products, 200);
+    }
+    public function product_group(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $groups = Group::whereStatus(1)->get(); // $id means category id
+        //dd($products);
+        return response()->json($groups, 200);   
     }
 }

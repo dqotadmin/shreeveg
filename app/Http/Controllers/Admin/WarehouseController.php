@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Model\Warehouse;
 use App\Model\Category;
 use App\Model\WarehouseCategory;
+use App\Model\Admin;
 use App\Model\Translation;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Contracts\Foundation\Application;
@@ -25,6 +26,7 @@ class WarehouseController extends Controller
     public function __construct(
         private Warehouse $warehouse,
         private Category $category,
+        private Admin $admin,
         private WarehouseCategory $warehouse_categories
 
     ){}
@@ -301,28 +303,32 @@ class WarehouseController extends Controller
 
     function wh_assign_category_store(Request $request): RedirectResponse
     {
+        $this->warehouse_categories->where('warehouse_id',$request->warehouse_id)->delete();
         $warehouse_id = $request->warehouse_id;
         $category_id = $request->category_id;
-        $category = array_map('intval', $category_id);
-        $category_ids = array_unique($category);
-        $parentCategories = Helpers::getParentCategories($category_ids);
-        $request->validate([
-            // 'margin' => 'required',
-            'category_id' => 'required',
-        ]);
-        $this->warehouse_categories->where('warehouse_id',$request->warehouse_id)->delete();
-        $numberOfCategories = count($category_ids);
-        $array_unique = array_unique($parentCategories);
-        foreach($array_unique as  $catId){
-            $row = new WarehouseCategory;
-            $row->warehouse_id = $warehouse_id;
-            $row->category_id = $catId;
-            $row->save();
-        }
+        if($category_id){
+            $category = array_map('intval', $category_id);
+            $category_ids = array_unique($category);
+            $parentCategories = Helpers::getParentCategories($category_ids);
+            $request->validate([
+                // 'margin' => 'required',
+                'category_id' => 'required',
+            ]);
+            $numberOfCategories = count($category_ids);
+            $array_unique = array_unique($parentCategories);
+            foreach($array_unique as  $catId){
+                $row = new WarehouseCategory;
+                $row->warehouse_id = $warehouse_id;
+                $row->category_id = $catId;
+                $row->save();
+            }
+                Toastr::success(translate('Warehouse Categories Added Successfully!'));
+            return redirect()->route('admin.warehouse.wh-assign-category-page',[$warehouse_id]);
+        }else{
 
-        Toastr::success(translate('Warehouse Categories Added Successfully!'));
-        return redirect()->route('admin.warehouse.wh-assign-category-page',[$warehouse_id]);
-        
+            Toastr::error(translate('Warehouse Categories remove Successfully!'));
+            return redirect()->route('admin.warehouse.wh-assign-category-page',[$warehouse_id]);
+        }
     }
   
     
@@ -349,11 +355,20 @@ class WarehouseController extends Controller
     public function delete(Request $request): RedirectResponse
     {
         $warehouse = $this->warehouse->find($request->id);
-        $warehouse->update(['deleted_by' => auth('admin')->user()->id]);
-       
-            $warehouse->delete();
-            Toastr::success( translate('warehouse removed!')  );
+        $warehouse_check = $this->admin->where('warehouse_id', $warehouse->id)->exists();
+
+        if($warehouse_check){
+            Toastr::error( translate('first remove it\'s warehouse admin!')  );
             return back();
+        }else{
+
+            $warehouse->update(['deleted_by' => auth('admin')->user()->id]);
+        
+                $warehouse->delete();
+                Toastr::success( translate('warehouse removed!')  );
+                return back();
+        }
     }
+  
   
 }  

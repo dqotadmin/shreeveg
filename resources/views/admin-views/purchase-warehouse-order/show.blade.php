@@ -88,54 +88,53 @@
             @endif
 
             <form action="{{route('admin.wh_receiver_update_status',$row->id)}}" method="post">
-            @csrf
-            @if((auth('admin')->user()->admin_role_id == 8 && $row->status != 'Rejected' && $row->status != 'Delivered' && $row->status != 'Received'))
-                <div class="col-md-6">
-                <label class="input-label" for="exampleFormControlInput1">{{translate('update status')}}</label>
-                <select name="status" class="form-control">
-                    @if(auth('admin')->user()->admin_role_id == 8  &&  $row->status != 'Pending' &&  $row->status != 'Accepted' &&  $row->status != 'Delivered' )
-                        <option value="Pending" disabled {{$row->status == 'Pending'?'selected':''}}>Pending</option>
-                    @endif
-                    @if(auth('admin')->user()->admin_role_id == 8  &&  $row->status != 'Accepted' )
-                        <option value="Accepted" {{$row->status == 'Accepted'?'selected':''}}>Accepted</option>
-                    @endif
-                        <option value="Delivered" {{$row->status == 'Delivered'?'selected':''}}>Delivered</option>
-                       @if($row->status != 'Accepted')
-                        <option value="Rejected" {{$row->status == 'Rejected'?'selected':''}}>Rejected</option>
-                       @endif
-                      
-                    </select>
-            </div>
-                @if(auth('admin')->user()->admin_role_id == 8 || $row->status == 'Pending' || $row->status == 'Accepted')
-                @if(auth('admin')->user()->admin_role_id == 8 &&  $row->status != 'Delivered')
-                <div class="col-md-6 mt-3">
-                    <label class="input-label" for="exampleFormControlInput1">{{translate('broker comments')}}</label>
-                    <textarea name="broker_comments" class="form-control" rows="6" placeholder="{{ translate('enter comments if any') }}" required>{{$row->broker_comments}}</textarea>
-                </div>
-                <div class="text-right">
-                    <button type="submit" class="btn btn-primary px-5">{{translate('save')}}</button>
-                </div>
+                @csrf
+                @if((auth('admin')->user()->admin_role_id == 8 && $row->status != 'Rejected' && $row->status != 'Delivered' && $row->status != 'Received'))
+                    <div class="col-md-6">
+                        <label class="input-label" for="exampleFormControlInput1">{{translate('update status')}}</label>
+                        <select name="status" class="form-control">
+                            @if(auth('admin')->user()->admin_role_id == 8  &&  $row->status != 'Pending' &&  $row->status != 'Accepted' &&  $row->status != 'Delivered' )
+                                <option value="Pending" disabled {{$row->status == 'Pending'?'selected':''}}>Pending</option>
+                            @endif
+                            @if(auth('admin')->user()->admin_role_id == 8  &&  $row->status != 'Accepted' )
+                                <option value="Accepted" {{$row->status == 'Accepted'?'selected':''}}>Accepted</option>
+                            @endif
+                                <option value="Delivered" {{$row->status == 'Delivered'?'selected':''}}>Delivered</option>
+                            @if($row->status != 'Accepted')
+                            <option value="Rejected" {{$row->status == 'Rejected'?'selected':''}}>Rejected</option>
+                            @endif
+                            
+                        </select>
+                    </div>
+                    @if(auth('admin')->user()->admin_role_id == 8 || $row->status == 'Pending' || $row->status == 'Accepted')
+                        @if(auth('admin')->user()->admin_role_id == 8 &&  $row->status != 'Delivered')
+                        <div class="col-md-6 mt-3">
+                            <label class="input-label" for="exampleFormControlInput1">{{translate('broker comments')}}</label>
+                            <textarea name="broker_comments" class="form-control" rows="6" placeholder="{{ translate('enter comments if any') }}" required>{{$row->broker_comments}}</textarea>
+                        </div>
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-primary px-5">{{translate('save')}}</button>
+                        </div>
 
-                @endif
-                @endif
+                        @endif
+                    @endif
                 @endif
                 @if((auth('admin')->user()->admin_role_id == 5) && ($row->status != 'Pending' && $row->status != 'Accepted' && $row->status != 'Received' && $row->status != 'Rejected'))
-                <div class="col-md-6">
-                <label class="input-label" for="exampleFormControlInput1">{{translate('update status')}}</label>
-                    <select name="status" class="form-control">
-                    
-                            <option value="Received" {{$row->status == 'Received'?'selected':''}}>Received</option>
-                        </select>
-                </div>
-                <div class="col-md-6">
-                    <label class="input-label" for="exampleFormControlInput1">{{translate('comments')}}</label>
-                    <textarea name="warehouse_comments" class="form-control" rows="6" placeholder="{{ translate('enter comments if any') }}" required>{{$row->warehouse_comments}}</textarea>
-                </div>
-                <div class="text-right">
-                    <button type="submit" class="btn btn-primary px-5">{{translate('save')}}</button>
-                </div>
+                    <div class="col-md-6">
+                    <label class="input-label" for="exampleFormControlInput1">{{translate('update status')}}</label>
+                        <select name="status" class="form-control">
+                        
+                                <option value="Received" {{$row->status == 'Received'?'selected':''}}>Received</option>
+                            </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="input-label" for="exampleFormControlInput1">{{translate('comments')}}</label>
+                        <textarea name="warehouse_comments" class="form-control" rows="6" placeholder="{{ translate('enter comments if any') }}" required>{{$row->warehouse_comments}}</textarea>
+                    </div>
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary px-5">{{translate('save')}}</button>
+                    </div>
                 @endif
-
             </form>
         </div>
     </div>

@@ -46,10 +46,13 @@ class CustomerController extends Controller
     public function add_new_address(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            'contact_person_name' => 'required',
             'address_type' => 'required',
-            'contact_person_number' => 'required',
-            'address' => 'required'
+            'address' => 'required',
+            'city' => 'required',
+            'house' => 'required',
+            'area' => 'required',
+            'landmark' => 'required',
+            'pincode' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -58,13 +61,15 @@ class CustomerController extends Controller
 
         $address = [
             'user_id' => $request->user()->id,
-            'contact_person_name' => $request->contact_person_name,
-            'contact_person_number' => $request->contact_person_number,
             'address_type' => $request->address_type,
             'address' => $request->address,
             'road' => $request->road,
             'house' => $request->house,
             'floor' => $request->floor,
+            'city' => $request->city,
+            'area' => $request->area,
+            'landmark' => $request->landmark,
+            'pincode' => $request->pincode,
             'longitude' => $request->longitude,
             'latitude' => $request->latitude,
             'created_at' => now(),
@@ -82,10 +87,13 @@ class CustomerController extends Controller
     public function update_address(Request $request, $id): JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            'contact_person_name' => 'required',
             'address_type' => 'required',
-            'contact_person_number' => 'required',
-            'address' => 'required'
+            'address' => 'required',
+            'city' => 'required',
+            'house' => 'required',
+            'area' => 'required',
+            'landmark' => 'required',
+            'pincode' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -94,19 +102,21 @@ class CustomerController extends Controller
 
         $address = [
             'user_id' => $request->user()->id,
-            'contact_person_name' => $request->contact_person_name,
-            'contact_person_number' => $request->contact_person_number,
             'address_type' => $request->address_type,
             'address' => $request->address,
             'road' => $request->road,
             'house' => $request->house,
             'floor' => $request->floor,
+            'city' => $request->city,
+            'area' => $request->area,
+            'landmark' => $request->landmark,
+            'pincode' => $request->pincode,
             'longitude' => $request->longitude,
             'latitude' => $request->latitude,
             'created_at' => now(),
             'updated_at' => now()
         ];
-        DB::table('customer_addresses')->where('id',$id)->update($address);
+        DB::table('customer_addresses')->where('user_id',$id)->update($address);
         return response()->json(['message' => 'successfully updated!'], 200);
     }
 

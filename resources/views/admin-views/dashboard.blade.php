@@ -11,8 +11,10 @@
                 <h1 class="page-header-title text-107980">{{ translate('welcome')}}, {{auth('admin')->user()->f_name}}</h1>
                 <p class="welcome-msg">{{ translate('welcome_message')}}</p>
             </div>
+             
             <!-- End Page Header -->
-
+            
+         
             <!-- Card -->
             <div class="card mb-10px">
                 <div class="card-body">

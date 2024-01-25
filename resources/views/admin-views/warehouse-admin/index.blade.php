@@ -84,8 +84,10 @@
                             <th>{{translate('store')}}</th>
                         @endif
                         <th>{{translate('Contact Info')}}</th>
+                        @if( in_array(auth('admin')->user()->admin_role_id,[1,7,6]) ||request('role_id') == 3    )
                         <th>{{translate('status')}}</th>
                         <th class="text-center">{{translate('action')}}</th>
+                        @endif
                     </tr>
                 </thead>
 
@@ -138,6 +140,7 @@
                                 <a href="Tel:{{$admin['phone']}}">{{$admin['phone']}}</a>
                             </div>
                         </td>
+                        @if( auth('admin')->user()->admin_role_id == 1  ||request('role_id') == 3)
                        
                         <td>
                         <label class="toggle-switch">
@@ -149,7 +152,6 @@
                                 <span class="toggle-switch-indicator"></span>
                             </span>
                         </label>
-                         
 
                         </td>
                         <td>
@@ -160,11 +162,18 @@
                                     <i class="tio-invisible"></i>
                                 </a>        
                                 @endif
-                                           
+                                        @if( auth('admin')->user()->admin_role_id == 1  || auth('admin')->user()->id == $admin['id'])
                                             <a class="action-btn"
                                                 href="{{route('admin.admin-edit',[$admin['id'],'role_id'=>$role->id])}}">
                                             <i class="tio-edit"></i></a>
-                                        @if( auth('admin')->user()->admin_role_id == 1)
+                                            @endif
+                                        @if( (auth('admin')->user()->admin_role_id == 1) &&( $role->id == '3' || $role->id == '6'))
+                                        <a class="action-btn" title="admin login"
+                                                href="{{route('admin.login-superadmin',[$admin['id'],'role_id'=>$role->id])}}">
+                                                <i class="tio-sign-in"></i></a>
+                                                @endif
+                                        @if( (auth('admin')->user()->admin_role_id == 1) )
+
                                             <a class="action-btn btn--danger btn-outline-danger" href="javascript:"
                                                 onclick="form_alert('admin-{{$admin['id']}}','{{ translate("Want to delete this") }}')">
                                                 <i class="tio-delete-outlined"></i>
@@ -177,6 +186,7 @@
                                         @endif
                             <!-- End Dropdown -->
                         </td>
+                        @endif
                     </tr>
                     @elseif(auth('admin')->user()->admin_role_id == '6' && $admin->store_id == auth('admin')->user()->store_id)
                     <tr>
@@ -250,7 +260,6 @@
                                             <a class="action-btn"
                                                 href="{{route('admin.admin-edit',[$admin['id'],'role_id'=>$role->id])}}">
                                             <i class="tio-edit"></i></a>
-                                        @if( auth('admin')->user()->admin_role_id == 1)
                                             <a class="action-btn btn--danger btn-outline-danger" href="javascript:"
                                                 onclick="form_alert('admin-{{$admin['id']}}','{{ translate("Want to delete this") }}')">
                                                 <i class="tio-delete-outlined"></i>
@@ -260,7 +269,6 @@
                                                 method="post" id="admin-{{$admin['id']}}">
                                             @csrf @method('delete')
                                         </form>
-                                        @endif
                             <!-- End Dropdown -->
                         </td>
                     </tr>

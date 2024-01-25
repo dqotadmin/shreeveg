@@ -192,9 +192,7 @@
                                 
                                             <td  >
                                                 <?php
-                                            foreach(\App\Model\WarehouseProduct::where('warehouse_id',auth('admin')->user()->warehouse_id)->where('product_id',$product->id)->get() as $sequence){
-                                        //    echo $sequence;
-                                            }
+                                           $sequence =  \App\Model\WarehouseProduct::where('warehouse_id',auth('admin')->user()->warehouse_id)->where('product_id',$product->id)->first();
 
                                             ?> 
                                                 <input type="text" name="sequence" class="form-control w-50" value="{{ @$sequence->sequence }}"
@@ -438,22 +436,28 @@
     }
 </script><script>
        $(document).ready(function() {
-        jQuery.extend(jQuery.fn.dataTableExt.oSort, {
-            "natural-asc": function (a, b) {
-                return naturalSort(a, b);
-            },
-            "natural-desc": function (a, b) {
-                return naturalSort(b, a);
-            }
-        });
+        $.fn.dataTable.ext.order['sequence-asc'] = function(a, b) {
+            return customSequenceSort(a, b);
+        };
+
+        $.fn.dataTable.ext.order['sequence-desc'] = function(a, b) {
+            return customSequenceSort(b, a);
+        };
 
         var table = $('#columnSearchDatatable').DataTable({
             "columnDefs": [
-                { "type": "natural", "targets": 5 } // Use natural sorting for 'sequence' column
+                { "type": "sequence", "targets": 5 } // Use custom sorting for 'sequence' column
             ],
             "orderCellsTop": true // Show sorting arrows in the header
         });
     });
+
+    function customSequenceSort(a, b) {
+        var numA = parseInt(a.match(/\d+/)[0], 10);
+        var numB = parseInt(b.match(/\d+/)[0], 10);
+
+        return numA - numB;
+    }
 </script>
 <!-- <script>
         $(document).on('ready', function () {

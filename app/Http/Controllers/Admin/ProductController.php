@@ -364,10 +364,9 @@ class ProductController extends Controller
             Rule::unique('products', 'sequence')->ignore($id),
         ]);
 
-            $product = Product::findOrFail($id);
-    
+            $product = WarehouseProduct::findOrFail($id);
             // Check if the new sequence already exists in the database
-            $existingProduct = Product::where('sequence', $request->input('sequence'))
+            $existingProduct = WarehouseProduct::where('warehouse_id',auth('admin')->user()->warehouse_id)->where('sequence', $request->input('sequence'))
                 ->where('id', '!=', $id)
                 ->first();
             if ($existingProduct) {

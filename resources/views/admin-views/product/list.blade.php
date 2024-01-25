@@ -120,11 +120,11 @@
                                 
                                 @if(in_array(auth('admin')->user()->admin_role_id ,[3,5]))
                                     <th class="">{{translate('stock')}}</th>
+                                    <th data-searchable="true"  id="column3_search">{{translate('sequence')}}</th>
                                
                                 @else
                                     <th class="text-center">{{translate('status')}}</th>
-                                    <th data-searchable="true"  id="column3_search">{{translate('sequence')}}</th>
-                                    <th data-searchable="true"  id="column3_search">{{translate('tax')}}</th>
+                                    <th data-searchable="true" >{{translate('tax')}}</th>
                                 @endif
                                 @if(in_array(auth('admin')->user()->admin_role_id ,[3]))
                                 <th class="">{{translate('status')}}</th>
@@ -137,146 +137,152 @@
                             </thead>
 
                             <tbody id="set-rows">
-                            @foreach($products as $key=>$product)
-                                <tr>
-                                    <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">{{$products->firstItem()+$key}}</td>
-                                    <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
-                                        <a @if(auth('admin')->user()->admin_role_id == '1') href="{{route('admin.product.view',[$product['id']])}}" @endif class="product-list-media">
-                                            @if (!empty(json_decode($product['image'],true)))
-                                        <img
-                                            src="{{asset('storage/app/public/product')}}/{{json_decode($product['image'],true)[0]}}"
-                                            onerror="this.src='{{asset('public/assets/admin/img/400x400/img2.jpg')}}'">
-                                        @else
-                                            <img src="{{asset('public/assets/admin/img/400x400/img2.jpg')}}">
-                                        @endif
-                                        <h6 class="name line--limit-2">
-                                            {{\Illuminate\Support\Str::limit($product['name'], 20, $end='...')}}
-                                        </h6>
-                                        </a>
-                                    </td>
-                                    <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
-                                        <div class="max-85 text-right">
-                                            {{ $product['product_code'] }}
-                                        </div>
-                                    </td>
-                                    <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
-                                        <div class="max-85 text-left">
-                                            @if (!empty($product->category->name))
-                                            {{ $product->category->name }}
+                                @foreach($products as $key=>$product)
+                                    <tr>
+                                        <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">{{$products->firstItem()+$key}}</td>
+                                        <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
+                                            <a @if(auth('admin')->user()->admin_role_id == '1') href="{{route('admin.product.view',[$product['id']])}}" @endif class="product-list-media">
+                                                @if (!empty(json_decode($product['image'],true)))
+                                            <img
+                                                src="{{asset('storage/app/public/product')}}/{{json_decode($product['image'],true)[0]}}"
+                                                onerror="this.src='{{asset('public/assets/admin/img/400x400/img2.jpg')}}'">
+                                            @else
+                                                <img src="{{asset('public/assets/admin/img/400x400/img2.jpg')}}">
                                             @endif
-                                        </div>
-                                    </td>
-                                     @if(in_array(auth('admin')->user()->admin_role_id, [3,5]))
-                                      
+                                            <h6 class="name line--limit-2">
+                                                {{\Illuminate\Support\Str::limit($product['name'], 20, $end='...')}}
+                                            </h6>
+                                            </a>
+                                        </td>
                                         <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
-                                            <?php
-                                            foreach(\App\Model\WarehouseProduct::where('warehouse_id',auth('admin')->user()->warehouse_id)->where('product_id',$product->id)->get() as $stock){
-                                                $current_stock =  0;
+                                            <div class="max-85 text-right">
+                                                {{ $product['product_code'] }}
+                                            </div>
+                                        </td>
+                                        <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
+                                            <div class="max-85 text-left">
+                                                @if (!empty($product->category->name))
+                                                {{ $product->category->name }}
+                                                @endif
+                                            </div>
+                                        </td>
+                                        @if(in_array(auth('admin')->user()->admin_role_id, [3,5]))
+                                        
+                                            <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
+                                                <?php
+                                                foreach(\App\Model\WarehouseProduct::where('warehouse_id',auth('admin')->user()->warehouse_id)->where('product_id',$product->id)->get() as $stock){
+                                                    $current_stock =  0;
 
-                                                    if($stock->total_stock > 0){
-                                                        $current_stock =  $stock->total_stock;
-                                                    }
-                                                    //echo $current_stock;
-                                                    ?>
-                                                    @if($current_stock <= $stock_limit)
-                                                    <span class="text-danger">  {{$current_stock}} /({{@$product->unit['title'] }})</span>
-                                                    @else
-                                                    {{$current_stock}} /({{@$product->unit['title'] }})
-                                                    @endif
-                                                    <?php $warehouse_id = auth('admin')->user()->warehouse_id; $product_id = $product['id'];
-                                                if(\App\Model\WarehouseProduct::where('warehouse_id',$warehouse_id)->where('product_id',$product_id)->exists('product_details')){
-                                                } 
+                                                        if($stock->total_stock > 0){
+                                                            $current_stock =  $stock->total_stock;
+                                                        }
+                                                        //echo $current_stock;
+                                                        ?>
+                                                        @if($current_stock <= $stock_limit)
+                                                        <span class="text-danger">  {{$current_stock}} /({{@$product->unit['title'] }})</span>
+                                                        @else
+                                                        {{$current_stock}} /({{@$product->unit['title'] }})
+                                                        @endif
+                                                        <?php $warehouse_id = auth('admin')->user()->warehouse_id; $product_id = $product['id'];
+                                                    if(\App\Model\WarehouseProduct::where('warehouse_id',$warehouse_id)->where('product_id',$product_id)->exists('product_details')){
+                                                    } 
+                                                }
+                                                ?> 
+                                            </td>
+                                
+                                            <td  >
+                                                <?php
+                                            foreach(\App\Model\WarehouseProduct::where('warehouse_id',auth('admin')->user()->warehouse_id)->where('product_id',$product->id)->get() as $sequence){
+                                        //    echo $sequence;
                                             }
+
                                             ?> 
-                                        </td>
-                              
-                                     
-                                      
-                                      
-                                    @else
-                                        <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
-                                            <label class="toggle-switch my-0">
-                                                <input type="checkbox"
-                                                    onclick="status_change_alert('{{ route('admin.product.status', [$product->id, $product->status ? 0 : 1]) }}', '{{ $product->status? translate('you want to disable this product'): translate('you want to active this product') }}', event)"
-                                                    class="toggle-switch-input" id="stocksCheckbox{{ $product->id }}"
-                                                    {{ $product->status ? 'checked' : '' }}>
-                                                <span class="toggle-switch-label mx-auto text">
-                                                    <span class="toggle-switch-indicator"></span>
-                                                </span>
-                                            </label>
-                                        </td>
-                                        <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
-                                            <input type="text" name="sequence" class="form-control w-50" value="{{ $product->sequence }}"
-                                            oninput="updateSequence('{{ route('admin.product.update-sequence', ['id' => $product->id]) }}', this.value)" 
-                                            id="old_val{{$product->id}}">
-                                            <input type="hidden" class="form-control" id="product_id" value="{{$product->id}}" style="width: 70px;">
-                                        </td>
-                                        <td>{{$product->tax}}</td>
-                                    @endif
-                                @if(in_array(auth('admin')->user()->admin_role_id ,[3]))
-                                        <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
-                                            <?php
-                                            foreach(\App\Model\WarehouseProduct::where('warehouse_id',auth('admin')->user()->warehouse_id)->where('product_id',$product->id)->get() as $stock){
-                                            ?>
-                                            
+                                                <input type="text" name="sequence" class="form-control w-50" value="{{ $sequence->sequence }}"
+                                                onblur="updateSequence('{{ route('admin.product.update-sequence', ['id' => $sequence->id]) }}', this.value)" 
+                                            >
+                                                <input type="hidden" class="form-control" id="product_id" value="{{$sequence->product_id}}" style="width: 70px;">
+                                            </td>
+                                        
+                                        
+                                        @else
+                                            <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
                                                 <label class="toggle-switch my-0">
                                                     <input type="checkbox"
-                                                        onclick="status_change_alert('{{ route('admin.product.status', [$stock->id, $stock->status ? 0 : 1]) }}', '{{ $stock->status? translate('you want to disable this product'): translate('you want to active this product') }}', event)"
+                                                        onclick="status_change_alert('{{ route('admin.product.status', [$product->id, $product->status ? 0 : 1]) }}', '{{ $product->status? translate('you want to disable this product'): translate('you want to active this product') }}', event)"
                                                         class="toggle-switch-input" id="stocksCheckbox{{ $product->id }}"
-                                                        {{ $stock->status ? 'checked' : '' }}>
+                                                        {{ $product->status ? 'checked' : '' }}>
                                                     <span class="toggle-switch-label mx-auto text">
                                                         <span class="toggle-switch-indicator"></span>
                                                     </span>
                                                 </label>
-                                                <?php
-                                                }
-                                            ?> 
-                                        </td>
-                                        <!-- <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
-                                        <div class="text-center">
-                                            <label class="switch my-0">
-                                                <input type="checkbox" class="status" {{ auth('admin')->user()->admin_role_id == 3 ? 'disabled' : '' }}  onchange="daily_needs('{{$product['id']}}','{{$product->daily_needs==1?0:1}}')"
-                                                    id="{{$product['id']}}" {{$product->daily_needs == 1?'checked':''}}>
-                                                <span class="slider round"></span>
-                                            </label>
-                                        </div>
-                                        </td> -->
-                                @endif
-                                    
-                                    @if(auth('admin')->user()->admin_role_id != 5)
-                                    <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
-                                            <!-- Dropdown -->
-                                            <div class="btn--container justify-content-center">
-                                            @if( auth('admin')->user()->admin_role_id == 1 )
-                                                <a class="action-btn   btn-outline-info" href="{{route('admin.product.view',[$product['id']])}}">
-                                                    <i class="tio-invisible"></i>
-                                                </a>
-                                                <a class="action-btn"  href="{{route('admin.product.edit',[$product['id']])}}">
-                                                    <i class="tio-edit"></i></a>
-                                                <a class="action-btn btn--danger btn-outline-danger" href="javascript:" onclick="form_alert('product-{{$product['id']}}','{{ translate("Want to delete this") }}')">
-                                                    <i class="tio-delete-outlined"></i>
-                                                </a>
-                                                <form action="{{route('admin.product.delete',[$product['id']])}}"
-                                                        method="post" id="product-{{$product['id']}}">
-                                                    @csrf @method('delete')
-                                                </form>
-                                                @endif
-                                                @if( auth('admin')->user()->admin_role_id == 3 )
-
-                                                <a class="action-btn"  href="{{route('admin.product.warehouse-edit',[$product['id']])}}">
-                                                <i class="tio-money"></i></a>
-                                                @endif
-
-                                            <!-- End Dropdown -->
-                                             
-                                            </div>
-                                        </td>
+                                            </td>
+                                            
+                                            <td>{{$product->tax}}</td>
                                         @endif
-                                
-                                </tr>
-                            @endforeach
+                                    @if(in_array(auth('admin')->user()->admin_role_id ,[3]))
+                                            <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
+                                                <?php
+                                                foreach(\App\Model\WarehouseProduct::where('warehouse_id',auth('admin')->user()->warehouse_id)->where('product_id',$product->id)->get() as $stock){
+                                                ?>
+                                                
+                                                    <label class="toggle-switch my-0">
+                                                        <input type="checkbox"
+                                                            onclick="status_change_alert('{{ route('admin.product.status', [$stock->id, $stock->status ? 0 : 1]) }}', '{{ $stock->status? translate('you want to disable this product'): translate('you want to active this product') }}', event)"
+                                                            class="toggle-switch-input" id="stocksCheckbox{{ $product->id }}"
+                                                            {{ $stock->status ? 'checked' : '' }}>
+                                                        <span class="toggle-switch-label mx-auto text">
+                                                            <span class="toggle-switch-indicator"></span>
+                                                        </span>
+                                                    </label>
+                                                    <?php
+                                                    }
+                                                ?> 
+                                            </td>
+                                            <!-- <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
+                                            <div class="text-center">
+                                                <label class="switch my-0">
+                                                    <input type="checkbox" class="status" {{ auth('admin')->user()->admin_role_id == 3 ? 'disabled' : '' }}  onchange="daily_needs('{{$product['id']}}','{{$product->daily_needs==1?0:1}}')"
+                                                        id="{{$product['id']}}" {{$product->daily_needs == 1?'checked':''}}>
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </div>
+                                            </td> -->
+                                    @endif
+                                        
+                                        @if(auth('admin')->user()->admin_role_id != 5)
+                                        <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
+                                                <!-- Dropdown -->
+                                                <div class="btn--container justify-content-center">
+                                                @if( auth('admin')->user()->admin_role_id == 1 )
+                                                    <a class="action-btn   btn-outline-info" href="{{route('admin.product.view',[$product['id']])}}">
+                                                        <i class="tio-invisible"></i>
+                                                    </a>
+                                                    <a class="action-btn"  href="{{route('admin.product.edit',[$product['id']])}}">
+                                                        <i class="tio-edit"></i></a>
+                                                    <a class="action-btn btn--danger btn-outline-danger" href="javascript:" onclick="form_alert('product-{{$product['id']}}','{{ translate("Want to delete this") }}')">
+                                                        <i class="tio-delete-outlined"></i>
+                                                    </a>
+                                                    <form action="{{route('admin.product.delete',[$product['id']])}}"
+                                                            method="post" id="product-{{$product['id']}}">
+                                                        @csrf @method('delete')
+                                                    </form>
+                                                    @endif
+                                                    @if( auth('admin')->user()->admin_role_id == 3 )
+
+                                                    <a class="action-btn"  href="{{route('admin.product.warehouse-edit',[$product['id']])}}">
+                                                    <i class="tio-money"></i></a>
+                                                    @endif
+
+                                                <!-- End Dropdown -->
+                                                
+                                                </div>
+                                            </td>
+                                            @endif
+                                    
+                                    </tr>
+                                @endforeach
                             </tbody>
-                        </table>
+                    </table>
 
                         <div class="page-area">
                             <table>
@@ -305,6 +311,8 @@
  
 <script>
    function updateSequence(url, sequence) {
+    console.log(url);
+    console.log(sequence);
      fetch(url, {
             method: 'PATCH',
             headers: {
@@ -429,35 +437,61 @@
             }
         });
     }
+</script><script>
+       $(document).ready(function() {
+        jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+            "natural-asc": function (a, b) {
+                return naturalSort(a, b);
+            },
+            "natural-desc": function (a, b) {
+                return naturalSort(b, a);
+            }
+        });
+
+        var table = $('#columnSearchDatatable').DataTable({
+            "columnDefs": [
+                { "type": "natural", "targets": 5 } // Use natural sorting for 'sequence' column
+            ],
+            "orderCellsTop": true // Show sorting arrows in the header
+        });
+    });
 </script>
-    <script>
+<!-- <script>
         $(document).on('ready', function () {
-    // INITIALIZATION OF DATATABLES
-    var datatable = $.HSCore.components.HSDatatables.init($('#columnSearchDatatable'));
+            // INITIALIZATION OF DATATABLES
+            var datatable = $.HSCore.components.HSDatatables.init($('#columnSearchDatatable'));
 
-    // Add searching functionality for the "Sequence" column
-    $('#column3_search').on('keyup', function () {
-        datatable
-            .columns(5) // "Sequence" column index is 1
-            .search(this.value)
-            .draw();
-    });
+            // Add searching functionality for the "Sequence" column
+            $('#column3_search').on('keyup', function () {
+                datatable
+                    .columns(5) // "Sequence" column index is 1
+                    .search(this.value)
+                    .draw();
+                    
+            });
 
-    // Add searching functionality for the "Status" column
-    $('#column1_search').on('change', function () {
-        var statusValue = this.value;
-        datatable
-            .columns(4) // "Status" column index is 0
-            .search(statusValue)
-            .draw();
-    });
+            $('#column3_search').on('change', function () {
+                datatable
+                    .columns(5) // "Sequence" column index is 1
+                    .search(this.value)
+                    .draw();
+            });
 
-    // ... (existing code)
+            // Add searching functionality for the "Status" column
+            $('#column1_search').on('change', function () {
+                var statusValue = this.value;
+                datatable
+                    .columns(4) // "Status" column index is 0
+                    .search(statusValue)
+                    .draw();
+            });
 
-    // INITIALIZATION OF SELECT2
-    $('.js-select2-custom').each(function () {
-        var select2 = $.HSCore.components.HSSelect2.init($(this));
-    });
-});
-    </script>
+            // ... (existing code)
+
+            // INITIALIZATION OF SELECT2
+            $('.js-select2-custom').each(function () {
+                var select2 = $.HSCore.components.HSSelect2.init($(this));
+            });
+        });
+</script> -->
 @endpush

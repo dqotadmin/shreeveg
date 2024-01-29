@@ -1,7 +1,7 @@
 <div class="card-header border-0 order-header-shadow">
     <h5 class="card-title d-flex justify-content-between flex-grow-1">
         <span>{{translate('most_rated_products')}}</span>
-        <a href="{{route('admin.reviews.list')}}" class="fz-12px font-medium text-006AE5">{{translate('view_all')}}</a>
+        {{-- <a href="{{route('admin.reviews.list')}}" class="fz-12px font-medium text-006AE5">{{translate('view_all')}}</a> --}}
     </h5>
 </div>
 

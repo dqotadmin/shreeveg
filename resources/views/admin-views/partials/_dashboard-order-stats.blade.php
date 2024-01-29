@@ -1,5 +1,5 @@
 
-<div class="col-sm-6 col-lg-3">
+<div class="col-sm-6 col-lg-4">
     <a class="dashboard--card h-100" href="{{route('admin.orders.list',['pending'])}}">
         <h6 class="subtitle">{{translate('pending')}}</h6>
         <h2 class="title">
@@ -9,7 +9,7 @@
     </a>
 </div>
 
-<div class="col-sm-6 col-lg-3">
+<div class="col-sm-6 col-lg-4">
     <a class="dashboard--card h-100" href="{{route('admin.orders.list',['confirmed'])}}">
         <h6 class="subtitle">{{translate('confirmed')}}</h6>
         <h2 class="title">
@@ -19,7 +19,7 @@
     </a>
 </div>
 
-<div class="col-sm-6 col-lg-3">
+<div class="col-sm-6 col-lg-4">
     <a class="dashboard--card h-100" href="{{route('admin.orders.list',['processing'])}}">
         <h6 class="subtitle">{{translate('packaging')}}</h6>
         <h2 class="title">
@@ -29,7 +29,7 @@
     </a>
 </div>
 
-<div class="col-sm-6 col-lg-3">
+<div class="col-sm-6 col-lg-4">
     <a class="dashboard--card h-100" href="{{route('admin.orders.list',['out_for_delivery'])}}">
         <h6 class="subtitle">{{translate('out_for_delivery')}}</h6>
         <h2 class="title">
@@ -39,8 +39,8 @@
     </a>
 </div>
 
-<div class="col-sm-6 col-lg-3">
-    <a class="order--card h-100" href="{{route('admin.orders.list',['delivered'])}}">
+<div class="col-sm-6 col-lg-4">
+    <a class="dashboard--card h-100" href="{{route('admin.orders.list',['delivered'])}}">
         <div class="d-flex justify-content-between align-items-center">
             <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
                 <img src="{{asset('public/assets/admin/img/delivery/1.png')}}" alt="dashboard" class="oder--card-icon">
@@ -54,8 +54,8 @@
 </div>
 
 
-<div class="col-sm-6 col-lg-3">
-    <a class="order--card h-100" href="{{route('admin.orders.list',['canceled'])}}">
+<div class="col-sm-6 col-lg-4">
+    <a class="dashboard--card h-100" href="{{route('admin.orders.list',['canceled'])}}">
         <div class="d-flex justify-content-between align-items-center">
             <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
                 <img src="{{asset('public/assets/admin/img/delivery/2.png')}}" alt="dashboard" class="oder--card-icon">
@@ -69,8 +69,8 @@
 </div>
 <!-- Static Cancel -->
 
-
-<div class="col-sm-6 col-lg-3">
+{{-- 
+<div class="col-sm-6 col-lg-4">
     <a class="order--card h-100" href="{{route('admin.orders.list',['returned'])}}">
         <div class="d-flex justify-content-between align-items-center">
             <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
@@ -83,7 +83,7 @@
         </div>
     </a>
 </div>
-<div class="col-sm-6 col-lg-3">
+<div class="col-sm-6 col-lg-4">
     <a class="order--card h-100" href="{{route('admin.orders.list',['failed'])}}">
         <div class="d-flex justify-content-between align-items-center">
             <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
@@ -95,4 +95,4 @@
             </span>
         </div>
     </a>
-</div>
+</div> --}}

@@ -11,6 +11,7 @@ use App\Model\Order;
 use App\Model\OrderDetail;
 use App\Model\Product;
 use App\Model\Review;
+use App\Model\Warehouse;
 use App\User;
 use Carbon\CarbonPeriod;
 use Illuminate\Contracts\Foundation\Application;
@@ -21,6 +22,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Mpdf\Tag\Em;
 
 class DashboardController extends Controller
 {
@@ -32,6 +34,7 @@ class DashboardController extends Controller
         private OrderDetail $order_detail,
         private Product $product,
         private Review $review,
+        private Warehouse $warehouse,
         private User $user
     ) {
     }
@@ -62,21 +65,33 @@ class DashboardController extends Controller
     /**
      * @return Factory|View|Application
      */
-    public function dashboard(): View|Factory|Application
+    public function dashboard(Request $request): View|Factory|Application
     {
         $top_sell = [];
 
-        if (auth('admin')->user()->admin_role_id == 2) {
-            $top_sell = $this->order_detail->with(['product'])
-                ->whereHas('order', function ($query) {
-                    $query->where('order_status', 'delivered');
-                })
-                ->select('product_id', DB::raw('SUM(quantity) as count'))
-                ->groupBy('product_id')
-                ->orderBy("count", 'desc')
-                ->take(6)
-                ->get();
+        $warehouse_id = 'all';
+        $authUser = auth('admin')->user();
+        if (in_array($authUser->admin_role_id, [6, 7])) {
+            $warehouse_id = $authUser->Store->warehouse_id;
+        } elseif (in_array($authUser->admin_role_id, [3, 4])) {
+            $warehouse_id = $authUser->warehouse_id;
+        } elseif ($authUser->admin_role_id == 1) {
+            $warehouse_id = $request['warehouse_id'];
         }
+
+        $warehouses = $this->warehouse->active()->where('deleted_at', null)->get();
+
+        // if (auth('admin')->user()->admin_role_id == 2) {
+        //     $top_sell = $this->order_detail->with(['product'])
+        //         ->whereHas('order', function ($query) {
+        //             $query->where('order_status', 'delivered');
+        //         })
+        //         ->select('product_id', DB::raw('SUM(quantity) as count'))
+        //         ->groupBy('product_id')
+        //         ->orderBy("count", 'desc')
+        //         ->take(6)
+        //         ->get();
+        // }
         $most_rated_products = $this->review->with(['product'])
             ->select([
                 'product_id',
@@ -89,30 +104,31 @@ class DashboardController extends Controller
             ->take(6)
             ->get();
 
-        $top_customer = $this->order->with(['customer'])
+        $top_customer = self::customQuery($request->warehouse_id)->with(['customer'])
             ->select('user_id', DB::raw('COUNT(user_id) as count'))
             ->groupBy('user_id')
             ->orderBy("count", 'desc')
             ->take(6)
             ->get();
-
-        $data = self::order_stats_data();
+        $data = self::new_order_stats_data($request->warehouse_id);
 
         $data['customer'] = $this->user->count();
         $data['product'] = $this->product->count();
-        $data['order'] = $this->order->count();
+        $data['order'] = self::customQuery($request->warehouse_id)->count();
         $data['category'] = $this->category->where('parent_id', 0)->count();
         $data['branch'] = $this->branch->count();
 
-        $data['pending_count'] = $this->order->where(['order_status' => 'pending'])->count();
-        $data['ongoing_count'] = $this->order->whereIn('order_status', ['confirmed', 'processing', 'out_for_delivery'])->count();
-        $data['delivered_count'] = $this->order->where(['order_status' => 'delivered'])->count();
-        $data['canceled_count'] = $this->order->where(['order_status' => 'canceled'])->count();
-        $data['returned_count'] = $this->order->where(['order_status' => 'returned'])->count();
-        $data['failed_count'] = $this->order->where(['order_status' => 'failed'])->count();
+        $data['pending_count'] = self::customQuery($request->warehouse_id)->where(['order_status' => 'pending'])->count();
+        $data['confirmed_count'] = self::customQuery($request->warehouse_id)->where(['order_status' => 'confirmed'])->count();
 
-        $data['recent_orders'] = $this->order->notPos()->latest()->take(5)->get(['id', 'created_at', 'order_status']);
+        $data['ongoing_count'] = self::customQuery($request->warehouse_id)->whereIn('order_status', ['delivered', 'processing', 'out_for_delivery'])->count();
+        $data['out_for_delivery_count'] = self::customQuery($request->warehouse_id)->where(['order_status' => 'out_for_delivery'])->count();
+        $data['delivered_count'] = self::customQuery($request->warehouse_id)->where(['order_status' => 'delivered'])->count();
+        $data['canceled_count'] = self::customQuery($request->warehouse_id)->where(['order_status' => 'canceled'])->count();
+        $data['returned_count'] = self::customQuery($request->warehouse_id)->where(['order_status' => 'returned'])->count();
+        $data['failed_count'] = self::customQuery($request->warehouse_id)->where(['order_status' => 'failed'])->count();
 
+        $data['recent_orders'] = self::customQuery($request->warehouse_id)->notPos()->latest()->take(5)->get(['id', 'created_at', 'order_status']);
 
         $data['top_sell'] = $top_sell;
         $data['most_rated_products'] = $most_rated_products;
@@ -120,11 +136,11 @@ class DashboardController extends Controller
 
         $from = \Carbon\Carbon::now()->startOfYear()->format('Y-m-d');
         $to = Carbon::now()->endOfYear()->format('Y-m-d');
-
+        //dd($data);
         /*earning statistics chart*/
 
         $earning = [];
-        $earning_data = $this->order->where([
+        $earning_data = self::customQuery($request->warehouse_id)->where([
             'order_status' => 'delivered'
         ])->select(
             DB::raw('IFNULL(sum(order_amount),0) as sums'),
@@ -142,7 +158,7 @@ class DashboardController extends Controller
         /*order statistics chart*/
 
         $order_statistics_chart = [];
-        $order_statistics_chart_data = $this->order->where(['order_status' => 'delivered'])
+        $order_statistics_chart_data = self::customQuery($request->warehouse_id)->where(['order_status' => 'delivered'])
             ->select(
                 DB::raw('(count(id)) as total'),
                 DB::raw('YEAR(created_at) year, MONTH(created_at) month')
@@ -159,17 +175,26 @@ class DashboardController extends Controller
         }
 
         //dd($order_statistics_chart_data);
-        return view('admin-views.dashboard', compact('data', 'earning', 'order_statistics_chart'));
+        return view('admin-views.dashboard', compact('data', 'earning', 'order_statistics_chart', 'warehouses', 'warehouse_id'));
     }
 
     /**
      * @param Request $request
      * @return JsonResponse
      */
+
+    public function customQuery($whID = null)
+    {
+        if ($whID == 'all' || empty($whID)) {
+            return $this->order;
+        } else {
+            return $this->order->where('warehouse_id', $whID);
+        }
+    }
     public function order_stats(Request $request): \Illuminate\Http\JsonResponse
     {
         session()->put('statistics_type', $request['statistics_type']);
-        $data = self::order_stats_data();
+        $data = self::order_stats_data_old();
 
         return response()->json([
             'view' => view('admin-views.partials._dashboard-order-stats', compact('data'))->render()
@@ -179,7 +204,40 @@ class DashboardController extends Controller
     /**
      * @return array
      */
-    public function order_stats_data(): array
+
+    public function new_order_stats_data($warehouseID = null): array
+    {
+        $today = session()->has('statistics_type') && session('statistics_type') == 'today' ? 1 : 0;
+        $this_month = session()->has('statistics_type') && session('statistics_type') == 'this_month' ? 1 : 0;
+
+        $orderStatuses = ['pending', 'confirmed', 'processing', 'out_for_delivery', 'delivered', 'all', 'returned', 'failed', 'canceled'];
+        $data = [];
+
+        foreach ($orderStatuses as $status) {
+            $data[$status] = $this->getOrderCount($status, $today, $this_month, $warehouseID);
+        }
+
+        return $data;
+    }
+
+    private function getOrderCount($status, $today, $this_month, $warehouseID)
+    {
+        $rowQuery = self::customQuery($warehouseID);
+
+        return $rowQuery
+            ->when($status, function ($query) use ($status) {
+                return $query->where('order_status', $status);
+            })
+            ->when($today, function ($query) {
+                return $query->whereDate('created_at', Carbon::today());
+            })
+            ->when($this_month, function ($query) {
+                return $query->whereMonth('created_at', Carbon::now());
+            })
+            ->count();
+    }
+
+    public function order_stats_data_old(): array
     {
         $today = session()->has('statistics_type') && session('statistics_type') == 'today' ? 1 : 0;
         $this_month = session()->has('statistics_type') && session('statistics_type') == 'this_month' ? 1 : 0;
@@ -276,14 +334,20 @@ class DashboardController extends Controller
     public function get_order_statitics(Request $request): \Illuminate\Http\JsonResponse
     {
         $dateType = $request->type;
-
+        //dd($request->all());
         $order_data = array();
+
+        if ($request->warehouse_id == 'all' || !$request->warehouse_id) {
+            $query = $this->order;
+        } else {
+            $query = $this->order->where('warehouse_id', $request->warehouse_id);
+        }
         if ($dateType == 'yearOrder') {
             $number = 12;
             $from = Carbon::now()->startOfYear()->format('Y-m-d');
             $to = Carbon::now()->endOfYear()->format('Y-m-d');
 
-            $orders = $this->order->where(['order_status' => 'delivered'])
+            $orders = $query->where(['order_status' => 'delivered'])
                 ->select(
                     DB::raw('(count(id)) as total'),
                     DB::raw('YEAR(created_at) year, MONTH(created_at) month')
@@ -304,7 +368,7 @@ class DashboardController extends Controller
             $number = date('d', strtotime($to));
             $key_range = range(1, $number);
 
-            $orders = $this->order->where(['order_status' => 'delivered'])
+            $orders = $query->where(['order_status' => 'delivered'])
                 ->select(
                     DB::raw('(count(id)) as total'),
                     DB::raw('YEAR(created_at) year, MONTH(created_at) month, DAY(created_at) day')
@@ -335,7 +399,7 @@ class DashboardController extends Controller
             $day_range_intKeys = array_map('intval', $day_range_keys);
             $day_range = array_combine($day_range_intKeys, $day_range_values);
 
-            $orders = $this->order->where(['order_status' => 'delivered'])
+            $orders = $query->where(['order_status' => 'delivered'])
                 ->select(
                     DB::raw('(count(id)) as total'),
                     DB::raw('YEAR(created_at) year, MONTH(created_at) month, DAY(created_at) day')
@@ -372,13 +436,18 @@ class DashboardController extends Controller
     {
         $dateType = $request->type;
 
+        if ($request->warehouse_id == 'all' || !$request->warehouse_id) {
+            $query = $this->order;
+        } else {
+            $query = $this->order->where('warehouse_id', $request->warehouse_id);
+        }
         $earning_data = array();
         if ($dateType == 'yearEarn') {
             $number = 12;
             $from = Carbon::now()->startOfYear()->format('Y-m-d');
             $to = Carbon::now()->endOfYear()->format('Y-m-d');
 
-            $earning = $this->order->where([
+            $earning = $query->where([
                 'order_status' => 'delivered'
             ])->select(
                 DB::raw('IFNULL(sum(order_amount),0) as sums'),
@@ -400,7 +469,7 @@ class DashboardController extends Controller
             $number = date('d', strtotime($to));
             $key_range = range(1, $number);
 
-            $earning = $this->order->where([
+            $earning = $query->where([
                 'order_status' => 'delivered'
             ])->select(
                 DB::raw('IFNULL(sum(order_amount),0) as sums'),
@@ -432,7 +501,7 @@ class DashboardController extends Controller
             $day_range_intKeys = array_map('intval', $day_range_keys);
             $day_range = array_combine($day_range_intKeys, $day_range_values);
 
-            $earning = $this->order->where([
+            $earning = $query->where([
                 'order_status' => 'delivered'
             ])->select(
                 DB::raw('IFNULL(sum(order_amount),0) as sums'),

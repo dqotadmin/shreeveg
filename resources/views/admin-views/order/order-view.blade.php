@@ -17,18 +17,7 @@
                     {{translate('order details')}}
                 </span>
             </h1>
-            <div class="d-flex justify-content-end d-print-none">
-                <a class="btn btn-icon btn-sm btn-soft-info rounded-circle mr-1"
-                    href="{{route('admin.orders.details',[$order['id']-1])}}"
-                    data-toggle="tooltip" data-placement="top" title="Previous order">
-                    <i class="tio-arrow-backward"></i>
-                </a>
-                <a class="btn btn-icon btn-sm btn-soft-info rounded-circle"
-                    href="{{route('admin.orders.details',[$order['id']+1])}}" data-toggle="tooltip"
-                    data-placement="top" title="Next order">
-                    <i class="tio-arrow-forward"></i>
-                </a>
-            </div>
+            
         </div>
         <!-- End Page Header -->
 
@@ -41,14 +30,17 @@
                         <div class="order-invoice-left">
                             <h1 class="page-header-title">
                                 <span class="mr-3">{{translate('order ID')}} #{{$order['id']}}</span>
-                                <span class="badge badge-soft-info py-2 px-3">{{$order->warehouse_id?$order->warehouse->name:'Branch deleted!'}}</span>
+                                <span class="badge badge-soft-info py-2 px-3">{{$order->warehouse_id?$order->warehouse->name:'Warehouse deleted!'}}</span>
                             </h1>
                             <span><i class="tio-date-range"></i>
                                 {{date('d M Y',strtotime($order['created_at']))}} {{ date(config('time_format'), strtotime($order['created_at'])) }}</span>
                         </div>
                         <div class="order-invoice-right mt-3 mt-sm-0">
                             <div class="btn--container ml-auto align-items-center justify-content-end">
-                                @if($order['order_type']!='self_pickup' && $order['order_type'] != 'pos')
+
+                                {{-- get location map commented by mukesh --}}
+
+                                {{-- @if($order['order_type']!='self_pickup' && $order['order_type'] != 'pos')
                                     @if($order['order_status']=='out_for_delivery')
                                         @php($origin=\App\Model\DeliveryHistory::where(['deliveryman_id'=>$order['delivery_man_id'],'order_id'=>$order['id']])->first())
                                         @php($current=\App\Model\DeliveryHistory::where(['deliveryman_id'=>$order['delivery_man_id'],'order_id'=>$order['id']])->latest()->first())
@@ -74,7 +66,7 @@
                                             {{translate('Show Location in Map')}}
                                         </a>
                                     @endif
-                                @endif
+                                @endif --}}
                                 <a class="btn btn--info print--btn" target="_blank" href={{route('admin.orders.generate-invoice',[$order['id']])}}>
                                     <i class="tio-print mr-1"></i> {{translate('print')}} {{translate('invoice')}}
                                 </a>
@@ -386,12 +378,12 @@
                                     <a class="dropdown-item"
                                         onclick="route_alert('{{route('admin.orders.status',['id'=>$order['id'],'order_status'=>'delivered'])}}','{{ translate("Change status to delivered ?") }}')"
                                         href="javascript:">{{translate('delivered')}}</a>
-                                    <a class="dropdown-item"
+                                    {{-- <a class="dropdown-item"
                                         onclick="route_alert('{{route('admin.orders.status',['id'=>$order['id'],'order_status'=>'returned'])}}','{{ translate("Change status to returned ?") }}')"
                                         href="javascript:">{{translate('returned')}}</a>
                                     <a class="dropdown-item"
                                         onclick="route_alert('{{route('admin.orders.status',['id'=>$order['id'],'order_status'=>'failed'])}}','{{ translate("Change status to failed ?") }}')"
-                                        href="javascript:">{{translate('failed')}}</a>
+                                        href="javascript:">{{translate('failed')}}</a> --}}
                                     <a class="dropdown-item"
                                         onclick="route_alert('{{route('admin.orders.status',['id'=>$order['id'],'order_status'=>'canceled'])}}','{{ translate("Change status to canceled ?") }}')"
                                         href="javascript:">{{translate('canceled')}}</a>
@@ -443,8 +435,9 @@
                         @endif
                         @if(($order['order_type'] !='self_pickup') && ($order['order_type'] !='pos'))
                                 @if (!$order->delivery_man)
-                                    <div class="mt-3">
-                                        <button class="btn btn--primary w-100" type="button" data-target="#assign_delivey_man_modal" data-toggle="modal">{{ translate('assign delivery man manually') }}</button>
+                                    <div class="mt-3"> 
+                                        {{-- button disabled due to next level functionality by mkk --}}
+                                        <button class="btn btn--primary w-100"  type="button" data-target="#assign_delivey_man_modal" data-toggle="modal">{{ translate('assign delivery man manually') }}</button>
                                     </div>
                                 @endif
                                 @if ($order->delivery_man)
@@ -641,11 +634,11 @@
                             <span>{{\App\Model\Order::where('warehouse_id',$order['warehouse_id'])->count()}} {{translate('Orders')}}</span>
                             <span class="text--title font-semibold d-block">
                                 <i class="tio-call-talking-quiet mr-2"></i>
-                                <a href="Tel:{{@$auth->phone}}">{{@$auth->phone}}</a>
+                                <a href="Tel:{{@$order->warehouse->getWarehouseAdmin->phone}}">{{@$order->warehouse->getWarehouseAdmin->phone}}</a>
                             </span>
                             <span class="text--title" >
                                 <i class="tio-email mr-2"></i>
-                                <a href="mailto:{{@$auth->email}}">{{@$auth->email}}</a>
+                                <a href="mailto:{{@$order->warehouse->getWarehouseAdmin->email}}">{{@$order->warehouse->getWarehouseAdmin->email}}</a>
                             </span>
                         </div>
                     </div>
@@ -653,7 +646,7 @@
                     <span class="d-block">
                         <a target="_blank"
                            href="http://maps.google.com/maps?z=12&t=m&q=loc:{{ @$order->warehouse['latitude']}}+{{@$order->warehouse['longitude'] }}">
-                            <i class="tio-poi"></i> {{ @$order->branch['address']}}
+                            <i class="tio-poi"></i> {{ @$order->warehouse['address']}}
                         </a>
                     </span>
                     </div>
@@ -873,7 +866,7 @@
                 url: '{{url('/')}}/admin/orders/add-delivery-man/{{$order['id']}}/' + id,
                 data: $('#product_form').serialize(),
                 success: function (data) {
-                    //console.log(data);
+                    //console.log(data); die;
                     location.reload();
                     if(data.status == true) {
                         toastr.success('{{ translate("Deliveryman successfully assigned/changed") }}', {

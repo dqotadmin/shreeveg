@@ -31,11 +31,11 @@
                 <form class="w-100">
                     <div class="row g-3 g-sm-4 g-md-3 g-lg-4">
                         <div class="col-sm-6 col-md-4 col-lg-2">
-                            <select class="custom-select custom-select-sm text-capitalize min-h-45px" name="branch_id">
-                                <option disabled>--- {{translate('select')}} {{translate('branch')}} ---</option>
-                                <option value="all" {{ $branch_id == 'all' ? 'selected': ''}}>{{translate('all')}} {{translate('branch')}}</option>
-                                @foreach($branches as $branch)
-                                    <option value="{{$branch['id']}}" {{ $branch['id'] == $branch_id ? 'selected' : ''}}>{{$branch['name']}}</option>
+                            <select class="custom-select custom-select-sm text-capitalize min-h-45px" name="warehouse_id">
+                                <option disabled>--- {{translate('select')}} {{translate('warehouse')}} ---</option>
+                                <option value="all" {{ $warehouse_id == 'all' ? 'selected': ''}}>{{translate('all')}} {{translate('warehouse')}}</option>
+                                @foreach($warehouses as $warehouse)
+                                    <option value="{{$warehouse['id']}}" {{ $warehouse['id'] == $warehouse_id ? 'selected' : ''}}>{{$warehouse['name']}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -68,7 +68,7 @@
                 <div class="p-20px pb-0 mt-4">
                     <div class="row g-3 g-sm-4 g-md-3 g-lg-4">
 
-                            <div class="col-sm-6 col-lg-3">
+                            <div class="col-sm-6 col-lg-4">
                                 <a class="order--card h-100" href="{{route('admin.orders.list',['pending'])}}">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
@@ -76,14 +76,13 @@
                                             <span>{{translate('pending')}}</span>
                                         </h6>
                                         <span class="card-title text-0661CB">
-    {{--                                    {{\App\Model\Order::where(['order_status'=>'pending'])->count()}}--}}
                                             {{ $count_data['pending'] }}
                                     </span>
                                     </div>
                                 </a>
                             </div>
 
-                            <div class="col-sm-6 col-lg-3">
+                            <div class="col-sm-6 col-lg-4">
                                 <a class="order--card h-100" href="{{route('admin.orders.list',['confirmed'])}}">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
@@ -97,7 +96,7 @@
                                 </a>
                             </div>
 
-                            <div class="col-sm-6 col-lg-3">
+                            <div class="col-sm-6 col-lg-4">
                                 <a class="order--card h-100" href="{{route('admin.orders.list',['processing'])}}">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
@@ -111,7 +110,7 @@
                                 </a>
                             </div>
 
-                            <div class="col-sm-6 col-lg-3">
+                            <div class="col-sm-6 col-lg-4">
                                 <a class="order--card h-100" href="{{route('admin.orders.list',['out_for_delivery'])}}">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
@@ -127,7 +126,7 @@
 
 
 
-                            <div class="col-sm-6 col-lg-3">
+                            <div class="col-sm-6 col-lg-4">
                                 <a class="order--card h-100" href="{{route('admin.orders.list',['delivered'])}}">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
@@ -143,7 +142,7 @@
 
 
                             <!-- Static Cancel -->
-                            <div class="col-sm-6 col-lg-3">
+                            <div class="col-sm-6 col-lg-4">
                                 <a class="order--card h-100" href="{{route('admin.orders.list',['all'])}}">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
@@ -159,7 +158,7 @@
                             <!-- Static Cancel -->
 
 
-                            <div class="col-sm-6 col-lg-3">
+                            {{-- <div class="col-sm-6 col-lg-3">
                                 <a class="order--card h-100" href="{{route('admin.orders.list',['returned'])}}">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
@@ -184,7 +183,7 @@
                                     </span>
                                     </div>
                                 </a>
-                            </div>
+                            </div> --}}
 
                         </div>
                 </div>
@@ -198,7 +197,7 @@
                                 <input id="datatableSearch_" type="search" name="search"
                                        class="form-control"
                                        placeholder="{{translate('Ex : Search by ID, order or payment status')}}" aria-label="Search"
-                                       value="{{$search}}" required autocomplete="off">
+                                       value="{{$search}}"  autocomplete="off">
                                 <div class="input-group-append">
                                     <button type="submit" class="input-group-text">
                                         {{translate('Search')}}
@@ -244,7 +243,7 @@
                             <th>{{translate('Delivery')}} {{translate('date')}}</th>
                             <th>{{translate('Time Slot')}}</th>
                             <th>{{translate('customer')}}</th>
-                            <th>{{translate('branch')}}</th>
+                            <th>{{translate('warehouse')}}</th>
                             <th>{{translate('total amount')}}</th>
                             <th>
                                 <div class="text-center">
@@ -298,7 +297,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <label class="badge badge-soft-primary">{{$order->branch?$order->branch->name:'Branch deleted!'}}</label>
+                                    <label class="badge badge-soft-primary">{{$order->warehouse?$order->warehouse->name:'Warehouse deleted!'}}</label>
                                 </td>
 
                                 <td>

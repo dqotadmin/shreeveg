@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Model;
+
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 use Illuminate\Database\Eloquent\Builder;
@@ -11,7 +12,7 @@ class Warehouse extends Model
     use SoftDeletes;
     protected $fillable = ['deleted_by'];
     protected $dates = ['deleted_at'];
-    
+
 
     public function translations(): \Illuminate\Database\Eloquent\Relations\MorphMany
     {
@@ -28,6 +29,14 @@ class Warehouse extends Model
             ->whereRaw('distance < radius')
             ->orderBy('distance', 'asc');
     }
-   
- 
+
+    public function getWarehouseAdmin()
+    {
+        return $this->hasOne(Admin::class, 'warehouse_id');
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', '=', 1);
+    }
 }

@@ -692,7 +692,7 @@
                                         </span>
                                     </a>
                                 </li>
-                                <li class="nav-item {{Request::is('admin/orders/list/returned')?'active':''}}">
+                                {{-- <li class="nav-item {{Request::is('admin/orders/list/returned')?'active':''}}">
                                     <a class="nav-link " href="{{route('admin.orders.list',['returned'])}}"
                                         title="{{translate('returned_orders')}}">
                                         <span class="tio-circle nav-indicator-icon"></span>
@@ -715,7 +715,7 @@
                                             </span>
                                         </span>
                                     </a>
-                                </li>
+                                </li> --}}
 
                                 <li class="nav-item {{Request::is('admin/orders/list/canceled')?'active':''}}">
                                     <a class="nav-link " href="{{route('admin.orders.list',['canceled'])}}"

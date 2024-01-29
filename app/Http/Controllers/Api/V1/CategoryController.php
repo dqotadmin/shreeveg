@@ -10,7 +10,7 @@ use App\Model\WarehouseCategory;
 
 class CategoryController extends Controller
 {
-    public function __construct( 
+    public function __construct(
         private Category $category,
         private WarehouseCategory $warehouse_category
     ) {
@@ -22,7 +22,7 @@ class CategoryController extends Controller
 
             $warehouseId = auth('api')->user()->warehouse_id;
             $whcategpries = Helpers::warehouseAssignCategories($warehouseId);
-
+            //dd($whcategpries);
             if (!empty($whcategpries)) {
                 $categories = $this->category->whereIn('id', $whcategpries)->where('parent_id', 0)->get();
             } else {

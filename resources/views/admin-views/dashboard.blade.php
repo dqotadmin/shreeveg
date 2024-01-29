@@ -24,21 +24,13 @@
                             {{ translate('Business Analytics') }}
                         </h5>
                         <div class="mb-2">
-                            <select class="custom-select" name="statistics_type"
-                                    onchange="order_stats_update(this.value)">
-                                <option
-                                    value="overall" {{session()->has('statistics_type') && session('statistics_type') == 'overall'?'selected':''}}>
-                                    {{ translate('Overall Statistics') }}
-                                </option>
-                                <option
-                                    value="today" {{session()->has('statistics_type') && session('statistics_type') == 'today'?'selected':''}}>
-                                    {{ translate("Today's Statistics") }}
-                                </option>
-                                <option
-                                    value="this_month" {{session()->has('statistics_type') && session('statistics_type') == 'this_month'?'selected':''}}>
-                                    {{ translate("This Month's Statistics") }}
-                                </option>
+                            <select class="custom-select custom-select-sm text-capitalize min-h-45px" id="warehouseSelect">
+                                <option value="all" {{ $warehouse_id == 'all' ? 'selected': ''}}>{{translate('all')}} {{translate('warehouse')}}</option>
+                                @foreach($warehouses as $warehouse)
+                                    <option value="{{$warehouse['id']}}" {{ $warehouse['id'] == $warehouse_id ? 'selected' : ''}}>{{$warehouse['name']}}</option>
+                                @endforeach
                             </select>
+                          
                         </div>
                     </div>
                     <div class="row g-2" id="order_stats">
@@ -46,107 +38,7 @@
                     </div>
                 </div>
             </div>
-            <!-- End Card -->
-
-            {{-- <div class="row gx-2 gx-lg-3 mb-3 mb-lg-5">
-                <div class="col-lg-12">
-
-                    <!-- Card -->
-                    <div class="card h-100">
-                        <!-- Body -->
-                        <div class="card-body">
-                            <div class="row mb-4">
-                                <div class="col-12 mb-3 border-bottom">
-                                    <h5 class="card-header-title float-left mb-2">
-                                        <i style="font-size: 30px" class="tio-chart-pie-1"></i>
-                                        {{ translate('Earning statistics for business analytics') }}
-                                    </h5>
-                                    <!-- Legend Indicators -->
-                                    <h5 class="card-header-title float-right mb-2">{{ translate('Monthly Earning') }}
-                                        <i style="font-size: 30px" class="tio-chart-bar-2"></i>
-                                    </h5>
-                                    <!-- End Legend Indicators -->
-                                </div>
-                                <div class="col-md-4 graph-border-1">
-                                    <div class="mt-2 center-div">
-                                          <span class="h6 mb-0">
-                                              <i class="legend-indicator" style="background-color: #B6C867!important;"></i>
-                                             {{ translate('earnings') }} : {{ Helpers::set_symbol(array_sum($earning)) }}
-                                          </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- End Row -->
-
-                            <!-- Bar Chart -->
-                            <div class="chartjs-custom">
-                                <canvas id="updatingData" style="height: 20rem;"
-                                        data-hs-chartjs-options='{
-                                "type": "bar",
-                                "data": {
-                                  "labels": ["Jan","Feb","Mar","April","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
-                                  "datasets": [
-                                 {
-                                    "data": [{{$earning[1]}},{{$earning[2]}},{{$earning[3]}},{{$earning[4]}},{{$earning[5]}},{{$earning[6]}},{{$earning[7]}},{{$earning[8]}},{{$earning[9]}},{{$earning[10]}},{{$earning[11]}},{{$earning[12]}}],
-                                    "backgroundColor": "#B6C867",
-                                    "borderColor": "#B6C867"
-                                  }]
-                                },
-                                "options": {
-                                  "scales": {
-                                    "yAxes": [{
-                                      "gridLines": {
-                                        "color": "#e7eaf3",
-                                        "drawBorder": false,
-                                        "zeroLineColor": "#e7eaf3"
-                                      },
-                                      "ticks": {
-                                        "beginAtZero": true,
-                                        "stepSize": 50000,
-                                        "fontSize": 12,
-                                        "fontColor": "#97a4af",
-                                        "fontFamily": "Open Sans, sans-serif",
-                                        "padding": 10,
-                                        "postfix": " {{ \App\CentralLogics\Helpers::currency_symbol() }}"
-                                      }
-                                    }],
-                                    "xAxes": [{
-                                      "gridLines": {
-                                        "display": false,
-                                        "drawBorder": false
-                                      },
-                                      "ticks": {
-                                        "fontSize": 12,
-                                        "fontColor": "#97a4af",
-                                        "fontFamily": "Open Sans, sans-serif",
-                                        "padding": 5
-                                      },
-                                      "categoryPercentage": 0.5,
-                                      "maxBarThickness": "10"
-                                    }]
-                                  },
-                                  "cornerRadius": 2,
-                                  "tooltips": {
-                                    "prefix": " ",
-                                    "hasIndicator": true,
-                                    "mode": "index",
-                                    "intersect": false
-                                  },
-                                  "hover": {
-                                    "mode": "nearest",
-                                    "intersect": true
-                                  }
-                                }
-                              }'></canvas>
-                            </div>
-                            <!-- End Bar Chart -->
-                        </div>
-                        <!-- End Body -->
-                    </div>
-                    <!-- End Card -->
-                </div>
-            </div> --}}
-            <!-- End Row -->
+          
 
 
             <!-- Dashboard Statistics -->
@@ -202,7 +94,7 @@
                                     <div id="dognut-pie"></div>
                                     <!-- Total Orders -->
                                     <div class="total--orders">
-                                        <h3>{{$data['pending_count'] + $data['ongoing_count'] + $data['delivered_count']+ $data['canceled_count']+ $data['returned_count']+ $data['failed_count']}} </h3>
+                                        <h3>{{$data['pending_count'] + $data['confirmed_count'] + $data['delivered_count']+ $data['canceled_count']+ $data['out_for_delivery_count']+ $data['processing']}} </h3>
                                         <span>{{ translate('orders') }}</span>
                                     </div>
                                     <!-- Total Orders -->
@@ -212,19 +104,20 @@
                                         <span>{{ translate('pending') }} ({{$data['pending_count']}})</span>
                                     </div>
                                     <div class="before-bg-036BB7">
-                                        <span>{{ translate('ongoing') }} ({{$data['ongoing_count']}})</span>
+                                        <span>{{ translate('confirmed') }} ({{$data['confirmed_count']}})</span>
                                     </div>
+                                    <div class="before-bg-f51414">
+                                        <span>{{ translate('packaging') }} ({{$data['processing']}})</span>
+                                    </div>
+                                    <div class="before-bg-ff00ff">
+                                        <span>{{ translate('out_for_delivery') }} ({{$data['out_for_delivery_count']}})</span>
+                                    </div>
+                                    
                                     <div class="before-bg-107980">
                                         <span>{{ translate('delivered') }} ({{$data['delivered_count']}})</span>
                                     </div>
                                     <div class="before-bg-0e0def">
                                         <span>{{ translate('canceled') }} ({{$data['canceled_count']}})</span>
-                                    </div>
-                                    <div class="before-bg-ff00ff">
-                                        <span>{{ translate('returned') }} ({{$data['returned_count']}})</span>
-                                    </div>
-                                    <div class="before-bg-f51414">
-                                        <span>{{ translate('failed') }} ({{$data['failed_count']}})</span>
                                     </div>
                                 </div>
                             </div>
@@ -274,8 +167,8 @@
                             <div class="card-header border-0 order-header-shadow">
                                 <h5 class="card-title d-flex justify-content-between flex-grow-1">
                                     <span>{{translate('recent_orders')}}</span>
-                                    <a href="{{route('admin.orders.list',['all'])}}"
-                                       class="fz-12px font-medium text-006AE5">{{translate('view_all')}}</a>
+                                    {{-- <a href="{{route('admin.orders.list',['all'])}}"
+                                       class="fz-12px font-medium text-006AE5">{{translate('view_all')}}</a> --}}
                                 </h5>
                             </div>
                             <div class="card-body p-10px">
@@ -314,15 +207,15 @@
                     <!-- Recent Orders -->
 
                     <!-- Top Selling Products -->
-                    <div class="col-lg-4">
+                    {{-- <div class="col-lg-4">
                         <div class="card h-100">
                             @include('admin-views.partials._top-selling-products',['top_sell'=>$data['top_sell']])
                         </div>
-                    </div>
+                    </div> --}}
                     <!-- Top Selling Products -->
 
                     <!-- Top Rated Products -->
-                    <div class="col-lg-4">
+                    <div class="col-lg-6">
                         <div class="card h-100">
                             @include('admin-views.partials._most-rated-products',['most_rated_products'=>$data['most_rated_products']])
                         </div>
@@ -330,7 +223,7 @@
                     <!-- Top Rated Products -->
 
                     <!-- Top Customer -->
-                    <div class="col-lg-4">
+                    <div class="col-lg-6">
                         <div class="card h-100">
                             @include('admin-views.partials._top-customer',['top_customer'=>$data['top_customer']])
                         </div>
@@ -366,6 +259,22 @@
 
                 <!-- Orders Statistics Charts -->
                 <script>
+
+                $(document).ready(function() {
+                        // Handle onchange event
+                        $('#warehouseSelect').on('change', function() {
+                            // Get the selected value
+                            var selectedWarehouseId = $(this).val();
+
+                            // Construct the new URL with the selected warehouse_id
+                            var currentUrl = window.location.href;
+                            var baseUrl = currentUrl.split('?')[0];
+                            var newUrl = baseUrl + '?warehouse_id=' + selectedWarehouseId;
+
+                            // Redirect to the new URL
+                            window.location.href = newUrl;
+                        });
+                    });
 
                     var options = {
                         series: [{
@@ -426,7 +335,8 @@
                 <!-- Dognut Pie Chart -->
                 <script>
                     var options = {
-                        series: [{{$data['ongoing_count']}}, {{$data['delivered_count']}}, {{$data['pending_count']}}, {{$data['canceled']}}, {{$data['returned']}}, {{$data['failed']}}],
+                        series: [{{$data['ongoing_count']}}, {{$data['delivered_count']}}, {{$data['pending_count']}}, {{$data['canceled']}}, 
+                        {{$data['returned']}}, {{$data['failed']}}],
                         chart: {
                             width: 320,
                             type: 'donut',
@@ -654,12 +564,14 @@
                 <script>
                     function orderStatisticsUpdate(t) {
                         let value = $(t).attr('data-order-type');
+                        var warehouse_id = "{{request('warehouse_id')}}";
 
                         $.ajax({
                             url: '{{route('admin.dashboard.order-statistics')}}',
                             type: 'GET',
                             data: {
-                                type: value
+                                type: value,
+                                warehouse_id:warehouse_id
                             },
                             beforeSend: function () {
                                 $('#loading').show()
@@ -729,11 +641,13 @@
 
                     function earningStatisticsUpdate(t) {
                         let value = $(t).attr('data-earn-type');
+                        var warehouse_id = "{{request('warehouse_id')}}";
                         $.ajax({
                             url: '{{route('admin.dashboard.earning-statistics')}}',
                             type: 'GET',
                             data: {
-                                type: value
+                                type: value,
+                                warehouse_id:warehouse_id
                             },
                             beforeSend: function () {
                                 $('#loading').show()

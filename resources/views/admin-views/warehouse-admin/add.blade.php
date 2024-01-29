@@ -118,7 +118,8 @@
                                         @elseif($user->admin_role_id == 1)
                                         <option selected disabled value="">Select Store </option>
                                         @foreach(\App\Model\Store::where('status', 1)->where('deleted_at', null)->get() as $store)
-                                        <option value="{{$store['id']}}">{{$store['name']}}</option>
+                                        
+                                        <option value="{{$store['id']}}">{{$store['name']}} ({{@$store->warehouse->name}})</option>
                                         @endforeach
                                         @else
                                         <option selected disabled value="">Select Store </option>

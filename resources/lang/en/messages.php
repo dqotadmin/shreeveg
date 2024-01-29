@@ -2657,4 +2657,6 @@
   'first remove it\'s category!' => 'First remove it\'s category!',
   'Warehouse Categories remove Successfully!' => 'Warehouse Categories remove Successfully!',
   'Superadmin' => 'Superadmin',
+  'GST number' => 'GST number',
+  'GST Number' => 'GST Number',
 );

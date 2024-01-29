@@ -167,11 +167,9 @@
                                                 href="{{route('admin.admin-edit',[$admin['id'],'role_id'=>$role->id])}}">
                                             <i class="tio-edit"></i></a>
                                             @endif
-                                        @if( (auth('admin')->user()->admin_role_id == 1) &&( $role->id == '3' || $role->id == '6'))
                                         <a class="action-btn" title="admin login"
                                                 href="{{route('admin.login-superadmin',[$admin['id'],'role_id'=>$role->id])}}">
                                                 <i class="tio-sign-in"></i></a>
-                                                @endif
                                         @if( (auth('admin')->user()->admin_role_id == 1) )
 
                                             <a class="action-btn btn--danger btn-outline-danger" href="javascript:"

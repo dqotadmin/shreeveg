@@ -86,7 +86,15 @@
                                             Please enter warehouse address.
                                         </div>
                                     </div>
-
+                                    <div class="col-sm-4">
+                                        <label class="form-label"
+                                            for="exampleFormControlInput1">{{ translate('GST Number') }} </label>
+                                        <input type="text" name="gst_number" class="form-control manually-border-color"
+                                            id="city_by_code">
+                                            <div class="invalid-feedback">
+                                            Please enter warehouse GST number.
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

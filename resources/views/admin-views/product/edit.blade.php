@@ -185,8 +185,8 @@
         <div class="col-lg-3">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="mb-3">{{translate('Single product')}} {{translate('image')}} <small class="text-danger">*
-                            ( {{translate('ratio')}} 1:1 )</small></h5>
+                    <h5 class="mb-3">{{translate('Single product')}} {{translate('image')}} <small >
+                            </small></h5>
                     <div class="product--single">
                         @if (!empty(json_decode($product['single_image'],true)))
                         @foreach(json_decode($product['single_image'],true) as $img)
@@ -209,8 +209,7 @@
         <div class="col-lg-9">
             <div class="card h-100">
                 <div class="card-body">
-                    <h5 class="mb-3">{{translate('product')}} {{translate('image')}} <small class="text-danger">* (
-                            {{translate('ratio')}} 1:1 )</small></h5>
+                    <h5 class="mb-3">{{translate('product')}} {{translate('image')}}  </h5>
                     <div class="product--coba">
                         <div class="row g-2" id="coba">
                             @if (!empty(json_decode($product['image'],true)))

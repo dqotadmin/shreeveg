@@ -65,6 +65,7 @@
                                     <input value="{{auth('admin')->user()->warehouse->name}}" class="form-control" readonly>
                                     <input value="{{auth('admin')->user()->warehouse_id}}" name="warehouse_id" type="hidden" class="form-control" readonly>
                                     @else
+                                  
                                     <select name="warehouse_id" id="" class="get_warehouse form-control" required>
                                         <option value="{{$stores->warehouse_id}}">
                                             @if (isset($stores) && isset($stores->warehouse) && isset($stores->warehouse->name))
@@ -117,13 +118,13 @@
                                 Please enter a valid rating between 1 and 5.
                                 </div>
                         </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
                                 <label class="form-label" for="exampleFormControlInput1">{{ translate('Shop') }}
                                     {{ translate('Licence') }} </label>
                                 <input type="text" name="shop_licence" class="form-control manually-border-color" value="{{$stores->shop_licence}}" placeholder="{{ translate('Ex: Shop Licence') }}">
 
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
                                 <label class="form-label" for="exampleFormControlInput1">
                                     {{ translate('Area') }} </label>
                                 <select name="area_id" id="" class="form-control" required>
@@ -136,6 +137,15 @@
                                     Please enter store area.
                                 </div>
                             </div>
+                            <div class="col-sm-4">
+                                        <label class="form-label"
+                                            for="exampleFormControlInput1">{{ translate('GST Number') }} </label>
+                                        <input type="text" name="gst_number" class="form-control manually-border-color" value="{{$stores->gst_number}}"
+                                            id=" ">
+                                            <div class="invalid-feedback">
+                                            Please enter store GST number.
+                                        </div>
+                                    </div>
                             <div class="col-sm-6">
                                 <label class="form-label" for="exampleFormControlInput1">{{ translate('Store') }}
                                     {{ translate('Address') }} </label>
@@ -203,7 +213,7 @@
                                 <label class="form-label" for="exampleFormControlInput1">
                                     {{ translate('open_time') }}
                                 </label>
-                                <input type="time" name="open_time" value="{{ config('custom.start_time') }}" disabled class="form-control" required />
+                                <input type="time" name="open_time" value="{{@$stores->warehouse->open_time}}" disabled class="form-control" required />
                                 <div class="invalid-feedback">
                                     Please enter store open time.
                                 </div>
@@ -212,7 +222,7 @@
                                 <label class="form-label" for="exampleFormControlInput1">
                                     {{ translate('close_time') }}
                                 </label>
-                                <input type="time" name="close_time" value="{{ config('custom.end_time') }}" disabled class="form-control" required />
+                                <input type="time" name="close_time" value="{{@$stores->warehouse->close_time}}" disabled class="form-control" required />
                                 <div class="invalid-feedback">
                                     Please enter store close time.
                                 </div>

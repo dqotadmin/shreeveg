@@ -184,7 +184,7 @@
                 <div class="card">
                     <div class="card-body">
                     <h5 class="mb-3">{{translate('Single product')}} {{translate('image')}} <small
-                        class="text-danger">* ( {{translate('ratio')}} 1:1 )</small></h5>
+                    ></small></h5>
                         <div class="product--single">
                             <div class="row g-2" id="single"></div>
                         </div>
@@ -195,7 +195,7 @@
                 <div class="card h-100">
                     <div class="card-body">
                     <h5 class="mb-3">{{translate('Multi product')}} {{translate('image')}} <small
-                        class="text-danger">* ( {{translate('ratio')}} 1:1 )</small></h5>
+                  ></small></h5>
                         <div class="product--coba">
                             <div class="row g-2" id="coba"></div>
                         </div>

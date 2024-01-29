@@ -56,7 +56,7 @@
                     <thead class="thead-light">
                     <tr>
                         <th class="border-0">{{translate('#')}}</th>
-                        <th class="border-0">{{translate('title')}}</th>
+                        <!-- <th class="border-0">{{translate('title')}}</th> -->
                         <th class="border-0">{{translate('date')}}</th>
                         <th class="border-0">{{translate('time')}}</th>
                         <th class="text-center border-0">{{translate('action')}}</th>
@@ -67,11 +67,11 @@
                     @foreach($rows as $key=>$row)
                         <tr>
                             <td>{{$key+1}}</td>
-                            <td>
+                            <!-- <td>
                                 <span class="d-block font-size-sm text-body text-trim-25">
                                     {{$row->title }}
                                 </span>
-                            </td>
+                            </td> -->
                             <td>
                                 {{ date('d-m-Y',strtotime($row->date_time))}}
                             </td>

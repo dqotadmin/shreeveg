@@ -134,6 +134,7 @@ class StoreController extends Controller
         $store->msme_number = $request->msme_number == null ? null : $request->msme_number;
         $store->shop_licence = $request->shop_licence == null ? null : $request->shop_licence;
         $store->area_id = $request->area_id == null ? null : $request->area_id;
+        $store->gst_number = $request->gst_number == null ? null : $request->gst_number;
 
         $store->open_time = $request->open_time == null ? null : $request->open_time;
         $store->close_time = $request->close_time == null ? null : $request->close_time;
@@ -204,6 +205,7 @@ class StoreController extends Controller
         $store->brn_number = $request->brn_number == null ? null : $request->brn_number;
         $store->msme_number = $request->msme_number == null ? null : $request->msme_number;
         $store->shop_licence = $request->shop_licence == null ? null : $request->shop_licence;
+        $store->gst_number = $request->gst_number == null ? null : $request->gst_number;
 
         $store->latitude = $request->latitude == null ? null : $request->latitude;
         $store->longitude = $request->longitude == null ? null : $request->longitude;

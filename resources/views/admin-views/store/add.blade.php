@@ -118,13 +118,13 @@
                                 Please enter a valid rating between 1 and 5.
                                 </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <label class="form-label" for="exampleFormControlInput1">{{ translate('Shop') }}
                                 {{ translate('Licence') }} </label>
                             <input type="text" name="shop_licence" class="form-control manually-border-color"  
                                 placeholder="{{ translate('Ex: Shop Licence') }}" maxlength="255">
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <label class="form-label" for="exampleFormControlInput1">
                                 {{ translate('Area') }} </label>
                             <select name="area_id" id="" class="form-control" required>
@@ -137,6 +137,15 @@
                                     Please enter store area.
                                 </div>
                         </div>
+                        <div class="col-sm-4">
+                                        <label class="form-label"
+                                            for="exampleFormControlInput1">{{ translate('GST Number') }} </label>
+                                        <input type="text" name="gst_number" class="form-control manually-border-color"
+                                            id=" ">
+                                            <div class="invalid-feedback">
+                                            Please enter store GST number.
+                                        </div>
+                                    </div>
                         <div class="col-sm-6">
                             <label class="form-label" for="exampleFormControlInput1">{{ translate('Store') }}
                                 {{ translate('Address') }} </label>

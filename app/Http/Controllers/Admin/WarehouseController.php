@@ -162,7 +162,8 @@ class WarehouseController extends Controller
         $warehouse->coverage =  $request->coverage == null ? null : $request->coverage;
         $warehouse->open_time =  $request->open_time == null ? null : $request->open_time;
         $warehouse->close_time =  $request->close_time == null ? null : $request->close_time;
-
+        $warehouse->gst_number =  $request->gst_number == null ? null : $request->gst_number;
+        
         $warehouse->latitude = $request->latitude;
         $warehouse->longitude = $request->longitude;
         $warehouse->delivery_time =  isset($delivery_time) ? $delivery_time :null ;
@@ -264,6 +265,7 @@ class WarehouseController extends Controller
             $warehouse->coverage =  $request->coverage == null ? null : $request->coverage;
             $warehouse->open_time =  $request->open_time == null ? null : $request->open_time;
             $warehouse->close_time =  $request->close_time == null ? null : $request->close_time;
+            $warehouse->gst_number =  $request->gst_number == null ? null : $request->gst_number;
     
             $warehouse->latitude = $request->latitude;
             $warehouse->longitude = $request->longitude;

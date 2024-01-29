@@ -29,7 +29,7 @@
                                 <div class="form-group mb-0">
                                     <label class="input-label" for="exampleFormControlInput1">{{translate('title')}}</label>
                                     <input type="text" name="title" class="form-control" style="text-transform: capitalize;"
-                                        placeholder="{{ translate('title') }}" required>
+                                        placeholder="{{ translate('title') }}">
                                         <div class="invalid-feedback">
                                         Please enter title.
                                     </div>

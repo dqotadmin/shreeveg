@@ -232,7 +232,7 @@ class ProductController extends Controller
         } else {
             $single_img_names = json_encode([]);
         }
-       
+
         $p = $this->product;
         $p->name = $request->name;
         $p->description = $request->description;
@@ -256,7 +256,7 @@ class ProductController extends Controller
 
         $lastSequence = $this->product->max('sequence');
         //dd($lastSequence);
-        $p->sequence = $lastSequence? $lastSequence+1:1;
+        $p->sequence = $lastSequence ? $lastSequence + 1 : 1;
         // ALTER TABLE `products` ADD `group_ids` TEXT NULL AFTER `daily_needs`;
         $p->save();
 
@@ -324,7 +324,7 @@ class ProductController extends Controller
      */
     public function status(Request $request, $id): \Illuminate\Http\RedirectResponse
     {
-        if (in_array(auth('admin')->user()->admin_role_id,[3,5] ) ) {
+        if (in_array(auth('admin')->user()->admin_role_id, [3, 5])) {
             $product = $this->warehouse_products->find($request->id);
             $product->status = $request->status;
             $product->save();
@@ -359,30 +359,49 @@ class ProductController extends Controller
 
     public function updateSequence(Request $request, $id)
     {
-        $request->validate([
-            'sequence' => 'required|string',
-            Rule::unique('products', 'sequence')->ignore($id),
-        ]);
+        //dump($request->all(), $id);
+        // $request->validate([
+        //     'sequence' => 'required|string',
+        //     Rule::unique('products', 'sequence')->ignore($id),
+        // ]);
 
-            $product = WarehouseProduct::findOrFail($id);
-            // Check if the new sequence already exists in the database
-            $existingProduct = WarehouseProduct::where('warehouse_id',auth('admin')->user()->warehouse_id)->where('sequence', $request->input('sequence'))
-                ->where('id', '!=', $id)
-                ->first();
-            if ($existingProduct) {
-                return response()->json(['error' => 'Sequence already exists']);
-            }
-    
-            // Update the sequence
-            $product->sequence = $request->input('sequence');
-            $product->save();
-    
-            return response()->json(['success' => 'Product sequence updated successfully']);
-    }   
+        //$product = WarehouseProduct::findOrFail($id);
+        $productRow = WarehouseProduct::where('id', $id)->first();
+        if ($productRow) {
+            $productRow->sequence = (int) $request->input('sequence');
+            $productRow->save();
+        }
+        // dd($request->input('sequence'));
+        //$productRow->update(['sequence' => (int)$request->input('sequence')]);
+        $records = WarehouseProduct::where('warehouse_id', auth('admin')->user()->warehouse_id)->where('sequence', '>=', $request->input('sequence'))->orderBy('sequence', 'asc')->get();
+
+        foreach ($records as $key => $record) {
+            $record->sequence = $productRow->sequence + $key; //(int) $request->input('sequence');
+            $record->save();
+        }
+        $records->each(function ($todo) {
+            //$todo->increment('sequence');
+            //$todo->update(['sequence']);
+
+        });
+        // Check if the new sequence already exists in the database
+        // $existingProduct = WarehouseProduct::where('warehouse_id', auth('admin')->user()->warehouse_id)->where('sequence', $request->input('sequence'))
+        //     ->where('id', '!=', $id)
+        //     ->first();
+        // if ($existingProduct) {
+        //     return response()->json(['error' => 'Sequence already exists']);
+        // }
+
+        // // Update the sequence
+        // $product->sequence = $request->input('sequence');
+        // $product->save();
+
+        return response()->json(['success' => 'Product sequence updated successfully']);
+    }
     // public function order(Request $request)
     // {
 
-        
+
     //     $product = $this->product->find($request->product_id);
     //     $existingProducts = $this->product->where('ordering', $request->ordering)
     //         ->where('id', '!=', $request->product_id)
@@ -495,7 +514,7 @@ class ProductController extends Controller
         $p->description = $request->description;
         $p->hn_name = $request->hn_name;
         $p->hn_description = $request->hn_description;
-          $p->tax = $request->tax ? $request->tax : 0;
+        $p->tax = $request->tax ? $request->tax : 0;
 
         $p->category_id = $request->category_id;
         $p->product_code = $request->product_code;

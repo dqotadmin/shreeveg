@@ -195,9 +195,11 @@
                                            $sequence =  \App\Model\WarehouseProduct::where('warehouse_id',auth('admin')->user()->warehouse_id)->where('product_id',$product->id)->first();
                                                 // dump($sequence);
                                             ?> 
+                                                @if($sequence)
                                                 <input type="text" name="sequence" class="form-control w-50" value="{{ @$sequence->sequence }}"
                                                 onblur="updateSequence('{{ route('admin.product.update-sequence', ['id' => $sequence->id]) }}', this.value)" 
                                             >
+                                            @endif
                                             </td>
                                         
                                         

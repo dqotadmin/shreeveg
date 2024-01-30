@@ -2660,4 +2660,6 @@
   'GST number' => 'GST number',
   'GST Number' => 'GST Number',
   'pin_code' => 'Pin code',
+  'radius in KM' => 'Radius in KM',
+  'google map address' => 'Google map address',
 );

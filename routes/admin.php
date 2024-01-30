@@ -294,6 +294,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
         Route::group(['prefix' => 'warehouse', 'as' => 'warehouse.', 'middleware' => ['module:user_management']], function () {
             Route::get('list', 'WarehouseController@index')->name('list');
             Route::get('create', 'WarehouseController@create')->name('create');
+            Route::get('mapdemo', 'WarehouseController@mapDemo')->name('mapdemo');
             Route::post('store', 'WarehouseController@store')->name('store');
             Route::get('edit/{id}', 'WarehouseController@edit')->name('edit');
             Route::post('update/{id}', 'WarehouseController@update')->name('update');

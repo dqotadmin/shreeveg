@@ -43,21 +43,17 @@
                 <div class="row g-3">
                     <div class="col-md-8">
                         <div class="row g-3">
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="form-group mb-0">
                                     <h5>Category</h5>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="form-group mb-0">
                                     <h5>Product</h5>
                                 </div>
                             </div>
-                            <div class="col-md-2">
-                                <div class="form-group mb-0">
-                                    <h5>Unit</h5>
-                                </div>
-                            </div>
+                           
                             <div class="col-md-2">
                                 <div class="form-group mb-0">
                                     <h5>Available Qty</h5>
@@ -65,7 +61,17 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group mb-0">
-                                    <h5>Rate</h5>
+                                    <h5>Rate(rupees)</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group mb-0">
+                                    <h5>Rate(paisa)</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group mb-0">
+                                    <h5>Unit</h5>
                                 </div>
                             </div>
                         </div>
@@ -77,7 +83,7 @@
                     <div class="col-md-8">
                         @foreach($categories as $category)
                         <div class="row g-3">
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="form-group mb-0">
                                     <h5>{{$category->name }}</h5>
                                 </div>
@@ -85,14 +91,38 @@
                             @if(count($category->products) >0)
                             @foreach($category->products as $key =>$product)
                                 @if($key > 0)
-                                    <div class="col-md-3"></div>
+                                    <div class="col-md-2"></div>
                                 @endif
 
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <div class="form-group mb-0">
                                         <input type="hidden" name="product_id[]" value="{{$product->id}}">
-                                        <input type="text"  value="{{$product->name}}" class="form-control"
+                                        <input type="text"  value="{{$product->name}} ({{ @$product->product_code }})" class="form-control" title="{{$product->name}} ({{ @$product->product_code }})"
                                             disabled>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-2">
+                                    <div class="form-group mb-0">
+                                        <input type="text" name="available_qty[]" class="form-control gray-border" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
+                                            placeholder="Available Qty" >
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group mb-0">
+                                        <input type="text" name="rate[]"  class="form-control gray-border" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
+                                            placeholder="ex. 12 ₹
+" >
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group mb-0">
+                                    <select name="paisa[]" class="form-control js-select2-custom">
+                                        @for($i=0; $i<=100; $i++)
+                                        <option value="{{$i}}">{{$i}}</option>
+                                        @endfor
+                                       
+                                    </select>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
@@ -103,18 +133,6 @@
                                         <option value="ltr">{{translate('ltr')}}</option>
                                         <option value="pc" >{{translate('pc')}}</option>
                                     </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="form-group mb-0">
-                                        <input type="text" name="available_qty[]" class="form-control gray-border" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
-                                            placeholder="Available Qty" >
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="form-group mb-0">
-                                        <input type="text" name="rate[]"  class="form-control gray-border" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
-                                            placeholder="Rate" >
                                     </div>
                                 </div>
                             @endforeach

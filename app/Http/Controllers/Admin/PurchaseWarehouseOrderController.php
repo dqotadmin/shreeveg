@@ -87,17 +87,56 @@ class PurchaseWarehouseOrderController extends Controller
         return view($this->view_folder . '.index', compact('rows', 'search', 'role'));
     }
 
-    public function destroy($id)
-    {
-        $row =  $this->mTable::find($id);
-        if ($row->status == 'Pending') {
-            $row->delete();
-            Toastr::success(translate('order remved'));
-            return back();
-        } else {
-            Toastr::error(translate('order not remved'));
-            return back();
+        public function destroy($id)
+        {
+            $row =  $this->mTable::find($id);
+            if ($row->status == 'Pending') {
+                $row->delete();
+                Toastr::success(translate('order remved'));
+                return back();
+            } else {
+                Toastr::error(translate('order not remved'));
+                return back();
+            }
         }
+
+    public function history(Request $request)
+    {
+        $rows = $this->mTable::query();
+        $search = $request['search'];
+        $role = auth('admin')->user()->admin_role_id;
+        $rows = $this->mTable::query();
+        if ($role == 8) {
+            $rows->where('broker_id', auth('admin')->user()->id);
+        } elseif ($role == 1) {
+            $rows->get();
+        } else {
+            $rows->where('warehouse_id', auth('admin')->user()->warehouse_id);
+        }
+         $rows = $rows->orderBy('id', 'desc')
+            ->paginate(Helpers::getPagination());
+            if ($request->has('search')) {
+                $key = explode(' ', $request['search']);
+                $rows->where(function ($q) use ($key) {
+                    foreach ($key as $value) {
+                        $q->orWhere('invoice_number', 'like', "%{$value}%");
+                        $q->orWhere('gstin_number', 'like', "%{$value}%");
+                        $q->orWhere('status', 'like', "%{$value}%");
+                        
+                    }
+                })->orWhereHas('warehouseDetail', function ($q1) use ($search) {
+                    $q1->where('name', 'like', "%{$search}%");
+                })->orWhereHas('receiverName', function ($q1) use ($search) {
+                    $q1->where('f_name', 'like', "%{$search}%");
+                })->orWhereHas('receiverName', function ($q1) use ($search) {
+                    $q1->where('l_name', 'like', "%{$search}%");
+              
+                })->orWhereHas('brokerDetail', function ($q1) use ($search) {
+                    $q1->whereRaw("CONCAT(f_name,' ', l_name) LIKE ?", ["%{$search}%"]);
+                });
+                $query_param = ['search' => $request['search']];
+            }
+        return view($this->view_folder . '.history', compact('rows', 'search','role'));
     }
 
 

@@ -86,7 +86,6 @@ class BrokerRateListController extends Controller
         try {
             DB::beginTransaction();
             $request->validate([
-                'title' => 'required',
                 'product_id/*' => 'required',
                 'rate/*' => 'required',
                 'available_qty/*' => 'required'
@@ -95,7 +94,7 @@ class BrokerRateListController extends Controller
             //into db
             $row = new $this->mTable;
             $row->admin_id = auth('admin')->user()->id;
-            $row->title = $request->title;
+            $row->title = @$request->title?$request->title : null;;
             $row->date_time = date('Y-m-d H:i:s');
 
             if ($row->save()) {
@@ -106,6 +105,10 @@ class BrokerRateListController extends Controller
                             $detailRow['broker_rate_list_id'] = $row->id;;
                             $detailRow['product_id'] = $request->product_id[$key];
                             $detailRow['rate'] = $rate;
+                            if ($rate !== null) {
+                                // Concatenate "rate" and "paisa"
+                                $detailRow['rate'] = $rate . '.' . $request->paisa[$key];
+                            } 
                             $detailRow['available_qty'] = $request->available_qty[$key];
                             $detailRow['unit'] = $request->unit[$key];
                             $detailRow->save();
@@ -114,7 +117,7 @@ class BrokerRateListController extends Controller
                 }
             }
             DB::commit();
-            Toastr::success(translate($request->title . ' Inserted Successfully!'));
+            Toastr::success(translate('Data Inserted Successfully!'));
             return redirect()->route('admin.broker-rate-list.index');
         } catch (\Exception $e) {
             DB::rollback();
@@ -129,6 +132,21 @@ class BrokerRateListController extends Controller
         $row = $this->mTable::find($id);
         return view($this->view_folder . '.show', compact('row'));
     }
+    public function wh_receiver_product_rate(Request $request)
+    {
+        $user_id = auth('admin')->user()->id;
+        $productID = $request->product_id;
+        $rows_old = $this->mTable::query()->get();
+        $latestIds = $this->mTable:: query()->selectRaw('MAX(id) as id ,admin_id')->groupBy('admin_id')->pluck('id')->toArray();
+       
+        $rows = $this->mTable::whereIn('id',$latestIds)->whereDate('created_at', Carbon::today())->whereHas('rateListDetail',function ($qu) use ($productID){
+            $qu->where('product_id',$productID);
+        })->get();
+       
+        return view($this->view_folder . '.rate_list_search', compact('rows','productID'));
+        return $request->all();
+    }
+    
 
     public function wh_receiver_rate_list(Request $request)
     {
@@ -140,7 +158,7 @@ class BrokerRateListController extends Controller
         $rows_old = $this->mTable::query()->get();
         $latestIds = $this->mTable:: query()->selectRaw('MAX(id) as id ,admin_id')->groupBy('admin_id')->pluck('id')->toArray();
        
-        $rows = $this->mTable::whereIn('id',$latestIds)->get();
+        $rows = $this->mTable::whereIn('id',$latestIds)->whereDate('created_at', Carbon::today())->get();
         // dd($rows_old, $rows);
         //$rows = $rows->orderBy('id', 'desc')->get();
        

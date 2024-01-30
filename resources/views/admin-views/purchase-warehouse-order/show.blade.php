@@ -110,7 +110,7 @@
                         @if(auth('admin')->user()->admin_role_id == 8 &&  $row->status != 'Delivered')
                         <div class="col-md-6 mt-3">
                             <label class="input-label" for="exampleFormControlInput1">{{translate('broker comments')}}</label>
-                            <textarea name="broker_comments" class="form-control" rows="6" placeholder="{{ translate('enter comments if any') }}" required>{{$row->broker_comments}}</textarea>
+                            <textarea name="broker_comments" class="form-control" rows="6" placeholder="{{ translate('enter comments if any') }}" >{{$row->broker_comments}}</textarea>
                         </div>
                         <div class="text-right">
                             <button type="submit" class="btn btn-primary px-5">{{translate('save')}}</button>
@@ -119,7 +119,7 @@
                         @endif
                     @endif
                 @endif
-                @if((auth('admin')->user()->admin_role_id == 5) && ($row->status != 'Pending' && $row->status != 'Accepted' && $row->status != 'Received' && $row->status != 'Rejected'))
+                @if((in_array(auth('admin')->user()->admin_role_id ,[3,5])) && ($row->status != 'Pending' && $row->status != 'Accepted' && $row->status != 'Received' && $row->status != 'Rejected'))
                     <div class="col-md-6">
                     <label class="input-label" for="exampleFormControlInput1">{{translate('update status')}}</label>
                         <select name="status" class="form-control">
@@ -129,7 +129,7 @@
                     </div>
                     <div class="col-md-6">
                         <label class="input-label" for="exampleFormControlInput1">{{translate('comments')}}</label>
-                        <textarea name="warehouse_comments" class="form-control" rows="6" placeholder="{{ translate('enter comments if any') }}" required>{{$row->warehouse_comments}}</textarea>
+                        <textarea name="warehouse_comments" class="form-control" rows="6" placeholder="{{ translate('enter comments if any') }}">{{$row->warehouse_comments}}</textarea>
                     </div>
                     <div class="text-right">
                         <button type="submit" class="btn btn-primary px-5">{{translate('save')}}</button>

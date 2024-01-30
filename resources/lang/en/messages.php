@@ -2660,4 +2660,10 @@
   'GST number' => 'GST number',
   'GST Number' => 'GST Number',
   'pin_code' => 'Pin code',
+  'Enter new address' => 'Enter new address',
+  'broker_type' => 'Broker type',
+  'Broker rate list' => 'Broker rate list',
+  'Receiver order list' => 'Receiver order list',
+  'order_list_history' => 'Order list history',
+  'receiver_order_history' => 'Receiver order history',
 );

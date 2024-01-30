@@ -41,18 +41,18 @@
                     <th>#</th>
                  <th>Product</th>
                  <th>Available Qty</th>
-                 <th>Unit</th>
                  <th>Rate</th>
+                 <th>Unit</th>
                 </thead>
                 <tbody>
                     @foreach($row->rateListDetail as $key => $value)
                   <tr class="">
                    <td>{{ $key+1}}</td>
-                   <td>{{ $value->productDetail->name }}</td>
+                   <td>{{ $value->productDetail->name }} ({{ @$value->productDetail->product_code }})</td>
                    <td>{{ $value->available_qty }}</td>
-                   <td>{{ $value->unit }}</td>
                    <td>{{ $value->rate }}</td>
-                  </tr>
+                   <td>{{ $value->unit }}</td>
+                   </tr>
                   @endforeach
                   
                 </tbody>

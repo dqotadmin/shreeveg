@@ -182,7 +182,35 @@
                                 </div>
                             </div>
 
-
+                            @if($role->id == 8 )
+                            <div class="row form-group">
+                                <label class="col-sm-3 col-form-label input-label" for="">{{ translate('address') }}</label>
+                                <div class="col-sm-9">
+                                    <input type="address" class="form-control" name="addressaddress" id="newaddressLabel"
+                                    value="{{$admins->address}}" 
+                                    placeholder="{{ translate('Enter new address') }}"
+                                    aria-label="Enter address" required>
+                                    <div class="invalid-feedback">
+                                        Please enter address.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="col-sm-3 col-form-label input-label" for="">{{ translate('broker_type') }}
+                                </label>
+                                <div class="col-sm-9">
+                                    <select id="" name="broker_type" class="form-control custom-select" required>
+                                        <option selected  disabled value="">Select broker type </option>
+                                        <option value="Farmer" {{ $admins->broker_type == 'Farmer' ? 'selected' : '' }}>Farmer</option>
+                                        <option value="Transporter" {{ $admins->broker_type == 'Transporter' ? 'selected' : '' }}>Transporter</option>
+                                        <option value="market_seller" {{ $admins->broker_type == 'market_seller' ? 'selected' : '' }}>Market Seller</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Please select broker type.
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
 
                             <!-- End Form -->
                         </div>

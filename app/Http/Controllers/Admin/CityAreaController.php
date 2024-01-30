@@ -86,9 +86,7 @@ class CityAreaController extends Controller
     {
         $request->validate([
             'area' => 'required|unique:city_areas',
-            'latitude_code' => 'required',
-            'longitude_code' => 'required',
-            'radius' => 'required',
+          
         ]);
 
             if (strlen($request->area) > 30) {
@@ -100,9 +98,9 @@ class CityAreaController extends Controller
         $cityarea->city_id = $request->city_id;
         $cityarea->area = $request->area;
         $cityarea->pincode = $request->pincode;
-        $cityarea->latitude_code = $request->latitude_code;
-        $cityarea->longitude_code = $request->longitude_code;
-        $cityarea->radius = $request->radius;
+        // $cityarea->latitude_code = $request->latitude_code;
+        // $cityarea->longitude_code = $request->longitude_code;
+        // $cityarea->radius = $request->radius;
         $cityarea->save();
 
         Toastr::success(translate('Area Added Successfully!') );
@@ -143,9 +141,10 @@ class CityAreaController extends Controller
         $request->validate([
             'area' =>    ['required',
             Rule::unique('city_areas')->ignore($id)
-             ],'latitude_code' => 'required',
-            'longitude_code' => 'required',
-            'radius' => 'required',
+             ],
+            //  'latitude_code' => 'required',
+            // 'longitude_code' => 'required',
+            // 'radius' => 'required',
      ]);
 
      
@@ -158,9 +157,9 @@ class CityAreaController extends Controller
         $cityarea->city_id = $request->city_id;
         $cityarea->area = $request->area;
         $cityarea->pincode = $request->pincode;
-        $cityarea->latitude_code = $request->latitude_code;
-        $cityarea->longitude_code = $request->longitude_code;
-        $cityarea->radius = $request->radius;
+        // $cityarea->latitude_code = $request->latitude_code;
+        // $cityarea->longitude_code = $request->longitude_code;
+        // $cityarea->radius = $request->radius;
         $cityarea->save();
      
         Toastr::success( translate('Area updated successfully!') );

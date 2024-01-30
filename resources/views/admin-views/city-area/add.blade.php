@@ -23,7 +23,7 @@
     <!-- End Page Header -->
 
     <div class="row g-2">
-        
+
         <div class="col-sm-12 col-lg-12">
             <form action="{{route('admin.area.store')}}" method="post" enctype="multipart/form-data" class="needs-validation form_customer" novalidate>
                 @csrf
@@ -49,33 +49,36 @@
                                             @endforeach
                                         </select>
                                         <div class="invalid-feedback">
-                                        Please select city.
+                                            Please select city.
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">{{ translate('Area') }}
                                             {{ translate('Name') }}
                                         </label>
-                                        <input type="text" name="area" class="form-control"  
-                                        placeholder="{{ translate('Ex: Area Name') }}" maxlength="255" required>
+                                        <input type="text" name="area" class="form-control" placeholder="{{ translate('Ex: Area Name') }}" maxlength="255" required>
                                         <div class="invalid-feedback">
-                                        Please enter area name.
+                                            Please enter area name.
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">{{ translate('Pin Code') }}
                                         </label>
-                                        <input type="number" name="pincode" class="form-control"  
-                                        placeholder="{{ translate('Ex: Pin Code') }}" maxlength="255" required>
+                                        <input type="number" name="pincode" class="form-control" placeholder="{{ translate('Ex: Pin Code') }}" maxlength="255" required>
                                         <div class="invalid-feedback">
-                                        Please enter pin code.
+                                            Please enter pin code.
                                         </div>
                                     </div>
+                                </div>
+                                <div class="btn--container justify-content-end">
+                                    <a type="button" href="{{route('admin.area.list')}}" class="btn btn--reset">{{translate('Back')}}</a>
+
+                                    <button type="submit" class="btn btn--primary">{{translate('submit')}}</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-12">
+                    <!-- <div class="col-sm-12">
                         <div class="card">
                             <div class="card-header">
                                 <h5 class="card-title">
@@ -144,15 +147,10 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="btn--container justify-content-end">
-                            <a type="button" href="{{route('admin.area.list')}}"
-                                class="btn btn--reset">{{translate('Back')}}</a>
-
-                            <button type="submit" class="btn btn--primary">{{translate('submit')}}</button>
-                        </div>
-                    </div>
+                    </div> -->
+                    <!-- <div class="col-12"> -->
+                        
+                    <!-- </div> -->
                 </div>
 
 
@@ -166,147 +164,146 @@
 @push('script_2')
 
 
-<script
-    src="https://maps.googleapis.com/maps/api/js?key={{ \App\Model\BusinessSetting::where('key', 'map_api_client_key')->first()?->value }}&libraries=places&v=3.45.8">
+<script src="https://maps.googleapis.com/maps/api/js?key={{ \App\Model\BusinessSetting::where('key', 'map_api_client_key')->first()?->value }}&libraries=places&v=3.45.8">
 </script>
 <script></script>
 <script>
-function status_change_alert(url, message, e) {
-    e.preventDefault();
-    Swal.fire({
-        title: 'Are you sure?',
-        text: message,
-        type: 'warning',
-        showCancelButton: true,
-        cancelButtonColor: 'default',
-        confirmButtonColor: '#107980',
-        cancelButtonText: 'No',
-        confirmButtonText: 'Yes',
-        reverseButtons: true
-    }).then((result) => {
-        if (result.value) {
-            location.href = url;
-        }
-    })
-}
+    function status_change_alert(url, message, e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'Are you sure?',
+            text: message,
+            type: 'warning',
+            showCancelButton: true,
+            cancelButtonColor: 'default',
+            confirmButtonColor: '#107980',
+            cancelButtonText: 'No',
+            confirmButtonText: 'Yes',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.value) {
+                location.href = url;
+            }
+        })
+    }
 </script>
 <script>
-$(document).ready(function() {
-    function initAutocomplete() {
-        var myLatLng = {
+    $(document).ready(function() {
+        function initAutocomplete() {
+            var myLatLng = {
 
-            lat: 23.811842872190343,
-            lng: 90.356331
-        };
-        const map = new google.maps.Map(document.getElementById("location_map_canvas"), {
-            center: {
                 lat: 23.811842872190343,
                 lng: 90.356331
-            },
-            zoom: 13,
-            mapTypeId: "roadmap",
-        });
+            };
+            const map = new google.maps.Map(document.getElementById("location_map_canvas"), {
+                center: {
+                    lat: 23.811842872190343,
+                    lng: 90.356331
+                },
+                zoom: 13,
+                mapTypeId: "roadmap",
+            });
 
-        var marker = new google.maps.Marker({
-            position: myLatLng,
-            map: map,
-        });
+            var marker = new google.maps.Marker({
+                position: myLatLng,
+                map: map,
+            });
 
-        marker.setMap(map);
-        var geocoder = geocoder = new google.maps.Geocoder();
-        google.maps.event.addListener(map, 'click', function(mapsMouseEvent) {
-            var coordinates = JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2);
-            var coordinates = JSON.parse(coordinates);
-            var latlng = new google.maps.LatLng(coordinates['lat'], coordinates['lng']);
-            marker.setPosition(latlng);
-            map.panTo(latlng);
+            marker.setMap(map);
+            var geocoder = geocoder = new google.maps.Geocoder();
+            google.maps.event.addListener(map, 'click', function(mapsMouseEvent) {
+                var coordinates = JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2);
+                var coordinates = JSON.parse(coordinates);
+                var latlng = new google.maps.LatLng(coordinates['lat'], coordinates['lng']);
+                marker.setPosition(latlng);
+                map.panTo(latlng);
 
-            document.getElementById('latitude').value = coordinates['lat'];
-            document.getElementById('longitude').value = coordinates['lng'];
+                document.getElementById('latitude').value = coordinates['lat'];
+                document.getElementById('longitude').value = coordinates['lng'];
 
 
-            geocoder.geocode({
-                'latLng': latlng
-            }, function(results, status) {
-                if (status == google.maps.GeocoderStatus.OK) {
-                    if (results[1]) {
-                        document.getElementById('address').innerHtml = results[1]
-                            .formatted_address;
+                geocoder.geocode({
+                    'latLng': latlng
+                }, function(results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        if (results[1]) {
+                            document.getElementById('address').innerHtml = results[1]
+                                .formatted_address;
+                        }
                     }
-                }
+                });
             });
-        });
-        // Create the search box and link it to the UI element.
-        const input = document.getElementById("pac-input");
-        const searchBox = new google.maps.places.SearchBox(input);
-        map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
-        // Bias the SearchBox results towards current map's viewport.
-        map.addListener("bounds_changed", () => {
-            searchBox.setBounds(map.getBounds());
-        });
-        let markers = [];
-        // Listen for the event fired when the user selects a prediction and retrieve
-        // more details for that place.
-        searchBox.addListener("places_changed", () => {
-            const places = searchBox.getPlaces();
+            // Create the search box and link it to the UI element.
+            const input = document.getElementById("pac-input");
+            const searchBox = new google.maps.places.SearchBox(input);
+            map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
+            // Bias the SearchBox results towards current map's viewport.
+            map.addListener("bounds_changed", () => {
+                searchBox.setBounds(map.getBounds());
+            });
+            let markers = [];
+            // Listen for the event fired when the user selects a prediction and retrieve
+            // more details for that place.
+            searchBox.addListener("places_changed", () => {
+                const places = searchBox.getPlaces();
 
-            if (places.length == 0) {
-                return;
-            }
-            // Clear out the old markers.
-            markers.forEach((marker) => {
-                marker.setMap(null);
-            });
-            markers = [];
-            // For each place, get the icon, name and location.
-            const bounds = new google.maps.LatLngBounds();
-            places.forEach((place) => {
-                if (!place.geometry || !place.geometry.location) {
-                    console.log("Returned place contains no geometry");
+                if (places.length == 0) {
                     return;
                 }
-                var mrkr = new google.maps.Marker({
-                    map,
-                    title: place.name,
-                    position: place.geometry.location,
+                // Clear out the old markers.
+                markers.forEach((marker) => {
+                    marker.setMap(null);
                 });
-                google.maps.event.addListener(mrkr, "click", function(event) {
-                    document.getElementById('latitude').value = this.position.lat();
-                    document.getElementById('longitude').value = this.position
-                        .lng();
+                markers = [];
+                // For each place, get the icon, name and location.
+                const bounds = new google.maps.LatLngBounds();
+                places.forEach((place) => {
+                    if (!place.geometry || !place.geometry.location) {
+                        console.log("Returned place contains no geometry");
+                        return;
+                    }
+                    var mrkr = new google.maps.Marker({
+                        map,
+                        title: place.name,
+                        position: place.geometry.location,
+                    });
+                    google.maps.event.addListener(mrkr, "click", function(event) {
+                        document.getElementById('latitude').value = this.position.lat();
+                        document.getElementById('longitude').value = this.position
+                            .lng();
+                    });
+
+                    markers.push(mrkr);
+
+                    if (place.geometry.viewport) {
+                        // Only geocodes have viewport.
+                        bounds.union(place.geometry.viewport);
+                    } else {
+                        bounds.extend(place.geometry.location);
+                    }
                 });
-
-                markers.push(mrkr);
-
-                if (place.geometry.viewport) {
-                    // Only geocodes have viewport.
-                    bounds.union(place.geometry.viewport);
-                } else {
-                    bounds.extend(place.geometry.location);
-                }
+                map.fitBounds(bounds);
             });
-            map.fitBounds(bounds);
-        });
-    };
-    initAutocomplete();
-});
+        };
+        initAutocomplete();
+    });
 </script>
 <script>
-$('.__right-eye').on('click', function() {
-    if ($(this).hasClass('active')) {
-        $(this).removeClass('active')
-        $(this).find('i').removeClass('tio-invisible')
-        $(this).find('i').addClass('tio-hidden-outlined')
-        $(this).siblings('input').attr('type', 'password')
-    } else {
-        $(this).addClass('active')
-        $(this).siblings('input').attr('type', 'text')
+    $('.__right-eye').on('click', function() {
+        if ($(this).hasClass('active')) {
+            $(this).removeClass('active')
+            $(this).find('i').removeClass('tio-invisible')
+            $(this).find('i').addClass('tio-hidden-outlined')
+            $(this).siblings('input').attr('type', 'password')
+        } else {
+            $(this).addClass('active')
+            $(this).siblings('input').attr('type', 'text')
 
 
-        $(this).find('i').addClass('tio-invisible')
-        $(this).find('i').removeClass('tio-hidden-outlined')
-    }
-})
+            $(this).find('i').addClass('tio-invisible')
+            $(this).find('i').removeClass('tio-hidden-outlined')
+        }
+    })
 </script>
 
 @endpush

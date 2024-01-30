@@ -60,10 +60,12 @@
                             <thead class="thead-light">
                             <tr>
                                 <th class="text-center">{{translate('#')}}</th>
+                                <th>{{translate('city')}}</th>
                                 <th>{{translate('area')}}</th>
-                                <th>{{translate('latitude_code')}}</th>
+                                <th>{{translate('pin_code')}}</th>
+                                <!-- <th>{{translate('latitude_code')}}</th>
                                 <th>{{translate('longitude_code')}}</th>
-                                <th>{{translate('radius')}}</th>
+                                <th>{{translate('radius')}}</th> -->
                                 <th>{{translate('status')}}</th>
                                 <th class="text-center">{{translate('action')}}</th>
                             </tr>
@@ -80,6 +82,16 @@
                                     </td>
                                     <td>
                                     <span class="d-block font-size-sm text-body text-trim-50">
+                                        {{$cityarea->cityDetail->city}}
+                                    </span>
+                                    </td>
+                                    <td>
+                                    <span class="d-block font-size-sm text-body text-trim-50">
+                                        {{$cityarea['pin    code']}}
+                                    </span>
+                                    </td>
+                                    <!-- <td>
+                                    <span class="d-block font-size-sm text-body text-trim-50">
                                         {{$cityarea['latitude_code']}}
                                     </span>
                                     </td>
@@ -92,7 +104,7 @@
                                     <span class="d-block font-size-sm text-body text-trim-25">
                                     {{$cityarea['radius']}}
                                         </span>
-                                    </td>
+                                    </td> -->
                                     <td>
 
                                         <label class="toggle-switch">

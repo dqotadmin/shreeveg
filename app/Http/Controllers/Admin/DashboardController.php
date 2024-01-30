@@ -128,7 +128,7 @@ class DashboardController extends Controller
         $data['returned_count'] = self::customQuery($request->warehouse_id)->where(['order_status' => 'returned'])->count();
         $data['failed_count'] = self::customQuery($request->warehouse_id)->where(['order_status' => 'failed'])->count();
 
-        $data['recent_orders'] = self::customQuery($request->warehouse_id)->notPos()->latest()->take(5)->get(['id', 'created_at', 'order_status']);
+        $data['recent_orders'] = self::customQuery($request->warehouse_id)->latest()->take(5)->get(['id', 'created_at', 'order_status']);
 
         $data['top_sell'] = $top_sell;
         $data['most_rated_products'] = $most_rated_products;
@@ -186,9 +186,9 @@ class DashboardController extends Controller
     public function customQuery($whID = null)
     {
         if ($whID == 'all' || empty($whID)) {
-            return $this->order;
+            return $this->order->notPos();
         } else {
-            return $this->order->where('warehouse_id', $whID);
+            return $this->order->where('warehouse_id', $whID)->notPos();
         }
     }
     public function order_stats(Request $request): \Illuminate\Http\JsonResponse

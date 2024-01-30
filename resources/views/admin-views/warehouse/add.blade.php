@@ -77,7 +77,7 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="col-sm-4">
+                                    {{-- <div class="col-sm-4">
                                         <label class="form-label"
                                             for="exampleFormControlInput1">{{ translate('Warehouse Address') }} </label>
                                         <textarea type="text" name="address" class="form-control" required
@@ -85,7 +85,7 @@
                                             <div class="invalid-feedback">
                                             Please enter warehouse address.
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="col-sm-4">
                                         <label class="form-label"
                                             for="exampleFormControlInput1">{{ translate('GST Number') }} </label>
@@ -174,6 +174,38 @@
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <div class="row g-3">
+                                            <div class="col-6">
+                                                <div class="form-group mb-0">
+                                                    <label class="form-label text-capitalize"
+                                                        for="search_location">{{ translate('radius') }}
+                                                        <i class="tio-info-outined" data-toggle="tooltip"
+                                                            data-placement="top"
+                                                            title="{{ translate('radius in KM') }}">
+                                                        </i>
+                                                    </label>
+                                                    <select name="coverage" class="form-control" id="radius" style="width: 270px;padding: 3px;">
+                                                        @for($i=1; $i<=25; $i++)
+                                                               <option value="{{$i}}" >{{$i}} KM</option>
+                                                       @endfor
+                                                       </select>
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group mb-0">
+                                                    <label class="form-label text-capitalize"
+                                                        for="address">{{ translate('address') }}
+                                                        <i class="tio-info-outined" data-toggle="tooltip"
+                                                            data-placement="top"
+                                                            title="{{ translate('google map address') }}">
+                                                        </i>
+                                                    </label>
+                                                    <input type="text" id="address" name="address"
+                                                        class="form-control"
+                                                        placeholder="{{ translate('Ex:') }} Nagaur, Rajasthan 341001, India"
+                                                        value="{{ old('address') }}" readonly>
+                                                </div>
+                                            </div>
                                             <div class="col-12">
                                                 <div class="form-group mb-0">
                                                     <label class="form-label text-capitalize"
@@ -203,7 +235,7 @@
                                                         value="{{ old('longitude') }}" readonly>
                                                 </div>
                                             </div>
-                                            <div class="col-12">
+                                            {{-- <div class="col-12">
                                                 <div class="form-group mb-0">
                                                     <label class="input-label">
                                                         {{translate('coverage (km)')}}
@@ -220,14 +252,14 @@
                                                             Please enter coverage (km).
                                                         </div>
                                                 </div>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                     </div>
                                     <div class="col-md-6" id="location_map_div">
-                                        <input id="pac-input" class="controls rounded" data-toggle="tooltip"
-                                            data-placement="right" name="map_location"
-                                            data-original-title="{{ translate('search_your_location_here') }}"
-                                            type="text" placeholder="{{ translate('search_here') }}" />
+                                        <input id="pac-input" class="controls rounded map_search" data-toggle="tooltip"
+                                        data-placement="right" name="map_location"
+                                        data-original-title="{{ translate('search_your_location_here') }}" type="text"
+                                        placeholder="{{ translate('search_here') }}" />
                                         <div id="location_map_canvas" class="overflow-hidden rounded"
                                             style="height: 100%"></div>
                                     </div>
@@ -431,15 +463,12 @@ function generateCode() {
 $(document).ready(function() {
     function initAutocomplete() {
         var myLatLng = {
-
             lat: 23.811842872190343,
             lng: 90.356331
         };
+
         const map = new google.maps.Map(document.getElementById("location_map_canvas"), {
-            center: {
-                lat: 23.811842872190343,
-                lng: 90.356331
-            },
+            center: myLatLng,
             zoom: 13,
             mapTypeId: "roadmap",
         });
@@ -450,7 +479,8 @@ $(document).ready(function() {
         });
 
         marker.setMap(map);
-        var geocoder = geocoder = new google.maps.Geocoder();
+        var geocoder = new google.maps.Geocoder();
+
         google.maps.event.addListener(map, 'click', function(mapsMouseEvent) {
             var coordinates = JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2);
             var coordinates = JSON.parse(coordinates);
@@ -461,61 +491,66 @@ $(document).ready(function() {
             document.getElementById('latitude').value = coordinates['lat'];
             document.getElementById('longitude').value = coordinates['lng'];
 
-
             geocoder.geocode({
                 'latLng': latlng
             }, function(results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {
                     if (results[1]) {
-                        document.getElementById('address').innerHtml = results[1]
-                            .formatted_address;
+                        document.getElementById('address').innerHtml = results[1].formatted_address;
                     }
                 }
             });
         });
-        // Create the search box and link it to the UI element.
+
         const input = document.getElementById("pac-input");
         const searchBox = new google.maps.places.SearchBox(input);
         map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
-        // Bias the SearchBox results towards current map's viewport.
+
         map.addListener("bounds_changed", () => {
             searchBox.setBounds(map.getBounds());
         });
+
         let markers = [];
-        // Listen for the event fired when the user selects a prediction and retrieve
-        // more details for that place.
+
         searchBox.addListener("places_changed", () => {
             const places = searchBox.getPlaces();
 
             if (places.length == 0) {
                 return;
             }
-            // Clear out the old markers.
+
             markers.forEach((marker) => {
                 marker.setMap(null);
             });
             markers = [];
-            // For each place, get the icon, name and location.
+
             const bounds = new google.maps.LatLngBounds();
+
             places.forEach((place) => {
                 if (!place.geometry || !place.geometry.location) {
                     console.log("Returned place contains no geometry");
                     return;
                 }
+
                 var mrkr = new google.maps.Marker({
                     map,
                     title: place.name,
                     position: place.geometry.location,
                 });
+
                 google.maps.event.addListener(mrkr, "click", function(event) {
                     document.getElementById('latitude').value = this.position.lat();
                     document.getElementById('longitude').value = this.position.lng();
+
+                    $('#address').val(place.formatted_address);
+                   
+                    // Draw circle when a suggestion is selected
+                    drawCircle(this.position);
                 });
 
                 markers.push(mrkr);
 
                 if (place.geometry.viewport) {
-                    // Only geocodes have viewport.
                     bounds.union(place.geometry.viewport);
                 } else {
                     bounds.extend(place.geometry.location);
@@ -523,9 +558,36 @@ $(document).ready(function() {
             });
             map.fitBounds(bounds);
         });
-    };
+        
+        // Function to draw circle
+        function drawCircle(center) {
+            var radius = parseFloat($('#radius').val());
+            if (!isNaN(radius)) {
+                var circle = new google.maps.Circle({
+                    map: map,
+                    fillColor: "#ADD8E6",
+                    fillOpacity: 0.3,
+                    strokeColor: "#0000FF",
+                    strokeOpacity: 0.8,
+                    strokeWeight: 2,
+                    center: center,
+                    radius: radius*1000
+                });
+            }
+        }
+        
+        // Draw circle on radius input change
+        $('#radius').on('change', function() {
+            var radius = parseFloat($(this).val());
+            if (!isNaN(radius)) {
+                drawCircle(marker.getPosition());
+            }
+        });
+    }
+
     initAutocomplete();
 });
+
 
 
 $('.__right-eye').on('click', function() {

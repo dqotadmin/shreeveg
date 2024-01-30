@@ -2659,4 +2659,7 @@
   'Superadmin' => 'Superadmin',
   'GST number' => 'GST number',
   'GST Number' => 'GST Number',
+  'search_location' => 'Search location',
+  'radius in KM' => 'Radius in KM',
+  'google map address' => 'Google map address',
 );

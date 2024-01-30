@@ -309,6 +309,8 @@ class Helpers
                 $item['unit'] = $item->productDetail->unit->title;
                 $item['image'] = json_decode($item->productDetail['image']);
                 $item['single_image'] = json_decode($item->productDetail['single_image']);
+                $item['choice_options'] = json_decode($item->productDetail['choice_options']);
+
                 if (isset($item)) {
 
                     foreach (json_decode($item['product_details'], true) as $var) {
@@ -318,7 +320,7 @@ class Helpers
                             'approx_piece' =>   $var['approx_piece'],
                             'title' =>   $var['title'],
                             'offer_price' =>   $var['offer_price'],
-                            'market_price' =>   (int)$var['market_price'],
+                            'market_price' =>    (int)$var['market_price'],
                         ];
                     }
                 }
@@ -326,7 +328,6 @@ class Helpers
 
                 $item['total_stock'] = $item->total_stock;
                 //$item['attributes'] = json_decode($item['attributes']);
-                //$item['choice_options'] = json_decode($item['choice_options']);
 
                 if (count($item->productDetail['translations'])) {
                     foreach ($item->productDetail['translations'] as $translation) {
@@ -475,7 +476,7 @@ class Helpers
                         'approx_piece' =>   $var['approx_piece'],
                         'title' =>   $var['title'],
                         'offer_price' =>   $var['offer_price'],
-                        'market_price' =>   $var['market_price'],
+                        'market_price' =>  $var['market_price'],
                     ];
                 }
             }

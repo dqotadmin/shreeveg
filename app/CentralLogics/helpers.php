@@ -285,7 +285,34 @@ class Helpers
 
         return $data;
     }
+// app/helpers.php
 
+    public static function generateBreadcrumbs($parentCategory)
+    {
+        $breadcrumbs = [
+            '<li class="breadcrumb-item"><a href="' . route('admin.dashboard') . '">Dashboard</a></li>',
+        ];
+
+        if ($parentCategory) {
+            $supperParent = \App\Model\Category::find($parentCategory->id);
+
+            if ($supperParent) {
+                $breadcrumbs[] = '<li class="breadcrumb-item"><a href="' . route('admin.category.list', ['parent_id' => $supperParent->id]) . '">' . $supperParent->name . '</a></li>';
+            }
+        }
+
+        if ($parentCategory && $parentCategory->parent_id !== null) {
+            $supperParent = \App\Model\Category::find($parentCategory->parent_id);
+
+            if ($supperParent) {
+                $breadcrumbs[] = '<li class="breadcrumb-item"><a href="' . route('admin.category.list', ['parent_id' => $supperParent->parent_id]) . '">' . $supperParent->name . '</a></li>';
+            }
+        }
+
+        $breadcrumbs[] = '<li class="breadcrumb-item active" aria-current="page">' . translate('Categories') . '</li>';
+
+        return implode('', $breadcrumbs);
+    }
 
     public static function apk_product_data_formatting($data, $multi_data = false)
     {

@@ -34,15 +34,22 @@
                 </div>
             </div>
         </div>
-            <div class="col-sm-12 col-lg-12">
+        <div class="col-sm-12 col-lg-12">
             <div class="card">
-            <div class="card-header border-0">
+                <div class="card-header border-0">
+                    <!-- Breadcrumbs -->
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            {!!  Helpers::generateBreadcrumbs($parentCategory) !!}
+                        </ol>
+                    </nav>
+                    <!-- End Breadcrumbs -->
+                </div>
 
-dsfsdfsd
+                <!-- Rest of your code for the card -->
+            </div>
+        </div>
 
-</div>
-</div>
-</div>
             <div class="col-sm-12 col-lg-12">
                 <div class="card">
                     <div class="card-header border-0">

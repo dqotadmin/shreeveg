@@ -76,63 +76,53 @@
                 
 
                     <div class="row align-items-end g-4" style="margin-top: 40px;">
-
-
-                                
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label class="input-label" for="exampleFormControlInput1">{{translate('name')}}
-                                                (EN)</label>
-                                            <input type="text" name="name" maxlength="255" value=""   class="form-control" placeholder="{{ translate('New Category') }}" required>
-                                            <div class="invalid-feedback">
-                                                Please enter name.
-                                            </div>
-                                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="input-label" for="exampleFormControlInput1">{{translate('name')}}
+                                        (EN)</label>
+                                    <input type="text" name="name" maxlength="255" value=""   class="form-control" placeholder="{{ translate('New Category') }}" required>
+                                    <div class="invalid-feedback">
+                                        Please enter name.
                                     </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label class="input-label" for="exampleFormControlInput1">{{translate('name')}} (HI)
-                                                </label>
-                                            <input type="text" name="hn_name" maxlength="255" value=""   class="form-control" placeholder="{{ translate('New Category') }}" required>
-                                            <div class="invalid-feedback">
-                                                Please enter hindi name.
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label class="input-label" for="exampleFormControlInput1">{{translate('title_silver')}}
-                                                </label>
-                                            <input type="text" name="title_silver" maxlength="255"  class="form-control manually-border-color" placeholder="{{ translate('title_silver') }}">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label class="input-label" for="exampleFormControlInput1">{{translate('title_gold')}}
-                                              
-                                                <input type="text" name="title_gold" maxlength="255" value="" class="form-control manually-border-color" placeholder="{{ translate('title_gold') }}">
-                                            </div>
-                                    </div>
-
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label class="input-label" for="exampleFormControlInput1">{{translate('title_platinum')}}
-                                              </label>
-                                            <input type="text" name="title_platinum" maxlength="255"   class="form-control manually-border-color" placeholder="{{ translate('title_platinum') }}">
-                                        </div>
-                                    </div>
-
-
                                 </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="input-label" for="exampleFormControlInput1">{{translate('name')}} (HI)
+                                        </label>
+                                    <input type="text" name="hn_name" maxlength="255" value=""   class="form-control" placeholder="{{ translate('New Category') }}" required>
+                                    <div class="invalid-feedback">
+                                        Please enter hindi name.
+                                    </div>
+                                </div>
+                            </div>
 
-                            
-                        
-                        
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="input-label" for="exampleFormControlInput1">{{translate('title_silver')}}
+                                        </label>
+                                    <input type="text" name="title_silver" maxlength="255"  class="form-control manually-border-color" placeholder="{{ translate('title_silver') }}">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="input-label" for="exampleFormControlInput1">{{translate('title_gold')}}
+                                        
+                                        <input type="text" name="title_gold" maxlength="255" value="" class="form-control manually-border-color" placeholder="{{ translate('title_gold') }}">
+                                    </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="input-label" for="exampleFormControlInput1">{{translate('title_platinum')}}
+                                        </label>
+                                    <input type="text" name="title_platinum" maxlength="255"   class="form-control manually-border-color" placeholder="{{ translate('title_platinum') }}">
+                                </div>
+                            </div>
+                        </div>
                         <input name="position" value="0" hidden>
-
                     </div>
 
                     <div class="row align-items-end g-4">

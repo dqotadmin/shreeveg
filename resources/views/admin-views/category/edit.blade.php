@@ -68,103 +68,52 @@
 
 
                     @csrf
-                    @php($data = Helpers::get_business_settings('language'))
-                    @php($default_lang = Helpers::get_default_language())
-
-                    @if($data && array_key_exists('code', $data[0]))
-                        <ul class="nav nav-tabs d-inline-flex mb--n-30">
-                            @foreach($data as $lang)
-                            <li class="nav-item">
-                                <a class="nav-link lang_link {{$lang['default'] == true? 'active':''}}" href="#"
-                                id="{{$lang['code']}}-link">{{\App\CentralLogics\Helpers::get_language_name($lang['code']).'('.strtoupper($lang['code']).')'}}</a>
-                            </li>
-                            @endforeach
-                        </ul>
-                    @endif
+                   
 
                     <div class="row align-items-end g-4" style="margin-top: 40px;">
-
-                        @if($data && array_key_exists('code', $data[0]))
-
-                            @foreach($data as $lang)
-
-                                <?php
-                                    if (count($category['translations'])) {
-                                        $translate = [];
-                                        foreach ($category['translations'] as $t) {
-                                            if ($t->locale == $lang['code'] && $t->key == "name") {
-                                                $translate[$lang['code']]['name'] = $t->value;
-                                            }
-
-                                            if ($t->locale == $lang['code'] && $t->key == "title_silver") {
-                                                $translate[$lang['code']]['title_silver'] = $t->value;
-                                            }
-
-                                            if ($t->locale == $lang['code'] && $t->key == "title_gold") {
-                                                $translate[$lang['code']]['title_gold'] = $t->value;
-                                            }
-
-                                            if ($t->locale == $lang['code'] && $t->key == "title_platinum") {
-                                                $translate[$lang['code']]['title_platinum'] = $t->value;
-                                            }
-                                        }
-                                    }
-                                ?>
-                                
-                                <div class="row {{$lang['default'] == false ? 'd-none':''}} lang_form" id="{{$lang['code']}}-form">
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label class="input-label" for="exampleFormControlInput1">{{translate('name')}}
-                                                ({{strtoupper($lang['code'])}})</label>
-                                            <input type="text" name="name[]" maxlength="255" value="{{$lang['code'] == 'en' ? $category['name'] : ($translate[$lang['code']]['name']??'')}}" class="form-control" @if($lang['status'] == true) oninvalid="document.getElementById('{{$lang['code']}}-link').click()" @endif placeholder="{{ translate('New Category') }}" {{$lang['status'] == true ? '':''}} required>
-                                            <div class="invalid-feedback">
-                                                Please enter name.
-                                            </div>
-                                          </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="input-label" for="exampleFormControlInput1">{{translate('name')}}
+                                        (EN)</label>
+                                    <input type="text" name="name" maxlength="255" value="{{ $category['name']}}" class="form-control"  required>
+                                    <div class="invalid-feedback">
+                                        Please enter name.
                                     </div>
-
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label class="input-label" for="exampleFormControlInput1">{{translate('title_silver')}}
-                                                ({{strtoupper($lang['code'])}})</label>
-                                            <input type="text" name="title_silver[]" maxlength="255" value="{{$lang['code'] == 'en' ? $category['title_silver'] : ($translate[$lang['code']]['title_silver']??'')}}" class="form-control  manually-border-color" @if($lang['status'] == true) oninvalid="document.getElementById('{{$lang['code']}}-link').click()" @endif placeholder="{{ translate('title_silver') }}" {{$lang['status'] == true ? '':''}}>
-                                        </div>
                                     </div>
-
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label class="input-label" for="exampleFormControlInput1">{{translate('title_gold')}}
-                                                ({{strtoupper($lang['code'])}})</label>
-                                            <input type="text" name="title_gold[]" maxlength="255" value="{{$lang['code'] == 'en' ? $category['title_gold'] : ($translate[$lang['code']]['title_gold']??'')}}" class="form-control  manually-border-color" @if($lang['status'] == true) oninvalid="document.getElementById('{{$lang['code']}}-link').click()" @endif placeholder="{{ translate('title_gold') }}" {{$lang['status'] == true ? '':''}}>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label class="input-label" for="exampleFormControlInput1">{{translate('title_platinum')}}
-                                                ({{strtoupper($lang['code'])}})</label>
-                                            <input type="text" name="title_platinum[]" maxlength="255" value="{{$lang['code'] == 'en' ? $category['title_platinum'] : ($translate[$lang['code']]['title_platinum']??'')}}" class="form-control manually-border-color" @if($lang['status'] == true) oninvalid="document.getElementById('{{$lang['code']}}-link').click()" @endif placeholder="{{ translate('title_platinum') }}" {{$lang['status'] == true ? '':''}}>
-                                        </div>
-                                    </div>
-
-
-                                </div>
-                                <input type="hidden" name="lang[]" value="{{$lang['code']}}">
-                            @endforeach
-
-                            
-                        
-                        @else
-                            <div class="col-sm-6 lang_form" id="{{$default_lang}}-form">
-                                <label class="input-label"
-                                        for="exampleFormControlInput1">{{translate('name')}}
-                                    ({{strtoupper($default_lang)}})</label>
-                                <input type="text" name="name[]" value="{{$lang['code'] == 'en' ? $category['name'] : ($translate[$lang['code']]['name']??'')}}"
-                                        class="form-control" oninvalid="document.getElementById('en-link').click()"
-                                        placeholder="{{ translate('New Category') }}" required>
                             </div>
-                            <input type="hidden" name="lang[]" value="{{$default_lang}}">
-                        @endif
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="input-label" for="exampleFormControlInput1">{{translate('name')}} (HI)
+                                        </label>
+                                    <input type="text" name="hn_name" maxlength="255" value=""   class="form-control" placeholder="{{ translate('New Category') }}" required>
+                                    <div class="invalid-feedback">
+                                        Please enter hindi name.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="input-label" for="exampleFormControlInput1">{{translate('title_silver')}}
+                                        (EN)</label>
+                                    <input type="text" name="title_silver" maxlength="255" value="{{ $category['title_silver']}}" class="form-control  manually-border-color"   placeholder="{{ translate('title_silver') }}" >
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="input-label" for="exampleFormControlInput1">{{translate('title_gold')}}
+                                        (EN)</label>
+                                    <input type="text" name="title_gold" maxlength="255" value="{{$category['title_gold']}}" class="form-control  manually-border-color"   placeholder="{{ translate('title_gold') }}" >
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="input-label" for="exampleFormControlInput1">{{translate('title_platinum')}}
+                                        (EN)</label>
+                                    <input type="text" name="title_platinum" maxlength="255" value="{{$category['title_platinum']}}" class="form-control manually-border-color"   placeholder="{{ translate('title_platinum') }}" >
+                                </div>
+                            </div>
+                        </div>
                         <input name="position" value="0" hidden>
 
                     </div>
@@ -173,7 +122,7 @@
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <label class="input-label" for="exampleFormControlInput1">{{translate('Category Code')}}</label>
-                                <input type="text" name="category_code" value="{{$lang['code'] == 'en' ? $category['category_code'] : ($category['category_code']??'')}}"
+                                <input type="text" name="category_code" value="{{$category['category_code']}}"
                                         class="form-control input-text-uc" oninvalid="document.getElementById('en-link').click()"
                                         placeholder="{{ translate('Category Code') }}" required>
                                         <div class="invalid-feedback">
@@ -215,25 +164,7 @@
 
 @push('script_2')
     <script>
-        $(".lang_link").click(function(e){
-            e.preventDefault();
-            $(".lang_link").removeClass('active');
-            $(".lang_form").addClass('d-none');
-            $(this).addClass('active');
-
-            let form_id = this.id;
-            let lang = form_id.split("-")[0];
-            console.log(lang);
-            $("#"+lang+"-form").removeClass('d-none');
-            if(lang == '{{$default_lang}}')
-            {
-                $(".from_part_2").removeClass('d-none');
-            }
-            else
-            {
-                $(".from_part_2").addClass('d-none');
-            }
-        });
+       
     </script>
     <script>
         function readURL(input) {

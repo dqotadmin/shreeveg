@@ -263,18 +263,11 @@ class CategoryController extends Controller
             'name' =>'required|unique:categories,name,'.$request->id,
             //'category_code' => 'required|unique:categories',
             'category_code' =>'required|unique:categories,category_code,'.$request->id,
-            'title_silver' => 'required',
-            'title_gold' => 'required',
-            'title_platinum' => 'required',
+             
             
         ]);
 
-        foreach ($request->name as $name) {
-            if (strlen($name) > 255) {
-                toastr::error(translate('Category name is too long!'));
-                return back();
-            }
-        }
+        
 
         //uniqueness check
         $parent_id = $request->parent_id ?? 0;
@@ -288,10 +281,10 @@ class CategoryController extends Controller
 
         //into db
         $category = $this->category->find($id);
-        $category->name = $request->name[array_search('en', $request->lang)];
-        $category->title_silver = $request->title_silver[array_search('en', $request->lang)];
-        $category->title_gold = $request->title_gold[array_search('en', $request->lang)];
-        $category->title_platinum = $request->title_platinum[array_search('en', $request->lang)];
+        $category->name = $request->name;
+        $category->title_silver = $request->title_silver;
+        $category->title_gold = $request->title_gold;
+        $category->title_platinum = $request->title_platinum;
 
         $category->image = $request->has('image') ? Helpers::update('category/', $category->image, 'png', $request->file('image')) : $category->image;
         $category->category_code = $request->category_code;
@@ -300,48 +293,48 @@ class CategoryController extends Controller
         $category->status = 1;
         
         $category->save();
-        foreach ($request->lang as $index => $key) {
-            if ($request->name[$index] && $key != 'en') {
-                Translation::updateOrInsert(
-                    ['translationable_type' => 'App\Model\Category',
-                     'translationable_id' => $category->id,
-                     'locale' => $key,
-                     'key' => 'name'
-                    ],
-                    ['value' => $request->name[$index]]
-                );                 
-            }
-            if ($request->title_silver[$index] && $key != 'en') {
-                Translation::updateOrInsert(
-                    ['translationable_type' => 'App\Model\Category',
-                     'translationable_id' => $category->id,
-                     'locale' => $key,
-                     'key' => 'title_silver'
-                    ],
-                    ['value' => $request->title_silver[$index]]
-                );
-            }
-            if ($request->title_gold[$index] && $key != 'en') {
-                Translation::updateOrInsert(
-                    ['translationable_type' => 'App\Model\Category',
-                     'translationable_id' => $category->id,
-                     'locale' => $key,
-                     'key' => 'title_gold'
-                    ],
-                    ['value' => $request->title_gold[$index]]
-                );
-            }
-            if ($request->title_platinum[$index] && $key != 'en') {
-                Translation::updateOrInsert(
-                    ['translationable_type' => 'App\Model\Category',
-                     'translationable_id' => $category->id,
-                     'locale' => $key,
-                     'key' => 'title_platinum'
-                    ],
-                    ['value' => $request->title_platinum[$index]]
-                );
-            }
-        }
+        // foreach ($request->lang as $index => $key) {
+        //     if ($request->name[$index] && $key != 'en') {
+        //         Translation::updateOrInsert(
+        //             ['translationable_type' => 'App\Model\Category',
+        //              'translationable_id' => $category->id,
+        //              'locale' => $key,
+        //              'key' => 'name'
+        //             ],
+        //             ['value' => $request->name[$index]]
+        //         );                 
+        //     }
+        //     if ($request->title_silver[$index] && $key != 'en') {
+        //         Translation::updateOrInsert(
+        //             ['translationable_type' => 'App\Model\Category',
+        //              'translationable_id' => $category->id,
+        //              'locale' => $key,
+        //              'key' => 'title_silver'
+        //             ],
+        //             ['value' => $request->title_silver[$index]]
+        //         );
+        //     }
+        //     if ($request->title_gold[$index] && $key != 'en') {
+        //         Translation::updateOrInsert(
+        //             ['translationable_type' => 'App\Model\Category',
+        //              'translationable_id' => $category->id,
+        //              'locale' => $key,
+        //              'key' => 'title_gold'
+        //             ],
+        //             ['value' => $request->title_gold[$index]]
+        //         );
+        //     }
+        //     if ($request->title_platinum[$index] && $key != 'en') {
+        //         Translation::updateOrInsert(
+        //             ['translationable_type' => 'App\Model\Category',
+        //              'translationable_id' => $category->id,
+        //              'locale' => $key,
+        //              'key' => 'title_platinum'
+        //             ],
+        //             ['value' => $request->title_platinum[$index]]
+        //         );
+        //     }
+        // }
 
         Toastr::success($category->parent_id == 0 ? translate('Category updated successfully!') : translate('Sub Category updated successfully!'));
         return redirect()->route('admin.category.list');

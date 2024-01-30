@@ -318,7 +318,7 @@ class Helpers
                             'approx_piece' =>   $var['approx_piece'],
                             'title' =>   $var['title'],
                             'offer_price' =>   $var['offer_price'],
-                            'market_price' =>   $var['market_price'],
+                            'market_price' =>   (int)$var['market_price'],
                         ];
                     }
                 }

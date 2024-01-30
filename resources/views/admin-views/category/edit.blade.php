@@ -86,7 +86,7 @@
                                 <div class="form-group">
                                     <label class="input-label" for="exampleFormControlInput1">{{translate('name')}} (HI)
                                         </label>
-                                    <input type="text" name="hn_name" maxlength="255" value=""   class="form-control" placeholder="{{ translate('New Category') }}" required>
+                                    <input type="text" name="" maxlength="255" value="{{$category['hn_name']}}"   class="form-control" placeholder="{{ translate('New Category') }}" required>
                                     <div class="invalid-feedback">
                                         Please enter hindi name.
                                     </div>

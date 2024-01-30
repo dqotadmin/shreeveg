@@ -285,6 +285,7 @@ class CategoryController extends Controller
         $category->title_silver = $request->title_silver;
         $category->title_gold = $request->title_gold;
         $category->title_platinum = $request->title_platinum;
+        $category->hn_name = @$request->hn_name;
 
         $category->image = $request->has('image') ? Helpers::update('category/', $category->image, 'png', $request->file('image')) : $category->image;
         $category->category_code = $request->category_code;

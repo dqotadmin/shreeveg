@@ -25,5 +25,9 @@ class CityArea extends Model
     {
         return $this->hasOne(State::class);
     }
+    public function cityDetail(){
+        return $this->belongsTo(City::class, 'city_id');
+
+    }
  
 }

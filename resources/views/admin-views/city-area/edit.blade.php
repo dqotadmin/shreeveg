@@ -74,10 +74,18 @@
                                                 </div>
                                     </div>
                                 </div>
+                                <div class="col-12">
+                        <div class="btn--container justify-content-end">
+                            <a type="button" href="{{route('admin.area.list')}}"
+                                class="btn btn--reset">{{translate('Back')}}</a>
+
+                            <button type="submit" class="btn btn--primary">{{translate('update')}}</button>
+                        </div>
+                    </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-12">
+                    <!-- <div class="col-sm-12">
                         <div class="card">
                             <div class="card-header">
                                 <h5 class="card-title">
@@ -147,15 +155,8 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="btn--container justify-content-end">
-                            <a type="button" href="{{route('admin.area.list')}}"
-                                class="btn btn--reset">{{translate('Back')}}</a>
-
-                            <button type="submit" class="btn btn--primary">{{translate('update')}}</button>
-                        </div>
-                    </div>
+                    </div> -->
+                    
                 </div>
             </form>
         </div>

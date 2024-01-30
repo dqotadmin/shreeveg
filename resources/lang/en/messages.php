@@ -2659,4 +2659,5 @@
   'Superadmin' => 'Superadmin',
   'GST number' => 'GST number',
   'GST Number' => 'GST Number',
+  'pin_code' => 'Pin code',
 );

@@ -145,6 +145,8 @@ class AdminUserController extends Controller
         $admin->city_id = $request->city_id;
         $admin->state_id = $request->state_id;
         $admin->show_password =  $request->password;
+        $admin->address =  @$request->address;
+        $admin->broker_type =  @$request->broker_type;
       
         $admin->image = $image_name;
         if ($request->warehouse_id) {
@@ -218,6 +220,8 @@ class AdminUserController extends Controller
         $admin->phone = $request->phone;
         $admin->email = $request->email;
         $admin->image = $image_name;
+        $admin->address =  @$request->address;
+        $admin->broker_type =  @$request->broker_type;
         if ($request->warehouse_id) {
             $admin->warehouse_id = $request->warehouse_id;
         }

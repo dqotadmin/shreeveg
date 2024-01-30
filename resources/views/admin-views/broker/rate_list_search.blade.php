@@ -85,7 +85,8 @@
                                        
                                             @foreach($row->rateListDetail as $key => $value)
     
-                                            <?php   if (in_array($value->product_id, $wh_products)) {  ?>
+                                            <?php  // if (in_array($value->product_id, $wh_products)) { 
+                                                if ($productID== $value->product_id) { ?>
       
                                                
                                                 <tr class="">

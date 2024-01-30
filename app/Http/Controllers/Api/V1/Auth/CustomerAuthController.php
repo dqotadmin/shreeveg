@@ -417,6 +417,7 @@ class CustomerAuthController extends Controller
             'email' => $request->email ?? '',
             'phone' => $request->phone ?? '',
             'gender' => $request->gender,
+            'warehouse_id' => 8,
             'password' => bcrypt(123456),
             'temporary_token' => $temporary_token,
             'referral_code' => Helpers::generate_referer_code(),

@@ -207,7 +207,7 @@
                         @endif
                         <!-- User management end here -->
 
-                        @if(auth('admin')->user()->admin_role_id == 5)
+                        @if(in_array(auth('admin')->user()->admin_role_id ,[3,5]))
 
                         <li class="navbar-vertical-aside-has-menu ">
                             <a class="js-navbar-vertical-aside-menu-link nav-link"
@@ -215,7 +215,7 @@
                                 title="{{translate('rate list')}}">
                                 <i class="tio-category nav-icon"></i>
                                 <span
-                                    class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('rate list')}}</span>
+                                    class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Broker rate list')}}</span>
                             </a>
                         </li>
 
@@ -225,7 +225,16 @@
                                 title="{{translate('order_list')}}">
                                 <i class="tio-map nav-icon"></i>
                                 <span
-                                    class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('order list')}}</span>
+                                    class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Receiver order list')}}</span>
+                            </a>
+                        </li>
+                        <li class="navbar-vertical-aside-has-menu ">
+                            <a class="js-navbar-vertical-aside-menu-link nav-link"
+                                href="{{route('admin.purchase-warehouse-order.history')}}"
+                                title="{{translate('order_list_history')}}">
+                                <i class="tio-map nav-icon"></i>
+                                <span
+                                    class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('receiver_order_history')}}</span>
                             </a>
                         </li>
                         @endif

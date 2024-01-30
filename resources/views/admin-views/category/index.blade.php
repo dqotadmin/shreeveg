@@ -34,11 +34,20 @@
                 </div>
             </div>
         </div>
+            <div class="col-sm-12 col-lg-12">
+            <div class="card">
+            <div class="card-header border-0">
 
+dsfsdfsd
+
+</div>
+</div>
+</div>
             <div class="col-sm-12 col-lg-12">
                 <div class="card">
                     <div class="card-header border-0">
                         <div class="card--header">
+                            
                             <h5 class="card-title">{{translate('Categories')}} <span class="badge badge-soft-secondary">{{ $categories->total() }}</span> </h5>
                             <form action="{{url()->current()}}" method="GET">
                                 <div class="input-group">

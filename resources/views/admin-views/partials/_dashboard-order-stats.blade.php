@@ -1,6 +1,6 @@
 
 <div class="col-sm-6 col-lg-4">
-    <a class="dashboard--card h-100" href="{{route('admin.orders.list',['pending'])}}">
+    <a class="dashboard--card h-100" href="{{route('admin.orders.list',['pending','warehouse_id'=>request('warehouse_id')])}}">
         <h6 class="subtitle">{{translate('pending')}}</h6>
         <h2 class="title">
             {{$data['pending']}}
@@ -10,7 +10,7 @@
 </div>
 
 <div class="col-sm-6 col-lg-4">
-    <a class="dashboard--card h-100" href="{{route('admin.orders.list',['confirmed'])}}">
+    <a class="dashboard--card h-100" href="{{route('admin.orders.list',['confirmed','warehouse_id'=>request('warehouse_id')])}}">
         <h6 class="subtitle">{{translate('confirmed')}}</h6>
         <h2 class="title">
             {{$data['confirmed']}}
@@ -20,7 +20,7 @@
 </div>
 
 <div class="col-sm-6 col-lg-4">
-    <a class="dashboard--card h-100" href="{{route('admin.orders.list',['processing'])}}">
+    <a class="dashboard--card h-100" href="{{route('admin.orders.list',['processing','warehouse_id'=>request('warehouse_id')])}}">
         <h6 class="subtitle">{{translate('packaging')}}</h6>
         <h2 class="title">
             {{$data['processing']}}
@@ -30,7 +30,7 @@
 </div>
 
 <div class="col-sm-6 col-lg-4">
-    <a class="dashboard--card h-100" href="{{route('admin.orders.list',['out_for_delivery'])}}">
+    <a class="dashboard--card h-100" href="{{route('admin.orders.list',['out_for_delivery','warehouse_id'=>request('warehouse_id')])}}">
         <h6 class="subtitle">{{translate('out_for_delivery')}}</h6>
         <h2 class="title">
             {{$data['out_for_delivery']}}
@@ -40,7 +40,7 @@
 </div>
 
 <div class="col-sm-6 col-lg-4">
-    <a class="dashboard--card h-100" href="{{route('admin.orders.list',['delivered'])}}">
+    <a class="dashboard--card h-100" href="{{route('admin.orders.list',['delivered','warehouse_id'=>request('warehouse_id')])}}">
         <div class="d-flex justify-content-between align-items-center">
             <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
                 <img src="{{asset('public/assets/admin/img/delivery/1.png')}}" alt="dashboard" class="oder--card-icon">
@@ -55,7 +55,7 @@
 
 
 <div class="col-sm-6 col-lg-4">
-    <a class="dashboard--card h-100" href="{{route('admin.orders.list',['canceled'])}}">
+    <a class="dashboard--card h-100" href="{{route('admin.orders.list',['canceled','warehouse_id'=>request('warehouse_id')])}}">
         <div class="d-flex justify-content-between align-items-center">
             <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
                 <img src="{{asset('public/assets/admin/img/delivery/2.png')}}" alt="dashboard" class="oder--card-icon">

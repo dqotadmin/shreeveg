@@ -365,36 +365,36 @@ class ProductController extends Controller
         //     Rule::unique('products', 'sequence')->ignore($id),
         // ]);
 
-        //$product = WarehouseProduct::findOrFail($id);
-        $productRow = WarehouseProduct::where('id', $id)->first();
-        if ($productRow) {
-            $productRow->sequence = (int) $request->input('sequence');
-            $productRow->save();
-        }
-        // dd($request->input('sequence'));
-        //$productRow->update(['sequence' => (int)$request->input('sequence')]);
-        $records = WarehouseProduct::where('warehouse_id', auth('admin')->user()->warehouse_id)->where('sequence', '>=', $request->input('sequence'))->orderBy('sequence', 'asc')->get();
-
-        foreach ($records as $key => $record) {
-            $record->sequence = $productRow->sequence + $key; //(int) $request->input('sequence');
-            $record->save();
-        }
-        $records->each(function ($todo) {
-            //$todo->increment('sequence');
-            //$todo->update(['sequence']);
-
-        });
-        // Check if the new sequence already exists in the database
-        // $existingProduct = WarehouseProduct::where('warehouse_id', auth('admin')->user()->warehouse_id)->where('sequence', $request->input('sequence'))
-        //     ->where('id', '!=', $id)
-        //     ->first();
-        // if ($existingProduct) {
-        //     return response()->json(['error' => 'Sequence already exists']);
+        $product = WarehouseProduct::findOrFail($id);
+        // $productRow = WarehouseProduct::where('id', $id)->first();
+        // if ($productRow) {
+        //     $productRow->sequence = (int) $request->input('sequence');
+        //     $productRow->save();
         // }
+        // // dd($request->input('sequence'));
+        // //$productRow->update(['sequence' => (int)$request->input('sequence')]);
+        // $records = WarehouseProduct::where('warehouse_id', auth('admin')->user()->warehouse_id)->where('sequence', '>=', $request->input('sequence'))->orderBy('sequence', 'asc')->get();
 
-        // // Update the sequence
-        // $product->sequence = $request->input('sequence');
-        // $product->save();
+        // foreach ($records as $key => $record) {
+        //     $record->sequence = $productRow->sequence + $key; //(int) $request->input('sequence');
+        //     $record->save();
+        // }
+        // $records->each(function ($todo) {
+        //     //$todo->increment('sequence');
+        //     //$todo->update(['sequence']);
+
+        // });
+        // Check if the new sequence already exists in the database
+        $existingProduct = WarehouseProduct::where('warehouse_id', auth('admin')->user()->warehouse_id)->where('sequence', $request->input('sequence'))
+            ->where('id', '!=', $id)
+            ->first();
+        if ($existingProduct) {
+            return response()->json(['error' => 'Sequence already exists']);
+        }
+
+        // Update the sequence
+        $product->sequence = $request->input('sequence');
+        $product->save();
 
         return response()->json(['success' => 'Product sequence updated successfully']);
     }

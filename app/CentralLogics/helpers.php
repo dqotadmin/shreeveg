@@ -287,32 +287,34 @@ class Helpers
     }
 // app/helpers.php
 
-    public static function generateBreadcrumbs($parentCategory)
-    {
-        $breadcrumbs = [
-            '<li class="breadcrumb-item"><a href="' . route('admin.dashboard') . '">Dashboard</a></li>',
-        ];
+public static function generateBreadcrumbsRecursive($categoryId)
+{
+    $breadcrumbs = [];
 
-        if ($parentCategory) {
-            $supperParent = \App\Model\Category::find($parentCategory->id);
+    $category = \App\Model\Category::find($categoryId);
 
-            if ($supperParent) {
-                $breadcrumbs[] = '<li class="breadcrumb-item"><a href="' . route('admin.category.list', ['parent_id' => $supperParent->id]) . '">' . $supperParent->name . '</a></li>';
+    if ($category) {
+        if ($category !== null && $category !== 0) {
+            // Check if $category is a collection
+            if ($category instanceof \Illuminate\Database\Eloquent\Collection) {
+                // Assuming it's a collection, take the first category
+                $category = $category->first();
             }
+
+            // Recursively call the function for the parent category
+            $parentBreadcrumbs = self::generateBreadcrumbsRecursive($category->parent_id);
+            $breadcrumbs = array_merge($breadcrumbs, $parentBreadcrumbs);
+
+            // Add the current category to the breadcrumbs
+            $breadcrumbs[] = '<li class="breadcrumb-item"><a href="' . route('admin.category.list', ['parent_id' => $category->id]) . '">' . $category->name . '</a></li>';
         }
-
-        if ($parentCategory && $parentCategory->parent_id !== null) {
-            $supperParent = \App\Model\Category::find($parentCategory->parent_id);
-
-            if ($supperParent) {
-                $breadcrumbs[] = '<li class="breadcrumb-item"><a href="' . route('admin.category.list', ['parent_id' => $supperParent->parent_id]) . '">' . $supperParent->name . '</a></li>';
-            }
-        }
-
-        $breadcrumbs[] = '<li class="breadcrumb-item active" aria-current="page">' . translate('Categories') . '</li>';
-
-        return implode('', $breadcrumbs);
     }
+
+    return $breadcrumbs;
+}
+
+
+
 
     public static function apk_product_data_formatting($data, $multi_data = false)
     {
@@ -1297,7 +1299,7 @@ class Helpers
     public static function buildCategoryOptionsColors($categories, $parentId = 0, $level = 0, $selected = 0)
     {
         $html = '';
-        $colors = ['text-primary', 'text-success', 'text-warning', 'text-danger']; // Add more colors as needed
+        $colors = ['text-primary', 'text-success', 'text-warning', 'text-danger',  'text-info']; // Add more colors as needed
 
         foreach ($categories as $category) {
             if ($category['parent_id'] == $parentId) {

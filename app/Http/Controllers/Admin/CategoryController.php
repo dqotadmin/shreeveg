@@ -52,14 +52,12 @@ class CategoryController extends Controller
             $categories = $categories;
         }
         $parentCategoryId = $request->input('parent_id'); // Get the parent_id from the request
-
         $parentCategory = null;
     
         // Check if parent_id is provided and retrieve the parent category
         if ($parentCategoryId) {
             $parentCategory = Category::findOrFail($parentCategoryId);
         }
-    
         $categories = $categories->latest()->paginate(Helpers::getPagination())->appends($query_param);
         return view('admin-views.category.index', compact('categories', 'search','parentCategory'));
     }

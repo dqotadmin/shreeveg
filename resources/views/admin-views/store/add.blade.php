@@ -229,7 +229,7 @@ $warehouse_id = auth('admin')->user()->warehouse_id;
                                     {{ translate('open_time') }}
                                 </label>
                                 <input type="time" name="open_time"
-                                                    class="form-control" value="{{@$stores->open_time}}" disabled required />
+                                                    class="open_time form-control" value="" disabled required />
                                <div class="invalid-feedback">
                                     Please enter store open time.
                                 </div> 
@@ -239,7 +239,7 @@ $warehouse_id = auth('admin')->user()->warehouse_id;
                                     {{ translate('close_time') }}
                                 </label>
                                 <input type="time" name="close_time"
-                                                    class="form-control"  value="{{ @$stores->close_time}}" disabled required />
+                                                    class="close_time form-control"  value="" disabled required />
                                 <div class="invalid-feedback">
                                     Please enter store close time.
                                 </div>
@@ -349,7 +349,8 @@ function validateRating(input) {
 <script>
 $(document).ready(function() {
     $('#click_on_city').on('change', function() {
-
+        $('.open_time').val('');
+    $('.close_time').val('');
         $('.get_wh_code').val('');
         var citySelected = $(this).find('option:selected');
         var cityId = citySelected.val();
@@ -401,49 +402,20 @@ $(document).ready(function() {
 //     $('.get_wh_code').empty();
 
 // });
-
-// function getWarehouse(cityId = null) {
-//     $('.get_warehouse').empty();
-//     $.ajax({
-//         url: 'get-warehouse-by-city/' + cityId,
-//         type: 'GET',
-//         dataType: 'json',
-//         success: function(data) {
-//             if (data.message) {
-//                 var message = data.message;
-//                 Swal.fire({
-//                     title: 'Alert',
-//                     html: message,
-//                     icon: 'info',
-//                     confirmButtonText: 'OK'
-//                 });
-//                 // $('.get_warehouse').html('<option value="">'+ message +'</option>');
-//             } else {
-//                 $('.get_warehouse').empty();
-
-//                 // Add the default option
-//                 $('.get_warehouse').html('<option value="">Select Warehouse</option>');
-
-//                 $.each(data.warehouse, function(key, value) {
-//                     $('.get_warehouse').append('<option code="' + value.code + '" value="' +
-//                         value
-//                         .id + '">' +
-//                         value.name + '</option>');
-//                 });
-
-//                 console.log(data.prevId);
-//                 $('.get_warehouse').on('change', function() {
-//                     var code = $(this).find('option:selected');
-//                     var selectedCode = code.attr('code');
-//                     var prev_id = $('#prev_id').val();
-
-//                     $('.get_wh_code').val(selectedCode + data.prevId);
-//                 });
-//             }
-
-//         }
-//     });
-// };
+$('.get_warehouse').on('change', function() {
+ 
+    var warehouse_id = $(this).val();
+    $.ajax({
+        url: 'get-warehouse-data/' + warehouse_id,
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            console.log(data.warehouse);
+           $('.open_time').val(data.warehouse.open_time);
+           $('.close_time').val(data.warehouse.close_time);
+    }
+    });
+});
 </script>
 
 <script>

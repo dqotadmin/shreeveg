@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::group(['namespace' => 'Api\V1', 'middleware'=>'localization'], function () {
+Route::group(['namespace' => 'Api\V1', 'middleware' => 'localization'], function () {
 
     Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
         Route::post('register', 'CustomerAuthController@registration');
@@ -11,8 +11,8 @@ Route::group(['namespace' => 'Api\V1', 'middleware'=>'localization'], function (
 
         Route::post('check-phone', 'CustomerAuthController@check_phone');
         Route::post('verify-phone', 'CustomerAuthController@verify_phone');
-        Route::post('login-otp', 'CustomerAuthController@login_otp');// new api 
-        
+        Route::post('login-otp', 'CustomerAuthController@login_otp'); // new api 
+
         Route::post('check-email', 'CustomerAuthController@check_email');
         Route::post('verify-email', 'CustomerAuthController@verify_email');
 
@@ -20,6 +20,9 @@ Route::group(['namespace' => 'Api\V1', 'middleware'=>'localization'], function (
         Route::post('verify-token', 'PasswordResetController@verify_token');
         Route::put('reset-password', 'PasswordResetController@reset_password_submit');
         Route::post('get-location', 'LocationController@get_location');
+
+        Route::post('login-guest-user', 'CustomerAuthController@guestUserLogin');
+
 
         Route::group(['prefix' => 'delivery-man'], function () {
             Route::post('register', 'DeliveryManLoginController@registration');
@@ -104,9 +107,9 @@ Route::group(['namespace' => 'Api\V1', 'middleware'=>'localization'], function (
             Route::get('get-order-message', 'ConversationController@get_message_by_order');
             Route::post('send/{sender_type}', 'ConversationController@store_message_by_order');
 
-//            Route::get('get', 'ConversationController@messages');
-//            Route::post('send', 'ConversationController@messages_store');
-//            Route::post('chat-image', 'ConversationController@chat_image');
+            //            Route::get('get', 'ConversationController@messages');
+            //            Route::post('send', 'ConversationController@messages_store');
+            //            Route::post('chat-image', 'ConversationController@chat_image');
         });
 
         Route::group(['prefix' => 'wish-list'], function () {
@@ -174,5 +177,4 @@ Route::group(['namespace' => 'Api\V1', 'middleware'=>'localization'], function (
             Route::post('/submit', 'DeliveryManReviewController@submit_review');
         });
     });
-
 });

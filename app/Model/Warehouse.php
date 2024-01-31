@@ -19,7 +19,7 @@ class Warehouse extends Model
         return $this->morphMany('App\Model\Translation', 'translationable');
     }
 
-    public function scopeWithinRadius($query, $latitude, $longitude)
+    public function scopeWithinRadiusOld($query, $latitude, $longitude)
     {
         // Haversine formula to calculate distances
         $query->select('*')
@@ -28,6 +28,38 @@ class Warehouse extends Model
                     sin( radians( latitude ) ) ) ) AS distance', [$latitude, $longitude, $latitude])
             ->whereRaw('distance < radius')
             ->orderBy('distance', 'asc');
+    }
+
+    public function scopeWithinRadius($query, $latitude, $longitude)
+    {
+        // Haversine formula to calculate distances
+
+        $searchRadius = 100;
+
+        // Haversine formula to calculate distance
+        $distanceExpression = sprintf(
+            '(6371 * acos(cos(radians(%s)) * cos(radians(latitude)) * cos(radians(longitude) - radians(%s)) + sin(radians(%s)) * sin(radians(latitude))))',
+            $latitude,
+            $longitude,
+            $latitude
+        );
+
+        // Query to find nearby warehouses
+        $query
+            ->select('id', 'name', 'latitude', 'longitude')
+            ->selectRaw("{$distanceExpression} AS distance")
+            ->whereRaw("{$distanceExpression} < ?", [$searchRadius])
+            ->whereNull('deleted_at') // Assuming you have a soft delete column
+            ->orderBy('distance')
+            ->get();
+
+
+        // $query->select('*')
+        //     ->selectRaw('( 6371 * acos( cos( radians(?) ) * cos( radians( latitude ) ) *
+        //             cos( radians( longitude ) - radians(?) ) + sin( radians(?) ) *
+        //             sin( radians( latitude ) ) ) ) AS distance', [$latitude, $longitude, $latitude])
+        //     ->whereRaw('distance < radius')
+        //     ->orderBy('distance', 'asc');
     }
 
     public function getWarehouseAdmin()

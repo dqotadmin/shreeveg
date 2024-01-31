@@ -50,11 +50,9 @@ class LocationController extends Controller
 
         $latitude = $request->latitude;
         $longitude = $request->longitude;
-    
+
         $warehouses = Warehouse::withinRadius($latitude, $longitude)->get();
-    
+        dd($warehouses);
         return response()->json(['warehouses' => $warehouses]);
     }
-
-    
 }

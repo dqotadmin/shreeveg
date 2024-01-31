@@ -513,7 +513,7 @@ $(document).ready(function () {
                
                 
                 $('#latitude').val(mrkr.position.lat());
-                $('#longitude').val(mrkr.position.lat());
+                $('#longitude').val(mrkr.position.lng());
                 drawCircle(mrkr.position);
                 //console.log(mrkr.position);
                 google.maps.event.addListener(mrkr, "click", function (event) {

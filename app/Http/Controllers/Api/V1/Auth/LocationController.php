@@ -52,11 +52,18 @@ class LocationController extends Controller
         $longitude = $request->longitude;
 
         $warehouses = Warehouse::withinRadius($latitude, $longitude)->get();
+        $guestWarehouse =  Warehouse::where('is_guest_warehouse', '1')->first();
+        $assignWarehouseId = $guestWarehouse ? $guestWarehouse->id : 0;
+
         if (count($warehouses) > 0 && auth('api')->user()) {
-            //dd($warehouses[0]->id);
-            auth('api')->user()->update(['warehouse_id' => $warehouses[0]->id]);
+            $assignWarehouseId = $warehouses[0]->id;
+            if (count($warehouses) > 0) {
+                $assignWarehouseId = $warehouses[0]->id;
+            }
         }
-        //dd($warehouses);
+
+        auth('api')->user()->update(['warehouse_id' => $assignWarehouseId]);
+
         return response()->json(['warehouses' => $warehouses]);
     }
 }

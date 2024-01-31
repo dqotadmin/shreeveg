@@ -577,6 +577,34 @@ class CustomerAuthController extends Controller
             'errors' => $errors
         ], 401);
     }
+
+    public function guestUserLogin(Request $request): JsonResponse
+    {
+
+        $user = $this->user->where(['email' => 'guestUser@yopmail.com'])->first();
+
+        if (isset($user)) {
+
+            if (\Auth::loginUsingId($user->id)) {
+                $token = auth()->user()->createToken('RestaurantCustomerAuth')->accessToken;
+
+                $user->login_hit_count = 0;
+                $user->is_temp_blocked = 0;
+                $user->temp_block_time = null;
+                $user->updated_at = now();
+                $user->save();
+
+                return response()->json(['token' => $token], 200);
+            }
+        }
+
+        $errors = [];
+        $errors[] = ['code' => 'auth-001', 'message' => 'Guest User not found.'];
+        return response()->json([
+            'errors' => $errors
+        ], 401);
+    }
+
     /**
      * @param Request $request
      * @return JsonResponse

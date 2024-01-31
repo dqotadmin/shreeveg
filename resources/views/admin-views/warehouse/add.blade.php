@@ -176,57 +176,44 @@
                                         <div class="row g-3">
                                             <div class="col-6">
                                                 <div class="form-group mb-0">
-                                                    <label class="form-label text-capitalize"
-                                                        for="search_location">{{ translate('radius') }}
-                                                        <i class="tio-info-outined" data-toggle="tooltip"
-                                                            data-placement="top"
+                                                    <label class="form-label text-capitalize" for="search_location">{{ translate('radius') }}
+                                                        <i class="tio-info-outined" data-toggle="tooltip" data-placement="top"
                                                             title="{{ translate('radius in KM') }}">
                                                         </i>
                                                     </label>
-                                                    <select name="coverage" class="form-control" id="radius" style="width: 270px;padding: 3px;">
+                                                    <select name="coverage" class="form-control" id="radius" style="width: 270px; padding: 3px;">
                                                         @for($i=1; $i<=25; $i++)
-                                                               <option value="{{$i}}" >{{$i}} KM</option>
-                                                       @endfor
-                                                       </select>
-                                                    
+                                                        <option value="{{$i}}">{{$i}} KM</option>
+                                                        @endfor
+                                                    </select>
                                                 </div>
                                             </div>
-                                            {{-- <div class="col-12">
+                                            <div class="col-12">
                                                 <div class="form-group mb-0">
-                                                    <label class="form-label text-capitalize"
-                                                        for="address">{{ translate('address') }}
-                                                        <i class="tio-info-outined" data-toggle="tooltip"
-                                                            data-placement="top"
+                                                    <label class="form-label text-capitalize" for="address">{{ translate('address') }}
+                                                        <i class="tio-info-outined" data-toggle="tooltip" data-placement="top"
                                                             title="{{ translate('google map address') }}">
                                                         </i>
                                                     </label>
-                                                    <input type="text" id="address" name="address"
-                                                        class="form-control"
-                                                        placeholder="{{ translate('Ex:') }} Nagaur, Rajasthan 341001, India"
-                                                        value="{{ old('address') }}" readonly>
-                                                </div>
-                                            </div> --}}
-                                            <div class="col-12">
-                                                <div class="form-group mb-0">
-                                                    <label class="form-label text-capitalize"
-                                                        for="latitude">{{ translate('latitude') }}
-                                                        <i class="tio-info-outined" data-toggle="tooltip"
-                                                            data-placement="top"
-                                                            title="{{ translate('click_on_the_map_select_your_default_location') }}">
-                                                        </i>
-                                                    </label>
-                                                    <input type="text" id="latitude" name="latitude"
-                                                        class="form-control"
-                                                        placeholder="{{ translate('Ex:') }} 23.8118428"
-                                                        value="{{ old('latitude') }}" readonly>
+                                                    <input type="text" id="pac-input" name="address" class="form-control"
+                                                        placeholder="{{ translate('Ex:') }} Nagaur, Rajasthan 341001, India">
                                                 </div>
                                             </div>
                                             <div class="col-12">
                                                 <div class="form-group mb-0">
-                                                    <label class="form-label text-capitalize"
-                                                        for="longitude">{{ translate('longitude') }}
-                                                        <i class="tio-info-outined" data-toggle="tooltip"
-                                                            data-placement="top"
+                                                    <label class="form-label text-capitalize" for="latitude">{{ translate('latitude') }}
+                                                        <i class="tio-info-outined" data-toggle="tooltip" data-placement="top"
+                                                            title="{{ translate('click_on_the_map_select_your_default_location') }}">
+                                                        </i>
+                                                    </label>
+                                                    <input type="text" id="latitude" name="latitude" class="form-control"
+                                                        placeholder="{{ translate('Ex:') }} 23.8118428" value="{{ old('latitude') }}" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group mb-0">
+                                                    <label class="form-label text-capitalize" for="longitude">{{ translate('longitude') }}
+                                                        <i class="tio-info-outined" data-toggle="tooltip" data-placement="top"
                                                             title="{{ translate('click_on_the_map_select_your_default_location') }}">
                                                         </i>
                                                     </label>
@@ -235,36 +222,18 @@
                                                         value="{{ old('longitude') }}" readonly>
                                                 </div>
                                             </div>
-                                            {{-- <div class="col-12">
-                                                <div class="form-group mb-0">
-                                                    <label class="input-label">
-                                                        {{translate('coverage (km)')}}
-                                                        <i class="tio-info-outined" data-toggle="tooltip"
-                                                            data-placement="top"
-                                                            title="{{ translate('This value is the radius from your branch location, and customer can order inside  the circle calculated by this radius. The coverage area value must be less or equal than 1000.') }}">
-                                                        </i>
-                                                    </label>
-                                                    
-                                                    <input type="number" name="coverage" min="1" max="1000"
-                                                        class="form-control" placeholder="{{ translate('Ex : 3') }}" required
-                                                        value="{{ old('coverage') }}">
-                                                        <div class="invalid-feedback">
-                                                            Please enter coverage (km).
-                                                        </div>
-                                                </div>
-                                            </div> --}}
                                         </div>
                                     </div>
                                     <div class="col-md-6" id="location_map_div">
-                                        <input id="pac-input" name="address" class="controls rounded map_search" data-toggle="tooltip"
-                                        data-placement="right" name="map_location"
-                                        data-original-title="{{ translate('search_your_location_here') }}" type="text"
-                                        placeholder="{{ translate('search_here') }}" />
-                                        <div id="location_map_canvas" class="overflow-hidden rounded"
-                                            style="height: 100%"></div>
+                                        <div id="location_map_canvas" class="overflow-hidden rounded" style="height: 100%"></div>
+                                        <div id="search-container">
+                                            <label for="pac-input">Search Address</label>
+                                            <input type="text" id="pac-input" class="form-control" placeholder="Search address">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 
@@ -390,7 +359,7 @@ $('.city_code').on('change', function() {
     // Get the data attribute value
     var dataAttributeValue = selectedOption.attr("data-val");
     var prev_id = $('#prev_id').val();
-    console.log('previous id' + 'RJ' + dataAttributeValue + prev_id);
+    //console.log('previous id' + 'RJ' + dataAttributeValue + prev_id);
 
 
     $.ajax({
@@ -508,7 +477,7 @@ $(document).ready(function () {
 
         const input = document.getElementById("pac-input");
         const searchBox = new google.maps.places.SearchBox(input);
-        map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
+        //map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
 
         map.addListener("bounds_changed", () => {
             searchBox.setBounds(map.getBounds());
@@ -518,7 +487,7 @@ $(document).ready(function () {
 
         searchBox.addListener("places_changed", () => {
             const places = searchBox.getPlaces();
-            
+            //console.log(places[0].geometry.location);
             if (places.length == 0) {
                 return;
             }
@@ -541,10 +510,12 @@ $(document).ready(function () {
                     title: place.name,
                     position: place.geometry.location,
                 });
-                //console.log(mrkr.position)
-                drawCircle(mrkr.position);
+               
+                
                 $('#latitude').val(mrkr.position.lat());
                 $('#longitude').val(mrkr.position.lat());
+                drawCircle(mrkr.position);
+                //console.log(mrkr.position);
                 google.maps.event.addListener(mrkr, "click", function (event) {
                     document.getElementById('latitude').value = this.position.lat();
                     document.getElementById('longitude').value = this.position.lng();

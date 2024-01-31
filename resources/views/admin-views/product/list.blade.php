@@ -120,7 +120,8 @@
                                 
                                 @if(in_array(auth('admin')->user()->admin_role_id ,[3,5]))
                                     <th class="">{{translate('stock')}}</th>
-                                    <th data-searchable="true"  id="column3_search">{{translate('sequence')}}</th>
+                                    <th class="">{{translate('unit')}}</th>
+                                    <th class="column3_search">{{translate('sequence')}}</th>
                                
                                 @else
                                     <th class="text-center">{{translate('status')}}</th>
@@ -139,8 +140,8 @@
                             <tbody id="set-rows">
                                 @foreach($products as $key=>$product)
                                     <tr>
-                                        <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">{{$products->firstItem()+$key}}</td>
-                                        <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
+                                        <td>{{$products->firstItem()+$key}}</td>
+                                        <td>
                                             <a @if(auth('admin')->user()->admin_role_id == '1') href="{{route('admin.product.view',[$product['id']])}}" @endif class="product-list-media">
                                                 @if (!empty(json_decode($product['image'],true)))
                                             <img
@@ -154,12 +155,12 @@
                                             </h6>
                                             </a>
                                         </td>
-                                        <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
+                                        <td>
                                             <div class="max-85 text-right">
                                                 {{ $product['product_code'] }}
                                             </div>
                                         </td>
-                                        <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
+                                        <td>
                                             <div class="max-85 text-left">
                                                 @if (!empty($product->category->name))
                                                 {{ $product->category->name }}
@@ -167,44 +168,45 @@
                                             </div>
                                         </td>
                                         @if(in_array(auth('admin')->user()->admin_role_id, [3,5]))
-                                        
-                                            <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
+                                    
+                                            <td>
                                                 <?php
-                                                foreach(\App\Model\WarehouseProduct::where('warehouse_id',auth('admin')->user()->warehouse_id)->where('product_id',$product->id)->get() as $stock){
-                                                    $current_stock =  0;
+                                                    foreach(\App\Model\WarehouseProduct::where('warehouse_id',auth('admin')->user()->warehouse_id)->where('product_id',$product->id)->get() as $stock){
+                                                        $current_stock =  0;
 
-                                                        if($stock->total_stock > 0){
-                                                            $current_stock =  $stock->total_stock;
-                                                        }
-                                                        //echo $current_stock;
-                                                        ?>
-                                                        @if($current_stock <= $stock_limit)
-                                                        <span class="text-danger">  {{$current_stock}} /({{@$product->unit['title'] }})</span>
-                                                        @else
-                                                        {{$current_stock}} /({{@$product->unit['title'] }})
-                                                        @endif
-                                                        <?php $warehouse_id = auth('admin')->user()->warehouse_id; $product_id = $product['id'];
-                                                    if(\App\Model\WarehouseProduct::where('warehouse_id',$warehouse_id)->where('product_id',$product_id)->exists('product_details')){
-                                                    } 
-                                                }
+                                                            if($stock->total_stock > 0){
+                                                                $current_stock =  $stock->total_stock;
+                                                            }
+                                                            //echo $current_stock;
+                                                            ?>
+                                                            @if($current_stock <= $stock_limit)
+                                                            <span class="text-danger">  {{$current_stock}} </span>
+                                                            @else
+                                                            {{$current_stock}} 
+                                                            @endif
+                                                            <?php $warehouse_id = auth('admin')->user()->warehouse_id; $product_id = $product['id'];
+                                                        if(\App\Model\WarehouseProduct::where('warehouse_id',$warehouse_id)->where('product_id',$product_id)->exists('product_details')){
+                                                        } 
+                                                    }
                                                 ?> 
+                                               
                                             </td>
-                                
-                                            <td  >
-                                                <?php
-                                           $sequence =  \App\Model\WarehouseProduct::where('warehouse_id',auth('admin')->user()->warehouse_id)->where('product_id',$product->id)->first();
-                                                // dump($sequence);
-                                            ?> 
+                                            
+                                            <td>
+                                                ({{@$product->unit['title'] }})
+                                                </td>
+                                            <td>
+                                                <?php  $sequence =  \App\Model\WarehouseProduct::where('warehouse_id',auth('admin')->user()->warehouse_id)->where('product_id',$product->id)->first();
+                                                // dump($sequence);  ?> 
                                                 @if($sequence)
-                                                <input type="text" name="sequence" class="form-control w-50" value="{{ @$sequence->sequence }}"
-                                                onblur="updateSequence('{{ route('admin.product.update-sequence', ['id' => $sequence->id]) }}', this.value)" 
-                                            >
-                                            @endif
+                                                    <input type="text" name="sequence" class="form-control w-50" value="{{ @$sequence->sequence }}"
+                                                    onblur="updateSequence('{{ route('admin.product.update-sequence', ['id' => $sequence->id]) }}', this.value)">
+                                                @endif
+                                                
                                             </td>
-                                        
                                         
                                         @else
-                                            <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
+                                            <td>
                                                 <label class="toggle-switch my-0">
                                                     <input type="checkbox"
                                                         onclick="status_change_alert('{{ route('admin.product.status', [$product->id, $product->status ? 0 : 1]) }}', '{{ $product->status? translate('you want to disable this product'): translate('you want to active this product') }}', event)"
@@ -218,38 +220,37 @@
                                             
                                             <td>{{$product->tax}}</td>
                                         @endif
-                                    @if(in_array(auth('admin')->user()->admin_role_id ,[3]))
-                                            <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
-                                                <?php
-                                                foreach(\App\Model\WarehouseProduct::where('warehouse_id',auth('admin')->user()->warehouse_id)->where('product_id',$product->id)->get() as $stock){
-                                                ?>
-                                                
-                                                    <label class="toggle-switch my-0">
-                                                        <input type="checkbox"
-                                                            onclick="status_change_alert('{{ route('admin.product.status', [$stock->id, $stock->status ? 0 : 1]) }}', '{{ $stock->status? translate('you want to disable this product'): translate('you want to active this product') }}', event)"
-                                                            class="toggle-switch-input" id="stocksCheckbox{{ $product->id }}"
-                                                            {{ $stock->status ? 'checked' : '' }}>
-                                                        <span class="toggle-switch-label mx-auto text">
-                                                            <span class="toggle-switch-indicator"></span>
-                                                        </span>
-                                                    </label>
+                                        @if(in_array(auth('admin')->user()->admin_role_id ,[3]))
+                                                <td>
                                                     <?php
-                                                    }
-                                                ?> 
-                                            </td>
-                                            <!-- <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
-                                            <div class="text-center">
-                                                <label class="switch my-0">
-                                                    <input type="checkbox" class="status" {{ auth('admin')->user()->admin_role_id == 3 ? 'disabled' : '' }}  onchange="daily_needs('{{$product['id']}}','{{$product->daily_needs==1?0:1}}')"
-                                                        id="{{$product['id']}}" {{$product->daily_needs == 1?'checked':''}}>
-                                                    <span class="slider round"></span>
-                                                </label>
-                                            </div>
-                                            </td> -->
-                                    @endif
-                                        
+                                                    foreach(\App\Model\WarehouseProduct::where('warehouse_id',auth('admin')->user()->warehouse_id)->where('product_id',$product->id)->get() as $stock){
+                                                    ?>
+                                                    
+                                                        <label class="toggle-switch my-0">
+                                                            <input type="checkbox"
+                                                                onclick="status_change_alert('{{ route('admin.product.status', [$stock->id, $stock->status ? 0 : 1]) }}', '{{ $stock->status? translate('you want to disable this product'): translate('you want to active this product') }}', event)"
+                                                                class="toggle-switch-input" id="stocksCheckbox{{ $product->id }}"
+                                                                {{ $stock->status ? 'checked' : '' }}>
+                                                            <span class="toggle-switch-label mx-auto text">
+                                                                <span class="toggle-switch-indicator"></span>
+                                                            </span>
+                                                        </label>
+                                                        <?php
+                                                        }
+                                                    ?> 
+                                                </td>
+                                                <!-- <td>
+                                                <div class="text-center">
+                                                    <label class="switch my-0">
+                                                        <input type="checkbox" class="status" {{ auth('admin')->user()->admin_role_id == 3 ? 'disabled' : '' }}  onchange="daily_needs('{{$product['id']}}','{{$product->daily_needs==1?0:1}}')"
+                                                            id="{{$product['id']}}" {{$product->daily_needs == 1?'checked':''}}>
+                                                        <span class="slider round"></span>
+                                                    </label>
+                                                </div>
+                                                </td> -->
+                                        @endif 
                                         @if(auth('admin')->user()->admin_role_id != 5)
-                                        <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
+                                            <td>
                                                 <!-- Dropdown -->
                                                 <div class="btn--container justify-content-center">
                                                 @if( auth('admin')->user()->admin_role_id == 1 )
@@ -276,20 +277,18 @@
                                                 
                                                 </div>
                                             </td>
-                                            @endif
+                                        @endif
                                     
                                     </tr>
                                 @endforeach
                             </tbody>
                     </table>
-
-                        <div class="page-area">
-                            <table>
-                                <tfoot class="border-top">
-                                {!! $products->links() !!}
-                                </tfoot>
-                            </table>
-                        </div>
+                    <table>
+                            <tfoot>
+                            {!! $products->links() !!}
+                            </tfoot>
+                        </table>
+                          
                         @if(count($products)==0)
                             <div class="text-center p-4">
                                 <img class="w-120px mb-3" src="{{asset('/public/assets/admin/svg/illustrations/sorry.svg')}}" alt="Image Description">
@@ -436,67 +435,39 @@
             }
         });
     }
-</script><script>
-       $(document).ready(function() {
-        $.fn.dataTable.ext.order['sequence-asc'] = function(a, b) {
-            return customSequenceSort(a, b);
-        };
-
-        $.fn.dataTable.ext.order['sequence-desc'] = function(a, b) {
-            return customSequenceSort(b, a);
-        };
-
-        var table = $('#columnSearchDatatable').DataTable({
-            "columnDefs": [
-                { "type": "sequence", "targets": 5 } // Use custom sorting for 'sequence' column
-            ],
-            "orderCellsTop": true // Show sorting arrows in the header
-        });
+</script>
+<script>
+ $(document).on('ready', function () {
+    var datatable = $.HSCore.components.HSDatatables.init($('#columnSearchDatatable'), {
+        "columnDefs": [
+            {
+                "type": "numeric",
+                "targets": 5
+            }
+        ]
     });
 
-    function customSequenceSort(a, b) {
-        var numA = parseInt(a.match(/\d+/)[0], 10);
-        var numB = parseInt(b.match(/\d+/)[0], 10);
+    $('#column1_search').on('keyup', function () {
+        datatable
+            .columns(5)
+            .search(this.value)
+            .draw();
+    });
 
-        return numA - numB;
-    }
-</script>
-<!-- <script>
-        $(document).on('ready', function () {
-            // INITIALIZATION OF DATATABLES
-            var datatable = $.HSCore.components.HSDatatables.init($('#columnSearchDatatable'));
+    $('#column3_search').on('change', function () {
+        datatable
+            .columns(5)
+            .search(this.value)
+            .draw();
+    });
 
-            // Add searching functionality for the "Sequence" column
-            $('#column3_search').on('keyup', function () {
-                datatable
-                    .columns(5) // "Sequence" column index is 1
-                    .search(this.value)
-                    .draw();
-                    
-            });
+    // INITIALIZATION OF SELECT2
+    // =======================================================
+    $('.js-select2-custom').each(function () {
+        var select2 = $.HSCore.components.HSSelect2.init($(this));
+    });
+});
 
-            $('#column3_search').on('change', function () {
-                datatable
-                    .columns(5) // "Sequence" column index is 1
-                    .search(this.value)
-                    .draw();
-            });
 
-            // Add searching functionality for the "Status" column
-            $('#column1_search').on('change', function () {
-                var statusValue = this.value;
-                datatable
-                    .columns(4) // "Status" column index is 0
-                    .search(statusValue)
-                    .draw();
-            });
-
-            // ... (existing code)
-
-            // INITIALIZATION OF SELECT2
-            $('.js-select2-custom').each(function () {
-                var select2 = $.HSCore.components.HSSelect2.init($(this));
-            });
-        });
-</script> -->
+</script>  
 @endpush

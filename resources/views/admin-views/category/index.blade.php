@@ -29,20 +29,27 @@
                         </div>
                             @php($data = Helpers::get_business_settings('language'))
                             @php($default_lang = Helpers::get_default_language())
-                            {{-- @php($default_lang = 'en') --}}
                            
                 </div>
             </div>
         </div>
         <div class="col-sm-12 col-lg-12">
-            <div class="card">
+            <div class="">
                 <div class="card-header border-0">
                     <!-- Breadcrumbs -->
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            {!!  Helpers::generateBreadcrumbs($parentCategory) !!}
-                        </ol>
-                    </nav>
+                
+                    <?php $categoryId = @$parentCategory->id;
+                    if(isset($categoryId)){
+                        $breadcrumbsArray = Helpers::generateBreadcrumbsRecursive($categoryId);
+                        
+
+                        $breadcrumbsArray[] = '<li class="breadcrumb-item active" aria-current="page">' . translate('Categories') . '</li>';
+
+                        $breadcrumbsHtml = implode('', $breadcrumbsArray);
+
+                        echo '<nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="' . route('admin.category.list') . '">Categories</a></li>' . $breadcrumbsHtml . '</ol></nav>'; 
+                    }?>
+                       
                     <!-- End Breadcrumbs -->
                 </div>
 

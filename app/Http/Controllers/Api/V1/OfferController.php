@@ -26,6 +26,8 @@ class OfferController extends Controller
     public function get_flash_deal(Request $request): JsonResponse
     {
         try {
+            $warehouse_id = auth()->user()->warehouse_id;
+            dd($warehouse_id);
             $flash_deals = $this->flash_deal->active()
                 ->where('deal_type','flash_deal')
                 ->get();

@@ -1,4 +1,4 @@
-<?php return array(
+<?php return array (
   'attribute' => 'Attribute',
   'update' => 'Update',
   'name' => 'Name',
@@ -2662,4 +2662,8 @@
   'pin_code' => 'Pin code',
   'radius in KM' => 'Radius in KM',
   'google map address' => 'Google map address',
+  'Broker rate list' => 'Broker rate list',
+  'Receiver order list' => 'Receiver order list',
+  'order_list_history' => 'Order list history',
+  'receiver_order_history' => 'Receiver order history',
 );

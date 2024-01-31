@@ -340,9 +340,10 @@ public static function generateBreadcrumbsRecursive($categoryId)
                 $item['single_image'] = json_decode($item->productDetail['single_image']);
                 $item['choice_options'] = json_decode($item->productDetail['choice_options']);
 
-                if (isset($item)) {
+                if (isset($item) && $item['product_details'] ) {
 
-                    foreach (json_decode($item['product_details'], true) as $var) {
+
+                    foreach (json_decode(@$item['product_details'], true) as $var) {
                         $variations[] = [
                             'quantity' => $var['quantity'],
                             'discount' =>  $var['discount'],

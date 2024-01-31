@@ -80,51 +80,6 @@
                                 <div class="d-block">
                                     <div class="rating--review">
                                         <!-- Static -->
-                                        @if($data && array_key_exists('code', $data[0]))
-                                        <ul class="nav nav-tabs mb-4">
-                                            @foreach($data as $lang)
-                                            <li class="nav-item">
-                                                <a class="nav-link lang_link {{$lang['code'] == 'en'? 'active':''}}"
-                                                    href="#"
-                                                    id="{{$lang['code']}}-link">{{Helpers::get_language_name($lang['code']).'('.strtoupper($lang['code']).')'}}</a>
-                                            </li>
-                                            @endforeach
-                                        </ul>
-                                        @foreach($data as $lang)
-                                        <?php
-                                            if(count($product['translations'])){
-                                                $translate = [];
-                                                foreach($product['translations'] as $t)
-                                                {
-                                                    if($t->locale == $lang['code'] && $t->key=="name"){
-                                                        $translate[$lang['code']]['name'] = $t->value;
-                                                    }
-                                                    if($t->locale == $lang['code'] && $t->key=="description"){
-                                                        $translate[$lang['code']]['description'] = $t->value;
-                                                    }
-                                            
-                                                            }
-                                                        }
-                                            
-                                            ?>
-                                        <div class="{{$lang['code'] != 'en'? 'd-none':''}} lang_form"
-                                            id="{{$lang['code']}}-form">
-                                            <div class="form-group">
-                                                <label class="input-label"
-                                                    for="{{$lang['code']}}_name">{{translate('name')}}
-                                                ({{strtoupper($lang['code'])}})</label>
-                                                {{$translate[$lang['code']]['name']??$product['name']}}
-                                            </div>
-                                            <input type="hidden" value="{{$lang['code']}}">
-                                            <div class="form-group mb-0">
-                                                <label class="input-label"
-                                                    for="{{$lang['code']}}_description">{{translate('short')}}
-                                                {{translate('description')}} ({{strtoupper($lang['code'])}})</label>
-                                                {{$translate[$lang['code']]['description']??$product['description']}}
-                                            </div>
-                                        </div>
-                                        @endforeach
-                                        @else
                                         <div id="english-form">
                                             <div class="form-group">
                                                 <label class="input-label"
@@ -135,10 +90,47 @@
                                                 <label class="input-label"
                                                     for="exampleFormControlInput1">{{translate('short')}}
                                                 {{translate('description')}} (EN)</label>
-                                                {{ $product['description'] }}
+                                               <!-- <span title="{{$product['description']}}">{{ Str::words($product['description'], '25')}}   </span>--> 
+                                               <div class="product-description">
+                                                    <div class="short-description" title="{{ $product['description'] }}">
+                                                        {!! Str::words($product['description'], 25, '...') !!}
+                                                    </div>
+
+                                                    <div class="full-description" style="display: none;">
+                                                        {{ $product['description'] }}
+                                                    </div>
+
+                                                    @if (str_word_count($product['description']) > 25)
+                                                        <button class="read-more-trigger_1 btn btn-info" type="button">Read More</button>
+                                                    @endif
+                                                </div>
                                             </div>
                                         </div>
-                                        @endif
+                                        <div id="english-form" class="mt-3">
+                                            <div class="form-group">
+                                                <label class="input-label"
+                                                    for="exampleFormControlInput1">{{translate('name')}} (HN)</label>
+                                                {{$product['hn_name']}}
+                                            </div>
+                                            <div class="form-group mb-0">
+                                                <label class="input-label"
+                                                    for="exampleFormControlInput1">{{translate('short')}}
+                                                {{translate('description')}} (HN)</label>
+                                                <div class="product-description">
+                                                    <div class="short-description" title="{{ $product['hn_description'] }}">
+                                                    {{ Str::words($product['hn_description'], '25')}} 
+                                                    </div>
+
+                                                    <div class="full-description" style="display: none;">
+                                                        {{ $product['hn_description'] }}
+                                                    </div>
+
+                                                    @if (str_word_count($product['hn_description']) > 25)
+                                                        <button class="read-more-trigger_2 btn btn-info" type="button">Read More</button>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
                                         <!-- Static -->
                                     </div>
                                 </div>
@@ -150,8 +142,7 @@
             <div class="col-lg-6">
                 <div class="card mb-3">
                     <div class="card-body">
-                        <h5 class="mb-3">{{translate('product')}} {{translate('image')}} <small class="text-danger">* (
-                            {{translate('ratio')}} 1:1 )</small>
+                        <h5 class="mb-3">{{translate('product')}} {{translate('image')}} 
                         </h5>
                         <div class="product--coba">
                             <div class="row g-2" id="">
@@ -534,5 +525,28 @@
             $('input[name="total_stock"]').attr("readonly", false);
         }
     }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    var readMoreButton_1 = document.querySelector('.read-more-trigger_1');
+    var readMoreButton_2 = document.querySelector('.read-more-trigger_2');
+    var shortDescription = document.querySelector('.short-description');
+    var fullDescription = document.querySelector('.full-description');
+
+    if (readMoreButton_1) {
+        readMoreButton_1.addEventListener('click', function () {
+            shortDescription.style.display = 'none';
+            fullDescription.style.display = 'block';
+            readMoreButton_1.style.display = 'none';
+        });
+    }
+    if (readMoreButton_2) {
+        readMoreButton_2.addEventListener('click', function () {
+            shortDescription.style.display = 'none';
+            fullDescription.style.display = 'block';
+            readMoreButton_2.style.display = 'none';
+        });
+    }
+});
 </script>
 @endpush

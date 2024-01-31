@@ -34,11 +34,15 @@
                     <div class="form-group">
                         <label for="address_address">Address</label>
                         <input type="text" id="address-input" name="address_address" class=" map-input" placeholder="search address">
-                        <input type="text" id="radius" name="address_address" class="" placeholder="enter radius">
-                        <input type="text" name="address_latitude" id="address-latitude" placeholder="address_latitude" />
-                        <input type="text" name="address_longitude" id="address-longitude" placeholder="address_longitude" />
+                        <select name="coverage" class="form-control" id="radius" style="width: 270px;padding: 3px;">
+                            @for($i=1; $i<=25; $i++)
+                                   <option value="{{$i}}" >{{$i}} KM</option>
+                           @endfor
+                           </select>
+                        <input type="text" name="latitude" id="latitude" placeholder="address_latitude" />
+                        <input type="text" name="address_longitude" id="longitude" placeholder="address_longitude" />
                     </div>
-                    <div id="address-map-container" style="width:100%;height:400px; ">
+                    <div id="location_map_canvas" style="width:100%;height:400px; ">
                         <div style="width: 100%; height: 100%" id="address-map"></div>
                     </div>
                     
@@ -67,87 +71,145 @@
 <!-- add multirows for revise time slot -->
 <!-- add multirows for delivery time slot -->
 <script>
-function initialize() {
 
-$('form').on('keyup keypress', function(e) {
-    var keyCode = e.keyCode || e.which;
-    if (keyCode === 13) {
-        e.preventDefault();
-        return false;
-    }
-});
-const locationInputs = document.getElementsByClassName("map-input");
-console.log(locationInputs);
-const autocompletes = [];
-const geocoder = new google.maps.Geocoder;
-for (let i = 0; i < locationInputs.length; i++) {
+$(document).ready(function () {
+    var map;
+    var marker;
+    var circle;
 
-    const input = locationInputs[i];
-    const fieldKey = input.id.replace("-input", "");
-    const isEdit = document.getElementById(fieldKey + "-latitude").value != '' && document.getElementById(fieldKey + "-longitude").value != '';
+    function initAutocomplete() {
+        var myLatLng = {
+            lat: 23.811842872190343,
+            lng: 90.356331
+        };
 
-    const latitude = parseFloat(document.getElementById(fieldKey + "-latitude").value) || -33.8688;
-    const longitude = parseFloat(document.getElementById(fieldKey + "-longitude").value) || 151.2195;
-
-    const map = new google.maps.Map(document.getElementById(fieldKey + '-map'), {
-        center: {lat: latitude, lng: longitude},
-        zoom: 13
-    });
-    const marker = new google.maps.Marker({
-        map: map,
-        position: {lat: latitude, lng: longitude},
-    });
-    console.log(center);
-    marker.setVisible(isEdit);
-
-    const autocomplete = new google.maps.places.Autocomplete(input);
-    autocomplete.key = fieldKey;
-    autocompletes.push({input: input, map: map, marker: marker, autocomplete: autocomplete});
-}
-
-for (let i = 0; i < autocompletes.length; i++) {
-    const input = autocompletes[i].input;
-    const autocomplete = autocompletes[i].autocomplete;
-    const map = autocompletes[i].map;
-    const marker = autocompletes[i].marker;
-
-    google.maps.event.addListener(autocomplete, 'place_changed', function () {
-        marker.setVisible(false);
-        const place = autocomplete.getPlace();
-
-        geocoder.geocode({'placeId': place.place_id}, function (results, status) {
-            if (status === google.maps.GeocoderStatus.OK) {
-                const lat = results[0].geometry.location.lat();
-                const lng = results[0].geometry.location.lng();
-                setLocationCoordinates(autocomplete.key, lat, lng);
-            }
+        map = new google.maps.Map(document.getElementById("location_map_canvas"), {
+            center: myLatLng,
+            zoom: 13,
+            mapTypeId: "roadmap",
         });
 
-        if (!place.geometry) {
-            window.alert("No details available for input: '" + place.name + "'");
-            input.value = "";
-            return;
+        marker = new google.maps.Marker({
+            position: myLatLng,
+            map: map,
+        });
+
+        marker.setMap(map);
+        var geocoder = new google.maps.Geocoder();
+
+        google.maps.event.addListener(map, 'click', function (mapsMouseEvent) {
+            var coordinates = JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2);
+            var coordinates = JSON.parse(coordinates);
+            var latlng = new google.maps.LatLng(coordinates['lat'], coordinates['lng']);
+            marker.setPosition(latlng);
+            map.panTo(latlng);
+
+            document.getElementById('latitude').value = coordinates['lat'];
+            document.getElementById('longitude').value = coordinates['lng'];
+
+            geocoder.geocode({
+                'latLng': latlng
+            }, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    if (results[1]) {
+                        document.getElementById('address').innerHTML = results[1].formatted_address;
+                    }
+                }
+            });
+        });
+
+        const input = document.getElementById("address-input");
+        const searchBox = new google.maps.places.SearchBox(input);
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
+
+        map.addListener("bounds_changed", () => {
+            searchBox.setBounds(map.getBounds());
+        });
+
+        let markers = [];
+
+        searchBox.addListener("places_changed", () => {
+            const places = searchBox.getPlaces();
+
+            if (places.length == 0) {
+                return;
+            }
+
+            markers.forEach((marker) => {
+                marker.setMap(null);
+            });
+            markers = [];
+
+            const bounds = new google.maps.LatLngBounds();
+
+            places.forEach((place) => {
+                if (!place.geometry || !place.geometry.location) {
+                    console.log("Returned place contains no geometry");
+                    return;
+                }
+
+                var mrkr = new google.maps.Marker({
+                    map,
+                    title: place.name,
+                    position: place.geometry.location,
+                });
+
+                google.maps.event.addListener(mrkr, "click", function (event) {
+                    document.getElementById('latitude').value = this.position.lat();
+                    document.getElementById('longitude').value = this.position.lng();
+
+                    $('#address').val(place.formatted_address);
+
+                    // Draw circle when a suggestion is selected
+                    drawCircle(this.position);
+                });
+
+                markers.push(mrkr);
+
+                if (place.geometry.viewport) {
+                    bounds.union(place.geometry.viewport);
+                } else {
+                    bounds.extend(place.geometry.location);
+                }
+            });
+            map.fitBounds(bounds);
+        });
+
+        // Function to draw circle
+        function drawCircle(center) {
+            var radius = parseFloat($('#radius').val());
+            if (!isNaN(radius)) {
+                // Check if a circle already exists
+                if (circle) {
+                    // Update the existing circle's radius
+                    circle.setRadius(radius * 1000);
+                } else {
+                    // Create a new circle
+                    circle = new google.maps.Circle({
+                        map: map,
+                        fillColor: "#ADD8E6",
+                        fillOpacity: 0.3,
+                        strokeColor: "#0000FF",
+                        strokeOpacity: 0.8,
+                        strokeWeight: 2,
+                        center: center,
+                        radius: radius * 1000
+                    });
+                }
+            }
         }
 
-        if (place.geometry.viewport) {
-            map.fitBounds(place.geometry.viewport);
-        } else {
-            map.setCenter(place.geometry.location);
-            map.setZoom(17);
-        }
-        marker.setPosition(place.geometry.location);
-        marker.setVisible(true);
+        // Draw circle on radius input change
+        $('#radius').on('change', function () {
+            var radius = parseFloat($(this).val());
+            if (!isNaN(radius)) {
+                drawCircle(marker.getPosition());
+            }
+        });
+    }
 
-    });
-}
-}
-
-function setLocationCoordinates(key, lat, lng) {
-const latitudeField = document.getElementById(key + "-" + "latitude");
-const longitudeField = document.getElementById(key + "-" + "longitude");
-latitudeField.value = lat;
-longitudeField.value = lng;
-}
+    initAutocomplete();
+});
 </script>
 <script
     src="https://maps.googleapis.com/maps/api/js?key={{ \App\Model\BusinessSetting::where('key', 'map_api_client_key')->first()?->value }}&libraries=places&callback=initialize">

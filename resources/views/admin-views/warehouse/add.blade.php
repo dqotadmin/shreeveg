@@ -191,7 +191,7 @@
                                                     
                                                 </div>
                                             </div>
-                                            <div class="col-12">
+                                            {{-- <div class="col-12">
                                                 <div class="form-group mb-0">
                                                     <label class="form-label text-capitalize"
                                                         for="address">{{ translate('address') }}
@@ -205,7 +205,7 @@
                                                         placeholder="{{ translate('Ex:') }} Nagaur, Rajasthan 341001, India"
                                                         value="{{ old('address') }}" readonly>
                                                 </div>
-                                            </div>
+                                            </div> --}}
                                             <div class="col-12">
                                                 <div class="form-group mb-0">
                                                     <label class="form-label text-capitalize"
@@ -256,7 +256,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6" id="location_map_div">
-                                        <input id="pac-input" class="controls rounded map_search" data-toggle="tooltip"
+                                        <input id="pac-input" name="address" class="controls rounded map_search" data-toggle="tooltip"
                                         data-placement="right" name="map_location"
                                         data-original-title="{{ translate('search_your_location_here') }}" type="text"
                                         placeholder="{{ translate('search_here') }}" />
@@ -460,20 +460,24 @@ function generateCode() {
 </script>
 
 <script>
-$(document).ready(function() {
+$(document).ready(function () {
+    var map;
+    var marker;
+    var circle;
+
     function initAutocomplete() {
         var myLatLng = {
             lat: 23.811842872190343,
             lng: 90.356331
         };
 
-        const map = new google.maps.Map(document.getElementById("location_map_canvas"), {
+        map = new google.maps.Map(document.getElementById("location_map_canvas"), {
             center: myLatLng,
             zoom: 13,
             mapTypeId: "roadmap",
         });
 
-        var marker = new google.maps.Marker({
+        marker = new google.maps.Marker({
             position: myLatLng,
             map: map,
         });
@@ -481,7 +485,7 @@ $(document).ready(function() {
         marker.setMap(map);
         var geocoder = new google.maps.Geocoder();
 
-        google.maps.event.addListener(map, 'click', function(mapsMouseEvent) {
+        google.maps.event.addListener(map, 'click', function (mapsMouseEvent) {
             var coordinates = JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2);
             var coordinates = JSON.parse(coordinates);
             var latlng = new google.maps.LatLng(coordinates['lat'], coordinates['lng']);
@@ -493,10 +497,10 @@ $(document).ready(function() {
 
             geocoder.geocode({
                 'latLng': latlng
-            }, function(results, status) {
+            }, function (results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {
                     if (results[1]) {
-                        document.getElementById('address').innerHtml = results[1].formatted_address;
+                        document.getElementById('address').innerHTML = results[1].formatted_address;
                     }
                 }
             });
@@ -514,7 +518,7 @@ $(document).ready(function() {
 
         searchBox.addListener("places_changed", () => {
             const places = searchBox.getPlaces();
-
+            
             if (places.length == 0) {
                 return;
             }
@@ -537,13 +541,16 @@ $(document).ready(function() {
                     title: place.name,
                     position: place.geometry.location,
                 });
-
-                google.maps.event.addListener(mrkr, "click", function(event) {
+                //console.log(mrkr.position)
+                drawCircle(mrkr.position);
+                $('#latitude').val(mrkr.position.lat());
+                $('#longitude').val(mrkr.position.lat());
+                google.maps.event.addListener(mrkr, "click", function (event) {
                     document.getElementById('latitude').value = this.position.lat();
                     document.getElementById('longitude').value = this.position.lng();
 
-                    $('#address').val(place.formatted_address);
-                   
+                    //$('#address').val(place.formatted_address);
+
                     // Draw circle when a suggestion is selected
                     drawCircle(this.position);
                 });
@@ -558,26 +565,33 @@ $(document).ready(function() {
             });
             map.fitBounds(bounds);
         });
-        
+
         // Function to draw circle
         function drawCircle(center) {
             var radius = parseFloat($('#radius').val());
             if (!isNaN(radius)) {
-                var circle = new google.maps.Circle({
-                    map: map,
-                    fillColor: "#ADD8E6",
-                    fillOpacity: 0.3,
-                    strokeColor: "#0000FF",
-                    strokeOpacity: 0.8,
-                    strokeWeight: 2,
-                    center: center,
-                    radius: radius*1000
-                });
+                // Check if a circle already exists
+                if (circle) {
+                    // Update the existing circle's radius
+                    circle.setRadius(radius * 1000);
+                } else {
+                    // Create a new circle
+                    circle = new google.maps.Circle({
+                        map: map,
+                        fillColor: "#ADD8E6",
+                        fillOpacity: 0.3,
+                        strokeColor: "#0000FF",
+                        strokeOpacity: 0.8,
+                        strokeWeight: 2,
+                        center: center,
+                        radius: radius * 1000
+                    });
+                }
             }
         }
-        
+
         // Draw circle on radius input change
-        $('#radius').on('change', function() {
+        $('#radius').on('change', function () {
             var radius = parseFloat($(this).val());
             if (!isNaN(radius)) {
                 drawCircle(marker.getPosition());

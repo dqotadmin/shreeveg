@@ -5302,7 +5302,17 @@ body:not(.navbar-vertical-aside-closed-mode)
 #location_map_div {
     min-height: 200px;
 }
+.product_model .modal .modal-dialog {
+    max-width: 1080px !important;
+}
 
+.product_tabke_mainmn .item {
+    font-weight: 500;
+}
+.product_tabke_mainmn .heading {
+    color: #000;
+    font-weight: 500;
+}
 input.non-printable.btn-primary {
     margin: 5px 0;
 }

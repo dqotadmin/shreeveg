@@ -124,7 +124,7 @@ class Helpers
             }
         }
         // product is  FlashDealProduct
-        $products = FlashDeal::query()->whereJsonContains('warehouse_id', $warehouseId)->active()->whereHas('products', function ($qu) use ($product_id) {
+        $products = FlashDeal::where('offer_type', 'other')->whereJsonContains('warehouse_id', $warehouseId)->active()->whereHas('products', function ($qu) use ($product_id) {
             $qu->where('product_id', $product_id);
         })->orderBy('title', 'asc')->get();
         //$products = FlashDeal::query()->whereJsonContains('warehouse_id', $warehouseId)->get();
@@ -144,7 +144,8 @@ class Helpers
             }
         }
 
-        $adminOffers = FlashDeal::where('offer_type', 'one_rupee')->whereJsonContains('warehouse_id', $warehouseId)->active()->whereHas('products')->orderBy('title', 'asc')->get();
+        //$adminOffers = FlashDeal::where('offer_type', 'one_rupee')->whereJsonContains('warehouse_id', $warehouseId)->active()->whereHas('products')->orderBy('title', 'asc')->get();
+        $adminOffers = FlashDeal::whereJsonContains('warehouse_id', $warehouseId)->active()->whereHas('products')->orderBy('title', 'asc')->get();
         //dd(($adminOffers), $warehouseId);
         return  $adminOffers;
     }

@@ -15,6 +15,8 @@ use App\Model\WarehouseProduct;
 use App\Model\WarehouseCategory;
 use App\Model\StoreProduct;
 use App\User;
+use App\Model\Warehouse;
+
 use Box\Spout\Common\Exception\InvalidArgumentException;
 use Box\Spout\Common\Exception\IOException;
 use Box\Spout\Common\Exception\UnsupportedTypeException;
@@ -50,6 +52,7 @@ class POSController extends Controller
         private User $user,
         private WarehouseCategory $warehouse_categories,
         private Store $store,
+        private Warehouse $warehouse,
         private StoreProduct $store_products,
         private WarehouseProduct $warehouse_products,
 
@@ -558,9 +561,23 @@ class POSController extends Controller
 
         // }
 
+        // $warehouse_id = null;
+        // $authUser = auth('admin')->user();
+        // if (in_array($authUser->admin_role_id, [6, 7])) {
+        //     $warehouse_id = $authUser->Store->warehouse_id;
+        // } elseif (in_array($authUser->admin_role_id, [3, 4])) {
+        //     $warehouse_id = $authUser->warehouse_id;
+        // } elseif ($authUser->admin_role_id == 1) {
+
+        // }
+
         $start_date = $request['start_date'];
         $end_date = $request['end_date'];
 
+        if (request('warehouse_id') && request('warehouse_id') != 'all') {
+            $warehouse_id = request('warehouse_id');
+            $query = $query->where('warehouse_id', request('warehouse_id'));
+        }
         $query = $query->when((!is_null($start_date) && !is_null($end_date)), function ($query) use ($start_date, $end_date) {
             return $query->whereDate('created_at', '>=', $start_date)
                 ->whereDate('created_at', '<=', $end_date);
@@ -596,8 +613,8 @@ class POSController extends Controller
         $orders = $query->orderBy('id', 'desc')->paginate(Helpers::getPagination())->appends($query_param);
         //return $orders;
         //dd($orders);
-
-        return view('admin-views.pos.order.list', compact('orders', 'search', 'branches', 'start_date', 'end_date'));
+        $warehouses = $this->warehouse->active()->where('deleted_at', null)->get();
+        return view('admin-views.pos.order.list', compact('orders', 'search', 'branches', 'start_date', 'end_date', 'warehouse_id', 'warehouses'));
     }
 
     /**

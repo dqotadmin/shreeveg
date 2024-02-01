@@ -26,13 +26,17 @@
                 <h5 class="form-bold w-100 mb-3">{{ translate('Select Date Range') }}</h5>
                 <form class="w-100">
                     <div class="row g-3 g-sm-4 g-md-3 g-lg-4">
-                        <!-- <div class="col-sm-6 col-md-4 col-lg-2">
-                            <select class="custom-select custom-select-sm text-capitalize min-h-45px" name="branch_id">
-                                <option disabled>--- {{translate('select')}} {{translate('branch')}} ---</option>
-                                @foreach($branches as $branch)
+                        @if(auth('admin')->user()->admin_role_id == 1)
+                        <div class="col-sm-6 col-md-4 col-lg-2">
+                            <select class="custom-select custom-select-sm text-capitalize min-h-45px" name="warehouse_id">
+                                <option disabled>--- {{translate('select')}} {{translate('warehouse')}} ---</option>
+                                <option value="all" {{ $warehouse_id == 'all' ? 'selected': ''}}>{{translate('all')}} {{translate('warehouse')}}</option>
+                                @foreach($warehouses as $warehouse)
+                                    <option value="{{$warehouse['id']}}" {{ $warehouse['id'] == $warehouse_id ? 'selected' : ''}}>{{$warehouse['name']}}</option>
                                 @endforeach
                             </select>
-                        </div> -->
+                        </div>
+                        @endif
                         <div class="col-sm-6 col-md-4 col-lg-3">
                             <div class="input-date-group">
                                 <label class="input-label" for="start_date">{{ translate('Start Date') }}</label>

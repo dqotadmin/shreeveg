@@ -225,7 +225,7 @@
                                 title="{{translate('order_list')}}">
                                 <i class="tio-map nav-icon"></i>
                                 <span
-                                    class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Receiver order list')}}</span>
+                                    class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('receiver_today_order')}}</span>
                             </a>
                         </li>
                         <li class="navbar-vertical-aside-has-menu ">

@@ -41,14 +41,14 @@
 
                 <h3 class="my-4"> Product Details </h3>
                 <div class="row g-3">
-                    <div class="col-md-8">
+                    <div class="col-md-10">
                         <div class="row g-3">
                             <div class="col-md-2">
                                 <div class="form-group mb-0">
                                     <h5>Category</h5>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <div class="form-group mb-0">
                                     <h5>Product</h5>
                                 </div>
@@ -64,12 +64,12 @@
                                     <h5>Rate(rupees)</h5>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <div class="form-group mb-0">
                                     <h5>Rate(paisa)</h5>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <div class="form-group mb-0">
                                     <h5>Unit</h5>
                                 </div>
@@ -80,7 +80,7 @@
 
 
                 <div class="row g-3">
-                    <div class="col-md-8">
+                    <div class="col-md-10">
                         @foreach($categories as $category)
                         <div class="row g-3">
                             <div class="col-md-2">
@@ -94,7 +94,7 @@
                                     <div class="col-md-2"></div>
                                 @endif
 
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <div class="form-group mb-0">
                                         <input type="hidden" name="product_id[]" value="{{$product->id}}">
                                         <input type="text"  value="{{$product->name}} ({{ @$product->product_code }})" class="form-control" title="{{$product->name}} ({{ @$product->product_code }})"
@@ -115,7 +115,7 @@
 " >
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-1">
                                     <div class="form-group mb-0">
                                     <select name="paisa[]" class="form-control js-select2-custom">
                                         @for($i=0; $i<=100; $i++)
@@ -125,7 +125,7 @@
                                     </select>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-1">
                                     <div class="form-group mb-0">
                                     <select name="unit[]" class="form-control js-select2-custom">
                                         <option value="kg">{{translate('kg')}}</option>

@@ -37,7 +37,7 @@
                         @foreach($rows as $row)
                             @foreach($row->rateListDetail as $key => $value)
                                 <?php   if (in_array($value->product_id, $wh_products)) {  ?>
-                                    <option value="{{ @$value->productDetail->id }}">{{ @$value->productDetail->name }}</option>
+                                    <option value="{{ @$value->productDetail->id }}" {{@$value->productDetail->id  == $productID? 'selected': ''}}>{{ @$value->productDetail->name }}</option>
                         
                                 <?php } ?>
                             @endforeach
@@ -52,7 +52,6 @@
 
             <div class="row g-3">
             @foreach($rows as $row)
-            
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-body">
@@ -83,7 +82,9 @@
                                          <th>Order Qty</th>
                                         </thead>
                                         <tbody>
+                                       
                                             @foreach($row->rateListDetail as $key => $value)
+    
                                             <?php  // if (in_array($value->product_id, $wh_products)) { 
                                                 if ($productID== $value->product_id) { ?>
       
@@ -94,7 +95,7 @@
                                                 <td>{{ @$value->productDetail->name }}</td>
                                                 <td id="available_quantity">{{ @$value->available_qty }}</td>
                                                 <td>{{@$value->unit }}</td>
-                                                <td>{{ @$value->rate }}</td>
+                                                <td>{{ @    $value->rate }}</td>
                                                 <td><input type="text" name="order_qty[]" class="form-control" id="order_qty" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"></td>
                                                 </tr>
                                           <?php }

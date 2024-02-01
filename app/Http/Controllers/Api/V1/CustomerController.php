@@ -8,6 +8,7 @@ use App\Model\Conversation;
 use App\Model\CustomerAddress;
 use App\Model\Newsletter;
 use App\Model\Order;
+use App\Model\Warehouse;
 use App\Model\OrderDetail;
 use App\User;
 use Illuminate\Http\Request;
@@ -179,7 +180,13 @@ class CustomerController extends Controller
      */
     public function info(Request $request): JsonResponse
     {
-       return response()->json($request->user(), 200);
+        $userData =   $request->user();
+        if($userData->warehouse_id){
+            $whData = Warehouse::find($userData->warehouse_id);
+            $userData['delivery_time']= json_decode($whData->delivery_time,true);
+        }
+       // $warehouse_data = $warehouse_id
+        return response()->json($userData, 200);
     }
 
     /**

@@ -2667,4 +2667,5 @@
   'order_list_history' => 'Order list history',
   'receiver_order_history' => 'Receiver order history',
   'out for delivery' => 'Out for delivery',
+  'receiver_today_order' => 'Receiver today order',
 );

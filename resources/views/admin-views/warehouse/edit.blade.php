@@ -534,6 +534,7 @@ function generateCode() {
 
                 $('#latitude').val(mrkr.position.lat());
                 $('#longitude').val(mrkr.position.lng());
+                drawCircle(mrkr.position);
 
                 google.maps.event.addListener(mrkr, "click", function (event) {
                     document.getElementById('latitude').value = this.position.lat();
@@ -555,11 +556,11 @@ function generateCode() {
         });
 
         // Function to draw circle
-        function drawCircle(center) {
+        function drawCircle(center, radiusChange =null) {
             var radius = parseFloat($('#radius').val());
             if (!isNaN(radius)) {
                 // Check if a circle already exists
-                if (circle) {
+                if (circle && radiusChange) {
                     // Update the existing circle's radius
                     circle.setRadius(radius * 1000);
                 } else {
@@ -582,7 +583,7 @@ function generateCode() {
         $('#radius').on('change', function () {
             var radius = parseFloat($(this).val());
             if (!isNaN(radius)) {
-                drawCircle(marker.getPosition());
+                drawCircle(marker.getPosition(),1);
             }
         });
     }

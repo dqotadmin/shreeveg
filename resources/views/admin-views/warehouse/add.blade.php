@@ -487,11 +487,12 @@ $(document).ready(function () {
 
         searchBox.addListener("places_changed", () => {
             const places = searchBox.getPlaces();
+            
             //console.log(places[0].geometry.location);
             if (places.length == 0) {
                 return;
             }
-
+           // return;
             markers.forEach((marker) => {
                 marker.setMap(null);
             });
@@ -538,14 +539,15 @@ $(document).ready(function () {
         });
 
         // Function to draw circle
-        function drawCircle(center) {
+        function drawCircle(center,radiusChange =null) {
             var radius = parseFloat($('#radius').val());
             if (!isNaN(radius)) {
+
                 // Check if a circle already exists
-                if (circle) {
+                if (circle && radiusChange) {
                     // Update the existing circle's radius
                     circle.setRadius(radius * 1000);
-                } else {
+                } else { 
                     // Create a new circle
                     circle = new google.maps.Circle({
                         map: map,
@@ -565,7 +567,7 @@ $(document).ready(function () {
         $('#radius').on('change', function () {
             var radius = parseFloat($(this).val());
             if (!isNaN(radius)) {
-                drawCircle(marker.getPosition());
+                drawCircle(marker.getPosition(),1);
             }
         });
     }

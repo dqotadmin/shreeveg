@@ -146,9 +146,10 @@ class BannerController extends Controller
         ], [
             'title.required' => 'Title is required!',
         ]);
-
         $banner = $this->banner->find($id);
         $banner->title = $request->title;
+        $banner->item_type = $request->item_type;
+
         if ($request['item_type'] == 'product') {
             $banner->product_id = $request->product_id;
             $banner->category_id = null;
@@ -159,7 +160,7 @@ class BannerController extends Controller
         $banner->video_url = $request->video_url?  $request->video_url : null;
 
         $banner->image = $request->has('image') ? Helpers::update('banner/', $banner->image, 'png', $request->file('image')) : $banner->image;
-        $banner->save();
+$banner->save();
         Toastr::success(translate('Banner updated successfully!'));
         return redirect()->route('admin.banner.add-new');
     }

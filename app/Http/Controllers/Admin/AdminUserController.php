@@ -445,6 +445,7 @@ class AdminUserController extends Controller
     public function login_superadmin(Request $request, $id)
     {
         $row = \App\Model\Admin::find($id);
+        
       if($row->id == 1){
         \Session::forget('issuperadminlogin');
       }else{

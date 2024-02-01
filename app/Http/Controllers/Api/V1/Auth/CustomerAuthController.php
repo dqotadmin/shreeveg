@@ -630,9 +630,11 @@ class CustomerAuthController extends Controller
                     'otp' => $otp
                 ], 200);
             } else {
+                $errors[] = ['code' => '404', 'message' => 'User Not Found'];
                 return response()->json([
-                    'errors' => 'User not found'
-                ], 401);
+                    'errors' => $errors
+                ], 404);
+                
             }
         }
     }

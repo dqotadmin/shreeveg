@@ -109,11 +109,11 @@
                            
                             <tr>
                                     <td>{{$key+1}}</td>
-                                    <td>{{$data->product->category['name']}} </td>
-                                    <td>{{$data->product['name']}} (<strong>{{$data->product['product_code']}}</strong>)</td>
+                                    <td>{{@$data->product->category['name']}} </td>
+                                    <td>{{@$data->product['name']}} (<strong>{{@$data->product['product_code']}}</strong>)</td>
                                     @if($flash_deal->offer_type == 'other')
-                                      <td>{{ $data['quantity'] }} {{$data->product->unit['title']}}</td>
-                                      <td>{{ $data['amount'] }}</td>
+                                      <td>{{ @$data['quantity'] }} {{@$data->product->unit['title']}}</td>
+                                      <td>{{ @$data['amount'] }}</td>
                                     @endif
                                     <td>
                                         <div class="d-flex justify-content-center">

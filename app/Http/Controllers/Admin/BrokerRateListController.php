@@ -132,7 +132,7 @@ class BrokerRateListController extends Controller
         $row = $this->mTable::find($id);
         return view($this->view_folder . '.show', compact('row'));
     }
-    public function wh_receiver_product_rate(Request $request)
+    public function wh_receiver_product_rate(Request $request, $product_id)
     {
         $user_id = auth('admin')->user()->id;
         $productID = $request->product_id;

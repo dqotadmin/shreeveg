@@ -117,12 +117,12 @@
                                 <th>{{translate('product_name')}}</th>
                                 <th>{{translate('product_code')}}</th>
                                 <th>{{translate('product_category')}}</th>
-                                
                                 @if(in_array(auth('admin')->user()->admin_role_id ,[3,5]))
                                     <th class="">{{translate('stock')}}</th>
                                     <th class="">{{translate('unit')}}</th>
+                                @if(in_array(auth('admin')->user()->admin_role_id ,[1,3]))
                                     <th class="column3_search">{{translate('sequence')}}</th>
-                               
+                               @endif 
                                 @else
                                     <th class="text-center">{{translate('status')}}</th>
                                     <th data-searchable="true" >{{translate('tax')}}</th>
@@ -131,7 +131,7 @@
                                 <th class="">{{translate('status')}}</th>
                                 @endif
 
-                                @if(auth('admin')->user()->admin_role_id != 5)
+                                @if(in_array(auth('admin')->user()->admin_role_id ,[5,1,3]))
                                 <th class="text-center">{{translate('action')}}</th>
                                 @endif
                             </tr>
@@ -195,6 +195,7 @@
                                             <td>
                                                 ({{@$product->unit['title'] }})
                                                 </td>
+                                @if(in_array(auth('admin')->user()->admin_role_id ,[1,3]))
                                             <td>
                                                 <?php  $sequence =  \App\Model\WarehouseProduct::where('warehouse_id',auth('admin')->user()->warehouse_id)->where('product_id',$product->id)->first();
                                                 // dump($sequence);  ?> 
@@ -204,7 +205,7 @@
                                                 @endif
                                                 
                                             </td>
-                                        
+                                        @endif
                                         @else
                                             <td>
                                                 <label class="toggle-switch my-0">
@@ -272,13 +273,20 @@
                                                     <a class="action-btn"  href="{{route('admin.product.warehouse-edit',[$product['id']])}}">
                                                     <i class="tio-money"></i></a>
                                                     @endif
-
+                                              
                                                 <!-- End Dropdown -->
                                                 
                                                 </div>
                                             </td>
                                         @endif
-                                    
+                                        @if(auth('admin')->user()->admin_role_id == 5)
+                                            <td>
+                                            <div class="btn--container justify-content-center">
+                                                <a class="action-btn"  href="{{route('admin.broker-rate-list.wh_receiver_product_rate',[$product['id']])}}">
+                                                <i class="tio-shopping-basket-add"></i></a>
+                                                </div>
+                                            </td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>

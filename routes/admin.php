@@ -51,7 +51,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
         Route::resource('broker-rate-list', 'BrokerRateListController');
         Route::resource('broker-order-list', 'BrokerOrderListController');
         Route::get('warehouse-receiver-rate-list', 'BrokerRateListController@wh_receiver_rate_list')->name('broker-rate-list.wh_receiver_rate_list');
-        Route::get('wh-receiver-product-rate', 'BrokerRateListController@wh_receiver_product_rate')->name('broker-rate-list.wh_receiver_product_rate');
+        Route::get('wh-receiver-product-rate/{product_id?}', 'BrokerRateListController@wh_receiver_product_rate')->name('broker-rate-list.wh_receiver_product_rate');
         Route::post('warehouse-receiver-rate-list', 'BrokerRateListController@wh_receiver_post_order')->name('broker-rate-list.wh_receiver_post_order');
         Route::resource('purchase-warehouse-order', 'PurchaseWarehouseOrderController');
         Route::get('history', 'PurchaseWarehouseOrderController@history')->name('purchase-warehouse-order.history');

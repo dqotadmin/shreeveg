@@ -28,9 +28,9 @@ class Helpers
     {
         $warehouseId = auth('api')->user()->warehouse_id;
         if (empty($whCategories)) {
-            $whCategories = self::warehouseAssignCategories($warehouseId);// , 1 , 3 , 10 , 11 , 12 , 2 , 4 , 5 , 8 , 9 10 => 6 11 => 7
+            $whCategories = self::warehouseAssignCategories($warehouseId); // , 1 , 3 , 10 , 11 , 12 , 2 , 4 , 5 , 8 , 9 10 => 6 11 => 7
         }
-       
+
 
         return WarehouseProduct::whereHas('productDetail', function ($query) use ($whCategories) {
             $query->whereIn('product_id', $whCategories)->active();
@@ -124,7 +124,7 @@ class Helpers
             }
         }
         // product is  FlashDealProduct
-        $products = FlashDeal::query()->whereJsonContains('warehouse_id', $warehouseId)->active()->whereHas('products', function ($qu) use ($product_id) {
+        $products = FlashDeal::where('offer_type', 'other')->whereJsonContains('warehouse_id', $warehouseId)->active()->whereHas('products', function ($qu) use ($product_id) {
             $qu->where('product_id', $product_id);
         })->orderBy('title', 'asc')->get();
         //$products = FlashDeal::query()->whereJsonContains('warehouse_id', $warehouseId)->get();
@@ -144,7 +144,8 @@ class Helpers
             }
         }
 
-        $adminOffers = FlashDeal::where('offer_type', 'one_rupee')->whereJsonContains('warehouse_id', $warehouseId)->active()->whereHas('products')->orderBy('title', 'asc')->get();
+        //$adminOffers = FlashDeal::where('offer_type', 'one_rupee')->whereJsonContains('warehouse_id', $warehouseId)->active()->whereHas('products')->orderBy('title', 'asc')->get();
+        $adminOffers = FlashDeal::whereJsonContains('warehouse_id', $warehouseId)->active()->whereHas('products')->orderBy('title', 'asc')->get();
         //dd(($adminOffers), $warehouseId);
         return  $adminOffers;
     }
@@ -285,40 +286,40 @@ class Helpers
 
         return $data;
     }
-// app/helpers.php
+    // app/helpers.php
 
-public static function generateBreadcrumbsRecursive($categoryId)
-{
-    $breadcrumbs = [];
+    public static function generateBreadcrumbsRecursive($categoryId)
+    {
+        $breadcrumbs = [];
 
-    $category = \App\Model\Category::find($categoryId);
+        $category = \App\Model\Category::find($categoryId);
 
-    if ($category) {
-        if ($category !== null && $category !== 0) {
-            // Check if $category is a collection
-            if ($category instanceof \Illuminate\Database\Eloquent\Collection) {
-                // Assuming it's a collection, take the first category
-                $category = $category->first();
+        if ($category) {
+            if ($category !== null && $category !== 0) {
+                // Check if $category is a collection
+                if ($category instanceof \Illuminate\Database\Eloquent\Collection) {
+                    // Assuming it's a collection, take the first category
+                    $category = $category->first();
+                }
+
+                // Recursively call the function for the parent category
+                $parentBreadcrumbs = self::generateBreadcrumbsRecursive($category->parent_id);
+                $breadcrumbs = array_merge($breadcrumbs, $parentBreadcrumbs);
+
+                // Add the current category to the breadcrumbs
+                $breadcrumbs[] = '<li class="breadcrumb-item"><a href="' . route('admin.category.list', ['parent_id' => $category->id]) . '">' . $category->name . '</a></li>';
             }
-
-            // Recursively call the function for the parent category
-            $parentBreadcrumbs = self::generateBreadcrumbsRecursive($category->parent_id);
-            $breadcrumbs = array_merge($breadcrumbs, $parentBreadcrumbs);
-
-            // Add the current category to the breadcrumbs
-            $breadcrumbs[] = '<li class="breadcrumb-item"><a href="' . route('admin.category.list', ['parent_id' => $category->id]) . '">' . $category->name . '</a></li>';
         }
-    }
 
-    return $breadcrumbs;
-}
+        return $breadcrumbs;
+    }
 
 
 
 
     public static function apk_product_data_formatting($data, $multi_data = false)
     {
- 
+
         $storage = [];
         if ($multi_data == true) {
             foreach ($data as $item) {
@@ -340,7 +341,7 @@ public static function generateBreadcrumbsRecursive($categoryId)
                 $item['single_image'] = json_decode($item->productDetail['single_image']);
                 $item['choice_options'] = json_decode($item->productDetail['choice_options']);
 
-                if (isset($item) && $item['product_details'] ) {
+                if (isset($item) && $item['product_details']) {
 
 
                     foreach (json_decode(@$item['product_details'], true) as $var) {
@@ -417,7 +418,7 @@ public static function generateBreadcrumbsRecursive($categoryId)
                 }
             }
         }
-       
+
         return $data;
     }
 

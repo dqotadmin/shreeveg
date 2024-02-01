@@ -24,7 +24,8 @@ class StoreController extends Controller
 {
     public function __construct(
         private Store $store,
-        private City $city
+        private City $city,
+        private Warehouse $warehouse
     ) {
     }
 
@@ -159,6 +160,12 @@ class StoreController extends Controller
     {
         $stores = $this->store->find($id);
         return view('admin-views.store.edit', compact('stores'));
+    }
+
+    public function get_warehouse_detail($warehouse_id){
+        $warehouse = $this->warehouse->find($warehouse_id);
+        return response()->json(['warehouse' => $warehouse]);
+
     }
 
     /**

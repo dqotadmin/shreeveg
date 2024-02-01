@@ -437,14 +437,23 @@
     }
 </script>
 <script>
- $(document).on('ready', function () {
+  $(document).on('ready', function () {
+    // Custom sorting function for 'sequence' column
+    $.fn.dataTable.ext.order['sequence-asc'] = function (a, b) {
+        return customSequenceSort(a, b);
+    };
+
+    $.fn.dataTable.ext.order['sequence-desc'] = function (a, b) {
+        return customSequenceSort(b, a);
+    };
+
+    // INITIALIZATION OF DATATABLES
+    // =======================================================
     var datatable = $.HSCore.components.HSDatatables.init($('#columnSearchDatatable'), {
         "columnDefs": [
-            {
-                "type": "numeric",
-                "targets": 5
-            }
-        ]
+            { "type": "sequence", "targets": 5 } // Use custom sorting for 'sequence' column
+        ],
+        "orderCellsTop": true // Show sorting arrows in the header
     });
 
     $('#column1_search').on('keyup', function () {
@@ -468,6 +477,13 @@
     });
 });
 
+// Custom sorting function for 'sequence' column
+function customSequenceSort(a, b) {
+    var numA = parseInt($(a).find('input[name="sequence"]').val(), 10);
+    var numB = parseInt($(b).find('input[name="sequence"]').val(), 10);
+
+    return numA - numB;
+}
 
 </script>  
 @endpush

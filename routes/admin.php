@@ -342,6 +342,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
 
             Route::get('get-warehouse/{cityId?}', 'StoreController@get_warehouse')->name('get-warehouse');
             // Route::get('get-warehouse-by-city/{cityId?}', 'StoreController@get_warehouse')->name('get-warehouse-by-city');
+            Route::get('get-warehouse-data/{warehouse_id?}', 'StoreController@get_warehouse_detail')->name('get-warehouse-data');
             Route::resource('purchase-store-orders', 'PurchaseStoreOrderController');
             Route::post('purchase-store-orders-update-status/{id}', 'PurchaseStoreOrderController@updateStatus')->name('updateStatus');
             Route::get('stock-update/{id}', 'PurchaseStoreOrderController@stockUpdate')->name('stock-update');

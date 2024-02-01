@@ -7,6 +7,13 @@
 @endpush
 
 @section('content')
+<?php
+
+$warehouse_id = auth('admin')->user()->warehouse_id;
+
+
+ $stores = \App\Model\Warehouse::where('id',$warehouse_id)->first();
+?>
 <div class="content container-fluid">
 
     <!-- Page Header -->
@@ -161,14 +168,11 @@
                                     <div class="text-center mb-3">
                                         <img id="viewer" class="img--105"
                                             onerror="this.src='{{asset('public/assets/admin/img/900x400/img1.jpg')}}'"
-                                            src="{{asset('storage/app/public/store')}}/"
+                                            src="{{asset('public/assets/admin/img/900x400/img1.jpg')}}/"
                                             alt="image" />
                                     </div>
                                 </div>
-                                <label class="form-label text-capitalize">{{ translate('Document  ') }}</label><small
-                                    class="text-danger">*
-                                    ( {{ translate('ratio') }}
-                                    3:1 )</small>
+                                <label class="form-label text-capitalize">{{ translate('Document  ') }}</label> 
                                 <div class="custom-file">
                                     <input type="file" name="document" id="customFileEg1" class="custom-file-input manually-border-color"
                                         accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*"
@@ -225,17 +229,17 @@
                                     {{ translate('open_time') }}
                                 </label>
                                 <input type="time" name="open_time"
-                                                    class="form-control" value="{{ config('custom.start_time') }}" disabled required />
+                                                    class="open_time form-control" value="" disabled required />
                                <div class="invalid-feedback">
                                     Please enter store open time.
-                                </div>
+                                </div> 
                             </div>
                             <div class="col-sm-6">
                                 <label class="form-label" for="exampleFormControlInput1">
                                     {{ translate('close_time') }}
                                 </label>
                                 <input type="time" name="close_time"
-                                                    class="form-control"  value="{{ config('custom.end_time') }}" disabled required />
+                                                    class="close_time form-control"  value="" disabled required />
                                 <div class="invalid-feedback">
                                     Please enter store close time.
                                 </div>
@@ -345,6 +349,8 @@ function validateRating(input) {
 <script>
 $(document).ready(function() {
     $('#click_on_city').on('change', function() {
+        $('.open_time').val('');
+    $('.close_time').val('');
         $('.get_wh_code').val('');
         var citySelected = $(this).find('option:selected');
         var cityId = citySelected.val();
@@ -353,6 +359,7 @@ $(document).ready(function() {
             type: 'GET',
             dataType: 'json',
             success: function(data) {
+                console.log(data);
                 if (data.message) {
                     var message = data.message;
                     Swal.fire({
@@ -381,6 +388,7 @@ $(document).ready(function() {
                         var code = $(this).find('option:selected');
                         var selectedCode = code.attr('code');
                         var prev_id = $('#prev_id').val();
+                        console.log(345);
 
                         $('.get_wh_code').val(selectedCode + data.prevId);
                     });
@@ -394,49 +402,20 @@ $(document).ready(function() {
 //     $('.get_wh_code').empty();
 
 // });
-
-// function getWarehouse(cityId = null) {
-//     $('.get_warehouse').empty();
-//     $.ajax({
-//         url: 'get-warehouse-by-city/' + cityId,
-//         type: 'GET',
-//         dataType: 'json',
-//         success: function(data) {
-//             if (data.message) {
-//                 var message = data.message;
-//                 Swal.fire({
-//                     title: 'Alert',
-//                     html: message,
-//                     icon: 'info',
-//                     confirmButtonText: 'OK'
-//                 });
-//                 // $('.get_warehouse').html('<option value="">'+ message +'</option>');
-//             } else {
-//                 $('.get_warehouse').empty();
-
-//                 // Add the default option
-//                 $('.get_warehouse').html('<option value="">Select Warehouse</option>');
-
-//                 $.each(data.warehouse, function(key, value) {
-//                     $('.get_warehouse').append('<option code="' + value.code + '" value="' +
-//                         value
-//                         .id + '">' +
-//                         value.name + '</option>');
-//                 });
-
-//                 console.log(data.prevId);
-//                 $('.get_warehouse').on('change', function() {
-//                     var code = $(this).find('option:selected');
-//                     var selectedCode = code.attr('code');
-//                     var prev_id = $('#prev_id').val();
-
-//                     $('.get_wh_code').val(selectedCode + data.prevId);
-//                 });
-//             }
-
-//         }
-//     });
-// };
+$('.get_warehouse').on('change', function() {
+ 
+    var warehouse_id = $(this).val();
+    $.ajax({
+        url: 'get-warehouse-data/' + warehouse_id,
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            console.log(data.warehouse);
+           $('.open_time').val(data.warehouse.open_time);
+           $('.close_time').val(data.warehouse.close_time);
+    }
+    });
+});
 </script>
 
 <script>
@@ -481,21 +460,21 @@ $(".lang_link").click(function(e) {
 </script>
 
 <script>
-function readURL(input) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
 
-        reader.onload = function(e) {
-            $('#viewer').attr('src', e.target.result);
+            reader.onload = function(e) {
+                $('#viewer').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
         }
-
-        reader.readAsDataURL(input.files[0]);
     }
-}
 
-$("#customFileEg1").change(function() {
-    readURL(this);
-});
+    $("#customFileEg1").change(function() {
+        readURL(this);
+    });
 </script>
 <script
     src="https://maps.googleapis.com/maps/api/js?key={{ \App\Model\BusinessSetting::where('key', 'map_api_client_key')->first()?->value }}&libraries=places&v=3.45.8">
@@ -503,171 +482,170 @@ $("#customFileEg1").change(function() {
 
 
 <script>
-$(document).ready(function() {
-    function initAutocomplete() {
-        var myLatLng = {
+    $(document).ready(function() {
+        function initAutocomplete() {
+            var myLatLng = {
 
-            lat: 23.811842872190343,
-            lng: 90.356331
-        };
-        const map = new google.maps.Map(document.getElementById("location_map_canvas"), {
-            center: {
                 lat: 23.811842872190343,
                 lng: 90.356331
-            },
-            zoom: 13,
-            mapTypeId: "roadmap",
-        });
+            };
+            const map = new google.maps.Map(document.getElementById("location_map_canvas"), {
+                center: {
+                    lat: 23.811842872190343,
+                    lng: 90.356331
+                },
+                zoom: 13,
+                mapTypeId: "roadmap",
+            });
 
-        var marker = new google.maps.Marker({
-            position: myLatLng,
-            map: map,
-        });
+            var marker = new google.maps.Marker({
+                position: myLatLng,
+                map: map,
+            });
 
-        marker.setMap(map);
-        var geocoder = geocoder = new google.maps.Geocoder();
-        google.maps.event.addListener(map, 'click', function(mapsMouseEvent) {
-            var coordinates = JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2);
-            var coordinates = JSON.parse(coordinates);
-            var latlng = new google.maps.LatLng(coordinates['lat'], coordinates['lng']);
-            marker.setPosition(latlng);
-            map.panTo(latlng);
+            marker.setMap(map);
+            var geocoder = geocoder = new google.maps.Geocoder();
+            google.maps.event.addListener(map, 'click', function(mapsMouseEvent) {
+                var coordinates = JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2);
+                var coordinates = JSON.parse(coordinates);
+                var latlng = new google.maps.LatLng(coordinates['lat'], coordinates['lng']);
+                marker.setPosition(latlng);
+                map.panTo(latlng);
 
-            document.getElementById('latitude').value = coordinates['lat'];
-            document.getElementById('longitude').value = coordinates['lng'];
+                document.getElementById('latitude').value = coordinates['lat'];
+                document.getElementById('longitude').value = coordinates['lng'];
 
 
-            geocoder.geocode({
-                'latLng': latlng
-            }, function(results, status) {
-                if (status == google.maps.GeocoderStatus.OK) {
-                    if (results[1]) {
-                        document.getElementById('address').innerHtml = results[1]
-                            .formatted_address;
+                geocoder.geocode({
+                    'latLng': latlng
+                }, function(results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        if (results[1]) {
+                            document.getElementById('address').innerHtml = results[1]
+                                .formatted_address;
+                        }
                     }
-                }
+                });
             });
-        });
-        // Create the search box and link it to the UI element.
-        const input = document.getElementById("pac-input");
-        const searchBox = new google.maps.places.SearchBox(input);
-        map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
-        // Bias the SearchBox results towards current map's viewport.
-        map.addListener("bounds_changed", () => {
-            searchBox.setBounds(map.getBounds());
-        });
-        let markers = [];
-        // Listen for the event fired when the user selects a prediction and retrieve
-        // more details for that place.
-        searchBox.addListener("places_changed", () => {
-            const places = searchBox.getPlaces();
+            // Create the search box and link it to the UI element.
+            const input = document.getElementById("pac-input");
+            const searchBox = new google.maps.places.SearchBox(input);
+            map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
+            // Bias the SearchBox results towards current map's viewport.
+            map.addListener("bounds_changed", () => {
+                searchBox.setBounds(map.getBounds());
+            });
+            let markers = [];
+            // Listen for the event fired when the user selects a prediction and retrieve
+            // more details for that place.
+            searchBox.addListener("places_changed", () => {
+                const places = searchBox.getPlaces();
 
-            if (places.length == 0) {
-                return;
-            }
-            // Clear out the old markers.
-            markers.forEach((marker) => {
-                marker.setMap(null);
-            });
-            markers = [];
-            // For each place, get the icon, name and location.
-            const bounds = new google.maps.LatLngBounds();
-            places.forEach((place) => {
-                if (!place.geometry || !place.geometry.location) {
-                    console.log("Returned place contains no geometry");
+                if (places.length == 0) {
                     return;
                 }
-                var mrkr = new google.maps.Marker({
-                    map,
-                    title: place.name,
-                    position: place.geometry.location,
+                // Clear out the old markers.
+                markers.forEach((marker) => {
+                    marker.setMap(null);
                 });
-                google.maps.event.addListener(mrkr, "click", function(event) {
-                    document.getElementById('latitude').value = this.position.lat();
-                    document.getElementById('longitude').value = this.position.lng();
+                markers = [];
+                // For each place, get the icon, name and location.
+                const bounds = new google.maps.LatLngBounds();
+                places.forEach((place) => {
+                    if (!place.geometry || !place.geometry.location) {
+                        console.log("Returned place contains no geometry");
+                        return;
+                    }
+                    var mrkr = new google.maps.Marker({
+                        map,
+                        title: place.name,
+                        position: place.geometry.location,
+                    });
+                    google.maps.event.addListener(mrkr, "click", function(event) {
+                        document.getElementById('latitude').value = this.position.lat();
+                        document.getElementById('longitude').value = this.position.lng();
+                    });
+
+                    markers.push(mrkr);
+
+                    if (place.geometry.viewport) {
+                        // Only geocodes have viewport.
+                        bounds.union(place.geometry.viewport);
+                    } else {
+                        bounds.extend(place.geometry.location);
+                    }
                 });
+                map.fitBounds(bounds);
+            });
+        };
+        initAutocomplete();
+    });
 
-                markers.push(mrkr);
 
-                if (place.geometry.viewport) {
-                    // Only geocodes have viewport.
-                    bounds.union(place.geometry.viewport);
-                } else {
-                    bounds.extend(place.geometry.location);
+    $('.__right-eye').on('click', function() {
+        if ($(this).hasClass('active')) {
+            $(this).removeClass('active')
+            $(this).find('i').removeClass('tio-invisible')
+            $(this).find('i').addClass('tio-hidden-outlined')
+            $(this).siblings('input').attr('type', 'password')
+        } else {
+            $(this).addClass('active')
+            $(this).siblings('input').attr('type', 'text')
+
+
+            $(this).find('i').addClass('tio-invisible')
+            $(this).find('i').removeClass('tio-hidden-outlined')
+        }
+    })
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('#country-dropdown').on('change', function() {
+            var country_id = this.value;
+            $("#state-dropdown").html('');
+            $.ajax({
+                url: "{{url('get-states-by-country')}}",
+                type: "POST",
+                data: {
+                    country_id: country_id,
+                    _token: '{{csrf_token()}}'
+                },
+                dataType: 'json',
+                success: function(result) {
+                    $.each(result.states, function(key, value) {
+                        $("#state-dropdown").append('<option value="' + value.id +
+                            '">' + value.name + '</option>');
+                    });
+                    $('#city-dropdown').html(
+                        '<option value="">Select State First</option>');
                 }
             });
-            map.fitBounds(bounds);
         });
-    };
-    initAutocomplete();
-});
-
-
-$('.__right-eye').on('click', function() {
-    if ($(this).hasClass('active')) {
-        $(this).removeClass('active')
-        $(this).find('i').removeClass('tio-invisible')
-        $(this).find('i').addClass('tio-hidden-outlined')
-        $(this).siblings('input').attr('type', 'password')
-    } else {
-        $(this).addClass('active')
-        $(this).siblings('input').attr('type', 'text')
-
-
-        $(this).find('i').addClass('tio-invisible')
-        $(this).find('i').removeClass('tio-hidden-outlined')
-    }
-})
-</script>s
-
+        $('#state-dropdown').on('change', function() {
+            var state_id = this.value;
+            $("#city-dropdown").html('');
+            $.ajax({
+                url: "{{url('get-cities-by-state')}}",
+                type: "POST",
+                data: {
+                    state_id: state_id,
+                    _token: '{{csrf_token()}}'
+                },
+                dataType: 'json',
+                success: function(result) {
+                    $.each(result.cities, function(key, value) {
+                        $("#city-dropdown").append('<option value="' + value.id +
+                            '">' +
+                            value.name + '</option>');
+                    });
+                }
+            });
+        });
+    });
+</script>
 </body>
 @endpush
 
 
 
-
-<script>
-$(document).ready(function() {
-    $('#country-dropdown').on('change', function() {
-        var country_id = this.value;
-        $("#state-dropdown").html('');
-        $.ajax({
-            url: "{{url('get-states-by-country')}}",
-            type: "POST",
-            data: {
-                country_id: country_id,
-                _token: '{{csrf_token()}}'
-            },
-            dataType: 'json',
-            success: function(result) {
-                $.each(result.states, function(key, value) {
-                    $("#state-dropdown").append('<option value="' + value.id +
-                        '">' + value.name + '</option>');
-                });
-                $('#city-dropdown').html(
-                    '<option value="">Select State First</option>');
-            }
-        });
-    });
-    $('#state-dropdown').on('change', function() {
-        var state_id = this.value;
-        $("#city-dropdown").html('');
-        $.ajax({
-            url: "{{url('get-cities-by-state')}}",
-            type: "POST",
-            data: {
-                state_id: state_id,
-                _token: '{{csrf_token()}}'
-            },
-            dataType: 'json',
-            success: function(result) {
-                $.each(result.cities, function(key, value) {
-                    $("#city-dropdown").append('<option value="' + value.id +
-                        '">' +
-                        value.name + '</option>');
-                });
-            }
-        });
-    });
-});
-</script>

@@ -132,17 +132,24 @@ class BrokerRateListController extends Controller
         $row = $this->mTable::find($id);
         return view($this->view_folder . '.show', compact('row'));
     }
-    public function wh_receiver_product_rate(Request $request, $product_id)
+    public function wh_receiver_product_rate(Request $request)
     {
         $user_id = auth('admin')->user()->id;
         $productID = $request->product_id;
         $rows_old = $this->mTable::query()->get();
         $latestIds = $this->mTable:: query()->selectRaw('MAX(id) as id ,admin_id')->groupBy('admin_id')->pluck('id')->toArray();
        
-        $rows = $this->mTable::whereIn('id',$latestIds)->whereDate('created_at', Carbon::today())->whereHas('rateListDetail',function ($qu) use ($productID){
-            $qu->where('product_id',$productID);
-        })->get();
-       
+        // $rows = $this->mTable::whereIn('id',$latestIds)->whereDate('created_at', Carbon::today())->whereHas('rateListDetail',function ($qu) use ($productID){
+        //     $qu->where('product_id',$productID);
+        // })->get();
+              
+        $rows = $this->mTable::whereIn('broker_rate_lists.id', $latestIds)
+            ->whereDate('broker_rate_lists.created_at', Carbon::today())
+            ->join('broker_rate_list_details', 'broker_rate_lists.id', '=', 'broker_rate_list_details.broker_rate_list_id')
+            ->where('broker_rate_list_details.product_id', $productID)
+            ->select('broker_rate_lists.*')
+            ->orderBy('broker_rate_list_details.rate', 'asc')
+            ->get();
         return view($this->view_folder . '.rate_list_search', compact('rows','productID'));
         return $request->all();
     }

@@ -40,7 +40,10 @@ class CustomerLogic{
         {
             $debit = $amount;
         }
+if($transaction_type == 'add_fund'){
+    $credit = $amount + ($amount/100)*10;
 
+}
         $wallet_transaction->credit = $credit;
         $wallet_transaction->debit = $debit;
         $wallet_transaction->balance = $current_balance + $credit - $debit;

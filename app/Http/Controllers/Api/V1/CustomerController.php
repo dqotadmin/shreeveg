@@ -196,12 +196,10 @@ class CustomerController extends Controller
     public function update_profile(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            'f_name' => 'required',
-            'l_name' => 'required',
+            'full_name' => 'required',
             'phone' => ['required', 'unique:users,phone,'.auth()->user()->id]
         ], [
-            'f_name.required' => 'First name is required!',
-            'l_name.required' => 'Last name is required!',
+            'full_name.required' => 'The full name field is required.',
             'phone.required' => 'Phone is required!',
             'phone.unique' => translate('Phone must be unique!'),
         ]);
@@ -229,11 +227,14 @@ class CustomerController extends Controller
         } else {
             $pass = $request->user()->password;
         }
+        $tmpName = $this->get_f_l_name($request->full_name);
 
         $userDetails = [
-            'f_name' => $request->f_name,
-            'l_name' => $request->l_name,
+            'full_name' => $request->full_name,
+            'f_name' => $tmpName['f_name'],
+            'l_name' => $tmpName['l_name'],
             'phone' => $request->phone,
+            'email' => $request->email,
             'image' => $imageName,
             'password' => $pass,
             'updated_at' => now()

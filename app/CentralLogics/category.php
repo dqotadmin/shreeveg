@@ -55,7 +55,6 @@ class CategoryLogic
         $warehouse_id = auth('api')->user()->warehouse_id;
 
         $assign_category_check = Helpers::getWhCategoriesData($id, $warehouse_id);
-        dd($assign_category_check);
         if ($assign_category_check) {
             $cate_ids = [];
             array_push($cate_ids, (int)$id);
@@ -68,7 +67,6 @@ class CategoryLogic
             $whProoducts = WarehouseProduct::whereHas('productDetail', function ($query) use ($cate_ids) {
                 $query->whereIn('category_id', $cate_ids)->active()->withCount(['wishlist', 'active_reviews'])->with('rating');
             })->where('warehouse_id', $warehouse_id)->get();
-            // dd($whProoducts);
 
             return $whProoducts;
         }

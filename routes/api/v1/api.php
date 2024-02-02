@@ -119,7 +119,9 @@ Route::group(['namespace' => 'Api\V1', 'middleware' => 'localization'], function
         });
 
         Route::post('transfer-point-to-wallet', 'CustomerWalletController@transfer_loyalty_point_to_wallet');
-        Route::get('wallet-transactions', 'CustomerWalletController@wallet_transactions');
+        Route::post('wallet-add-money', 'CustomerWalletController@wallet_add_money');
+         Route::get('wallet-transactions', 'CustomerWalletController@wallet_transactions');
+        Route::get('wallet-transactions-history', 'CustomerWalletController@wallet_transactions_history');
         Route::get('loyalty-point-transactions', 'LoyaltyPointController@point_transactions');
     });
 

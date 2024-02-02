@@ -82,4 +82,49 @@ class CustomerWalletController extends Controller
         ];
         return response()->json($data, 200);
     }
+
+    public function wallet_add_money(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'amount'=>'numeric|min:.01',
+
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => Helpers::error_processor($validator)], 403);
+        }
+        $paginator = $this->wallet_transaction->where('user_id', $request->user()->id)
+            ->latest()
+            ->paginate($request->limit, ['*'], 'page', $request->offset);
+            $wallet_transaction = CustomerLogic::create_wallet_transaction($request->user()->id, $request->amount, 'add_fund',$request->referance);
+
+            if($wallet_transaction)
+            {
+                return response()->json([], 200);
+            }
+    
+            return response()->json(['errors'=>[
+                'message'=>translate('failed_to_create_transaction')
+            ]], 200);
+
+    }
+
+    
+    public function wallet_transactions_history(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $paginator = $this->wallet_transaction->where('user_id', $request->user()->id)
+            ->latest()
+            ->paginate($request->limit, ['*'], 'page', $request->offset);
+
+            if($paginator)
+            {
+                return response()->json([$paginator], 200);
+            }
+    
+            return response()->json(['errors'=>[
+                'message'=>translate('failed_to_create_transaction')
+            ]], 200);
+
+    }
+    
 }

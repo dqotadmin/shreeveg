@@ -333,27 +333,32 @@ class OrderController extends Controller
             return response()->json(['errors' => Helpers::error_processor($validator)], 403);
         }
 
-        $details = $this->order_detail->where(['order_id' => $request['order_id']])
+        $details = $this->order_detail->where(['user_warehouse_order_id' => $request['order_id']])
             ->whereHas('order', function ($q) use ($request){
                 $q->where([ 'user_id' => $request->user()->id ]);
             })
             ->orderBy('id', 'desc')
             ->get();
-
         if ($details->count() > 0) {
-            foreach ($details as $det) {
-                $det['variation'] = json_decode($det['variation'], true);
-                if ($this->order->find($request->order_id)->order_type == 'pos') {
-                    $det['variation'] = (string)implode('-', array_values($det['variation'])) ?? null;
-                }
-                else {
-                    $det['variation'] = (string)$det['variation'][0]['type']??null;
-                }
+            // foreach ($details as $det) {
+            //     $det['variation'] = json_decode($det['variation'], true);
 
-                $det['review_count'] = $this->review->where(['order_id' => $det['order_id'], 'product_id' => $det['product_id']])->count();
-                $product = $this->product->where('id', $det['product_id'])->first();
-                $det['product_details'] = isset($product) ? Helpers::product_data_formatting($product) : null;
+            //     if ($this->order->find($request->order_id)->order_type == 'pos') {
+            //         $det['variation'] = (string)implode('-', array_values($det['variation'])) ?? null;
+            //     }
+            //     else {
+            //         $det['variation'] = (string)$det['variation'][0]['type']??null;
+            //     }
+
+            //     $det['review_count'] = $this->review->where(['user_warehouse_order_id' => $det['order_id'], 'product_id' => $det['product_id']])->count();
+            //     $product = $this->product->where('id', $det['product_id'])->first();
+            //     $det['product_details'] = isset($product) ? Helpers::product_data_formatting($product) : null;
+            // }
+             foreach ($details as $product_detail) {
+                $product_detail['product_details'] = json_decode($product_detail['product_details'], true);
+
             }
+
             return response()->json($details, 200);
         } else {
             return response()->json([

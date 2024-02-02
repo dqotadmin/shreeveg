@@ -216,9 +216,9 @@ class ProductController extends Controller
                 $image_data = Helpers::upload('product/', 'png', $img);
                 $img_names[] = $image_data;
             }
-            $image_data = json_encode($img_names);
+            $img_names = json_encode($img_names);
         } else {
-            $image_data = json_encode([]);
+            $img_names = json_encode([]);
         }
 
 
@@ -244,15 +244,18 @@ class ProductController extends Controller
         $p->product_code = $request->product_code;
 
         $p->unit_id = $request->unit_id;
-        $p->image = $image_data;
+        $p->image = $img_names;
         $p->single_image = $single_img_names;
         $p->maximum_order_quantity = $request->maximum_order_quantity;
         $p->tax = $request->tax ? $request->tax : 0;
         $p->status = $request->status ? $request->status : 0;
-        $groupIds = array_map('intval', $request->group_ids);
+        if($request->group_ids){
 
-        // Now, encode $groupIds as JSON
-        $p->group_ids = json_encode($groupIds, JSON_UNESCAPED_SLASHES);
+            $groupIds = array_map('intval', @$request->group_ids);
+    
+            // Now, encode $groupIds as JSON
+            $p->group_ids = json_encode($groupIds, JSON_UNESCAPED_SLASHES);
+        }
 
         $lastSequence = $this->product->max('sequence');
         //dd($lastSequence);
@@ -522,9 +525,7 @@ class ProductController extends Controller
         $p->unit_id = $request->unit_id;
 
         $p->maximum_order_quantity = $request->maximum_order_quantity;
-        $p->status = $request->status ? $request->status : 0;
         $p->group_ids = json_encode($request->group_ids);
-        //dd($p);
         $p->save();
 
         // foreach ($request->lang as $index => $key) {

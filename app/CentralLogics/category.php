@@ -55,6 +55,7 @@ class CategoryLogic
         $warehouse_id = auth('api')->user()->warehouse_id;
 
         $assign_category_check = Helpers::getWhCategoriesData($id, $warehouse_id);
+        dd($assign_category_check);
         if ($assign_category_check) {
             $cate_ids = [];
             array_push($cate_ids, (int)$id);

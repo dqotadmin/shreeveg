@@ -342,6 +342,7 @@ class Helpers
                 $item['image'] = json_decode($item->productDetail['image']);
                 $item['single_image'] = json_decode($item->productDetail['single_image']);
                 $item['choice_options'] = json_decode($item->productDetail['choice_options']);
+                $item['group_ids'] = json_decode($item->productDetail['group_ids']);
 
                 if (isset($item) && $item['product_details']) {
 

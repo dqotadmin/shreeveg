@@ -5,11 +5,13 @@ namespace App\CentralLogics;
 use App\Model\BusinessSetting;
 use App\Model\CategoryDiscount;
 use App\Model\Currency;
+use App\Model\CustomerAddress;
 use App\Model\DMReview;
 use App\Model\Order;
 use App\Model\Review;
 use App\Model\FlashDeal;
 use App\Model\FlashDealProduct;
+use App\Model\Warehouse;
 use App\Model\WarehouseProduct;
 use App\User;
 use Exception;
@@ -154,6 +156,36 @@ class Helpers
     {
 
         return FlashDealProduct::query()->where('product_id', $product_id)->where('flash_deal_id', $deal_id)->first()->quantity;
+    }
+
+
+    public static function checkDistance($warehouseId, $deliveryAddressId)
+    {
+        $status = true;
+        $warehouseData = Warehouse::findOrFail($warehouseId);
+        $addressData = CustomerAddress::findOrFail($deliveryAddressId);
+        $distance = self::haversineDistance($warehouseData->latitude, $warehouseData->longitude, $addressData->latitude, $addressData->longitude);
+        if (ceil($distance) > $warehouseData->coverage) {
+            $status = false;
+        }
+        $data['distance'] = ceil($distance);
+        $data['status'] =  $status;
+        return $data;
+    }
+
+    public static function haversineDistance($lat1, $lon1, $lat2, $lon2)
+    {
+        $earthRadius = 6371; // Radius of the Earth in kilometers
+
+        $dLat = deg2rad($lat2 - $lat1);
+        $dLon = deg2rad($lon2 - $lon1);
+
+        $a = sin($dLat / 2) * sin($dLat / 2) + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * sin($dLon / 2) * sin($dLon / 2);
+        $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+
+        $distance = $earthRadius * $c;
+
+        return $distance;
     }
 
     public static function error_processor($validator)

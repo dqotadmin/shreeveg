@@ -158,6 +158,12 @@ class Helpers
         return FlashDealProduct::query()->where('product_id', $product_id)->where('flash_deal_id', $deal_id)->first()->quantity;
     }
 
+    public static function getWhProductOfferItem($product_id, $deal_id)
+    {
+
+        return FlashDealProduct::query()->where('product_id', $product_id)->where('flash_deal_id', $deal_id)->first();
+    }
+
 
     public static function checkDistance($warehouseId, $deliveryAddressId)
     {

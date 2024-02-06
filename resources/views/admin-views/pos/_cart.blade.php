@@ -2,86 +2,91 @@
     <div class="table-responsive">
         <table class="table table-bordered border-left-0 border-right-0 middle-align">
             <thead class="thead-light">
-            <tr>
-                <th scope="col">{{translate('item')}}</th>
-                <th scope="col" class="text-center">{{translate('qty')}}</th>
-                <th scope="col">{{translate('price')}}</th>
-                <th scope="col">{{translate('delete')}}</th>
-            </tr>
+                <tr>
+                    <th scope="col">{{ translate('item') }}</th>
+                    <th scope="col" class="text-center">{{ translate('qty') }}</th>
+                    <th scope="col">{{ translate('price') }}</th>
+                    <th scope="col">{{ translate('delete') }}</th>
+                </tr>
             </thead>
             <tbody>
-            <?php
-            $subtotal = 0;
-            $discount = 0;
-            $discount_type = 'amount';
-            $discount_on_product = 0;
-            $total_tax = 0;
-            $updated_total_tax=0;
-            $vat_status = \App\CentralLogics\Helpers::get_business_settings('product_vat_tax_status') === 'included' ? 'included' : 'excluded';
-            ?>
-            @if(session()->has('cart') && count( session()->get('cart')) > 0)
                 <?php
-                $cart = session()->get('cart');
-                if (isset($cart['discount'])) {
-                    $discount = $cart['discount'];
-                    $discount_type = $cart['discount_type'];
-                }
+                $subtotal = 0;
+                $discount = 0;
+                $discount_type = 'amount';
+                $discount_on_product = 0;
+                $total_tax = 0;
+                $updated_total_tax = 0;
+                $vat_status = \App\CentralLogics\Helpers::get_business_settings('product_vat_tax_status') === 'included' ? 'included' : 'excluded';
                 ?>
-                @foreach(session()->get('cart') as $key => $cartItem)
-                    @if(is_array($cartItem))
-                        <?php //dump($cartItem);
-                        $product_subtotal_mkk = ($cartItem['price']) * $cartItem['quantity'];
-                        // $discount_on_product += ($cartItem['discount'] * $cartItem['quantity']);
-                        $discount_on_product += ($cartItem['offer_discount']);
-                        $product_subtotal = $cartItem['with_offer_price'] >0?$cartItem['with_offer_price']:$product_subtotal_mkk;
-                        $subtotal += $product_subtotal;
-                   
-                        //tax calculation
-                        $product =\App\Model\WarehouseProduct::find($cartItem['id']);
-                        $total_tax += \App\CentralLogics\Helpers::tax_calculate($product, $cartItem['price']) * $cartItem['quantity'];
-                        $updated_total_tax += $vat_status === 'included' ? 0 : \App\CentralLogics\Helpers::tax_calculate($product, $cartItem['price']) * $cartItem['quantity'];
-
-                        ?>
-                        <tr>
-                            <td>
-                                <div class="media align-items-center">
-                                    @if (!empty(json_decode($cartItem['image'],true)))
-                                        <img class="avatar avatar-sm mr-1"
-                                            src="{{asset('storage/app/public/product')}}/{{json_decode($cartItem['image'], true)[0]}}"
-                                            onerror="this.src='{{asset('public/assets/admin/img/160x160/2.png')}}'"
-                                            alt="{{$cartItem['name']}} image">
-                                    @else
-                                        <img class="avatar avatar-sm mr-1"
-                                        src="{{asset('public/assets/admin/img/160x160/2.png')}}">
-                                    @endif
-                                    <div class="media-body">
-                                        <h6 class="text-hover-primary mb-0">{{Str::limit($cartItem['name'], 10)}}</h6>
-                                        <small>{{Str::limit($cartItem['variant'], 20)}}</small>
+                @if (session()->has('cart') && count(session()->get('cart')) > 0)
+                    <?php
+                    $cart = session()->get('cart');
+                    if (isset($cart['discount'])) {
+                        $discount = $cart['discount'];
+                        $discount_type = $cart['discount_type'];
+                    }
+                    ?>
+                    @foreach (session()->get('cart') as $key => $cartItem)
+                        @if (is_array($cartItem))
+                            <?php //dump($cartItem);
+                            $product_subtotal_mkk = $cartItem['price'] * $cartItem['quantity'];
+                            // $discount_on_product += ($cartItem['discount'] * $cartItem['quantity']);
+                            $discount_on_product += $cartItem['offer_discount'];
+                            $product_subtotal = $cartItem['with_offer_price'] > 0 ? $cartItem['with_offer_price'] : $product_subtotal_mkk;
+                            $subtotal += $product_subtotal;
+                            //dd($product, $cartItem['price']);
+                            //tax calculation
+                            $product = \App\Model\WarehouseProduct::find($cartItem['id']);
+                            $total_tax += \App\CentralLogics\Helpers::tax_calculate($product, $cartItem['price']) * $cartItem['quantity'];
+                            $updated_total_tax += $vat_status === 'included' ? 0 : \App\CentralLogics\Helpers::tax_calculate($product, $cartItem['price']) * $cartItem['quantity'];
+                            
+                            ?>
+                            <tr>
+                                <td>
+                                    <div class="media align-items-center">
+                                        @if (!empty(json_decode($cartItem['image'], true)))
+                                            <img class="avatar avatar-sm mr-1"
+                                                src="{{ asset('storage/app/public/product') }}/{{ json_decode($cartItem['image'], true)[0] }}"
+                                                onerror="this.src='{{ asset('public/assets/admin/img/160x160/2.png') }}'"
+                                                alt="{{ $cartItem['name'] }} image">
+                                        @else
+                                            <img class="avatar avatar-sm mr-1"
+                                                src="{{ asset('public/assets/admin/img/160x160/2.png') }}">
+                                        @endif
+                                        <div class="media-body">
+                                            <h6 class="text-hover-primary mb-0">{{ Str::limit($cartItem['name'], 10) }}
+                                            </h6>
+                                            <small>{{ Str::limit($cartItem['variant'], 20) }}</small>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                            <td class="align-items-center text-center">
-                                <input type="hidden" data-key="{{$key}}" id="{{ $cartItem['id'] }}" class="amount--input form-control text-center"
-                                    value="{{$cartItem['quantity']}}" min="1" max="{{ $product['total_stock'] }}" onkeyup="updateQuantity(event)" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');">
-                                    {{$cartItem['quantity']}}
-                                    
-                            </td>
-                            <td class="text-center px-0 py-1">
-                                <div class="btn text-left">
-                                    {{ \App\CentralLogics\Helpers::set_symbol($product_subtotal) }}
-                                </div> 
-                            </td>
-                            <td>
-                                <div class="d-flex flex-wrap justify-content-center">
-                                    <a href="javascript:removeFromCart({{$key}})" class="btn btn-sm btn--danger rounded-full action-btn">
-                                        <i class="tio-delete-outlined"></i>
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                    @endif
-                @endforeach
-            @endif
+                                </td>
+                                <td class="align-items-center text-center">
+                                    <input type="hidden" data-key="{{ $key }}" id="{{ $cartItem['id'] }}"
+                                        class="amount--input form-control text-center"
+                                        value="{{ $cartItem['quantity'] }}" min="1"
+                                        max="{{ $product['total_stock'] }}" onkeyup="updateQuantity(event)"
+                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');">
+                                    {{ $cartItem['quantity'] }}
+
+                                </td>
+                                <td class="text-center px-0 py-1">
+                                    <div class="btn text-left">
+                                        {{ \App\CentralLogics\Helpers::set_symbol($product_subtotal) }}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-wrap justify-content-center">
+                                        <a href="javascript:removeFromCart({{ $key }})"
+                                            class="btn btn-sm btn--danger rounded-full action-btn">
+                                            <i class="tio-delete-outlined"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endif
+                    @endforeach
+                @endif
             </tbody>
         </table>
     </div>
@@ -90,10 +95,10 @@
 <?php
 $total = $subtotal;
 //$session_total = $subtotal+$total_tax-$discount_on_product;
-$session_total = $subtotal+$total_tax;
+$session_total = $subtotal + $total_tax;
 \Session::put('total', $session_total);
 
-$discount_amount = ($discount_type == 'percent' && $discount > 0) ? (($total * $discount) / 100) : $discount;
+$discount_amount = $discount_type == 'percent' && $discount > 0 ? ($total * $discount) / 100 : $discount;
 $discount_amount += $discount_on_product;
 //$total -= $discount_amount;
 
@@ -107,8 +112,7 @@ if ($extra_discount) {
     $total -= $extra_discount;
 }
 
-
-$finalTotal = round($total+$updated_total_tax, 2);
+$finalTotal = round($total + $updated_total_tax, 2);
 ?>
 <div class="box p-3">
     <dl class="row">
@@ -116,43 +120,47 @@ $finalTotal = round($total+$updated_total_tax, 2);
         <dd class="col-sm-6 text-right">{{ Helpers::set_symbol($subtotal) }}</dd> --}}
 
 
-        <dt class="col-sm-6">{{translate('product')}} {{translate('discount')}}:
+        {{-- <dt class="col-sm-6">{{translate('product')}} {{translate('discount')}}:
         </dt>
-        <dd class="col-sm-6 text-right">  {{ Helpers::set_symbol(round($discount_amount,2)) }}</dd>
+        <dd class="col-sm-6 text-right">  {{ Helpers::set_symbol(round($discount_amount,2)) }}</dd> --}}
 
-<!--        <dt class="col-sm-6">{{translate('coupon')}} {{translate('discount')}}:
+        <!--        <dt class="col-sm-6">{{ translate('coupon') }} {{ translate('discount') }}:
         </dt>
         <dd class="col-sm-6 text-right">
             <button class="btn btn-sm" type="button" data-toggle="modal" data-target="#coupon-discount"><i
                     class="tio-edit"></i>
             </button> - {{ Helpers::set_symbol($extra_discount) }}
         </dd>-->
-        <dt class="col-sm-6">{{translate('extra')}} {{translate('discount')}}:
+        <dt class="col-sm-6">{{ translate('extra') }} {{ translate('discount') }}:
         </dt>
         <dd class="col-sm-6 text-right">
             <button class="btn btn-sm" type="button" data-toggle="modal" data-target="#add-discount"><i
                     class="tio-edit"></i>
-            </button> - {{ Helpers::set_symbol($extra_discount) }}</dd>
+            </button> - {{ Helpers::set_symbol($extra_discount) }}
+        </dd>
 
-            <?php $adminOffers = Helpers::adminWhOffers(); ?>
-            @if(count($adminOffers) >0)
-            <dt class="col-sm-6"> {{translate('Avail Offers')}}:
+        <?php $adminOffers = Helpers::adminWhOffers(); ?>
+        @if (count($adminOffers) > 0)
+            <dt class="col-sm-6"> {{ translate('Avail Offers') }}:
             </dt>
             <dd class="col-sm-6 text-right">
                 <button class="btn btn-sm" type="button" data-toggle="modal" data-target="#offer-discount"><i
                         class="tio-edit"></i>
-                </button> {{count($adminOffers)}} Offers</dd>
-            @endif
-        <dt class="col-sm-6">{{translate('tax')}} {{ \App\CentralLogics\Helpers::get_business_settings('product_vat_tax_status') === 'included'?  '(Included)': ''}} :</dt>
-        <dd class="col-sm-6 text-right">{{ Helpers::set_symbol(round($total_tax,2)) }}</dd>
+                </button> {{ count($adminOffers) }} Offers
+            </dd>
+        @endif
+        <dt class="col-sm-6">{{ translate('tax') }}
+            {{ \App\CentralLogics\Helpers::get_business_settings('product_vat_tax_status') === 'included' ? '(Included)' : '' }}
+            :</dt>
+        <dd class="col-sm-6 text-right">{{ Helpers::set_symbol(round($total_tax, 2)) }}</dd>
         <dt class="col-12">
             <hr class="mt-0">
         </dt>
-        <dt class="col-sm-6">{{translate('total')}} :</dt>
+        <dt class="col-sm-6">{{ translate('total') }} :</dt>
         <dd class="col-sm-6 text-right h4 b">{{ Helpers::set_symbol($finalTotal) }}</dd>
     </dl>
     <div>
-        <form action="{{route('admin.pos.order')}}" id='order_place' method="post">
+        <form action="{{ route('admin.pos.order') }}" id='order_place' method="post">
             @csrf
             <div class="pos--payment-options mt-3 mb-3">
                 <h5 class="mb-3">{{ translate('Payment Method') }}</h5>
@@ -160,7 +168,7 @@ $finalTotal = round($total+$updated_total_tax, 2);
                     <li>
                         <label>
                             <input type="radio" name="type" value="cash" hidden="" checked="">
-                            <span>{{translate('cash')}}</span>
+                            <span>{{ translate('cash') }}</span>
                         </label>
                     </li>
                     {{-- <li>
@@ -173,12 +181,12 @@ $finalTotal = round($total+$updated_total_tax, 2);
             </div>
             <div class="row button--bottom-fixed g-1 bg-white ">
                 <div class="col-sm-6">
-                    <a href="#" class="btn btn-outline-danger btn--danger btn-sm btn-block" onclick="emptyCart()"><i
-                            class="fa fa-times-circle "></i> {{translate('Cancel Order')}} </a>
+                    <a href="#" class="btn btn-outline-danger btn--danger btn-sm btn-block"
+                        onclick="emptyCart()"><i class="fa fa-times-circle "></i> {{ translate('Cancel Order') }} </a>
                 </div>
                 <div class="col-sm-6">
-                    <button type="submit" class="btn  btn--primary btn-sm btn-block" ><i class="fa fa-shopping-bag"></i>
-                        {{translate('Place Order')}}
+                    <button type="submit" class="btn  btn--primary btn-sm btn-block"><i class="fa fa-shopping-bag"></i>
+                        {{ translate('Place Order') }}
                     </button>
                 </div>
             </div>
@@ -190,33 +198,37 @@ $finalTotal = round($total+$updated_total_tax, 2);
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{translate('update_discount')}}</h5>
+                <h5 class="modal-title">{{ translate('update_discount') }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{route('admin.pos.discount')}}" method="post" class="row">
+                <form action="{{ route('admin.pos.discount') }}" method="post" class="row">
                     @csrf
                     <div class="form-group col-sm-6">
-                        <label for="">{{translate('discount')}}</label>
-                        <input type="number" min="0" max="" value="{{session()->get('cart')['extra_discount'] ?? 0}}"
-                               id="extra_discount_input" class="form-control" name="discount" step="any" placeholder="{{translate('Ex: 45')}}">
+                        <label for="">{{ translate('discount') }}</label>
+                        <input type="number" min="0" max=""
+                            value="{{ session()->get('cart')['extra_discount'] ?? 0 }}" id="extra_discount_input"
+                            class="form-control" name="discount" step="any"
+                            placeholder="{{ translate('Ex: 45') }}">
                     </div>
                     <div class="form-group col-sm-6">
-                        <label for="">{{translate('type')}}</label>
+                        <label for="">{{ translate('type') }}</label>
                         <select name="type" class="form-control" id="discount_type_select">
-                            <option value="amount" {{$extra_discount_type=='amount'?'selected':''}}>{{translate('amount')}}
-                                ({{\App\CentralLogics\Helpers::currency_symbol()}})
+                            <option value="amount" {{ $extra_discount_type == 'amount' ? 'selected' : '' }}>
+                                {{ translate('amount') }}
+                                ({{ \App\CentralLogics\Helpers::currency_symbol() }})
                             </option>
-                            <option value="percent" {{$extra_discount_type=='percent'?'selected':''}}>{{translate('percent')}}(%)
+                            <option value="percent" {{ $extra_discount_type == 'percent' ? 'selected' : '' }}>
+                                {{ translate('percent') }}(%)
                             </option>
                         </select>
                     </div>
                     <div class="col-sm-12">
                         <div class="btn--container justify-content-end">
-                            <button class="btn btn-sm btn--reset" type="reset">{{translate('reset')}}</button>
-                            <button class="btn btn-sm btn--primary" type="submit">{{translate('submit')}}</button>
+                            <button class="btn btn-sm btn--reset" type="reset">{{ translate('reset') }}</button>
+                            <button class="btn btn-sm btn--primary" type="submit">{{ translate('submit') }}</button>
                         </div>
                     </div>
                 </form>
@@ -229,37 +241,38 @@ $finalTotal = round($total+$updated_total_tax, 2);
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{translate('Available Offers')}}</h5>
+                <h5 class="modal-title">{{ translate('Available Offers') }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{route('admin.pos.offer-discount')}}" method="post" class="row">
+                <form action="{{ route('admin.pos.offer-discount') }}" method="post" class="row">
                     @csrf
-                    
-                    @foreach($adminOffers as $offer)
-                    <div class="discountpricing card card-body p-2 d-block mb-2 w-75"> 
-                        
-                        <?php 
-                        if($offer->offer_type == 'one_rupee'){
-                             $msg =  '1 Kg in only 1₹ on minimun order amount ₹'.$offer->min_purchase_amount;
-                        }else{
- 
-                             $disType = ($offer->discount_type == 'amount')?'₹':'%';
-                             $msg =  $offer->discount_amount.$disType. ' off on purchase minimun ';
-                         } ?>
-                          <input type="radio" class="form-check-input" name="admin_offer_id"  value="{{$offer->id}}"> {{ @$offer->title }}  <strong class="text-dark mx-2 d-inline-block"> {{$msg }}</strong>  
-                         {{-- <span class="bg-danger discountbox px-2 py-1 rounded-sm text-white "> </span> 
+
+                    @foreach ($adminOffers as $offer)
+                        <div class="discountpricing card card-body p-2 d-block mb-2 w-75">
+
+                            <?php
+                            if ($offer->offer_type == 'one_rupee') {
+                                $msg = '1 Kg in only 1₹ on minimun order amount ₹' . $offer->min_purchase_amount;
+                            } else {
+                                $disType = $offer->discount_type == 'amount' ? '₹' : '%';
+                                $msg = $offer->discount_amount . $disType . ' off on purchase minimun ';
+                            } ?>
+                            <input type="radio" class="form-check-input" name="admin_offer_id"
+                                value="{{ $offer->id }}"> {{ @$offer->title }} <strong
+                                class="text-dark mx-2 d-inline-block"> {{ $msg }}</strong>
+                            {{-- <span class="bg-danger discountbox px-2 py-1 rounded-sm text-white "> </span> 
                           --}}
-                         
-                     </div>
-                     @endforeach
-                   
+
+                        </div>
+                    @endforeach
+
                     <div class="col-sm-12">
                         <div class="btn--container justify-content-end">
-                            <button class="btn btn-sm btn--reset" type="reset">{{translate('reset')}}</button>
-                            <button class="btn btn-sm btn--primary" type="submit">{{translate('submit')}}</button>
+                            <button class="btn btn-sm btn--reset" type="reset">{{ translate('reset') }}</button>
+                            <button class="btn btn-sm btn--primary" type="submit">{{ translate('submit') }}</button>
                         </div>
                     </div>
                 </form>
@@ -272,22 +285,22 @@ $finalTotal = round($total+$updated_total_tax, 2);
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{translate('update_tax')}}</h5>
+                <h5 class="modal-title">{{ translate('update_tax') }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{route('admin.pos.tax')}}" method="POST" class="row">
+                <form action="{{ route('admin.pos.tax') }}" method="POST" class="row">
                     @csrf
                     <div class="form-group col-12">
-                        <label for="">{{translate('tax')}} (%)</label>
+                        <label for="">{{ translate('tax') }} (%)</label>
                         <input type="number" class="form-control" name="tax" min="0">
                     </div>
                     <div class="col-sm-12">
                         <div class="btn--container">
-                            <button class="btn btn-sm btn--reset" type="reset">{{translate('reset')}}</button>
-                            <button class="btn btn-sm btn--primary" type="submit">{{translate('submit')}}</button>
+                            <button class="btn btn-sm btn--reset" type="reset">{{ translate('reset') }}</button>
+                            <button class="btn btn-sm btn--primary" type="submit">{{ translate('submit') }}</button>
                         </div>
                     </div>
                 </form>
@@ -301,30 +314,30 @@ $finalTotal = round($total+$updated_total_tax, 2);
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{translate('payment')}}</h5>
+                <h5 class="modal-title">{{ translate('payment') }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{route('admin.pos.order')}}" id='order_place' method="post" class="row">
+                <form action="{{ route('admin.pos.order') }}" id='order_place' method="post" class="row">
                     @csrf
                     <div class="form-group col-12">
-                        <label class="input-label" for="">{{ translate('amount') }} ({{\App\CentralLogics\Helpers::currency_symbol()}})</label>
+                        <label class="input-label" for="">{{ translate('amount') }} ({{ \App\CentralLogics\Helpers::currency_symbol() }})</label>
                         <input type="number" class="form-control" name="amount" min="0" step="0.01"
-                               value="{{Helpers::set_price($total+$total_tax)}}" disabled>
+                               value="{{ Helpers::set_price($total + $total_tax) }}" disabled>
                     </div>
                     <div class="form-group col-12">
-                        <label class="input-label" for="">{{translate('type')}}</label>
+                        <label class="input-label" for="">{{ translate('type') }}</label>
                         <select name="type" class="form-control">
-                            <option value="cash">{{translate('cash')}}</option>
-                            <option value="card">{{translate('card')}}</option>
+                            <option value="cash">{{ translate('cash') }}</option>
+                            <option value="card">{{ translate('card') }}</option>
                         </select>
                     </div>
                     <div class="col-sm-12">
                         <div class="btn&#45;&#45;container">
-                            <button class="btn btn-sm btn&#45;&#45;reset" type="reset">{{translate('reset')}}</button>
-                            <button class="btn btn-sm btn&#45;&#45;primary" type="submit">{{translate('submit')}}</button>
+                            <button class="btn btn-sm btn&#45;&#45;reset" type="reset">{{ translate('reset') }}</button>
+                            <button class="btn btn-sm btn&#45;&#45;primary" type="submit">{{ translate('submit') }}</button>
                         </div>
                     </div>
                 </form>
@@ -339,7 +352,7 @@ $finalTotal = round($total+$updated_total_tax, 2);
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{translate('coupon_discount')}}</h5>
+                <h5 class="modal-title">{{ translate('coupon_discount') }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -348,12 +361,12 @@ $finalTotal = round($total+$updated_total_tax, 2);
                 <form class="row">
                     @csrf
                     <div class="form-group col-sm-12">
-                        <input type="text" class="form-control" >
+                        <input type="text" class="form-control">
                     </div>
                     <div class="col-sm-12">
                         <div class="btn--container justify-content-end">
-                            <button class="btn btn-sm btn--reset" type="reset">{{translate('reset')}}</button>
-                            <button class="btn btn-sm btn--primary" type="submit">{{translate('submit')}}</button>
+                            <button class="btn btn-sm btn--reset" type="reset">{{ translate('reset') }}</button>
+                            <button class="btn btn-sm btn--primary" type="submit">{{ translate('submit') }}</button>
                         </div>
                     </div>
                 </form>
@@ -363,6 +376,4 @@ $finalTotal = round($total+$updated_total_tax, 2);
 </div>
 <!-- Coupon Discount -->
 
-<script>
-
-</script>
+<script></script>

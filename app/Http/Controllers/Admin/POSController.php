@@ -109,7 +109,7 @@ class POSController extends Controller
         $product = $this->product->findOrFail($request->product_id);
         $discount = self::discount_calculation($product, $product['price']);
         $offers =  Helpers::getWhProductOffers($request->product_id);
-
+        //dd($offers);
         return response()->json([
             'success' => 1,
             'view' => view('admin-views.pos._quick-view-data', compact('product', 'discount', 'offers'))->render(),
@@ -569,7 +569,7 @@ class POSController extends Controller
         //     $warehouse_id = $authUser->warehouse_id;
         // } elseif ($authUser->admin_role_id == 1) {
 
-        // }
+        // } 
 
         $start_date = $request['start_date'];
         $end_date = $request['end_date'];

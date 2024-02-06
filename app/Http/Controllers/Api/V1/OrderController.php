@@ -66,7 +66,7 @@ class OrderController extends Controller
             'cart' => 'required',
             //'distance' => 'required_if:order_type,delivery',
             'store_id' => 'required_if:order_type,self_pickup',
-            'time_slot_id' => 'required_if:order_type,delivery',
+            // 'time_slot_id' => 'required_if:order_type,delivery',
         ]);
 
         if ($validator->fails()) {
@@ -615,6 +615,7 @@ class OrderController extends Controller
             // }
             foreach ($details as $product_detail) {
                 $product_detail['product_details'] = json_decode($product_detail['product_details'], true);
+                
             }
 
             return response()->json($details, 200);
@@ -632,6 +633,47 @@ class OrderController extends Controller
      * @return JsonResponse
      */
     public function cancel_order(Request $request): \Illuminate\Http\JsonResponse
+    {
+        if ($this->order->where(['user_id' => $request->user()->id, 'id' => $request['order_id']])->first()) {
+            $order = $this->order->with(['details'])->where(['user_id' => $request->user()->id, 'id' => $request['order_id']])->first();
+            if($order->order_status == 'pending'){
+                $total_stock = 0;
+
+                foreach ($order->details as $detail) {
+                    if ($detail['is_stock_decreased'] == 1) {
+                        // Assuming $detail->product_details is an array
+                        $product_details = json_decode($detail->product_details, true);
+                
+                        // Assuming $detail['quantity'] is the stock quantity to be decreased
+                        // $total_stock += $detail['quantity'];
+                        $this->warehouseProduct->where(['id' => $product_details['product_id']])->update([
+                            'total_stock' => $detail['quantity'],
+                        ]);
+                    }
+                }
+                //     $var_store[] = $var;
+                        // $this->warehouseProduct->where(['id' => $product_details['product_id']])->update([
+                        //     'total_stock' => $total_stock,
+                        // ]);
+                        $this->order_detail->where(['id' => $product_details['product_id']])->update([
+                            'is_stock_decreased' => 0,
+                        ]);
+            }
+        
+
+            $this->order->where(['user_id' => $request->user()->id, 'id' => $request['order_id']])->update([
+                'order_status' => 'canceled',
+            ]);
+            return response()->json(['message' => 'Order canceled'], 200);
+        }
+
+        return response()->json([
+            'errors' => [
+                ['code' => 'order', 'message' => 'not found!'],
+            ],
+        ], 401);
+    }
+    public function old_cancel_order(Request $request): \Illuminate\Http\JsonResponse
     {
         if ($this->order->where(['user_id' => $request->user()->id, 'id' => $request['order_id']])->first()) {
 
@@ -670,7 +712,6 @@ class OrderController extends Controller
             ],
         ], 401);
     }
-
     /**
      * @param Request $request
      * @return JsonResponse

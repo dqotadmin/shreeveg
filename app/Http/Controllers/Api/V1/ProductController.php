@@ -466,6 +466,7 @@ class ProductController extends Controller
      */
     public function remove_favorite_products(Request $request): \Illuminate\Http\JsonResponse
     {
+
         $validator = Validator::make(
             $request->all(),
             [

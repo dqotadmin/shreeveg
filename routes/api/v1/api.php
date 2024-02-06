@@ -7,6 +7,7 @@ Route::group(['namespace' => 'Api\V1', 'middleware' => 'localization'], function
     Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
         Route::post('', 'CustomerAuthController@registration');
         Route::post('login', 'CustomerAuthController@login');
+        Route::post('logout', 'CustomerAuthController@logout');
         Route::post('social-customer-login', 'CustomerAuthController@social_customer_login');
 
         Route::post('check-phone', 'CustomerAuthController@check_phone');

@@ -2668,4 +2668,6 @@
   'receiver_order_history' => 'Receiver order history',
   'out for delivery' => 'Out for delivery',
   'receiver_today_order' => 'Receiver today order',
+  'Phone number must be unique!' => 'Phone number must be unique!',
+  'deliveryman_added_successfully' => 'Deliveryman added successfully',
 );

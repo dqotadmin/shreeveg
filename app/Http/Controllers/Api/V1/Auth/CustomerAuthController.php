@@ -718,4 +718,19 @@ class CustomerAuthController extends Controller
             'errors' => $errors
         ], 401);
     }
+    public function logout(Request $request): JsonResponse
+    {
+        $user = \Auth::user();
+
+        if ($user) {
+            $user->tokens()->delete(); // Invalidate all tokens for the authenticated user
+        }
+    
+        \Auth::logout();
+    
+        return response()->json([
+            'success' => 'Logout successful'
+        ], 200);
+    }
+    
 }

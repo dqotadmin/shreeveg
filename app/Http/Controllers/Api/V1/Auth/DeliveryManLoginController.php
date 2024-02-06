@@ -35,7 +35,7 @@ class DeliveryManLoginController extends Controller
             'identity_type' => 'required|in:passport,driving_license,nid',
             'identity_number' => 'required',
             'identity_image' => 'required|max:2048',
-            'branch_id' => 'required',
+            'warehouse_id' => 'required',
         ], [
             'f_name.required' => translate('First name is required!'),
             'email.required' => translate('Email is required!'),
@@ -72,7 +72,7 @@ class DeliveryManLoginController extends Controller
         $dm->phone = $request->phone;
         $dm->identity_number = $request->identity_number;
         $dm->identity_type = $request->identity_type;
-        $dm->branch_id = $request->branch_id;
+        $dm->warehouse_id = $request->warehouse_id;
         $dm->identity_image = $identity_image;
         $dm->image = $image_name;
         $dm->is_active = 0;

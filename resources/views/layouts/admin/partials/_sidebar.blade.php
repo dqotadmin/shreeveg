@@ -841,7 +841,6 @@
                         @endif
 
                         @if(Helpers::module_permission_check(MANAGEMENT_SECTION['support_management']))
-                        <!-- Help & Support Manegement 
                             <li class="nav-item">
                                 <small class="nav-subtitle"
                                        title="Layouts">{{translate('Help & Support Section')}}</small>
@@ -859,7 +858,6 @@
                                     </span>
                                 </a>
                             </li>
-                            End Pages -->
                         @endif
 
 

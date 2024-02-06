@@ -431,4 +431,13 @@ class OrderController extends Controller
             ],
         ], 401);
     }
+    public function order_history(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $details = $this->order->where(['user_id' => $request->user()->id])
+        ->with(['details'])
+        ->get(); 
+        return response()->json($details, 200);
+
+    }
+    
 }

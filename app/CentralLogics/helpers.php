@@ -319,7 +319,6 @@ class Helpers
 
     public static function apk_product_data_formatting($data, $multi_data = false)
     {
-
         $storage = [];
         if ($multi_data == true) {
             foreach ($data as $item) {
@@ -343,6 +342,9 @@ class Helpers
                 $item['single_image'] = json_decode($item->productDetail['single_image']);
                 $item['choice_options'] = json_decode($item->productDetail['choice_options']);
                 $item['group_ids'] = json_decode($item->productDetail['group_ids']);
+                $item['cat_parent_id'] = $item->productDetail->category->parent_id;
+                $item['cat_name'] = $item->productDetail->category->name;
+                $item['cat_category_code'] = $item->productDetail->category->category_code;
 
                 if (isset($item) && $item['product_details']) {
 

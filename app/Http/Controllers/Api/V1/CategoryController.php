@@ -56,6 +56,7 @@ class CategoryController extends Controller
     public function get_all_products($id): \Illuminate\Http\JsonResponse
     {
         try {
+
             $products = CategoryLogic::all_products($id); // $id means category id
             return response()->json(Helpers::apk_product_data_formatting($products, true), 200);
             // return response()->json(Helpers::product_data_formattingOld(CategoryLogic::all_products($id), true), 200);

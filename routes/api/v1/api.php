@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['namespace' => 'Api\V1', 'middleware' => 'localization'], function () {
 
     Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
-        Route::post('register', 'CustomerAuthController@registration');
+        Route::post('', 'CustomerAuthController@registration');
         Route::post('login', 'CustomerAuthController@login');
         Route::post('social-customer-login', 'CustomerAuthController@social_customer_login');
 
@@ -97,6 +97,7 @@ Route::group(['namespace' => 'Api\V1', 'middleware' => 'localization'], function
             Route::put('cancel', 'OrderController@cancel_order');
             Route::get('track', 'OrderController@track_order');
             Route::put('payment-method', 'OrderController@update_payment_method');
+            Route::get('history', 'OrderController@order_history');
         });
         // Chatting
         Route::group(['prefix' => 'message'], function () {

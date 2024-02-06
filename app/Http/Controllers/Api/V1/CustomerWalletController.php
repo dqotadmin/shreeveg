@@ -86,10 +86,9 @@ class CustomerWalletController extends Controller
     public function wallet_add_money(Request $request): \Illuminate\Http\JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            'amount'=>'numeric|min:.01',
+            'amount'=>'required|numeric|min:.01',
 
         ]);
-
         if ($validator->fails()) {
             return response()->json(['errors' => Helpers::error_processor($validator)], 403);
         }
@@ -100,7 +99,7 @@ class CustomerWalletController extends Controller
 
             if($wallet_transaction)
             {
-                return response()->json([], 200);
+                return response()->json([$paginator], 200);
             }
     
             return response()->json(['errors'=>[

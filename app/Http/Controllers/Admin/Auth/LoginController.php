@@ -30,7 +30,7 @@ class LoginController extends Controller
         $builder->build($width = 100, $height = 40, $font = null);
         $phrase = $builder->getPhrase();
 
-        if(Session::has('default_captcha_code')) {
+        if (Session::has('default_captcha_code')) {
             Session::forget('default_captcha_code');
         }
         Session::put('default_captcha_code', $phrase);
@@ -91,6 +91,7 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         auth()->guard('admin')->logout();
+        \Session::forget('issuperadminlogin');
         return redirect()->route('admin.auth.login');
     }
 }

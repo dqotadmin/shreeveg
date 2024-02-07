@@ -27,165 +27,38 @@
                 <!-- Header -->
                 <div class="card-header border-0">
                     <div class="card--header justify-content-start max--sm-grow ">
-                        <!-- <form action="{{url()->current()}}" method="GET" class="float-left">
-                            <div class="input-group">
-                                <input id="datatableSearch_" type="search" name="search" class="form-control"
-                                    placeholder="{{translate('Search_by_ID_or_name')}}" aria-label="Search"
-                                    value="{{$search}}" autocomplete="off">
-                                <div class="input-group-append">
-                                    <button type="submit" class="input-group-text">
-                                        {{translate('search')}}
-                                    </button>
-                                </div>
-                            </div>
-                        </form> -->
+                      
                         @if($admin_role_id == 1)
                         <div class="col-md-3 m-2">
-                            <select name="" id="fetch_warehouse_stock" class="form-control">
+                            <select name="warehouse_id" id="fetch_warehouse_stock" class=" form-control">
                                 <option value="" disabled selected>{{translate('Select Warehouse')}}</option>
                                 @foreach(\App\Model\Warehouse::where('status','1')->where('deleted_at',null)->get()
                                 as $warehouse)
-                                <option value="{{$warehouse->id}}" id="warehouse_id">{{$warehouse->name}}</option>
+                                <option value="{{$warehouse->id}}" id="warehouse_id"  >{{$warehouse->name}}</option>
                                 @endforeach
                             </select>
+   
                         </div>
                         @endif    
-                        @if(in_array(@$admin_role_id, [3,1]))
-
-                      <?php $condition = ''; 
-                        $admin_role_id = $admin_role_id;
-                        $store =  \App\Model\Store::where('status','1')->where('deleted_at',null);
-                        if($admin_role_id == '1')
-                                 $condition =  $store->get();
-                            elseif($admin_role_id == 3)
-                                $condition =  $store->where('warehouse_id',$warehouse_id)->get();
-                                elseif($admin_role_id == 6)
-                                $condition =  $store->where('id',$store_id)->get();
-                            $selected = 'selected';
-                           ?>
-
-                             <div class="col-md-3 m-2">
-                            <select name="" id="fetch_store_stock" class="form-control">
-                                <option value=""   >{{translate('Select Store')}}</option>
-                            @if($condition)  
-                            @foreach($condition as $store)
-                                <option value="{{$store->id}}"   id="store_id">{{$store->name}}</option>
-                            @endforeach
-                            @endif
-                            @endif
-
-                        @if($admin_role_id == 6)
-                          <?php $condition = ''; 
-                            if($admin_role_id == '1')
-                                 $condition =  \App\Model\Store::where('status','1')->where('deleted_at',null)->get();
-                            elseif($admin_role_id == 3)
-                                $condition =  \App\Model\Store::where('status','1')->where('deleted_at',null)->where('warehouse_id',auth('admin')->user()->warehouse_id)->get();
-                                elseif($admin_role_id == 6)
-                                $condition =  \App\Model\Store::where('status','1')->where('deleted_at',null)->where('id',auth('admin')->user()->store_id)->get();
-                            $selected = 'selected';
-                           ?>
-                             <div class="col-md-3 m-2">
-                            <select name="" id="fetch_store_stock" class="form-control">
-                                <option value=""   >{{translate('Select Store')}}</option>
-                            @if($condition)  
-                            @foreach($condition as $store)
-                                <option value="{{$store->id}}" {{$selected}}  id="store_id">{{$store->name}}</option>
-                            @endforeach
-                            @endif
-                        @endif
+                        
+                        <div class="col-md-3 m-2">
+                            <select   class="form-control store_name" name="store_id" id="fetch_store_stock">
+                                    <option disabled selected>--- {{translate('select')}} {{translate('Store')}} ---</option>
+                                
                             </select>
                         </div>
-                      
+                           
+
+                        
                     </div>
-                    <div id="product_detail"></div>
+                      
+                </div>
                     <!-- Unfold -->
                      
-                </div>
-                <div class="table-responsive datatable-custom">
-                    <table id="columnSearchDatatable product_detail"
-                        class="table table-borderless table-thead-bordered table-nowrap table-align-middle card-table"
-                        data-hs-datatables-options='{
-                                 "order": [],
-                                 "orderCellsTop": true
-                               }'>
-                        <thead class="thead-light">
-                            <tr>
-                                <th>{{translate('#')}}</th>
-                                <th>{{translate('product_name')}}</th>
-                                <th id="store_id" class="d-none">{{translate('store_id')}}</th>
-                            <?php if($admin_role_id == 1)
-                                $display = "d-none";
-                                else
-                                $display = "d-block"; ?>
-                                <th id="stock" class=<?php echo $display ?>>{{translate('stock')}}</th>
-                                </tr>
-                        </thead>
+             <div id="product_detail"></div>
 
-                        <tbody id="set-rows" class="justify-content-end">
-                            @foreach($products as $key=>$product)
-                            <tr>
-                                <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">{{$products->firstItem()+$key}}
-                                </td>
-                                <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
-                                    @if($admin_role_id != 3)
-                                    <a href="{{route('admin.product.view',[$product['id']])}}"
-                                        class="product-list-media">
-                                        @else
-                                        <a class="product-list-media">
-                                            @endif
-                                            @if (!empty(json_decode($product['image'],true)))
-                                            <img src="{{asset('storage/app/public/product')}}/{{json_decode($product['image'],true)[0]}}"
-                                                onerror="this.src='{{asset('public/assets/admin/img/400x400/img2.jpg')}}'">
-                                            @else
-                                            <img src="{{asset('public/assets/admin/img/400x400/img2.jpg')}}">
-                                            @endif
-                                            <h6 class="name line--limit-2">
-                                                {{\Illuminate\Support\Str::limit($product['name'], 20, $end='...')}}
-                                            </h6>
-                                        </a>
-                                </td>
-                                <!-- <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
-                                    <div class="max-85 text-right">
-                                        {{ $product['product_code'] }}
-                                    </div>
-                                </td> -->
-                                @if($admin_role_id == 3)
-                                <td class="pt-1 pb-3  {{$key == 0 ? 'pt-4' : '' }}">
-                                    <?php
-                                            $current_stock =  0;
-
-                                        foreach(\App\Model\WarehouseProduct::where('warehouse_id',auth('admin')->user()->warehouse_id)->where('product_id',$product->id)->get() as $stock){
-                                           if($stock->total_stock > 0){
-                                            $current_stock =  $stock->total_stock;
-                                           }
-                                        }
-                                        echo $current_stock;
-                                        ?> /({{@$product->unit['title'] }})
-                                </td>
-                                @endif
-
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-
-                    <div class="page-area">
-                        <table>
-                            <tfoot class="border-top">
-                                {!! $products->links() !!}
-                            </tfoot>
-                        </table>
-                    </div>
-                    @if(count($products)==0)
-                    <div class="text-center p-4">
-                        <img class="w-120px mb-3" src="{{asset('/public/assets/admin/svg/illustrations/sorry.svg')}}"
-                            alt="Image Description">
-                        <p class="mb-0">{{translate('No_data_to_show')}}</p>
-                    </div>
-                    @endif
-                </div>
                 <!-- End Table -->
-            </div>
+        </div>
             <!-- End Card -->
         </div>
     </div>
@@ -196,47 +69,46 @@
 
 @push('script_2')
 <script>
+        var warehouse_id = "{{$warehouse_id}}";
+        getStore(warehouse_id);
+        $('select[name="warehouse_id"]').on('change',function(){
+            var warehouse_id = $(this).val();
+            getStore(warehouse_id);
+           
+        });
+        function getStore(warehouse_id){
+        //    alert(warehouse_id);
+            if(warehouse_id){
+                $.ajax({
+            url: '{{url('/')}}/admin/report/stores/' + warehouse_id,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+            console.log(data);  
+            $('.store_name').empty();
+            $('.store_name').append('<option value="" disabled selected>--- Select Store ---</option>');
+            $.each(data.stores, function (key, value) {
+                    $('.store_name').append('<option value="' + value.id + '" >' + value.name + '</option>');
+                });
+               
+            }
+        });
+            }
+        }
+    </script>
+<script>
+    
     // Function to handle AJAX request
     function fetchStoreStock(storeId) {
-        var tbody = $('#set-rows');
-        tbody.empty(); // Clear the existing rows
+        // var tbody = $('#set-rows');
+        // tbody.empty(); // Clear the existing rows
 
         $.ajax({
             url: '{{url('/')}}/admin/pos/fetch-store-stock/' + storeId,
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                var tbody = $('#set-rows');
-        tbody.empty(); // Clear the existing rows
-        if (data.data.length === 0) {
-            // Display "No data to show" message
-            var noDataHtml = '<div class="row">';
-            noDataHtml += '<div class="col-md-12 text-center p-4">';
-            noDataHtml += '</div>';
-            noDataHtml += '<div class="col-md-12 text-center p-4">';
-            noDataHtml += '<img class="w-120px mb-3" src="{{asset('/public/assets/admin/svg/illustrations/sorry.svg')}}" alt="Image Description">';
-            noDataHtml += '<p class="mb-0">{{translate('No_data_to_show')}}</p>';
-            noDataHtml += '</div>';
-            noDataHtml += '</div>';
-            tbody.append(noDataHtml);
-        }else{
-        $.each(data.data, function (index, item) {
-            var lowStockClass = (item.total_stock <= "{{$stock_limit}}") ? 'text-danger' : '';
-            
-            var rowHtml = '<tr>';
-            rowHtml += '<td class="pt-1 pb-3  pt-4">' + (index + 1) + '</td>';
-            rowHtml += '<td class="pt-1 pb-3  pt-4">' + item.product.name + '</td>'; // Replace with actual property names
-            rowHtml += '<td class="pt-1 pb-3  pt-4 ' + lowStockClass + '">' + item.total_stock;
-                    if ((item.product.unit)) {
-                        rowHtml += ' ' + item.product.unit.title;
-                    }
-
-                    rowHtml += '</td>'; // Replace with actual property names'
-            rowHtml += '</tr>';
-            //console.log(item)
-            tbody.append(rowHtml); });
-              
-            }// ... Your existing logic for displaying data ...
+                $('#product_detail').html(data.view);
             }
         });
     }
@@ -247,11 +119,6 @@
         if (defaultStoreId) {
             // Trigger the AJAX request with the default selected value
             fetchStoreStock(defaultStoreId);
-            
-            // Additional logic if needed...
-            $('#stock').removeClass('d-none');
-            $('#store_id').removeClass('d-none');
-            $('.page-area').addClass('d-none');
         }
     });
 
@@ -259,94 +126,22 @@
     $('#fetch_store_stock').on('change', function () {
         var storeId = $(this).val();
         fetchStoreStock(storeId);
-
-        // Additional logic if needed...
-        $('#stock').removeClass('d-none');
-        $('#store_id').removeClass('d-none');
-        $('.page-area').addClass('d-none');
     });
 </script>
-<!-- 
-<script>
-        $('#fetch_store_stock').on('selected',function(){
-            $('#stock').removeClass('d-none');
-            $('#store_id').removeClass('d-none');
-            $('.page-area').addClass('d-none');
-        var store_id = $(this).val();
-        $.ajax({
-            url: '{{url('/')}}/admin/pos/fetch-store-stock/'+store_id,
-            type:'GET',
-            dataType:'json',
-            success:function(data){
-                var tbody = $('#set-rows');
-        tbody.empty(); // Clear the existing rows
-        if (data.data.length === 0) {
-            // Display "No data to show" message
-            var noDataHtml = '<div class="row">';
-            noDataHtml += '<div class="col-md-12 text-center p-4">';
-            noDataHtml += '</div>';
-            noDataHtml += '<div class="col-md-12 text-center p-4">';
-            noDataHtml += '<img class="w-120px mb-3" src="{{asset('/public/assets/admin/svg/illustrations/sorry.svg')}}" alt="Image Description">';
-            noDataHtml += '<p class="mb-0">{{translate('No_data_to_show')}}</p>';
-            noDataHtml += '</div>';
-            noDataHtml += '</div>';
-            tbody.append(noDataHtml);
-        }else{
-        $.each(data.data, function (index, item) {
-            var rowHtml = '<tr>';
-            rowHtml += '<td class="pt-1 pb-3  pt-4">' + (index + 1) + '</td>';
-            rowHtml += '<td class="pt-1 pb-3  pt-4">' + item.product.name + '</td>'; // Replace with actual property names
-            rowHtml += '<td class="pt-1 pb-3  pt-4">' + item.total_stock + '</td>'; // Replace with actual property names
-            rowHtml += '</tr>';
-            console.log(item)
-            tbody.append(rowHtml); });
-              
-            }
-            }
-        });
-        });
-    </script> -->
+ 
     
 <script>
         $('#fetch_warehouse_stock').on('change',function(){
-            $('#stock').removeClass('d-none');
-            $('#store_id').removeClass('d-none');
-            $('.page-area').addClass('d-none');
-            $('#warehouse_id').removeClass('d-none');
-        var store_id = $(this).val();
+          
+        var warehouse_id = $(this).val();
         $.ajax({
-            url: '{{url('/')}}/admin/pos/fetch-warehouse-stock/'+store_id,
+            url: '{{url('/')}}/admin/pos/fetch-warehouse-stock/'+warehouse_id,
             type:'GET',
             dataType:'json',
             success:function(data){
-                var tbody = $('#set-rows');
-        tbody.empty(); // Clear the existing rows
+                console.log(data);
+                $('#product_detail').html(data.view);
 
-        if (data.data.length === 0) {
-            // Display "No data to show" message
-            var noDataHtml = '<div class="row">';
-            noDataHtml += '<div class="col-md-12 text-center p-4">';
-            noDataHtml += '</div>';
-            noDataHtml += '<div class="col-md-12 text-center p-4">';
-            noDataHtml += '<img class="w-120px mb-3" src="{{asset('/public/assets/admin/svg/illustrations/sorry.svg')}}" alt="Image Description">';
-            noDataHtml += '<p class="mb-0">{{translate('No_data_to_show')}}</p>';
-            noDataHtml += '</div>';
-            noDataHtml += '</div>';
-            tbody.append(noDataHtml);
-        } else {
-            // Iterate over the data and create rows
-            $.each(data.data, function(index, item) {
-                var rowHtml = '<tr>';
-                rowHtml += '<td class="pt-1 pb-3  pt-4">' + (index + 1) + '</td>';
-                if (item.product_detail) {
-                    rowHtml += '<td class="pt-1 pb-3  pt-4">' + item.product_detail.name + '</td>';
-                }
-                rowHtml += '<td class="pt-1 pb-3  pt-4">' + item.total_stock + '</td>'; // Replace with actual property names
-                rowHtml += '</tr>';
-                console.log(item)
-                tbody.append(rowHtml);
-            });
-        }
     }
         });
         });

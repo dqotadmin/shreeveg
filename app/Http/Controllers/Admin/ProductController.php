@@ -525,7 +525,7 @@ class ProductController extends Controller
         $p->unit_id = $request->unit_id;
 
         $p->maximum_order_quantity = $request->maximum_order_quantity;
-        $p->group_ids = json_encode($request->group_ids);
+        $p->group_ids = $request->group_ids ? json_encode($request->group_ids) : null;
         $p->save();
 
         // foreach ($request->lang as $index => $key) {

@@ -1016,17 +1016,23 @@ class POSController extends Controller
     {
         $data =  $this->store_products->where('store_id', $store_id)->with(['product', 'product.unit'])->get();
         // Decode JSON data to an associative array
+        // return response()->json([
+        //     'data' => $data
+        // ]);
         return response()->json([
-            'data' => $data
-        ]);
+            'view' => view('admin-views.pos.stocks.render_store_stock', compact('data'))->render()
+        ]); 
     }
 
     public function prices_wareohuse_stock($warehouse_id)
     {
         $data =  $this->warehouse_products->where('warehouse_id', $warehouse_id)->with('productDetail')->get();
         // Decode JSON data to an associative array
+        // return response()->json([
+        //     'data' => $data
+        // ]);
         return response()->json([
-            'data' => $data
-        ]);
+            'view' => view('admin-views.pos.stocks.render_stock', compact('data'))->render()
+        ]); 
     }
 }

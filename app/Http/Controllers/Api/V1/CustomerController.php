@@ -10,6 +10,7 @@ use App\Model\Newsletter;
 use App\Model\Order;
 use App\Model\Warehouse;
 use App\Model\OrderDetail;
+use App\Model\Store;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -37,7 +38,13 @@ class CustomerController extends Controller
      */
     public function address_list(Request $request): JsonResponse
     {
-        return response()->json($this->customer_address->where('user_id', $request->user()->id)->latest()->get(), 200);
+        if(isset($request->user()->id)){
+            return response()->json($this->customer_address->where('user_id', $request->user()->id)->latest()->get(), 200);
+
+        }else{
+        $errors[] = ['code' => 'auth-001', 'message' => 'You are not authenticate.'];
+
+        }
     }
 
     /**
@@ -54,6 +61,8 @@ class CustomerController extends Controller
             'area' => 'required',
             'landmark' => 'required',
             'pincode' => 'required',
+            'latitude' => 'required',
+            'longitude' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -180,13 +189,15 @@ class CustomerController extends Controller
      */
     public function info(Request $request): JsonResponse
     {
-        $userData =   $request->user();
-        if($userData->warehouse_id){
-            $whData = Warehouse::find($userData->warehouse_id);
-            $userData['delivery_time']= json_decode($whData->delivery_time,true);
-        }
-       // $warehouse_data = $warehouse_id
-        return response()->json($userData, 200);
+            $userData =   $request->user();
+            if($userData->warehouse_id){
+                $whData = Warehouse::find($userData->warehouse_id);
+                $userData['delivery_time']= json_decode($whData->delivery_time,true);
+                $stores = Store::where('warehouse_id',$userData->warehouse_id)->get();
+                $userData['stores'] = $stores;
+            }
+           // $warehouse_data = $warehouse_id
+            return response()->json($userData, 200);
     }
 
     /**

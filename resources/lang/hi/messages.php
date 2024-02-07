@@ -2176,4 +2176,10 @@
   'shreeveg_price' => 'Shreeveg price',
   'avg_price' => 'Avg price',
   'Ex : 1%' => 'Ex : 1%',
+  'stock_list' => 'Stock list',
+  'rate list' => 'Rate list',
+  'Broker rate list' => 'Broker rate list',
+  'receiver_today_order' => 'Receiver today order',
+  'order_list_history' => 'Order list history',
+  'receiver_order_history' => 'Receiver order history',
 );

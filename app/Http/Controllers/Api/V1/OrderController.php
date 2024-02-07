@@ -66,7 +66,7 @@ class OrderController extends Controller
             'cart' => 'required',
             //'distance' => 'required_if:order_type,delivery',
             'store_id' => 'required_if:order_type,self_pickup',
-            // 'time_slot_id' => 'required_if:order_type,delivery',
+            'time_slot_id' => 'required_if:order_type,delivery',
         ]);
 
         if ($validator->fails()) {
@@ -193,7 +193,6 @@ class OrderController extends Controller
 
             $o_time = $or['time_slot_id'];
             $o_delivery = $or['delivery_date'];
-            dd($or);
             $total_tax_amount = 0;
 
             foreach ($request['cart'] as $c) {

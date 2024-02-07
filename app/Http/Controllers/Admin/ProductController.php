@@ -585,7 +585,7 @@ class ProductController extends Controller
                 if (isset($request->title[$key])) {
                     $product_details[$key]['title'] = $request->title[$key];
                 }
-                $discountPercentage = ($request->market_price[$key] - ($request->offer_price[$key] / $qty)) / $request->market_price[$key] * 100;
+                $discountPercentage = ($request->market_price[$key] - ($request->offer_price[$key] )) / $request->market_price[$key] * 100;
                 $product_details[$key]['discount']  = number_format($discountPercentage, 2, '.', '');
 
                 if (isset($request->per_unit_price[$key])) {

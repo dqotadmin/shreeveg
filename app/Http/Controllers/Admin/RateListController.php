@@ -146,7 +146,7 @@ class RateListController extends Controller
                 if(isset($quantity) &&  $quantity != "NaN"){
                     $marketPrice = $array['market_price'][$key] * $quantity;
                     $originalmarketPrice = $array['market_price'][$key];
-                    $discountPercentage = ($marketPrice - ($offerPrice / $quantity)) / $marketPrice * 100;
+                    $discountPercentage = ($marketPrice - ($offerPrice)) / $marketPrice * 100;
                 }
                 $unit = $array['unit_id'][$key];
                 $margin = $array['1_slot']['margin'][$key];
@@ -174,7 +174,7 @@ class RateListController extends Controller
                 $offerPrice = ($array['2_slot']['offer_price'][$key] === "NaN") ? '0' : $array['2_slot']['offer_price'][$key];
                 if(isset($quantity) &&  $quantity != "NaN"){
                     $marketPrice = $array['market_price'][$key] * $quantity;
-                    $discountPercentage = ($marketPrice - ($offerPrice / $quantity)) / $marketPrice * 100;
+                    $discountPercentage = ($marketPrice - ($offerPrice)) / $marketPrice * 100;
                 }
                 $margin = $array['2_slot']['margin'][$key];
                 $per_unit_price = $array['2_slot']['per_unit_price'][$key];
@@ -199,7 +199,7 @@ class RateListController extends Controller
                 $offerPrice = ($array['3_slot']['offer_price'][$key] === "NaN") ? '0' : $array['3_slot']['offer_price'][$key];
                 if(isset($quantity) &&  $quantity != "NaN"){
                     $marketPrice = $array['market_price'][$key] * $quantity;
-                    $discountPercentage = ($marketPrice - ($offerPrice / $quantity)) / $marketPrice * 100;
+                    $discountPercentage = ($marketPrice - ($offerPrice)) / $marketPrice * 100;
                 }
                 $margin = $array['3_slot']['margin'][$key];
                 $per_unit_price = $array['3_slot']['per_unit_price'][$key];

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\CentralLogics\Helpers;
 use App\Http\Controllers\Controller;
 use App\Model\City;
+use App\Model\Admin;
 use App\Model\Translation;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Contracts\Foundation\Application;
@@ -20,7 +21,8 @@ use Illuminate\Validation\Rule;
 class CityController extends Controller
 {
     public function __construct(
-        private City $city
+        private City $city,
+        private Admin $admin
     ){}
 
     /**
@@ -130,12 +132,19 @@ class CityController extends Controller
      */
     public function status(Request $request): RedirectResponse
     {
+        $city_check = $this->admin->where('city_id', $request->id)->exists();
+
+        if ($city_check) {
+            Toastr::error(translate('first remove it\'s warehouse!'));
+            return back();
+        } else {
         $city = $this->city->find($request->id);
         $city->status = $request->status;
         $city->save();
         Toastr::success(translate('city status updated!'));
         return back();
     }
+}
 
     /**
      * @param Request $request
@@ -173,7 +182,12 @@ class CityController extends Controller
     public function delete(Request $request): RedirectResponse
     {
         $city = $this->city->find($request->id);
-       
+        $city_check = $this->admin->where('city_id', $request->id)->exists();
+
+        if ($city_check) {
+            Toastr::error(translate('first remove it\'s warehouse!'));
+            return back();
+        } else {
         if ($city) {
             $city->delete();
             Toastr::success( translate('city removed!')  );
@@ -182,4 +196,5 @@ class CityController extends Controller
         }
         return back();
     }
+}
 }

@@ -109,7 +109,7 @@
                                                                                                     </div>
                                                                                                 @endif
                                                                                                 <div class="item">
-                                                                                                    {{ $offProduct2->product->name }}
+                                                                                                    {{ @$offProduct2->product->name }}
                                                                                                 </div>
                                                                                             </div>
                                                                                             <div class="col-md-4">

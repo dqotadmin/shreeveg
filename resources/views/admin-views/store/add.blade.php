@@ -367,7 +367,9 @@ $(document).ready(function() {
                         html: message,
                         icon: 'info',
                         confirmButtonText: 'OK'
-                    });
+                    }).then((result)=>{
+                    location.reload();
+                });
                     // $('.get_warehouse').html('<option value="">'+ message +'</option>');
                 } else {
                     $('.get_warehouse').empty();

@@ -87,7 +87,7 @@
                                     </td>
                                     <td>
                                     <span class="d-block font-size-sm text-body text-trim-50">
-                                        {{$cityarea['pin    code']}}
+                                        {{$cityarea['pincode']}}
                                     </span>
                                     </td>
                                     <!-- <td>

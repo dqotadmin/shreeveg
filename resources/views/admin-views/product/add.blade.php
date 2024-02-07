@@ -23,8 +23,8 @@
         </div>
         <!-- End Page Header -->
 
-        <form action="javascript:" method="post" id="product_form"
-        enctype="multipart/form-data" class="needs-validation form_customer row g-2" novalidate>
+            <form action="javascript:" method="post" id="product_form"
+            enctype="multipart/form-data" class="needs-validation form_customer row g-2" novalidate>
             @csrf
             @php($data = Helpers::get_business_settings('language'))
             @php($default_lang = Helpers::get_default_language())

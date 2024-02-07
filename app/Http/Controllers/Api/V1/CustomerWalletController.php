@@ -18,7 +18,8 @@ class CustomerWalletController extends Controller
         private BusinessSetting $business_setting,
         private WalletTransaction $wallet_transaction,
         private User $user
-    ){}
+    ){ 
+    }
 
     /**
      * @param Request $request
@@ -82,7 +83,6 @@ class CustomerWalletController extends Controller
         ];
         return response()->json($data, 200);
     }
-
     public function wallet_add_money(Request $request): \Illuminate\Http\JsonResponse
     {
         $validator = Validator::make($request->all(), [
@@ -107,8 +107,6 @@ class CustomerWalletController extends Controller
             ]], 200);
 
     }
-
-    
     public function wallet_transactions_history(Request $request): \Illuminate\Http\JsonResponse
     {
         $paginator = $this->wallet_transaction->where('user_id', $request->user()->id)

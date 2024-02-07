@@ -257,6 +257,7 @@
                                     class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Warehouse Admin')}}</span>
                             </a>
                         </li>
+                        @if(auth('admin')->user()->admin_role_id == 1  )
 
                         <li class="navbar-vertical-aside-has-menu ">
                             <a class="js-navbar-vertical-aside-menu-link nav-link"
@@ -267,6 +268,7 @@
                                     class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Broker')}}</span>
                             </a>
                         </li>
+                        @endif
                         @endif
 
                         @if( auth('admin')->user()->admin_role_id == 1 || auth('admin')->user()->admin_role_id == 3 )
@@ -484,7 +486,7 @@
                             <li class="navbar-vertical-aside-has-menu ">
                                 <a class="js-navbar-vertical-aside-menu-link nav-link"
                                     href="{{route('admin.purchase-warehouse-order.index')}}"
-                                    title="{{translate('order_list')}}">
+                                    title="{{translate('todays_warehouse_purchase_orders')}}">
                                     <i class="tio-map nav-icon"></i>
                                     <span
                                         class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('warehouse_purchase_orders')}}</span>

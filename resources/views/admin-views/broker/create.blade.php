@@ -110,7 +110,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group mb-0">
-                                        <input type="text" name="rate[]"  class="form-control gray-border" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
+                                        <input type="text" name="rate[]"  class="form-control gray-border"  oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '');"
                                             placeholder="ex. 12 ₹
 " >
                                     </div>

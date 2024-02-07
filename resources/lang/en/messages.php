@@ -2671,4 +2671,8 @@
   'Phone number must be unique!' => 'Phone number must be unique!',
   'deliveryman_added_successfully' => 'Deliveryman added successfully',
   'sdale' => 'Sdale',
+  'first remove it\'s warehouse!' => 'First remove it\'s warehouse!',
+  'Enter new address' => 'Enter new address',
+  'broker_type' => 'Broker type',
+  'todays_warehouse_purchase_orders' => 'Todays warehouse purchase orders',
 );

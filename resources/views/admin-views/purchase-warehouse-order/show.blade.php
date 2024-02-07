@@ -119,7 +119,7 @@
                         @endif
                     @endif
                 @endif
-                @if((in_array(auth('admin')->user()->admin_role_id ,[3,5])) && ($row->status != 'Pending' && $row->status != 'Accepted' && $row->status != 'Received' && $row->status != 'Rejected'))
+                @if((in_array(auth('admin')->user()->admin_role_id ,[1,3,5])) && ($row->status != 'Pending' && $row->status != 'Accepted' && $row->status != 'Received' && $row->status != 'Rejected'))
                     <div class="col-md-6">
                     <label class="input-label" for="exampleFormControlInput1">{{translate('update status')}}</label>
                         <select name="status" class="form-control">

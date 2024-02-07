@@ -219,11 +219,18 @@ class WarehouseController extends Controller
      */
     public function status(Request $request): RedirectResponse
     {
+        $warehouse_check = $this->admin->where('warehouse_id', $request->id)->exists();
+
+        if ($warehouse_check) {
+            Toastr::error(translate('first remove it\'s warehouse admin!'));
+            return back();
+        } else {
         $city = $this->warehouse->find($request->id);
         $city->status = $request->status;
         $city->save();
         Toastr::success(translate('Warehouse status updated!'));
         return back();
+        }
     }
 
     /**

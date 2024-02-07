@@ -25,10 +25,10 @@
                 <!-- Card -->
                 <div class="card">
                     <!-- Header -->
-                    <div class="card-header border-0">
-                        <div class="card--header justify-content-start max--sm-grow ">
+                    @if (in_array($authUser->admin_role_id, [1, 3]))
+                        <div class="card-header border-0">
+                            <div class="card--header justify-content-start max--sm-grow ">
 
-                            @if (in_array($authUser->admin_role_id, [1, 3]))
                                 <div class="col-md-3 m-2">
                                     <select name="warehouse_id" id="fetch_warehouse_stock" class=" form-control">
                                         @if ($warehouse_id)
@@ -45,21 +45,19 @@
                                     </select>
 
                                 </div>
-                            @endif
 
-                            <div class="col-md-3 m-2">
-                                <select class="form-control store_name" name="store_id" id="fetch_store_stock">
-                                    <option disabled selected>--- {{ translate('select') }} {{ translate('Store') }} ---
-                                    </option>
+                                <div class="col-md-3 m-2">
+                                    <select class="form-control store_name" name="store_id" id="fetch_store_stock">
+                                        <option disabled selected>--- {{ translate('select') }} {{ translate('Store') }} ---
+                                        </option>
 
-                                </select>
+                                    </select>
+                                </div>
+
                             </div>
 
-
-
                         </div>
-
-                    </div>
+                    @endif
                     <!-- Unfold -->
 
                     <div id="product_detail"></div>
@@ -90,6 +88,11 @@
             if (defaultStoreId) {
 
                 fetchStockData(store_stock_url, defaultStoreId);
+            }
+
+            var is_store_id = "{{ $authUser->store_id }}";
+            if (is_store_id > 0) {
+                fetchStockData(store_stock_url, is_store_id);
             }
         });
 

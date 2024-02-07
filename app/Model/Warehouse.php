@@ -57,4 +57,9 @@ class Warehouse extends Model
     {
         return $query->where('status', '=', 1);
     }
+
+    public function getWarehouseHavingProduct()
+    {
+        return $this->hasMany(WarehouseProduct::class, 'warehouse_id');
+    }
 }

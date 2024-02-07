@@ -1008,7 +1008,7 @@ class POSController extends Controller
         $warehouse_id =  $authUser->warehouse_id;
         $products = $query->latest()->with('category')->paginate(Helpers::getPagination())->appends($query_param);
 
-        return view('admin-views.pos.stocks.stock', compact('products', 'search', 'warehouse_id'));
+        return view('admin-views.pos.stocks.stock', compact('products', 'search', 'warehouse_id', 'authUser'));
     }
 
 
@@ -1021,7 +1021,7 @@ class POSController extends Controller
         // ]);
         return response()->json([
             'view' => view('admin-views.pos.stocks.render_store_stock', compact('data'))->render()
-        ]); 
+        ]);
     }
 
     public function prices_wareohuse_stock($warehouse_id)
@@ -1033,6 +1033,6 @@ class POSController extends Controller
         // ]);
         return response()->json([
             'view' => view('admin-views.pos.stocks.render_stock', compact('data'))->render()
-        ]); 
+        ]);
     }
 }

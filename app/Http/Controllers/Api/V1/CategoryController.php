@@ -22,7 +22,6 @@ class CategoryController extends Controller
 
             $warehouseId = auth('api')->user()->warehouse_id;
             $whcategpries = Helpers::warehouseAssignCategories($warehouseId);
-            //dd($whcategpries);
             if (!empty($whcategpries)) {
                 $categories = $this->category->whereIn('id', $whcategpries)->where('parent_id', 0)->get();
             } else {

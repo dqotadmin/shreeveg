@@ -62,11 +62,11 @@ class OrderController extends Controller
             'payment_method' => 'required',
             'delivery_address_id' => 'required',
             'order_type' => 'required|in:self_pickup,delivery',
-            'warehouse_id' => 'required',
+            // 'warehouse_id' => 'required',
             'cart' => 'required',
             //'distance' => 'required_if:order_type,delivery',
             'store_id' => 'required_if:order_type,self_pickup',
-            'time_slot_id' => 'required_if:order_type,delivery',
+            'delivery_time_slot' => 'required_if:order_type,delivery',
         ]);
 
         if ($validator->fails()) {

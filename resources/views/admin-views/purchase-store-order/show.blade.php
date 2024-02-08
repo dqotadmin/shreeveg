@@ -106,7 +106,7 @@
                         @if(auth('admin')->user()->admin_role_id == 3 &&  $row->status != 'Delivered')
                         <div class="col-md-6 mt-3">
                             <label class="input-label" for="exampleFormControlInput1">{{translate('comments')}}</label>
-                            <textarea name="store_comments" class="form-control" rows="6" placeholder="{{ translate('enter comments if any') }}" required>{{$row->store_comments}}</textarea>
+                            <textarea name="store_comments" class="form-control" rows="6" placeholder="{{ translate('enter comments if any') }}" >{{$row->store_comments}}</textarea>
 
                         </div>
                         <div class="text-right">
@@ -126,7 +126,7 @@
                     </div>
                     <div class="col-md-6">
                         <label class="input-label" for="exampleFormControlInput1">{{translate('comments')}}</label>
-                        <textarea name="warehouse_comments" class="form-control" rows="6" placeholder="{{ translate('enter comments if any') }}" required>{{$row->warehouse_comments}}</textarea>
+                        <textarea name="warehouse_comments" class="form-control" rows="6" placeholder="{{ translate('enter comments if any') }}" >{{$row->warehouse_comments}}</textarea>
 
                     </div>
                     <div class="text-right">

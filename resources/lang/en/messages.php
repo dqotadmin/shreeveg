@@ -2675,4 +2675,6 @@
   'Enter new address' => 'Enter new address',
   'broker_type' => 'Broker type',
   'todays_warehouse_purchase_orders' => 'Todays warehouse purchase orders',
+  'office' => 'Office',
+  'work' => 'Work',
 );

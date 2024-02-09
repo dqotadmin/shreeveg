@@ -53,6 +53,7 @@ class CustomerController extends Controller
      */
     public function add_new_address(Request $request): JsonResponse
     {
+       
         $validator = Validator::make($request->all(), [
             'address_type' => 'required',
             'address' => 'required',
@@ -126,7 +127,7 @@ class CustomerController extends Controller
             'created_at' => now(),
             'updated_at' => now()
         ];
-        DB::table('customer_addresses')->where('user_id',$id)->update($address);
+        DB::table('customer_addresses')->where('id',$id)->update($address);
         return response()->json(['message' => 'successfully updated!'], 200);
     }
 

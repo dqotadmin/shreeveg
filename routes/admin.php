@@ -399,6 +399,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
                 Route::get('max-amount-status/{status}', 'BusinessSettingsController@max_amount_status')->name('max-amount-status');
                 Route::get('free-delivery-status/{status}', 'BusinessSettingsController@free_delivery_status')->name('free-delivery-status');
                 Route::get('dm-self-registration/{status}', 'BusinessSettingsController@dm_self_registration_status')->name('dm-self-registration');
+                Route::get('pre-order-time-slot/{status}', 'BusinessSettingsController@pre_order_time_slot')->name('pre-order-time-slot');
                 Route::get('otp-setup', 'BusinessSettingsController@otp_setup')->name('otp-setup');
                 Route::post('otp-setup-update', 'BusinessSettingsController@otp_setup_update')->name('otp-setup-update');
 

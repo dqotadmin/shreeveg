@@ -296,7 +296,7 @@
             
         </div>
         <!-- Card -->
-        <!-- <div class="card">
+        <div class="card">
             <div class="card-header border-0">
                 <h5 class="card-title">{{translate('product reviews')}}</h5>
             </div>
@@ -403,7 +403,7 @@
                     <p class="mb-0">{{translate('No_data_to_show')}}</p>
                 </div>
             @endif
-        </div> -->
+        </div>  
         <!-- End Card -->
         
     </div>

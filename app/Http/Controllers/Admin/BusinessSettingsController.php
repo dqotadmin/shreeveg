@@ -131,6 +131,24 @@ class BusinessSettingsController extends Controller
         return response()->json(['message' => 'Delivery man self registration status updated']);
     }
 
+    
+    public function pre_order_time_slot($status): \Illuminate\Http\JsonResponse
+    {
+       $discount =  DB::table('business_settings')->where('key','pre_order_discount')->first()->value;
+       if(isset($discount) && !empty($discount)){
+        DB::table('business_settings')->updateOrInsert(['key' => 'pre_order_time_slot'], [
+            'value' => $status
+        ]);
+        return response()->json(['message' => 'Pre-order time slot status updated']);
+        
+
+       }else{
+
+           return response()->json(['error' => 'Please firstly add pre-order discount']);
+       }
+         
+    }
+
     public function max_amount_status($status): \Illuminate\Http\JsonResponse
     {
         DB::table('business_settings')->updateOrInsert(['key' => 'maximum_amount_for_cod_order_status'], [
@@ -189,6 +207,9 @@ class BusinessSettingsController extends Controller
 
         DB::table('business_settings')->updateOrInsert(['key' => 'restaurant_name'], [
             'value' => $request->restaurant_name
+        ]);
+        DB::table('business_settings')->updateOrInsert(['key' => 'pre_order_discount'], [
+            'value' => $request['pre_order_discount'],
         ]);
 
         $curr_logo = $this->business_settings->where(['key' => 'logo'])->first();

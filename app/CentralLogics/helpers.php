@@ -167,7 +167,7 @@ class Helpers
 
     public static function checkDistance($warehouseId, $deliveryAddressId)
     {
-        $status = true;
+       $status = true;
         $warehouseData = Warehouse::findOrFail($warehouseId);
         $addressData = CustomerAddress::findOrFail($deliveryAddressId);
         $distance = self::haversineDistance($warehouseData->latitude, $warehouseData->longitude, $addressData->latitude, $addressData->longitude);
@@ -176,7 +176,7 @@ class Helpers
         }
         $data['distance'] = ceil($distance);
         $data['status'] =  $status;
-        return $data;
+      return $data;
     }
 
     public static function haversineDistance($lat1, $lon1, $lat2, $lon2)
@@ -471,12 +471,12 @@ class Helpers
         // dd($data->productDetail['image'], $data->productDetail);
 
         $variations = [];
-        $data['category_id'] = json_decode($data->productDetail->category->id); //json_decode($data['category_id']);
-        $data['image'] = json_decode($data->productDetail['image']);
-        $data['customer_price'] = json_decode($data['customer_price']);
-        $data['store_price'] = json_decode($data['store_price']);
-        $data['attributes'] = json_decode($data['attributes']);
-        $data['choice_options'] = json_decode($data['choice_options']);
+        $data['category_id'] = json_decode(@$data->productDetail->category->id); //json_decode($data['category_id']);
+        $data['image'] = json_decode(@$data->productDetail['image']);
+        $data['customer_price'] = json_decode(@$data['customer_price']);
+        $data['store_price'] = json_decode(@$data['store_price']);
+        $data['attributes'] = json_decode(@$data['attributes']);
+        $data['choice_options'] = json_decode(@$data['choice_options']);
 
         $categories = gettype($data['category_id']) == 'array' ? $data['category_id'] : json_decode($data['category_id']);
         if (!is_null($categories) && ($categories) > 0) {
@@ -1234,13 +1234,12 @@ class Helpers
     public static function module_permission_check($mod_name)
     {
         $permission = auth('admin')->user()->role->module_access;
-
         if (isset($permission) && in_array($mod_name, (array)json_decode($permission)) == true) {
-            return true;
+        return true;
         }
 
         if (auth('admin')->user()->admin_role_id == 1) {
-            return true;
+        return true;
         }
         return false;
     }

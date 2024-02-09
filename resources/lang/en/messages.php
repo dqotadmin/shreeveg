@@ -2675,4 +2675,9 @@
   'Enter new address' => 'Enter new address',
   'broker_type' => 'Broker type',
   'todays_warehouse_purchase_orders' => 'Todays warehouse purchase orders',
+  'office' => 'Office',
+  'work' => 'Work',
+  'pre_order_time_slot' => 'Pre order time slot',
+  'When this field is active, this pre-order time slot will be visible in  app.' => 'When this field is active  this pre-order time slot will be visible in  app.',
+  'Favicon.ico' => 'Favicon.ico',
 );

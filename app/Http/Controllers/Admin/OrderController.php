@@ -83,7 +83,7 @@ class OrderController extends Controller
         $start_date = $request['start_date'];
         $end_date = $request['end_date'];
 
-        //$this->order->where(['checked' => 0])->update(['checked' => 1]);
+        $this->order->where(['checked' => 0])->update(['checked' => 1]);
 
         $mainQuery = self::customQuery($warehouse_id)
             ->with(['customer', 'warehouse'])

@@ -689,8 +689,8 @@
                                 <div class="col-md-4">
                                     <?php
                                     $dm_self_registration=\App\Model\BusinessSetting::where('key','dm_self_registration')->first()->value;
-                                    $dm_status = $dm_self_registration == 1 ? 0 : 1;
-                                    ?>
+                                         $dm_status = $dm_self_registration == 1 ? 0 : 1;
+                                          ?>
                                     <div class="form-group">
                                         <label class="toggle-switch h--45px toggle-switch-sm d-flex justify-content-between border rounded px-3 py-0 form-control"
                                                onclick="dm_self_registration('{{route('admin.business-settings.store.dm-self-registration',[$dm_status])}}')">
@@ -703,13 +703,42 @@
                                                     <img src="{{asset('public/assets/admin/img/info-circle.svg')}}" alt="info">
                                                 </span>
                                             </span>
-                                            <input type="checkbox" name="dm_self_registration" class="toggle-switch-input" {{ $dm_self_registration == 1 ? 'checked' : '' }}>
+                                          
+                                            <input type="checkbox" name="dm_self_registration" class="toggle-switch-input"   {{ $dm_self_registration == 1 ? 'checked' : '' }}>
                                             <span class="toggle-switch-label text">
                                                 <span class="toggle-switch-indicator"></span>
                                             </span>
                                         </label>
                                     </div>
                                 </div>
+                                <div class="col-md-4">
+                                    <?php
+                                    $pre_order_time_slot=\App\Model\BusinessSetting::where('key','pre_order_time_slot')->first()->value;
+                                    $pre_time_slot_status = $pre_order_time_slot == 1 ? 0 : 1;
+                                    ?>
+                                    <div class="form-group">
+                                        <label class="toggle-switch h--45px toggle-switch-sm d-flex justify-content-between border rounded px-3 py-0 form-control"
+                                               onclick="pre_order_time_slot('{{route('admin.business-settings.store.pre-order-time-slot',[$pre_time_slot_status])}}')">
+                                            <span class="pr-1 d-flex align-items-center switch--label">
+                                            <span class="line--limit-1">
+                                                <strong>{{translate('pre_order_time_slot')}}</strong>
+                                            </span>
+                                                <span class="form-label-secondary text-danger d-flex ml-1" data-toggle="tooltip" data-placement="right"
+                                                      data-original-title="{{translate('When this field is active, this pre-order time slot will be visible in  app.')}}">
+                                                    <img src="{{asset('public/assets/admin/img/info-circle.svg')}}" alt="info">
+                                                </span>
+                                            </span>
+                                            <input type="checkbox" name="pre_order_time_slot" class="toggle-switch-input" {{ $pre_order_time_slot == 1 ? 'checked' : '' }}>
+                                            <span class="toggle-switch-label text">
+                                                <span class="toggle-switch-indicator"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                @php($pre_order_discount=\App\Model\BusinessSetting::where('key','pre_order_discount')->first()->value)
+                                <input type="text" class="form-control" placeholder="Please enter discount in (%)" name="pre_order_discount" value="{{$pre_order_discount}}">
+                               </div>
                             </div>
 
                             <div class="row">
@@ -840,56 +869,46 @@
         @endif
 
         function currency_symbol_position(route) {
-            $.get({
-                url: route,
+            fireAjax(route);
+        }
+
+        function fireAjax(getRoute){
+            if(getRoute){
+                $.get({
+                url: getRoute,
                 contentType: false,
                 processData: false,
                 beforeSend: function () {
                     $('#loading').show();
                 },
                 success: function (data) {
-                    toastr.success(data.message);
-                },
+                if(data.message){
+                        toastr.success(data.message);
+                    }else{
+                        toastr.warning(data.error);
+                        location.reload();
+                    }
+                    },
                 complete: function () {
                     $('#loading').hide();
                 },
             });
+            }
         }
 
         function self_pickup(route) {
 
-            $.get({
-                url: route,
-                contentType: false,
-                processData: false,
-                beforeSend: function () {
-                    $('#loading').show();
-                },
-                success: function (data) {
-                    toastr.success(data.message);
-                },
-                complete: function () {
-                    $('#loading').hide();
-                },
-            });
+            fireAjax(route);
+        }
+
+        function pre_order_time_slot(route) {
+
+            fireAjax(route);
         }
 
         function dm_self_registration(route) {
 
-            $.get({
-                url: route,
-                contentType: false,
-                processData: false,
-                beforeSend: function () {
-                    $('#loading').show();
-                },
-                success: function (data) {
-                    toastr.success(data.message);
-                },
-                complete: function () {
-                    $('#loading').hide();
-                },
-            });
+            fireAjax(route);
         }
 
         function phone_verification(route) {

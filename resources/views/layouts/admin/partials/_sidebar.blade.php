@@ -650,7 +650,7 @@
                                         <span class="text-truncate sidebar--badge-container">
                                             <span>{{translate('pending')}}</span>
                                             <span class="badge badge-soft-info badge-pill ml-1">
-                                                {{\App\Model\Order::where(['order_status'=>'pending'])->when(request('warehouse_id') && request('warehouse_id') !== 'all', fn ($query) => $query->where('warehouse_id', request('warehouse_id')))->count()}}
+                                                {{\App\Model\Order::where(['order_status'=>'pending','type'=>'Warehouse'] )->when(request('warehouse_id') && request('warehouse_id') !== 'all', fn ($query) => $query->where('warehouse_id', request('warehouse_id')))->count()}}
                                             </span>
                                         </span>
                                     </a>
@@ -662,7 +662,7 @@
                                         <span class="text-truncate sidebar--badge-container">
                                             <span>{{translate('confirmed')}}</span>
                                             <span class="badge badge-soft-success badge-pill ml-1">
-                                                {{\App\Model\Order::where(['order_status'=>'confirmed'])->when(request('warehouse_id') && request('warehouse_id') !== 'all', fn ($query) => $query->where('warehouse_id', request('warehouse_id')))->count()}}
+                                                {{\App\Model\Order::where(['order_status'=>'confirmed','type'=>'Warehouse'])->when(request('warehouse_id') && request('warehouse_id') !== 'all', fn ($query) => $query->where('warehouse_id', request('warehouse_id')))->count()}}
                                             </span>
                                         </span>
                                     </a>
@@ -674,7 +674,7 @@
                                         <span class="text-truncate  sidebar--badge-container">
                                             <span>{{translate('packaging')}}</span>
                                             <span class="badge badge-soft-warning badge-pill ml-1">
-                                                {{\App\Model\Order::where(['order_status'=>'processing'])->when(request('warehouse_id') && request('warehouse_id') !== 'all', fn ($query) => $query->where('warehouse_id', request('warehouse_id')))->count()}}
+                                                {{\App\Model\Order::where(['order_status'=>'processing','type'=>'Warehouse'])->when(request('warehouse_id') && request('warehouse_id') !== 'all', fn ($query) => $query->where('warehouse_id', request('warehouse_id')))->count()}}
                                             </span>
                                         </span>
                                     </a>
@@ -686,7 +686,7 @@
                                         <span class="text-truncate  sidebar--badge-container">
                                             <span>{{translate('out_for_delivery')}}</span>
                                             <span class="badge badge-soft-warning badge-pill ml-1">
-                                                {{\App\Model\Order::where(['order_status'=>'out_for_delivery'])->when(request('warehouse_id') && request('warehouse_id') !== 'all', fn ($query) => $query->where('warehouse_id', request('warehouse_id')))->count()}}
+                                                {{\App\Model\Order::where(['order_status'=>'out_for_delivery','type'=>'Warehouse'])->when(request('warehouse_id') && request('warehouse_id') !== 'all', fn ($query) => $query->where('warehouse_id', request('warehouse_id')))->count()}}
                                             </span>
                                         </span>
                                     </a>
@@ -698,7 +698,7 @@
                                         <span class="text-truncate  sidebar--badge-container">
                                             <span>{{translate('delivered')}}</span>
                                             <span class="badge badge-soft-success badge-pill ml-1">
-                                                {{\App\Model\Order::notPos()->where(['order_status'=>'delivered'])->when(request('warehouse_id') && request('warehouse_id') !== 'all', fn ($query) => $query->where('warehouse_id', request('warehouse_id')))->count()}}
+                                                {{\App\Model\Order::notPos()->where(['order_status'=>'delivered','type'=>'Warehouse'])->when(request('warehouse_id') && request('warehouse_id') !== 'all', fn ($query) => $query->where('warehouse_id', request('warehouse_id')))->count()}}
                                             </span>
                                         </span>
                                     </a>
@@ -735,7 +735,7 @@
                                         <span class="text-truncate  sidebar--badge-container">
                                             <span>{{translate('canceled')}}</span>
                                             <span class="badge badge-soft-light badge-pill ml-1">
-                                                {{\App\Model\Order::where(['order_status'=>'canceled'])->count()}}
+                                                {{\App\Model\Order::where(['order_status'=>'canceled','type'=>'Warehouse'])->count()}}
                                             </span>
                                         </span>
                                     </a>
@@ -925,7 +925,7 @@
                             </ul>
                         </li> -->
 
-                        <!-- End Pages -->
+                        <!-- End Pages --> 
                         @endif
 
 

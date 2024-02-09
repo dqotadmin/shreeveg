@@ -46,11 +46,8 @@
                                     <input value="{{auth('admin')->user()->city->city}}" class="form-control" readonly>
                                     <input value="{{auth('admin')->user()->city_id}}" name="city_id" type="hidden" class="form-control" readonly>
                                     @else
-                                    <select name="city_id" id="click_on_city" class="get_city  form-control" readonly required>
-                                        <option value="" disabled selected>Select City</option>
-                                        @foreach(\App\Model\City::where('status','1')->get() as $city)
-                                        <option value="{{$city->id}}" {{$city->id==$stores->city_id ? 'selected' : '';}}>{{$city->city}}</option>
-                                        @endforeach
+                                    <select name="city_id" id="click_on_city" class="get_city  form-control"  required>
+                                        <option value="{{$stores->city_id}}" >{{$stores->city->city}}</option>
                                     </select>
                                     <div class="invalid-feedback">
                                         Please select city.

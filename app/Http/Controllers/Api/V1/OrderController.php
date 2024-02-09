@@ -62,13 +62,12 @@ class OrderController extends Controller
             'payment_method' => 'required',
             'delivery_address_id' => 'required',
             'order_type' => 'required|in:self_pickup,delivery',
-            'warehouse_id' => 'required',
+            // 'warehouse_id' => 'required',
             'cart' => 'required',
             //'distance' => 'required_if:order_type,delivery',
             'store_id' => 'required_if:order_type,self_pickup',
-            'time_slot_id' => 'required_if:order_type,delivery',
+            'delivery_time_slot' => 'required_if:order_type,delivery',
         ]);
-
         if ($validator->fails()) {
             return response()->json(['errors' => Helpers::error_processor($validator)], 403);
         }
@@ -82,7 +81,6 @@ class OrderController extends Controller
         }
 
         $customer = $this->user->find($request->user()->id);
-
         if ($request->payment_method == 'wallet_payment' && $customer->wallet_balance < $request['order_amount']) {
             return response()->json([
                 'errors' => [
@@ -93,16 +91,17 @@ class OrderController extends Controller
 
 
         //Checking the distance between warehouse and customer.
-        $distanceData = Helpers::checkDistance($request->warehouse_id, $request->delivery_address_id);
-        $request['distance'] = $distanceData['distance'] ?? 0;
-
-        if ($request->order_type == 'delivery' && !$distanceData['status']) {
-            return response()->json([
-                'errors' => [
-                    ['code' => 'delivery_address_id', 'message' => 'Sorry! Delivery is not Available on this address']
-                ]
-            ], 203);
-        }
+        // $distanceData = Helpers::checkDistance($request->warehouse_id, $request->delivery_address_id);
+        
+        // $request['distance'] = $distanceData['distance'] ?? 0;
+        $request['distance'] = 1;
+        // if ($request->order_type == 'delivery' && !$distanceData['status']) {
+        //     return response()->json([
+        //         'errors' => [
+        //             ['code' => 'delivery_address_id', 'message' => 'Sorry! Delivery is not Available on this address']
+        //         ]
+        //     ], 203);
+        // }
 
 
         $max_amount = Helpers::get_business_settings('maximum_amount_for_cod_order');
@@ -139,19 +138,19 @@ class OrderController extends Controller
             $delivery_charge = Helpers::get_delivery_charge($request['distance']);
         }
 
-        $coupon = $this->coupon->active()->where(['code' => $request['coupon_code']])->first();
+        // $coupon = $this->coupon->active()->where(['code' => $request['coupon_code']])->first();
 
-        if (isset($coupon)) {
-            if ($coupon['coupon_type'] == 'free_delivery') {
-                $free_delivery_amount = Helpers::get_delivery_charge($request['distance']);
-                $coupon_discount = 0;
-                $delivery_charge = 0;
-            } else {
-                $coupon_discount = $request['coupon_discount_amount'];
-            }
-        } else {
-            $coupon_discount = $request['coupon_discount_amount'];
-        }
+        // if (isset($coupon)) {
+        //     if ($coupon['coupon_type'] == 'free_delivery') {
+        //         $free_delivery_amount = Helpers::get_delivery_charge($request['distance']);
+        //         $coupon_discount = 0;
+        //         $delivery_charge = 0;
+        //     } else {
+        //         $coupon_discount = $request['coupon_discount_amount'];
+        //     }
+        // } else {
+        //     $coupon_discount = $request['coupon_discount_amount'];
+        // }
 
 
         //        $coupon_discount_amount = 0;
@@ -169,7 +168,6 @@ class OrderController extends Controller
                 'order_amount' => $request['order_amount'],
                 'coupon_code' =>  $request['coupon_code'],
                 //'coupon_discount_amount' => $coupon_discount_amount,
-                'coupon_discount_amount' => $coupon_discount,
                 'coupon_discount_title' => $request->coupon_discount_title == 0 ? null : 'coupon_discount_title',
                 'payment_status' => ($request->payment_method == 'cash_on_delivery' || $request->payment_method == 'offline_payment') ? 'unpaid' : 'paid',
                 'order_status' => ($request->payment_method == 'cash_on_delivery' || $request->payment_method == 'offline_payment') ? 'pending' : 'confirmed',
@@ -177,7 +175,7 @@ class OrderController extends Controller
                 'transaction_reference' => $request->transaction_reference ?? null,
                 'order_note' => $request['order_note'],
                 'order_type' => $request['order_type'],
-                'branch_id' => $request['branch_id'],
+                'warehouse_id' => $request['warehouse_id'],
                 'delivery_address_id' => $request->delivery_address_id,
                 'time_slot_id' => $request->time_slot_id,
                 'delivery_date' => $request->delivery_date,
@@ -194,81 +192,74 @@ class OrderController extends Controller
             $o_time = $or['time_slot_id'];
             $o_delivery = $or['delivery_date'];
             $total_tax_amount = 0;
-
-            foreach ($request['cart'] as $c) {
-                $product = $this->product->find($c['product_id']);
-
-                if ($product['maximum_order_quantity'] < $c['quantity']) {
-                    return response()->json(['errors' => $product['name'] . ' ' . \App\CentralLogics\translate('quantity_must_be_equal_or_less_than ' . $product['maximum_order_quantity'])], 401);
-                }
-
-                if (count(json_decode($product['variations'], true)) > 0) {
-                    $price = Helpers::variation_price($product, json_encode($c['variation']));
-                } else {
-                    $price = $product['price'];
-                }
-
-                $tax_on_product = Helpers::tax_calculate($product, $price);
-
-                //                if (Helpers::get_business_settings('product_vat_tax_status') === 'included'){
-                //                    //$price = $price - $tax_on_product;
-                //                }
-
-                $category_id = null;
-                foreach (json_decode($product['category_ids'], true) as $cat) {
-                    if ($cat['position'] == 1) {
-                        $category_id = ($cat['id']);
+            $data = json_decode($request['cart'], true);
+            foreach ($data as $c) {
+                    $product = $this->warehouseProduct->find($c['id']);
+                    $total_stock = $product->total_stock; 
+                    $pack_size = ($c['variations']['quantity']); 
+                    $product_total_quantity = $pack_size *$c['quantity'];
+                    $product_price = ($c['variations']['offer_price']); 
+                    $total_product_price =  $product_price *$c['quantity']; 
+                
+                    if ($product['maximum_order_quantity'] < $product_total_quantity) {
+                        return response()->json(['errors' => $product['name'] . ' ' . \App\CentralLogics\translate('quantity_must_be_equal_or_less_than ' . $product['maximum_order_quantity'])], 401);
                     }
-                }
+  
+                 
+                        $price = $total_product_price;
 
-                $category_discount = Helpers::category_discount_calculate($category_id, $price);
-                $product_discount = Helpers::discount_calculate($product, $price);
-                if ($category_discount >= $price) {
-                    $discount = $product_discount;
-                    $discount_type = 'discount_on_product';
-                } else {
-                    $discount = max($category_discount, $product_discount);
-                    $discount_type = $product_discount > $category_discount ? 'discount_on_product' : 'discount_on_category';
-                }
+                    $tax_on_product = Helpers::tax_calculate($product, $price);
 
-                $or_d = [
-                    'order_id' => $order_id,
-                    'product_id' => $c['product_id'],
-                    'time_slot_id' => $o_time,
-                    'delivery_date' => $o_delivery,
-                    'product_details' => $product,
-                    'quantity' => $c['quantity'],
-                    'price' => $price,
-                    'unit' => $product['unit'],
-                    'tax_amount' => $tax_on_product,
-                    'discount_on_product' => $discount,
-                    'discount_type' => $discount_type,
-                    'variant' => json_encode($c['variant']),
-                    'variation' => json_encode($c['variation']),
-                    'is_stock_decreased' => 1,
-                    'vat_status' => Helpers::get_business_settings('product_vat_tax_status') === 'included' ? 'included' : 'excluded',
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
+                    //                if (Helpers::get_business_settings('product_vat_tax_status') === 'included'){
+                    //                    //$price = $price - $tax_on_product;
+                    //                }
 
-                $total_tax_amount += $or_d['tax_amount'] * $c['quantity'];
+                    // $category_id = null;
+                    // foreach (json_decode($product['category_ids'], true) as $cat) {
+                    //     if ($cat['position'] == 1) {
+                    //         $category_id = ($cat['id']);
+                    //     }
+                    // }
 
-                $type = $c['variation'][0]['type'];
-                $var_store = [];
-                foreach (json_decode($product['variations'], true) as $var) {
-                    if ($type == $var['type']) {
-                        $var['stock'] -= $c['quantity'];
-                    }
-                    $var_store[] = $var;
-                }
+                    // $category_discount = Helpers::category_discount_calculate($category_id, $price);
+                    // $product_discount = Helpers::discount_calculate($product, $price);
+                    // if ($category_discount >= $price) {
+                    //     $discount = $product_discount;
+                    //     $discount_type = 'discount_on_product';
+                    // } else {
+                    //     $discount = max($category_discount, $product_discount);
+                    //     $discount_type = $product_discount > $category_discount ? 'discount_on_product' : 'discount_on_category';
+                    // }
+                    $or_d = [
+                        'user_warehouse_order_id' => $order_id,
+                        'product_id' => $c['product']['product_id'],
+                        'time_slot_id' => $o_time,
+                        'delivery_date' => $o_delivery,
+                        'product_details' => $product,
+                        'quantity' => $c['quantity'],
+                        'price' => $price,
+                        'unit' => $product['unit'],
+                       
+                        // 'discount_on_product' => $discount,
+                        // 'discount_type' => $discount_type,
+                        'variation' => json_encode($c['variations']),
+                        'is_stock_decreased' => 1,
+                        'vat_status' => Helpers::get_business_settings('product_vat_tax_status') === 'included' ? 'included' : 'excluded',
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                    // $total_tax_amount += $or_d['tax_amount'] * $c['quantity'];
+                    
+                    // $type = $c['variations'][0]['type'];
+                   $after_deduct_quantity_stock =  $total_stock - $product_total_quantity;
+                    $this->warehouseProduct->where(['id' => $product['id']])->update([
+                        'total_stock' => $after_deduct_quantity_stock,
+                    ]);
+                    $this->product->where(['id' => $product['product_id']])->update([
+                        'popularity_count' => $product['popularity_count'] + 1
+                    ]);
 
-                $this->product->where(['id' => $product['id']])->update([
-                    'variations' => json_encode($var_store),
-                    'total_stock' => $product['total_stock'] - $c['quantity'],
-                    'popularity_count' => $product['popularity_count'] + 1
-                ]);
-
-                DB::table('order_details')->insert($or_d);
+                    DB::table('user_warehouse_order_details')->insert($or_d);
             }
             $or['total_tax_amount'] = $total_tax_amount;
             DB::table('user_warehouse_orders')->insertGetId($or);

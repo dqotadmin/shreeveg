@@ -216,7 +216,8 @@
                                                             @endforeach
                                                         @endif
                                                     @endif
-                                                    <h5 class="mt-1"><span class="text-body">{{translate('Unit')}}</span> : {{$detail['unit']}} </h5>
+                                                    <h5 class="mt-1"><span class="text-body">{{translate('Unit')}}</span> :
+                                                 <?php   $data = json_decode($detail['unit'], true);  ?>{{@$data['title']}} </h5>
                                                     <h5 class="mt-1"><span class="text-body">{{translate('Unit Price')}}</span> : {{$detail['price']}} </h5>
                                                     <h5 class="mt-1"><span class="text-body">{{translate('QTY')}}</span> : {{$detail['quantity']}} </h5>
                                                 </div>

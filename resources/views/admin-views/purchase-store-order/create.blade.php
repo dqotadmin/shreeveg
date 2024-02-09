@@ -141,7 +141,7 @@
                     </div>
                     <div class="col-md-6">
                         <label class="input-label" for="exampleFormControlInput1">{{translate('comments')}}</label>
-                        <textarea name="store_comments" class="form-control" rows="6" placeholder="{{ translate('enter comments if any') }}" required></textarea>
+                        <textarea name="store_comments" class="form-control" rows="6" placeholder="{{ translate('enter comments if any') }}" ></textarea>
                     </div>
                 </div>
                 <div class="col-12">

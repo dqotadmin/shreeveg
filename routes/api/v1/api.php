@@ -3,7 +3,13 @@
 use Illuminate\Support\Facades\Route;
 
 Route::group(['namespace' => 'Api\V1', 'middleware' => 'localization'], function () {
-
+    Route::get('authentication-failed', function () {
+        $errors = [];
+        array_push($errors, ['code' => 'auth-001', 'message' => 'Unauthenticated.']);
+        return response()->json([
+            'errors' => $errors,
+        ], 401);
+    })->name('authentication-failed');
     Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
         Route::post('', 'CustomerAuthController@registration');
         Route::post('login', 'CustomerAuthController@login');

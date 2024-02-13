@@ -24,6 +24,12 @@ class Order extends Model
         'delivery_address'       => 'array',
         'delivery_date'          => 'date',
         'free_delivery_amount'   => 'float',
+        // 'cancel_by'              => 'string',
+        // 'cancel_by_id'              => 'integer',
+        
+    ];
+    protected $fillable=[
+        'cancel_by','cancel_by_id'
     ];
 
     public function details(): \Illuminate\Database\Eloquent\Relations\HasMany

@@ -262,7 +262,6 @@
                             </th>
                         </tr>
                         </thead>
-
                         <tbody id="set-rows">
                         @foreach($orders as $key=>$order)
 
@@ -275,7 +274,8 @@
                                 </td>
                                 <td>{{date('d M Y',strtotime($order['delivery_date']))}}</td>
                                 <td>
-                                    <span>{{$order->time_slot?date(config('time_format'), strtotime($order->time_slot['start_time'])).' - ' .date(config('time_format'), strtotime($order->time_slot['end_time'])) :'No Time Slot'}}</span>
+                                    <span>{{$order->delivery_time_slot ? $order->delivery_time_slot :'No Time Slot'}}</span>
+                                    <!-- <span>{{$order->time_slot?date(config('time_format'), strtotime($order->time_slot['start_time'])).' - ' .date(config('time_format'), strtotime($order->time_slot['end_time'])) :'No Time Slot'}}</span> -->
                                 </td>
                                 <td>
                                     @if(isset($order->customer))

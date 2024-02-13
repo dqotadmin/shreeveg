@@ -13,6 +13,7 @@ use App\Model\Order;
 use App\Model\OrderDetail;
 use App\Model\Product;
 use App\Model\Warehouse;
+use App\Model\WarehouseProduct;
 use App\User;
 use Box\Spout\Common\Exception\InvalidArgumentException;
 use Box\Spout\Common\Exception\IOException;
@@ -41,6 +42,7 @@ class OrderController extends Controller
         private Product $product,
         private User $user,
         private Warehouse $warehouse,
+        private WarehouseProduct $warehouseProduct,
 
     ) {
     }
@@ -222,8 +224,8 @@ class OrderController extends Controller
      */
     public function status(Request $request): \Illuminate\Http\RedirectResponse
     {
+        
         $order = $this->order->find($request->id);
-
         if (in_array($order->order_status, ['delivered', 'failed'])) {
             Toastr::warning(translate('you_can_not_change_the_status_of_a_completed_order'));
             return back();
@@ -240,23 +242,26 @@ class OrderController extends Controller
         }
 
         if ($request->order_status == 'returned' || $request->order_status == 'failed' || $request->order_status == 'canceled') {
+            if($request->order_status == 'canceled'){
+                
+                    $this->order->find($request->id)->update([
+                        'cancel_by' =>'admin', // Assuming $request->cancel_by is the value you want to update for 'cancel_by'
+                        'cancel_by_id' => auth('admin')->user()->id, // Assuming $request->cancel_by is the value you want to update for 'cancel_by'
+                ]);
+            }
             foreach ($order->details as $detail) {
-
                 if ($detail['is_stock_decreased'] == 1) {
                     $product = $this->product->find($detail['product_id']);
-
+                    $warehouseProduct = $this->warehouseProduct->where('product_id',$detail['product_id'])->where('warehouse_id',$order->warehouse_id)->first();
+                    $type =$warehouseProduct->total_stock;
                     if ($product != null) {
-                        $type = json_decode($detail['variation'])[0]->type;
                         $var_store = [];
-                        foreach (json_decode($product['variations'], true) as $var) {
-                            if ($type == $var['type']) {
-                                $var['stock'] += $detail['quantity'];
-                            }
-                            $var_store[] = $var;
-                        }
+                       
                         $this->product->where(['id' => $product['id']])->update([
                             'variations' => json_encode($var_store),
-                            'total_stock' => $product['total_stock'] + $detail['quantity'],
+                        ]);
+                        $this->warehouseProduct->where('product_id',$detail['product_id'])->where('warehouse_id',$order->warehouse_id)->update([
+                            'total_stock' => $warehouseProduct['total_stock'] + $detail['quantity'],
                         ]);
                         $this->order_detail->where(['id' => $detail['id']])->update([
                             'is_stock_decreased' => 0,
@@ -372,7 +377,7 @@ class OrderController extends Controller
      */
     public function add_delivery_man($order_id, $delivery_man_id): \Illuminate\Http\JsonResponse
     {
-
+        
         if ($delivery_man_id == 0) {
             return response()->json([], 401);
         }

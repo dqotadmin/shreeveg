@@ -3,7 +3,7 @@
 @section('title', translate('Order Details'))
 
 @section('content')
-
+<?php   $auth = auth('admin')->user();  ?>
     <div class="content container-fluid">
 
 
@@ -203,7 +203,10 @@
                                                     @endif
                                                 </div>
                                                 <div class="media-body">
-                                                    <h5 class="line--limit-1">{{@$product['product_detail']['name']}}</h5>
+                                               <?php
+                                                    $product_name = \App\Model\Product::find($product['product_id']);
+                                             ?> 
+                                                    <h5 class="line--limit-1">{{@$product_name->name}} </h5>
                                                     @if($detail['variation'])
                                                         @if(count(json_decode($detail['variation'],true)) > 0)
                                                             @foreach(json_decode($detail['variation'],true)[0]??json_decode($detail['variation'],true) as $key1 =>$variation)
@@ -422,14 +425,33 @@
                                     </label>
                                 </div>
                                 <div class="hs-unfold w-0 flex-grow min-w-160px">
-                                    <select class="custom-select custom-select time_slote" name="timeSlot" data-id="{{$order['id']}}">
+                         
+                                @if($auth->store_id > 0)
+                            {{$order->store->name}}
+
+                        @else
+                       <?php $delivery_time = json_decode($order->warehouse->delivery_time, true);  ?>
+                       
+                        @endif  
+                        <select class="custom-select custom-select time_slote" name="timeSlot" data-id="{{$order['id']}}">
+                            <option disabled selected>{{translate('select')}} {{translate('Time Slot')}}</option>
+                            @foreach($delivery_time as $time_slot)
+                            <?php   $open = $time_slot['open'];
+                                $close = $time_slot['close']; 
+                                $time_range = "$open - $close";?>
+                                <option value="{{$open}} - {{$close}}" {{ $time_range == $order->delivery_time_slot ? 'selected' : '' }} >
+                                {{$open}} - {{$close}}
+                                </option>
+                            @endforeach
+                        </select>
+                                    <!-- <select class="custom-select custom-select time_slote" name="timeSlot" data-id="{{$order['id']}}">
                                         <option disabled selected>{{translate('select')}} {{translate('Time Slot')}}</option>
                                         @foreach(\App\Model\TimeSlot::all() as $timeSlot)
                                             <option value="{{$timeSlot['id']}}" {{$timeSlot->id == $order->time_slot_id ?'selected':''}}>{{date(config('time_format'), strtotime($timeSlot['start_time']))}}
                                                 - {{date(config('time_format'), strtotime($timeSlot['end_time']))}}
                                             </option>
                                         @endforeach
-                                    </select>
+                                    </select> -->
                                 </div>
                             </div>
                         </div>
@@ -610,7 +632,7 @@
                         <span class="card-header-icon">
                         <i class="tio-shop-outlined"></i>
                         </span>
-                        <?php   $auth = auth('admin')->user();  ?>
+                      
                         @if($auth->store_id > 0)
                         <span>{{translate('Store information')}}</span>
                         @else
@@ -864,7 +886,7 @@
         function addDeliveryMan(id) {
             $.ajax({
                 type: "GET",
-                url: '{{url('/')}}/admin/orders/add-delivery-man/{{$order['id']}}/' + id,
+                url: '{{url('/')}}/orders/add-delivery-man/{{$order['id']}}/' + id,
                 data: $('#product_form').serialize(),
                 success: function (data) {
                     //console.log(data); die;

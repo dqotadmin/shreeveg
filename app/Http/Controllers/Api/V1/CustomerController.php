@@ -203,6 +203,21 @@ class CustomerController extends Controller
             return response()->json($userData, 200);
     }
 
+    public static function get_f_l_name($string)
+    {
+        $words = explode(' ', $string);
+        if (count($words) == 1) {
+            $firstName = array_pop($words);
+            $lastName = null;
+        } else {
+            $lastName = array_pop($words);
+            $firstName = implode(' ', $words);
+        }
+        $data['f_name'] = $firstName;
+        $data['l_name'] = $lastName;
+        return $data;
+    }
+
     /**
      * @param Request $request
      * @return JsonResponse
@@ -258,7 +273,7 @@ class CustomerController extends Controller
 
         return response()->json(['message' => 'successfully updated!'], 200);
     }
-
+  
     /**
      * @param Request $request
      * @return JsonResponse

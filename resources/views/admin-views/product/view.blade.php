@@ -431,7 +431,7 @@
         var product_id = $('#product_id').val();
 
         $.ajax({
-            url: '{{url('/')}}/admin/product/get-prices-by-warehouse/'+warehouse_id+'/'+product_id,
+            url: '{{url('/')}}/product/get-prices-by-warehouse/'+warehouse_id+'/'+product_id,
             type:'GET',
             dataType:'json',
             success:function(data){

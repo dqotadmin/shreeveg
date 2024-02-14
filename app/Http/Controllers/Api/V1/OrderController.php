@@ -258,7 +258,7 @@ class OrderController extends Controller
                         'popularity_count' => $product['popularity_count'] + 1
                     ]);
 
-                    // DB::table('user_warehouse_order_details')->insert($or_d);
+                    DB::table('user_warehouse_order_details')->insert($or_d);
             }
             $or['total_tax_amount'] = $total_tax_amount;
             DB::table('user_warehouse_orders')->insertGetId($or);

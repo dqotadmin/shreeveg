@@ -11,7 +11,7 @@ Route::group(['namespace' => 'Api\V1', 'middleware' => 'localization'], function
         ], 401);
     })->name('authentication-failed');
     Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
-        Route::post('', 'CustomerAuthController@registration');
+        Route::post('register', 'CustomerAuthController@registration');
         Route::post('login', 'CustomerAuthController@login');
         Route::post('logout', 'CustomerAuthController@logout');
         Route::post('social-customer-login', 'CustomerAuthController@social_customer_login');

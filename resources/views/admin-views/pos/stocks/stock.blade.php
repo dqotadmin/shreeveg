@@ -75,8 +75,8 @@
 
 @push('script_2')
     <script>
-        var warehouse_stock_url = '{{ url('/') }}/admin/pos/fetch-warehouse-stock/';
-        var store_stock_url = '{{ url('/') }}/admin/pos/fetch-store-stock/';
+        var warehouse_stock_url = '{{ url('/') }}/pos/fetch-warehouse-stock/';
+        var store_stock_url = '{{ url('/') }}/pos/fetch-store-stock/';
 
         $(document).ready(function() {
             var defaultStoreId = $('#fetch_store_stock').val();
@@ -137,7 +137,7 @@
                 console.log(warehouse_id);
                 //alert(warehouse_id);
                 $.ajax({
-                    url: '{{ url('/') }}/admin/report/stores/' + warehouse_id,
+                    url: '{{ url('/') }}/report/stores/' + warehouse_id,
                     type: 'GET',
                     dataType: 'json',
                     success: function(data) {

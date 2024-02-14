@@ -982,7 +982,7 @@ class POSController extends Controller
             ];
         }
 
-        return (new FastExcel($storage))->download('    xlsx');
+        return (new FastExcel($storage))->download('xlsx');
     }
     public function available_stock(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {

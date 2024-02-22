@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\Rule;
 
 
 class CustomerController extends Controller
@@ -224,13 +225,21 @@ class CustomerController extends Controller
      */
     public function update_profile(Request $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
+      $validator = Validator::make($request->all(), [
             'full_name' => 'required',
-            'phone' => ['required', 'unique:users,phone,'.auth()->user()->id]
+            'phone' => [
+                Rule::unique('users', 'phone')->ignore(auth()->user()->id, 'id'),
+            ],
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users', 'email')->ignore(auth()->user()->id, 'id'),
+            ],
         ], [
             'full_name.required' => 'The full name field is required.',
             'phone.required' => 'Phone is required!',
-            'phone.unique' => translate('Phone must be unique!'),
+            'email.required' => 'Email is required!',
+            'email.email' => 'Invalid email format.',
         ]);
 
         if ($validator->fails()) {
@@ -262,7 +271,7 @@ class CustomerController extends Controller
             'full_name' => $request->full_name,
             'f_name' => $tmpName['f_name'],
             'l_name' => $tmpName['l_name'],
-            'phone' => $request->phone,
+            // 'phone' => $request->phone,
             'email' => $request->email,
             'image' => $imageName,
             'password' => $pass,

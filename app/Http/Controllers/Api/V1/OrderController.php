@@ -67,6 +67,7 @@ class OrderController extends Controller
             //'distance' => 'required_if:order_type,delivery',
             'store_id' => 'required_if:order_type,self_pickup',
             'delivery_time_slot' => 'required_if:order_type,delivery',
+            'payment_id' => 'required_if:payment_method,online_payment',
         ]);
         if ($validator->fails()) {
             return response()->json(['errors' => Helpers::error_processor($validator)], 403);
@@ -162,6 +163,7 @@ class OrderController extends Controller
         try {
             //DB::beginTransaction();
             $order_id = 100000 + Order::all()->count() + 1;
+           
             $or = [
                 'id' => $order_id,
                 'user_id' => $request->user()->id,
@@ -185,16 +187,21 @@ class OrderController extends Controller
                 'payment_by' => $request['payment_method'] == 'offline_payment' ? $request['payment_by'] : null,
                 'payment_note' => $request['payment_method'] == 'offline_payment' ? $request['payment_note'] : null,
                 'free_delivery_amount' => $free_delivery_amount,
+                'payment_id' => @$request['payment_id'],
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
+          
             $o_time = $or['delivery_time_slot'];
             $o_delivery = $or['delivery_date'];
             $total_tax_amount = 0;
             $data = json_decode($request['cart'], true);
+            // $dataa = json_decode($data['cart'], true);
+           
             foreach ($data as $c) {
-                    $product = $this->warehouseProduct->find($c['id']);
-                    $total_stock = $product->total_stock; 
+
+                $product = $this->warehouseProduct->find($c['id']);
+                $total_stock = $product->total_stock; 
                     $pack_size = ($c['variations']['quantity']); 
                     $product_total_quantity = $pack_size *$c['quantity'];
                     $product_price = ($c['variations']['offer_price']); 
@@ -260,6 +267,8 @@ class OrderController extends Controller
 
                     DB::table('user_warehouse_order_details')->insert($or_d);
             }
+         
+
             $or['total_tax_amount'] = $total_tax_amount;
             DB::table('user_warehouse_orders')->insertGetId($or);
 
@@ -283,7 +292,7 @@ class OrderController extends Controller
                     ];
                     Helpers::send_push_notif_to_device($fcm_token, $data);
                 }
-
+  
                 //send email
                 $emailServices = Helpers::get_business_settings('mail_config');
 
@@ -291,7 +300,8 @@ class OrderController extends Controller
                     Mail::to($request->user()->email)->send(new \App\Mail\OrderPlaced($order_id));
                 }
             } catch (\Exception $e) {
-                dd($e);
+                return response()->json([$e], 403);
+
             }
 
             return response()->json([
@@ -302,7 +312,7 @@ class OrderController extends Controller
             // DB::commit();
         } catch (\Exception $e) {
             // DB::rollBack();
-            dd($e);
+          
             return response()->json([$e], 403);
         }
     }

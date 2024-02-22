@@ -338,7 +338,8 @@ class OrderController extends Controller
                     'description' => $value,
                     'order_id' => $order['id'],
                     'image' => '',
-                    'type' => 'order'
+                    'type' => 'order',
+                    'user_id' => $order['user_id'],
                 ];
                 Helpers::send_push_notif_to_device($fcm_token, $data);
             }

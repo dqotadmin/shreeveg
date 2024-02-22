@@ -2681,4 +2681,7 @@
   'When this field is active, this pre-order time slot will be visible in  app.' => 'When this field is active  this pre-order time slot will be visible in  app.',
   'Favicon.ico' => 'Favicon.ico',
   'pendig' => 'Pendig',
+  'Message updated!' => 'Message updated!',
+  'online payment' => 'Online payment',
+  'Change  Change  Order Status' => 'Change  Change  Order Status',
 );

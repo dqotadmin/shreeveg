@@ -21,6 +21,14 @@ class Order extends Model
         'user_id'                => 'integer',
         'created_at'             => 'datetime',
         'updated_at'             => 'datetime',
+        'pending_time'             => 'datetime',
+        'confirmed_time'             => 'datetime',
+        'processing_time'             => 'datetime',
+        'delivered_time'             => 'datetime',
+        'failed_time'             => 'datetime',
+        'out_for_delivery_time'             => 'datetime',
+        'returned_time'             => 'datetime',
+        'canceled_time'             => 'datetime',
         'delivery_address'       => 'array',
         'delivery_date'          => 'date',
         'free_delivery_amount'   => 'float',
@@ -28,6 +36,8 @@ class Order extends Model
         // 'cancel_by_id'              => 'integer',
         
     ];
+
+
     protected $fillable=[
         'cancel_by','cancel_by_id'
     ];

@@ -366,6 +366,7 @@ class OrderController extends Controller
                     'type' => 'order',
                     'user_id' => $order['user_id'],
                 ];
+               
                 Helpers::send_push_notif_to_device($fcm_token, $data);
             }
         } catch (\Exception $e) {
@@ -382,10 +383,11 @@ class OrderController extends Controller
                         'title' => translate('Order'),
                         'description' => $value,
                         'order_id' => $order['id'],
+                        'user_id' => @$order['user_id'],
                         'image' => '',
                         'type' => 'order'
                     ];
-                    Helpers::send_push_notif_to_device($fcm_token, $data);
+                Helpers::send_push_notif_to_device($fcm_token, $data);
                 }
             } catch (\Exception $e) {
                 Toastr::warning(\App\CentralLogics\translate('Push notification failed for DeliveryMan!'));
@@ -425,7 +427,8 @@ class OrderController extends Controller
                 $data = [
                     'title' => translate('Order'),
                     'description' => $value,
-                    'order_id' => $order['id'],
+                    'order_id' => @$order['id'],
+                    'user_id' => @$order->user_id,
                     'image' => '',
                     'type' => 'order'
                 ];

@@ -288,7 +288,8 @@ class OrderController extends Controller
                     $data = [
                         'title' => 'Order',
                         'description' => $value,
-                        'order_id' => $order_id,
+                        'order_id' => @$order_id,
+                        'user_id' => @$request->user()->id,
                         'image' => '',
                         'type' => 'order'
                     ];

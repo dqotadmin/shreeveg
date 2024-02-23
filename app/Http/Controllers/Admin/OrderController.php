@@ -224,7 +224,6 @@ class OrderController extends Controller
      */
     public function status(Request $request): \Illuminate\Http\RedirectResponse
     {
-        
         $order = $this->order->find($request->id);
         if (in_array($order->order_status, ['delivered', 'failed'])) {
             Toastr::warning(translate('you_can_not_change_the_status_of_a_completed_order'));
@@ -327,7 +326,33 @@ class OrderController extends Controller
         }
 
         $order->order_status = $request->order_status;
+        if($request->order_status == 'pending'){
+            $order->pending_time = now();
+
+        }elseif($request->order_status == 'confirmed'){
+            $order->confirmed_time = now();
+
+        }elseif($request->order_status == 'processing'){
+            $order->processing_time = now();
+
+        }elseif($request->order_status == 'delivered'){
+            $order->delivered_time = now();
+
+        }elseif($request->order_status == 'failed'){
+            $order->failed_time = now();
+            
+        }elseif($request->order_status == 'out_for_delivery'){
+            $order->out_for_delivery_time = now();
+            
+        }elseif($request->order_status == 'returned'){
+            $order->returned_time = now();
+            
+        }elseif($request->order_status == 'canceled'){
+            $order->canceled_time = now();
+            
+        }
         $order->save();
+
 
         $fcm_token = isset($order->customer) ? $order->customer->cm_firebase_token : null;
         $value = Helpers::order_status_update_message($request->order_status);

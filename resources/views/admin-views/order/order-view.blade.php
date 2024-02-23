@@ -179,7 +179,6 @@
                                 </tr>
                             </thead>
                             @foreach($order->details as $detail)
-
                                 @if($detail->product_details !=null)
                                     @php($product = json_decode($detail->product_details, true))
                                     <!-- Media -->

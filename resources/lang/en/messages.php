@@ -2684,4 +2684,6 @@
   'Message updated!' => 'Message updated!',
   'online payment' => 'Online payment',
   'Change  Change  Order Status' => 'Change  Change  Order Status',
+  'send_notification_to_all_user' => 'Send notification to all user',
+  'notification_offer_message' => 'Notification offer message',
 );

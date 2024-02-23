@@ -88,11 +88,20 @@ class OfferController extends Controller
         $flash_deal->description = $request->description;
         $flash_deal->start_date = $request->start_date;
         $flash_deal->end_date = $request->end_date;
+
         if ($request->offer_type == 'other') {
             //$flash_deal->discount_type = $request->discount_type;
             //$flash_deal->discount_amount = $request->discount_amount;
         } else {
             $flash_deal->min_purchase_amount = $request->min_purchase_amount;
+        }
+        if($request->notification_offer_message && $request->notification_offer_status){
+        $flash_deal->notification_offer_status = 1;
+        $flash_deal->notification_offer_message = $request->notification_offer_message;
+        
+        }else{
+        $flash_deal->notification_offer_status = 0;
+
         }
 
         $flash_deal->deal_type = 'flash_deal';
@@ -186,6 +195,14 @@ class OfferController extends Controller
             // $flash_deal->discount_amount = null;
             $flash_deal->min_purchase_amount = $request->min_purchase_amount;
         }
+        if($request->notification_offer_message && $request->notification_offer_status){
+            $flash_deal->notification_offer_status = 1;
+            $flash_deal->notification_offer_message = $request->notification_offer_message;
+            
+            }else{
+            $flash_deal->notification_offer_status = 0;
+    
+            }
         $flash_deal->image = $request->has('image') ? Helpers::update('offer/', $flash_deal->image, 'png', $request->file('image')) : $flash_deal->image;
         $flash_deal->save();
         Toastr::success(translate('Flash deal updated successfully!'));

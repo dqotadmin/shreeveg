@@ -208,7 +208,7 @@ $(document).on('ready', function () {
     function renderWhProducts(cat_id){
 
         $.ajax({
-            url: '{{url('/')}}/admin/rate_list/get-product-by-cat/' + cat_id,
+            url: '{{url('/')}}/rate_list/get-product-by-cat/' + cat_id,
             method: 'GET',
 
             success: function(data) {

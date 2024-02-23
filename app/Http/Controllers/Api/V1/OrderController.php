@@ -207,9 +207,9 @@ class OrderController extends Controller
                     $product_price = ($c['variations']['offer_price']); 
                     $total_product_price =  $product_price *$c['quantity']; 
                 
-                    if ($product['maximum_order_quantity'] < $product_total_quantity) {
-                        return response()->json(['errors' => $product['name'] . ' ' . \App\CentralLogics\translate('quantity_must_be_equal_or_less_than ' . $product['maximum_order_quantity'])], 401);
-                    }
+                    // if ($product['maximum_order_quantity'] < $product_total_quantity) {
+                    //     return response()->json(['errors' => $product['name'] . ' ' . \App\CentralLogics\translate('quantity_must_be_equal_or_less_than ' . $product['maximum_order_quantity'])], 401);
+                    // }
   
                  
                         $price = $total_product_price;

@@ -105,7 +105,35 @@
                                         </div>
                                 </div>
                             </div>
-                            
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                <label class="toggle-switch h--45px toggle-switch-sm d-flex justify-content-between border rounded px-3 py-0 form-control" >
+                                    <span class="pr-1 d-flex align-items-center switch--label">
+                                    <span class="line--limit-1">
+                                        <strong>Send Notification To All User</strong>
+                                    </span>
+                                        <span class="form-label-secondary text-danger d-flex ml-1" data-toggle="tooltip" data-placement="right" data-original-title="When this field is active  this notification will be visible in  app.">
+                                            <img src="http://192.168.29.160/shreeveg/public/assets/admin/img/info-circle.svg" alt="info">
+                                        </span>
+                                    </span>
+                                    <input type="checkbox" name="notification_offer_status" checked class="toggle-switch-input" id="toggle-offer-status">
+                                    <span class="toggle-switch-label text">
+                                        <span class="toggle-switch-indicator"></span>
+                                    </span>
+                                </label>
+                                </div>
+                            </div>
+                            <div class="col-12 d-none" id="offer_message">
+                                <div class="form-group mb-0">
+                                    <label class="input-label"
+                                        for="exampleFormControlInput1">{{translate('notification_offer_message')}}</label>
+                                    <input type="text" name="notification_offer_message" value="{{old('notification_offer_message')}}" class="form-control"
+                                        placeholder="{{ translate('notification_offer_message') }}" maxlength="500">
+                                        <div class="invalid-feedback">
+                                        Please enter notification offer message.
+                                    </div>
+                                </div>
+                            </div>
                             {{-- <div class="col-6 manageType">
                                 <div class="form-group mb-0">
                                     <label class="input-label" for="exampleFormControlSelect1">{{translate('discount')}} {{translate('type')}}<span
@@ -285,6 +313,18 @@
 @endsection
 @push('script_2')
 <script>
+    $(document).ready(function(){
+        $('#offer_message').removeClass('d-none');
+        $('#toggle-offer-status').change(function(){
+            if($(this).prop('checked')){
+                $('#offer_message').removeClass('d-none');
+            }else{
+                $('#offer_message').addClass('d-none');
+            }
+    });
+    });
+</script>
+<script>
     $(document).on('ready', function() {
         $('.manageMinPurchase').hide();
         $('input[name="min_purchase_amount"]').removeAttr('required');
@@ -358,4 +398,5 @@
         })
     }
 </script>
+
 @endpush

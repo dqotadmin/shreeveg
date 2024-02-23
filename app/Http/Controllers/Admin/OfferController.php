@@ -9,6 +9,7 @@ use App\Model\FlashDealProduct;
 use App\Model\WarehouseCategory;
 use Brian2694\Toastr\Facades\Toastr;
 use App\Model\Product;
+use App\User;
 use App\Model\Category;
 use App\Model\WarehouseProduct;
 use Illuminate\Contracts\Foundation\Application;
@@ -96,20 +97,38 @@ class OfferController extends Controller
             $flash_deal->min_purchase_amount = $request->min_purchase_amount;
         }
         if($request->notification_offer_message && $request->notification_offer_status){
-        $flash_deal->notification_offer_status = 1;
+            $flash_deal->notification_offer_status = 1;
         $flash_deal->notification_offer_message = $request->notification_offer_message;
+        
+          $all_users =   User::whereIn('warehouse_id',$request->warehouse_id)->whereNotNull('cm_firebase_token')->get();
         
         }else{
         $flash_deal->notification_offer_status = 0;
 
         }
+        
 
         $flash_deal->deal_type = 'flash_deal';
         $flash_deal->status = 0;
         $flash_deal->featured = 0;
         $flash_deal->image = $image_name;
         $flash_deal->save();
+
+        $all_users =   User::whereIn('warehouse_id',$request->warehouse_id)->whereNotNull('cm_firebase_token')->get();
+            foreach($all_users as $user){
+      
+                $data = [
+                    'title' => translate('Offer'),
+                    'description' => $flash_deal->notification_offer_message,
+                    'image' => $flash_deal->image,
+                    'type' => 'offer',
+                    'user_id' => $user['id'],
+                ];
+                Helpers::send_offer_push_notif_to_device($user->cm_firebase_token, $data);
+            }
+
         Toastr::success(translate('Flash deal added successfully!'));
+
         return back();
     }
 

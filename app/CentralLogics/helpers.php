@@ -647,82 +647,153 @@ class Helpers
         return $amount;
     }
     public static function send_push_notif_to_device($fcm_token, $data)
-{
-    //dd($fcm_token);
-    $key = BusinessSetting::where(['key' => 'push_notification_key'])->first()->value;
+    {
+        //dd($fcm_token);
+        $key = BusinessSetting::where(['key' => 'push_notification_key'])->first()->value;
 
-    $url = "https://fcm.googleapis.com/fcm/send";
-    $header = array(
-        "authorization: key=" . $key . "",
-        "content-type: application/json"
-    );
+        $url = "https://fcm.googleapis.com/fcm/send";
+        $header = array(
+            "authorization: key=" . $key . "",
+            "content-type: application/json"
+        );
 
-    $payload = '{
-        "to" : "' . $fcm_token . '",
-        "mutable-content": "true",
-        "data" : {
-            "title":"' . $data['title'] . '",
-            "body" : "' . $data['description'] . '",
-            "image" : "' . $data['image'] . '",
-            "order_id":"' . $data['order_id'] . '",
-            "type":"' . $data['type'] . '",
-            "click-action":"OPEN_ORDER_SUMMARY",
-            "is_read": 0
-          },
-         "notification" : {
-            "title" :"' . $data['title'] . '",
-            "body" : "' . $data['description'] . '",
-            "image" : "' . $data['image'] . '",
-            "order_id":"' . $data['order_id'] . '",
-            "title_loc_key":"' . $data['order_id'] . '",
-            "type":"' . $data['type'] . '",
-            "click-action":"OPEN_ORDER_SUMMARY",
-            "is_read": 0,
-            "icon" : "new",
-            "sound" : "default"
-          }
-    }';
+        $payload = '{
+            "to" : "' . $fcm_token . '",
+            "mutable-content": "true",
+            "data" : {
+                "title":"' . $data['title'] . '",
+                "body" : "' . $data['description'] . '",
+                "image" : "' . $data['image'] . '",
+                "order_id":"' . $data['order_id'] . '",
+                "type":"' . $data['type'] . '",
+                "click-action":"OPEN_ORDER_SUMMARY",
+                "is_read": 0
+            },
+            "notification" : {
+                "title" :"' . $data['title'] . '",
+                "body" : "' . $data['description'] . '",
+                "image" : "' . $data['image'] . '",
+                "order_id":"' . $data['order_id'] . '",
+                "title_loc_key":"' . $data['order_id'] . '",
+                "type":"' . $data['type'] . '",
+                "click-action":"OPEN_ORDER_SUMMARY",
+                "is_read": 0,
+                "icon" : "new",
+                "sound" : "default"
+            }
+        }';
 
-    $ch = curl_init();
-    $timeout = 120;
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+        $ch = curl_init();
+        $timeout = 120;
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
 
-    // Get URL content
-    $result = curl_exec($ch);
+        // Get URL content
+        $result = curl_exec($ch);
 
-    // Close handle to release resources
-    // curl_close($ch);
-    // Dump the original payload and FCM response
-    $result_data = [
-        'payload' => json_decode($payload, true),
-        'response' => json_decode($result, true)
-    ];  
-    $decodedPayload = json_decode($payload, true);
-    $result_json_convert = json_decode($result, true);
+        // Close handle to release resources
+        // curl_close($ch);
+        // Dump the original payload and FCM response
+        $result_data = [
+            'payload' => json_decode($payload, true),
+            'response' => json_decode($result, true)
+        ];  
+        $decodedPayload = json_decode($payload, true);
+        $result_json_convert = json_decode($result, true);
 
-    // Access the 'data' key to get the body message
-    $bodyMessage = $decodedPayload['data']['body'];
+        // Access the 'data' key to get the body message
+        $bodyMessage = $decodedPayload['data']['body'];
 
-// Output the values
-    DB::table('notification_history')->insert([
-                'user_id' => @$data['user_id'],
-                'order_id' => @$data['order_id'],
-                'type' => 'alert',
-                'title' => 'order placed',
-                'click-action' => 'OPEN_ORDER_SUMMARY',
-                'message' =>@$bodyMessage,
-                'multicast_id' => @$result_json_convert['multicast_id'],
-                'message_id' => @$result_json_convert['results'][0]['message_id'],
-                'created_at' => now(),
-                'updated_at' => now()
-            ]);
-    return $result_data;
-}
+        // Output the values
+            DB::table('notification_history')->insert([
+                    'user_id' => @$data['user_id'],
+                    'order_id' => @$data['order_id'],
+                    'type' => 'alert',
+                    'title' => 'order placed',
+                    'click-action' => 'OPEN_ORDER_SUMMARY',
+                    'message' =>@$bodyMessage,
+                    'multicast_id' => @$result_json_convert['multicast_id'],
+                    'message_id' => @$result_json_convert['results'][0]['message_id'],
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+        return $result_data;
+    }
+    public static function send_offer_push_notif_to_device($fcm_token, $data)
+    {
+        $key = BusinessSetting::where(['key' => 'push_notification_key'])->first()->value;
+
+        $url = "https://fcm.googleapis.com/fcm/send";
+        $header = array(
+            "authorization: key=" . $key . "",
+            "content-type: application/json"
+        );
+
+        $payload = '{
+            "to" : "' . $fcm_token . '",
+            "mutable-content": "true",
+            "data" : {
+                "title":"' . $data['title'] . '",
+                "body" : "' . $data['description'] . '",
+                "image" : "' . $data['image'] . '",
+                "type":"' . $data['type'] . '",
+                "type":"' . $data['user_id'] . '",
+                "is_read": 0
+            },
+            "notification" : {
+                "title":"' . $data['title'] . '",
+                "body" : "' . $data['description'] . '",
+                "image" : "' . $data['image'] . '",
+                "type":"' . $data['type'] . '",
+                "type":"' . $data['user_id'] . '",
+                "is_read": 0,
+                "icon" : "new",
+                "sound" : "default"
+            }
+        }';
+
+        $ch = curl_init();
+        $timeout = 120;
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+
+        // Get URL content
+        $result = curl_exec($ch);
+
+        // Close handle to release resources
+        // curl_close($ch);
+        // Dump the original payload and FCM response
+        $result_data = [
+            'payload' => json_decode($payload, true),
+            'response' => json_decode($result, true)
+        ];  
+        $decodedPayload = json_decode($payload, true);
+        $result_json_convert = json_decode($result, true);
+
+        // Access the 'data' key to get the body message
+        $bodyMessage = $decodedPayload['data']['body'];
+        // Output the values
+            DB::table('notification_history')->insert([
+                    'user_id' => @$data['user_id'],
+                    'image' => @$data['image'],
+                    'type' => 'offer',
+                    'title' => $data['title'],
+                    'message' =>@$bodyMessage,
+                    'multicast_id' => @$result_json_convert['multicast_id'],
+                    'message_id' => @$result_json_convert['results'][0]['message_id'],
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+        return $result_data;
+    }
 
 
 //     public static function send_push_notif_to_device($fcm_token, $data)

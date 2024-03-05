@@ -15,9 +15,15 @@ class NotificationController extends Controller
     {
 
         try {
- 
-            $notification_history = NotificationHistory::latest()
+            $user =auth('api')->user()->id;
+
+            if (!$user) {
+                return response()->json(['error' => 'Unauthenticated.'], 401);
+            }
+        
+            $notification_history = NotificationHistory::where('user_id', $user)
             ->paginate($request->limit, ['*'], 'page', $request->offset);
+
             return response()->json($notification_history, 200);
         } catch (\Exception $e) {
             return response()->json([], 200);

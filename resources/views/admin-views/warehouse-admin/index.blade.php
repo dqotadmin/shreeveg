@@ -24,7 +24,7 @@
 
     <div class="row g-2">
         <div class="col-sm-12 col-lg-12">
-       @if( in_array(auth('admin')->user()->admin_role_id, [1,6]) && $role->id != auth('admin')->user()->admin_role_id)
+           @if( in_array(auth('admin')->user()->admin_role_id, [1,6]) && $role->id != auth('admin')->user()->admin_role_id)
        
 
             <div class="btn--container justify-content-end m-2">

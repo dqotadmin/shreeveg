@@ -10,6 +10,14 @@ Route::group(['namespace' => 'Api\V1', 'middleware' => 'localization'], function
             'errors' => $errors,
         ], 401);
     })->name('authentication-failed');
+
+    Route::get('/terms', function () {
+        return view('terms');
+    });
+    Route::get('/privacy-policy', function () {
+        return view('privacy_policy');
+    });
+    
     Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
         Route::post('register', 'CustomerAuthController@registration');
         Route::post('login', 'CustomerAuthController@login');

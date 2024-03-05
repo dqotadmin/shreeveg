@@ -70,8 +70,20 @@ class CustomerController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => Helpers::error_processor($validator)], 403);
         }
+        $warehouses = Warehouse::withinRadius($request->latitude, $request->longitude)->get();
+        $guestWarehouse =  Warehouse::where('is_guest_warehouse', '1')->first();
+        $assignWarehouseId = $guestWarehouse ? $guestWarehouse->id : 0;
 
-        $address = [
+        if (count($warehouses) > 0 && auth('api')->user()) {
+            $assignWarehouseId = $warehouses[0]->id;
+            if (count($warehouses) > 0) {
+                $assignWarehouseId = $warehouses[0]->id;
+            }
+        }
+      
+        auth('api')->user()->update(['warehouse_id' => $assignWarehouseId]);
+
+            $address = [
             'user_id' => $request->user()->id,
             'address_type' => $request->address_type,
             'address' => $request->address,
@@ -266,18 +278,19 @@ class CustomerController extends Controller
             $pass = $request->user()->password;
         }
         $tmpName = $this->get_f_l_name($request->full_name);
-
+     $phone_check =    $this->user->where(['id' => $request->user()->id])->first();
         $userDetails = [
             'full_name' => $request->full_name,
             'f_name' => $tmpName['f_name'],
             'l_name' => $tmpName['l_name'],
-            // 'phone' => $request->phone,
             'email' => $request->email,
             'image' => $imageName,
             'password' => $pass,
             'updated_at' => now()
         ];
-
+        if ($phone_check['phone'] === null || empty($phone_check['phone'])) {
+            $userDetails['phone'] = $request->phone;
+        }
         $this->user->where(['id' => $request->user()->id])->update($userDetails);
 
         return response()->json(['message' => 'successfully updated!'], 200);

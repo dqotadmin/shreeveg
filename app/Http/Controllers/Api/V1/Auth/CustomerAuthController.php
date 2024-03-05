@@ -9,6 +9,7 @@ use App\Mail\EmailVerification;
 use App\Model\BusinessSetting;
 use App\Model\EmailVerifications;
 use App\Model\PhoneVerification;
+use App\Model\Warehouse;
 use App\User;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\JsonResponse;
@@ -407,7 +408,8 @@ class CustomerAuthController extends Controller
         if ($request->referral_code) {
             $refer_user = $this->user->where(['referral_code' => $request->referral_code])->first();
         }
-        //dd(11);
+        $default_wh = Warehouse::where('is_guest_warehouse',1)->first();
+
         $temporary_token = Str::random(40);
         $tmpName = $this->get_f_l_name($request->full_name);
         $user = $this->user->create([
@@ -417,7 +419,7 @@ class CustomerAuthController extends Controller
             'email' => $request->email ?? '',
             'phone' => $request->phone ?? '',
             'gender' => $request->gender,
-            'warehouse_id' => 8,
+            'warehouse_id' => @$default_wh->id,
             'password' => bcrypt(123456),
             'temporary_token' => $temporary_token,
             'referral_code' => Helpers::generate_referer_code(),

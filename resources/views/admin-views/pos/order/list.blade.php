@@ -152,18 +152,18 @@
                                         <label
                                             class="text-danger">{{translate('Customer_not_available')}}
                                         </label>
+                                  
                                     @else
                                         <label
                                             class="text-success">{{translate('Walking Customer')}}
                                         </label>
                                     @endif
                                 </td>
-                                
                                 <td>
                                     <div class="mw-85">
                                         <div>
                                             <?php
-                                               $vat_status = $order->details[0] ? $order->details[0]->vat_status : '';
+                                               $vat_status = @$order->details[0] ? @$order->details[0]->vat_status : '';
                                                 if(isset($vat_status) && $vat_status == 'included'){
                                                     $order_amount = @$order['order_amount'] - @$order['total_tax_amount'];
                                         }else{

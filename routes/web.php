@@ -2,7 +2,8 @@
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
-
+// admin login  http://192.168.29.160/astroweds_old/login
+// admin user  http://192.168.29.160/astroweds_old/login
 /*
 |--------------------------------------------------------------------------
 | Web Routes

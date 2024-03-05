@@ -2687,4 +2687,6 @@
   'send_notification_to_all_user' => 'Send notification to all user',
   'notification_offer_message' => 'Notification offer message',
   'Offer' => 'Offer',
+  'Terms and Conditions updated!' => 'Terms and Conditions updated!',
+  'Privacy policy updated!' => 'Privacy policy updated!',
 );

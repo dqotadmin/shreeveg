@@ -192,8 +192,7 @@ class OrderController extends Controller
                 'payment_id' => @$request['payment_id'],
                 'created_at' => now(),
                 'updated_at' => now(),
-            ];
-          
+            ]; 
             $o_time = $or['delivery_time_slot'];
             $o_delivery = $or['delivery_date'];
             $total_tax_amount = 0;
@@ -266,7 +265,6 @@ class OrderController extends Controller
                     $this->product->where(['id' => $product['product_id']])->update([
                         'popularity_count' => $product['popularity_count'] + 1
                     ]);
-
                     DB::table('user_warehouse_order_details')->insert($or_d);
             }
          

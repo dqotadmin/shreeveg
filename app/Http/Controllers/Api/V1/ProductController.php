@@ -23,6 +23,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Carbon;
 
 class ProductController extends Controller
 {
@@ -318,24 +320,34 @@ class ProductController extends Controller
             return response()->json(['errors' => Helpers::error_processor($validator)], 403);
         }
 
-        $image_array = [];
-        if (!empty($request->file('attachment'))) {
-            foreach ($request->file('attachment') as $image) {
-                if ($image != null) {
-                    if (!Storage::disk('public')->exists('review')) {
-                        Storage::disk('public')->makeDirectory('review');
-                    }
-                    $image_array[] = Storage::disk('public')->put('review', $image);
-                }
+        $image = $request->file('attachment');
+
+        if ($image != null) {
+            $data = getimagesize($image);
+            $imageName = Carbon::now()->toDateString() . "-" . uniqid() . "." . 'png';
+            if (!Storage::disk('public')->exists('review')) {
+                Storage::disk('public')->makeDirectory('review');
             }
-        }
+            $note_img = Image::make($image)->fit($data[0], $data[1])->stream();
+            Storage::disk('public')->put('review/' . $imageName, $note_img);
+        } 
+        // if (!empty($request->file('attachment'))) {
+        //     foreach ($request->file('attachment') as $image) {
+        //         if ($image != null) {
+        //             if (!Storage::disk('public')->exists('review')) {
+        //                 Storage::disk('public')->makeDirectory('review');
+        //             }
+        //             $image_array[] = Storage::disk('public')->put('review', $image);
+        //         }
+        //     }
+        // }
 
         $review->user_id = $request->user()->id;
         $review->product_id = $request->product_id;
         $review->order_id = $request->order_id?$request->order_id:null;
         $review->comment = $request->comment;
         $review->rating = $request->rating;
-        $review->attachment = json_encode($image_array);
+        $review->attachment = $imageName;
         $review->save();
 
         return response()->json(['message' => 'successfully review submitted!'], 200);
